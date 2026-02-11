@@ -18,6 +18,7 @@
         .vault-card { position: relative; }
         .delete-btn { position: absolute; top: 2px; right: 2px; background: rgba(255,0,0,0.8); color: white; padding: 2px 5px; font-size: 8px; cursor: pointer; display: none; }
         .director-mode .delete-btn { display: block; }
+        .countdown-text { font-size: 8px; font-weight: bold; }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -31,7 +32,6 @@
         <div class="w-full bg-gray-900 h-2 mt-2 border border-[#00ff41]/30">
             <div id="threat-level" class="bg-red-600 h-full w-[10%] transition-all duration-1000"></div>
         </div>
-        <p class="text-[9px] mt-1 opacity-60 uppercase tracking-tighter">System Status: All Systems Normal | Sector: Emalahleni-Witbank Hub</p>
     </header>
 
     <main class="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
@@ -70,24 +70,21 @@
                     <p class="text-[8px] opacity-60 uppercase">Auto-Archive Cycle: 72 Hours</p>
                 </div>
             </div>
-            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                    <p class="text-xs text-red-500 mb-1 font-bold uppercase">Intel Upload:</p>
+                    <p class="text-xs text-red-500 mb-1 font-bold uppercase">Upload Intel:</p>
                     <input type="file" id="file-upload" class="hidden" accept="image/*" onchange="uploadIntel(event)">
                     <button onclick="document.getElementById('file-upload').click()" class="w-full bg-red-600 text-black font-bold p-2 mb-4 uppercase text-xs">Push New Visuals</button>
-                    
-                    <p class="text-xs text-red-500 mb-1 font-bold uppercase">Broadcast Directive:</p>
-                    <textarea id="mission-content" class="w-full bg-gray-900 border border-red-600 p-2 text-white text-sm h-24 focus:outline-none"></textarea>
+                    <textarea id="mission-content" class="w-full bg-gray-900 border border-red-600 p-2 text-white text-sm h-24 focus:outline-none" placeholder="Broadcast directive..."></textarea>
                     <button onclick="broadcastMission()" class="w-full bg-red-600 text-black font-bold p-2 mt-2 uppercase text-xs">Execute Protocol Zero</button>
                 </div>
                 <div class="border-l border-red-900 pl-4">
                     <div class="flex justify-between items-center mb-2">
-                        <p class="text-xs text-red-500 font-bold uppercase">Terminal Status:</p>
+                        <p class="text-xs text-red-500 font-bold uppercase">Status Logs:</p>
                         <button onclick="fetchArchives()" class="text-[8px] border border-red-500 px-1 text-red-500">VIEW ARCHIVES</button>
                     </div>
                     <div id="system-logs" class="text-[9px] text-red-400 font-mono h-48 overflow-y-auto leading-relaxed"></div>
-                    <button onclick="retireOperative(prompt('ALIAS TO PURGE:'))" class="mt-4 text-[8px] text-red-900 underline uppercase italic italic">Wipe Operative Data</button>
+                    <button onclick="retireOperative(prompt('ALIAS TO PURGE:'))" class="mt-4 text-[8px] text-red-900 underline uppercase italic">Wipe Operative Data</button>
                 </div>
             </div>
         </section>
@@ -101,13 +98,26 @@
         };
         const supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
 
-        document.addEventListener('DOMContentLoaded', () => { loadMissions(); loadVault(); setupRealtime(); animateThreatLevel(); });
+        document.addEventListener('DOMContentLoaded', () => { loadMissions(); loadVault(); setupRealtime(); animateThreatLevel(); setInterval(loadMissions, 60000); });
+
+        function getRemainingTime(createdAt) {
+            const expiry = new Date(createdAt).getTime() + (72 * 60 * 60 * 1000);
+            const now = new Date().getTime();
+            const diff = expiry - now;
+            if (diff <= 0) return "ARCHIVING...";
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            return `${hours}H ${mins}M REMAINING`;
+        }
 
         async function loadMissions() {
             const { data } = await supabaseClient.from('missions').select('*').order('created_at', { ascending: false });
             document.getElementById('mission-feed').innerHTML = data.map(m => `
                 <div class="border-l-2 border-[#00ff41] pl-3 py-1 bg-[#00ff41]/5 mb-1">
-                    <p class="text-[9px] opacity-40 uppercase">${new Date(m.created_at).toLocaleTimeString()}</p>
+                    <div class="flex justify-between items-start">
+                        <p class="text-[9px] opacity-40 uppercase">${new Date(m.created_at).toLocaleTimeString()}</p>
+                        <p class="countdown-text text-[#00ff41]/60 uppercase">${getRemainingTime(m.created_at)}</p>
+                    </div>
                     <p class="text-xs">${m.content}</p>
                 </div>
             `).join('');
@@ -132,7 +142,6 @@
             if (CONFIG.DIRECTOR_ID === "34c6e8ba-97dd-46fa-ad03-d3cf76d6d64c") {
                 document.getElementById('director-hub').classList.remove('hidden');
                 document.body.classList.add('director-mode');
-                document.getElementById('system-logs').innerHTML += `<br>[${new Date().toLocaleTimeString()}] DIRECTOR VERIFIED. ARCHIVE PURGE: 72H CYCLE ACTIVE.`;
             }
         }
 
@@ -159,8 +168,7 @@
         }
 
         async function retireOperative(alias) {
-            if (!alias) return;
-            if (confirm(`WIPE ${alias}?`)) { await supabaseClient.from('operatives').delete().eq('alias', alias.toUpperCase()); location.reload(); }
+            if (alias && confirm(`WIPE ${alias}?`)) { await supabaseClient.from('operatives').delete().eq('alias', alias.toUpperCase()); location.reload(); }
         }
 
         function setupRealtime() {
