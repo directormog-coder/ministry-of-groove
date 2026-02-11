@@ -163,22 +163,28 @@
     }
 
     function registerOperative() {
-        const alias = document.getElementById('operative-alias').value;
-        if (!alias) return alert("BIOMETRIC SCAN FAILED: ALIAS REQUIRED");
+    const alias = document.getElementById('operative-alias').value;
+    if (!alias) return alert("BIOMETRIC SCAN FAILED: ALIAS REQUIRED");
+    
+    // Switch to Operative Profile
+    document.getElementById('auth-section').classList.add('hidden');
+    document.getElementById('operative-profile').classList.remove('hidden');
+    document.getElementById('display-alias').innerText = alias.toUpperCase();
 
-        // UI Update
-        document.getElementById('auth-section').classList.add('hidden');
-        document.getElementById('operative-profile').classList.remove('hidden');
-        document.getElementById('display-alias').innerText = alias.toUpperCase();
-
-        // THE DIRECTOR CHECK - Unlocks Admin Controls
-        // In a real app, this matches the logged-in User ID.
-        // For this terminal, we use your hardcoded UID.
-        if (CONFIG.DIRECTOR_ID === "34c6e8ba-97dd-46fa-ad03-d3cf76d6d64c") {
-            document.getElementById('director-controls').classList.remove('hidden');
-            console.log("DIRECTOR STATUS VERIFIED. PROTOCOL ZERO ACTIVE.");
-        }
+    // SENSITIVE: Unlock Director Hub ONLY for your UID
+    if (CONFIG.DIRECTOR_ID === "34c6e8ba-97dd-46fa-ad03-d3cf76d6d64c") {
+        document.getElementById('director-hub').classList.remove('hidden');
+        document.body.classList.add('director-mode');
+        
+        // Auto-scroll to Command Center
+        setTimeout(() => {
+            document.getElementById('director-hub').scrollIntoView({ behavior: 'smooth' });
+        }, 500);
+        
+        console.log("ACCESS GRANTED: WELCOME DIRECTOR.");
     }
+    }
+    
 
     async function broadcastMission() {
         const content = document.getElementById('mission-content').value;
