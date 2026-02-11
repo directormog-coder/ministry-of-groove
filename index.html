@@ -98,6 +98,43 @@
             <div id="vault-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
                 </div>
         </section>
+                <section class="lg:col-span-3 border border-[#00ff41] p-4 bg-black/80">
+            ...
+        </section>
+
+        <section id="director-hub" class="hidden border-2 border-red-600 p-6 bg-black mt-8">
+            <h3 class="text-red-600 font-bold mb-4 tracking-widest underline">DIRECTOR COMMAND CENTER</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <p class="text-xs text-red-500 mb-1">BROADCAST NEW DIRECTIVE:</p>
+                    <textarea id="mission-content" class="w-full bg-gray-900 border border-red-600 p-2 text-white"></textarea>
+                    <button onclick="broadcastMission()" class="w-full bg-red-600 text-black font-bold p-2 mt-2">EXECUTE PROTOCOL ZERO</button>
+                </div>
+                <div class="border-l border-red-900 pl-4">
+                    <p class="text-xs text-red-500 mb-1">TERMINAL LOGS:</p>
+                    <div id="system-logs" class="text-[10px] text-red-400 overflow-y-auto h-32">
+                        </div>
+                </div>
+            </div>
+        </section>
+
+    </main> ```
+---
+
+### **The "Magic" Moment**
+Once you have added the **CSS** (the red glow), the **Layer** (the scanlines), and this **HTML section**, the final piece is the **JavaScript** trigger. 
+
+When you click **Initialize Session**, the code performs a check. If it sees your ID (`34c6e8ba...`), it removes that `hidden` class, and the Red Command Center animates into view.
+
+
+
+### **Final Checklist:**
+1.  **Head Section**: Replaced with the new CSS? (Check)
+2.  **The Layer**: Added right after `<body>`? (Check)
+3.  **Director Hub**: Added at the bottom of `<main>`? (Check)
+
+**Would you like me to provide the final, updated `registerOperative()` function to ensure that when you log in, the "hidden" class is removed and the red alert triggers?**
+    
     </main>
 
     <script>
