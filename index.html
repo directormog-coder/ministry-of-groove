@@ -9,85 +9,76 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
         
-        /* Updated Color Palette based on logo/video: Gold and Obsidian */
+        /* Blue-Centric Palette */
         :root {
-            --mog-gold: #D4AF37;
-            --mog-amber: #FFBF00;
-            --mog-red: #FF3E3E;
+            --mog-blue-primary: #0088ff;
+            --mog-blue-glow: #00d4ff;
+            --mog-dark-blue: #001a33;
+            --mog-red: #ff1111;
         }
 
         body { 
             font-family: 'JetBrains+Mono', monospace; 
-            background-color: #050505; 
-            color: var(--mog-gold); 
+            background-color: #02040a; 
+            color: var(--mog-blue-primary); 
             overflow-x: hidden; 
             transition: all 0.5s ease; 
         }
 
         .video-background {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             overflow: hidden;
             background: #000;
         }
 
         .video-background video {
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            position: absolute;
-            top: 50%;
-            left: 50%;
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto;
+            position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             object-fit: cover;
-            /* Filtered to match Gold/Amber tones */
-            filter: sepia(100%) hue-rotate(5deg) brightness(0.3) contrast(1.1);
-            opacity: 0.55;
+            /* Filtered for Cobalt/Deep Blue tones */
+            filter: saturate(1.5) hue-rotate(190deg) brightness(0.2) contrast(1.2);
+            opacity: 0.6;
             transition: filter 0.8s ease;
         }
 
-        /* Glitch Animation */
-        @keyframes glitch {
+        /* Signal Interference Glitch */
+        @keyframes blue-glitch {
             0% { transform: translate(0); filter: hue-rotate(0deg); }
-            20% { transform: translate(-3px, 1px); filter: hue-rotate(15deg); }
-            40% { transform: translate(3px, -1px); opacity: 0.7; }
+            10% { transform: translate(-2px, -1px); filter: brightness(2) hue-rotate(-20deg); }
+            30% { transform: translate(3px, 1px); opacity: 0.8; }
             100% { transform: translate(0); }
         }
 
-        .signal-glitch { animation: glitch 0.25s infinite; }
+        .signal-glitch { animation: blue-glitch 0.2s infinite; }
 
-        /* Component Styling */
-        .gold-border { border: 1px solid var(--mog-gold); }
-        .gold-text { color: var(--mog-gold); }
-        .gold-bg { background-color: var(--mog-gold); }
+        /* UI Accents */
+        .blue-border { border: 1px solid var(--mog-blue-primary); box-shadow: 0 0 10px rgba(0, 136, 255, 0.1); }
+        .blue-bg { background-color: var(--mog-blue-primary); }
+        .blue-glow-text { text-shadow: 0 0 8px var(--mog-blue-glow); }
 
         .terminal-overlay { 
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(212, 175, 55, 0.03), rgba(255, 191, 0, 0.02), rgba(212, 175, 55, 0.03)); 
-            background-size: 100% 3px, 3px 100%; 
-            pointer-events: none; 
-            position: fixed; 
-            inset: 0; 
-            z-index: 99; 
-            opacity: 0.2; 
+            background: linear-gradient(rgba(0, 136, 255, 0.03) 50%, rgba(0, 0, 0, 0.2) 50%), linear-gradient(90deg, rgba(0, 212, 255, 0.02), rgba(0, 0, 0, 0), rgba(0, 212, 255, 0.02)); 
+            background-size: 100% 4px, 4px 100%; 
+            pointer-events: none; position: fixed; inset: 0; z-index: 99; opacity: 0.3; 
         }
         
-        /* Director Mode Transition */
+        /* Director Override State */
         .director-mode { color: var(--mog-red); }
-        .director-mode .gold-border { border-color: var(--mog-red) !important; }
+        .director-mode .blue-border { border-color: var(--mog-red) !important; box-shadow: 0 0 15px rgba(255, 17, 17, 0.2); }
         .director-mode .video-background video {
-            filter: sepia(100%) hue-rotate(-50deg) brightness(0.25) contrast(1.3);
+            filter: saturate(2) hue-rotate(-50deg) brightness(0.2) contrast(1.4);
         }
+        .director-mode .blue-bg { background-color: var(--mog-red); }
         
         ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--mog-gold); }
+        ::-webkit-scrollbar-thumb { background: var(--mog-blue-primary); }
         .director-mode ::-webkit-scrollbar-thumb { background: var(--mog-red); }
         
-        audio { height: 30px; width: 100%; border-radius: 0; filter: invert(0.8) sepia(1) hue-rotate(5deg); }
+        audio { height: 30px; width: 100%; border-radius: 0; filter: invert(0.8) hue-rotate(180deg) brightness(1.2); }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -99,59 +90,59 @@
 
     <div class="terminal-overlay"></div> 
     
-    <header class="gold-border p-4 mb-6 bg-black/80 backdrop-blur-md relative z-10 flex flex-col md:flex-row justify-between items-center gap-4">
+    <header class="blue-border p-4 mb-6 bg-black/80 backdrop-blur-lg relative z-10 flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="flex items-center gap-4">
-            <img src="logo.png" alt="MOG" class="h-12 w-auto brightness-110">
+            <img src="logo.png" alt="MOG" class="h-10 w-auto">
             <div>
-                <h1 class="text-xl font-bold tracking-[0.2em] uppercase">SOVEREIGN v200</h1>
-                <p class="text-[9px] opacity-70 uppercase tracking-widest">Sector: Emalahleni | Node: 2026.MOG</p>
+                <h1 class="text-xl font-bold tracking-[0.25em] uppercase blue-glow-text">SOVEREIGN v200</h1>
+                <p class="text-[9px] opacity-60 uppercase tracking-widest">System Status: Encrypted | Location: Emalahleni</p>
             </div>
         </div>
         <div class="w-full md:w-64">
-            <p class="text-[8px] mb-1 font-bold uppercase text-red-500 animate-pulse">Frequency 104.2: Active</p>
+            <p class="text-[8px] mb-1 font-bold uppercase text-blue-400 animate-pulse text-right">Encrypted Comms Channel 0.1</p>
             <audio controls src="mandate_mix.mp3"></audio>
         </div>
     </header>
 
     <main class="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
-        <section class="gold-border p-5 bg-black/85 backdrop-blur-lg">
-            <h2 class="text-xs border-b border-current mb-4 pb-2 font-bold uppercase tracking-widest">Authentication</h2>
+        <section class="blue-border p-5 bg-black/85 backdrop-blur-xl">
+            <h2 class="text-xs border-b border-current mb-4 pb-2 font-bold uppercase tracking-[0.2em]">Identification Required</h2>
             <div id="auth-section">
-                <input id="operative-alias" type="text" placeholder="ALIAS..." class="w-full bg-black/40 border border-[#D4AF37]/30 p-2 mb-2 text-sm text-[#D4AF37] focus:outline-none uppercase focus:border-[#D4AF37]">
-                <input id="access-code" type="password" placeholder="CODE..." class="w-full bg-black/40 border border-[#D4AF37]/30 p-2 mb-4 text-sm text-[#D4AF37] focus:outline-none focus:border-[#D4AF37]">
-                <button onclick="registerOperative()" class="w-full gold-bg text-black font-bold p-2 uppercase text-xs hover:bg-white transition duration-300">Access Node</button>
+                <input id="operative-alias" type="text" placeholder="ALIAS..." class="w-full bg-blue-900/10 border border-blue-500/30 p-2 mb-2 text-sm text-blue-100 focus:outline-none uppercase focus:border-blue-400 transition-colors">
+                <input id="access-code" type="password" placeholder="CODE..." class="w-full bg-blue-900/10 border border-blue-500/30 p-2 mb-4 text-sm text-blue-100 focus:outline-none focus:border-blue-400 transition-colors">
+                <button onclick="registerOperative()" class="w-full blue-bg text-white font-bold p-2 uppercase text-xs hover:bg-white hover:text-black transition duration-300">Unlock Console</button>
             </div>
             <div id="operative-profile" class="hidden">
-                <p class="text-sm tracking-widest">OPERATIVE: <span id="display-alias" class="font-bold text-white">---</span></p>
+                <p class="text-sm tracking-widest">ACTIVE AGENT: <span id="display-alias" class="font-bold text-white blue-glow-text">---</span></p>
                 <div class="mt-6 border-t border-current/20 pt-4">
-                    <textarea id="field-report" class="w-full bg-black/60 border border-current/40 p-2 text-xs text-white h-20 focus:outline-none" placeholder="Enter intel..."></textarea>
-                    <button onclick="sendReport()" class="w-full border border-current mt-2 py-2 text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Transmit Report</button>
+                    <textarea id="field-report" class="w-full bg-blue-900/5 border border-blue-500/40 p-2 text-xs text-white h-20 focus:outline-none focus:border-blue-300" placeholder="Transmit field intel..."></textarea>
+                    <button onclick="sendReport()" class="w-full border border-current mt-2 py-2 text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Submit Transmission</button>
                 </div>
             </div>
         </section>
 
-        <section class="lg:col-span-2 gold-border p-5 bg-black/85 backdrop-blur-lg">
-            <h2 class="text-xs border-b border-current mb-4 pb-2 flex justify-between font-bold uppercase tracking-widest">Active Directives <span id="mission-count" class="text-xs opacity-60">00</span></h2>
+        <section class="lg:col-span-2 blue-border p-5 bg-black/85 backdrop-blur-xl">
+            <h2 class="text-xs border-b border-current mb-4 pb-2 flex justify-between font-bold uppercase tracking-[0.2em]">Priority Directives <span id="mission-count" class="text-xs opacity-50">00</span></h2>
             <div id="mission-feed" class="h-64 overflow-y-auto space-y-3 pr-2"></div>
         </section>
 
-        <section class="lg:col-span-3 gold-border p-5 bg-black/85 backdrop-blur-lg">
-            <h2 class="text-xs border-b border-current mb-4 pb-2 font-bold uppercase tracking-widest">Visual Recon Library</h2>
+        <section class="lg:col-span-3 blue-border p-5 bg-black/85 backdrop-blur-xl">
+            <h2 class="text-xs border-b border-current mb-4 pb-2 font-bold uppercase tracking-[0.2em]">Secure Intel Repository</h2>
             <div id="vault-grid" class="grid grid-cols-2 md:grid-cols-6 gap-3 min-h-[100px]"></div>
         </section>
 
-        <section id="director-hub" class="hidden lg:col-span-3 border-2 border-red-600 p-6 bg-black/95 backdrop-blur-2xl mt-8">
-            <h3 class="text-red-600 font-bold tracking-[0.3em] uppercase italic text-lg mb-6 border-b border-red-900 pb-2">Director Command</h3>
+        <section id="director-hub" class="hidden lg:col-span-3 border-2 border-red-600 p-6 bg-black/95 backdrop-blur-3xl mt-8">
+            <h3 class="text-red-500 font-bold tracking-[0.4em] uppercase italic text-lg mb-6 border-b border-red-900 pb-2">Director Command - Protocol Zero</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div>
                     <input type="file" id="file-upload" class="hidden" accept="image/*" onchange="uploadIntel(event)">
-                    <button onclick="document.getElementById('file-upload').click()" class="w-full bg-red-600 text-black font-bold p-3 mb-6 uppercase text-xs hover:bg-red-500 transition">Upload Visual Asset</button>
-                    <textarea id="mission-content" class="w-full bg-black border border-red-900 p-3 text-white text-sm h-24 focus:outline-none" placeholder="Enter Director Mandate..."></textarea>
-                    <button onclick="broadcastMission()" class="w-full bg-red-600 text-black font-bold p-3 mt-4 uppercase text-xs hover:bg-red-500 transition">Broadcast Mandate</button>
+                    <button onclick="document.getElementById('file-upload').click()" class="w-full bg-red-600 text-white font-bold p-3 mb-6 uppercase text-xs hover:bg-red-500 transition shadow-lg shadow-red-900/20">Sync Visual Intel</button>
+                    <textarea id="mission-content" class="w-full bg-black border border-red-900 p-3 text-white text-sm h-24 focus:outline-none" placeholder="Enter Global Mandate..."></textarea>
+                    <button onclick="broadcastMission()" class="w-full bg-red-600 text-white font-bold p-3 mt-4 uppercase text-xs hover:bg-red-500 transition">Execute Broadcast</button>
                 </div>
-                <div class="border-l border-red-900/50 pl-6">
-                    <p class="text-[10px] text-red-500 font-bold uppercase mb-3">Network Logs</p>
-                    <div id="system-logs" class="text-[10px] text-red-400 font-mono h-52 overflow-y-auto leading-relaxed"></div>
+                <div class="border-l border-red-900/40 pl-6">
+                    <p class="text-[10px] text-red-400 font-bold uppercase mb-3">Kernel Logs</p>
+                    <div id="system-logs" class="text-[10px] text-red-500 font-mono h-52 overflow-y-auto leading-relaxed opacity-80"></div>
                 </div>
             </div>
         </section>
@@ -169,7 +160,7 @@
             const video = document.getElementById('bg-video');
             const main = document.querySelector('main');
             [video, main].forEach(el => el.classList.add('signal-glitch'));
-            setTimeout(() => { [video, main].forEach(el => el.classList.remove('signal-glitch')); }, 1200);
+            setTimeout(() => { [video, main].forEach(el => el.classList.remove('signal-glitch')); }, 1000);
         }
 
         async function registerOperative() {
@@ -189,15 +180,15 @@
                 document.getElementById('display-alias').innerText = alias;
                 document.getElementById('director-hub').classList.add('hidden');
                 document.body.classList.remove('director-mode');
-            } else { alert("INVALID CLEARANCE"); }
+            } else { alert("ACCESS DENIED: LEVEL 1 CLEARANCE ONLY"); }
         }
 
         async function loadMissions() {
             const { data } = await supabaseClient.from('missions').select('*').order('created_at', { ascending: false });
             document.getElementById('mission-feed').innerHTML = data.map(m => `
-                <div class="border-l-2 border-current pl-4 py-2 bg-white/5">
-                    <p class="text-[8px] opacity-50 uppercase tracking-tighter mb-1">${new Date(m.created_at).toLocaleString()}</p>
-                    <p class="text-xs leading-relaxed text-white/90">${m.content}</p>
+                <div class="border-l-2 border-current pl-4 py-2 bg-blue-400/5 mb-1">
+                    <p class="text-[8px] opacity-40 uppercase tracking-tighter mb-1">${new Date(m.created_at).toLocaleString()}</p>
+                    <p class="text-xs leading-relaxed text-blue-50/90">${m.content}</p>
                 </div>
             `).join('');
             document.getElementById('mission-count').innerText = data.length.toString().padStart(2, '0');
@@ -207,8 +198,8 @@
             const { data } = await supabaseClient.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
             document.getElementById('vault-grid').innerHTML = data.map(file => {
                 const url = `${CONFIG.SUPABASE_URL}/storage/v1/object/public/intel-vault/${file.name}`;
-                return `<div class="h-24 border border-current/20 bg-black overflow-hidden group">
-                    <img src="${url}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500 opacity-60">
+                return `<div class="h-24 border border-blue-500/20 bg-black overflow-hidden group hover:border-blue-400 transition-all">
+                    <img src="${url}" class="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition duration-700">
                 </div>`;
             }).join('');
         }
@@ -216,7 +207,7 @@
         async function sendReport() {
             const report = document.getElementById('field-report').value;
             if (report) { 
-                await supabaseClient.from('missions').insert([{ content: `[REPORT] ${document.getElementById('display-alias').innerText}: ${report}` }]); 
+                await supabaseClient.from('missions').insert([{ content: `[INTEL] ${document.getElementById('display-alias').innerText}: ${report}` }]); 
                 document.getElementById('field-report').value = ''; 
             }
         }
@@ -224,7 +215,7 @@
         async function broadcastMission() {
             const content = document.getElementById('mission-content').value;
             if (content) { 
-                await supabaseClient.from('missions').insert([{ content: `[DIRECTOR]: ${content}`, author_id: CONFIG.DIRECTOR_ID }]); 
+                await supabaseClient.from('missions').insert([{ content: `[COMMAND]: ${content}`, author_id: CONFIG.DIRECTOR_ID }]); 
                 document.getElementById('mission-content').value = ''; 
             }
         }
