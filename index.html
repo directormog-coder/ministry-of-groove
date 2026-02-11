@@ -71,7 +71,18 @@
             <div id="operative-profile" class="hidden">
                 <p class="text-lg">OPERATIVE: <span id="display-alias">---</span></p>
                 <p class="text-xs opacity-60 mt-2">Rank: Field Agent | Sector: South Africa</p>
-            </div>
+            </div><section class="border border-[#00ff41] p-4 bg-black/80">
+    <h2 class="text-sm border-b border-[#00ff41] mb-4 pb-1">BIOMETRIC SCAN</h2>
+    <div id="auth-section">
+        <input id="operative-alias" type="text" placeholder="ENTER ALIAS..." class="w-full bg-transparent border border-[#00ff41]/50 p-2 mb-2 focus:outline-none focus:border-[#00ff41]">
+        
+        <input id="access-code" type="password" placeholder="ENTER ACCESS CODE..." class="w-full bg-transparent border border-[#00ff41]/50 p-2 mb-4 focus:outline-none focus:border-[#00ff41]">
+        
+        <button onclick="registerOperative()" class="w-full bg-[#00ff41] text-black font-bold p-2 hover:bg-[#003300] hover:text-[#00ff41] transition">INITIALIZE SESSION</button>
+    </div>
+    ...
+            </section>
+            
         </section>
 
         <section class="lg:col-span-2 border border-[#00ff41] p-4 bg-black/80">
