@@ -33,7 +33,7 @@
 
         /* Director Command Mode (Red Glow) */
         .director-mode {
-            box-shadow: inset 0 0 100px rgba(255, 0, 0, 0.2);
+            box-shadow: inset 0 0 100px rgba(255, 0, 0, 0.3);
             border: 2px solid #ff0000 !important;
             color: #ff4444;
         }
@@ -52,21 +52,22 @@
     
     <header class="border border-[#00ff41] p-4 mb-6 bg-black relative z-10">
         <div class="flex justify-between items-center mb-2">
-            <h1 class="text-xl font-bold tracking-widest">MINISTRY OF GROOVE // SOVEREIGN v200</h1>
+            <h1 class="text-xl font-bold tracking-widest uppercase">Ministry of Groove // Sovereign v200</h1>
             <span id="network-pulse" class="text-xs animate-pulse text-red-500 font-bold">NETWORK ACTIVE</span>
         </div>
         <div class="w-full bg-gray-900 h-4 border border-[#00ff41]/30">
             <div id="threat-level" class="threat-bar bg-red-600 h-full w-[10%] transition-all duration-1000"></div>
         </div>
-        <p class="text-[10px] mt-1 opacity-70 uppercase tracking-tighter">System Status: All Systems Normal | Location: Emalahleni-Witbank Hub</p>
+        <p class="text-[10px] mt-1 opacity-70 uppercase tracking-tighter">System Status: All Systems Normal | Sector: Emalahleni-Witbank Hub</p>
     </header>
 
     <main class="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
+        
         <section class="border border-[#00ff41] p-4 bg-black/80">
             <h2 class="text-sm border-b border-[#00ff41] mb-4 pb-1 font-bold">BIOMETRIC SCAN</h2>
             <div id="auth-section">
-                <input id="operative-alias" type="text" placeholder="ENTER ALIAS..." class="w-full bg-transparent border border-[#00ff41]/50 p-2 mb-2 focus:outline-none focus:border-[#00ff41] text-sm">
-                <input id="access-code" type="password" placeholder="ENTER ACCESS CODE..." class="w-full bg-transparent border border-[#00ff41]/50 p-2 mb-4 focus:outline-none focus:border-[#00ff41] text-sm">
+                <input id="operative-alias" type="text" placeholder="ENTER ALIAS..." class="w-full bg-transparent border border-[#00ff41]/50 p-2 mb-2 focus:outline-none focus:border-[#00ff41] text-sm text-[#00ff41]">
+                <input id="access-code" type="password" placeholder="ENTER ACCESS CODE..." class="w-full bg-transparent border border-[#00ff41]/50 p-2 mb-4 focus:outline-none focus:border-[#00ff41] text-sm text-[#00ff41]">
                 <button onclick="registerOperative()" class="w-full bg-[#00ff41] text-black font-bold p-2 hover:bg-[#003300] hover:text-[#00ff41] transition uppercase text-xs">Initialize Session</button>
             </div>
             <div id="operative-profile" class="hidden">
@@ -95,7 +96,7 @@
         </section>
 
         <section id="director-hub" class="hidden lg:col-span-3 border-2 border-red-600 p-6 bg-black mt-8">
-            <h3 class="text-red-600 font-bold mb-4 tracking-widest underline italic">DIRECTOR COMMAND CENTER</h3>
+            <h3 class="text-red-600 font-bold mb-4 tracking-widest underline italic uppercase">Director Command Center</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <p class="text-xs text-red-500 mb-1 font-bold">BROADCAST NEW DIRECTIVE:</p>
@@ -105,7 +106,7 @@
                 <div class="border-l border-red-900 pl-4">
                     <p class="text-xs text-red-500 mb-1 font-bold">TERMINAL LOGS:</p>
                     <div id="system-logs" class="text-[9px] text-red-400 font-mono h-32 overflow-y-auto">
-                        [SYSTEM] Awaiting Director authentication...
+                        [SYSTEM] Awaiting authentication...
                     </div>
                 </div>
             </div>
@@ -113,6 +114,7 @@
     </main>
 
     <script>
+        // 1. DATABASE CONFIGURATION
         const CONFIG = {
             SUPABASE_URL: "https://lzqlkcrzununkgjohgxa.supabase.co", 
             SUPABASE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6cWxrY3J6dW51bmtnam9oZ3hhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3MTE0MTYsImV4cCI6MjA4NjI4NzQxNn0.xA_Lm4m03Trtbud1gn2gYk1xMJhhZt66NPca6uEtAwM", 
@@ -121,12 +123,14 @@
 
         const supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
 
+        // 2. BOOT SEQUENCE
         document.addEventListener('DOMContentLoaded', () => {
             loadMissions();
             setupRealtime();
             animateThreatLevel();
         });
 
+        // 3. CORE LOGIC
         async function loadMissions() {
             const { data, error } = await supabaseClient
                 .from('missions')
@@ -146,23 +150,44 @@
             document.getElementById('mission-count').innerText = `${data.length.toString().padStart(2, '0')} ACTIVE`;
         }
 
-        function registerOperative() {
-            const alias = document.getElementById('operative-alias').value;
+        async function registerOperative() {
+            const alias = document.getElementById('operative-alias').value.trim();
             const code = document.getElementById('access-code').value;
             const MASTER_CODE = "@MOGProtocol2026"; 
 
             if (!alias) return alert("BIOMETRIC SCAN FAILED: ALIAS REQUIRED");
             if (code !== MASTER_CODE) return alert("ACCESS DENIED: INVALID SECURITY KEY");
 
+            // 1. Check if Operative already exists in your Database
+            let { data: operative, error } = await supabaseClient
+                .from('operatives')
+                .select('*')
+                .eq('alias', alias.toUpperCase())
+                .single();
+
+            // 2. If they don't exist, Register them (Insert into table)
+            if (!operative) {
+                const { data: newOperative, error: insertError } = await supabaseClient
+                    .from('operatives')
+                    .insert([{ alias: alias.toUpperCase() }])
+                    .select()
+                    .single();
+                
+                if (insertError) return alert("REGISTRATION ERROR: " + insertError.message);
+                operative = newOperative;
+                console.log("NEW OPERATIVE REGISTERED:", alias);
+            }
+
+            // 3. Grant Terminal Access
             document.getElementById('auth-section').classList.add('hidden');
             document.getElementById('operative-profile').classList.remove('hidden');
-            document.getElementById('display-alias').innerText = alias.toUpperCase();
+            document.getElementById('display-alias').innerText = operative.alias;
 
-            // Director Elevation Check
+            // 4. Update System Logs for the Director
             if (CONFIG.DIRECTOR_ID === "34c6e8ba-97dd-46fa-ad03-d3cf76d6d64c") {
                 document.getElementById('director-hub').classList.remove('hidden');
                 document.body.classList.add('director-mode');
-                document.getElementById('system-logs').innerHTML += `<br>[${new Date().toLocaleTimeString()}] DIRECTOR VERIFIED. ACCESS GRANTED.`;
+                document.getElementById('system-logs').innerHTML += `<br>[${new Date().toLocaleTimeString()}] ${operative.alias} SESSION INITIALIZED.`;
                 
                 setTimeout(() => {
                     document.getElementById('director-hub').scrollIntoView({ behavior: 'smooth' });
@@ -199,10 +224,8 @@
             }, 4000);
         }
 
-        // Placeholder for Vault upload logic
         function uploadIntel(event) {
-            console.log("Vault connection pending logic...");
-            alert("VAULT CONNECTION INITIALIZED. READY FOR STORAGE.");
+            alert("VAULT SYSTEM READY. UPLOAD LOGIC STANDING BY.");
         }
     </script>
 </body>
