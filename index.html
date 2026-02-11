@@ -10,24 +10,22 @@
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; --mog-red: #ff3333; }
         body { font-family: 'JetBrains+Mono', monospace; background-color: var(--mog-black); color: var(--mog-gold); overflow-x: hidden; }
-
+        
         .video-background { position: fixed; inset: 0; z-index: -1; background: #000; }
         .video-background video { min-width: 100%; min-height: 100%; width: auto; height: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); object-fit: cover; filter: sepia(0.5) hue-rotate(180deg) brightness(0.2); opacity: 0.5; }
 
         .gold-frame { border: 1px solid var(--mog-gold); box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.05); }
         .blue-accent { color: var(--mog-blue); }
-        input, textarea { background: rgba(0, 0, 0, 0.8) !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; color: var(--mog-blue) !important; width: 100%; padding: 10px; margin-bottom: 8px; font-size: 0.8rem; }
+        
+        input { background: rgba(0, 0, 0, 0.8) !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; color: var(--mog-blue) !important; width: 100%; padding: 10px; margin-bottom: 8px; font-size: 0.8rem; outline: none; }
+        input:focus { border-color: var(--mog-gold) !important; }
         
         .btn-gold { background: var(--mog-gold); color: black; font-weight: bold; width: 100%; padding: 10px; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
         .btn-gold:hover { background: white; }
-        .btn-gold:disabled { opacity: 0.5; cursor: wait; }
+        .btn-gold:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .auth-tab { cursor: pointer; transition: 0.3s; padding-bottom: 4px; border-bottom: 2px solid transparent; }
+        .auth-tab { cursor: pointer; transition: 0.3s; padding-bottom: 4px; border-bottom: 2px solid transparent; opacity: 0.5; }
         .auth-tab.active { color: var(--mog-blue); border-bottom-color: var(--mog-blue); opacity: 1; }
-
-        .recon-card { height: 160px; border: 1px solid rgba(212, 175, 55, 0.2); background: black; overflow: hidden; }
-        .recon-card img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: 0.5s; }
-        .recon-card:hover img { filter: grayscale(0%); transform: scale(1.1); }
 
         .director-mode { color: var(--mog-red); }
         .director-mode .gold-frame { border-color: var(--mog-red) !important; }
@@ -48,40 +46,29 @@
         <div class="w-full md:w-64"><audio id="mandate-audio" controls src="mandate_mix.mp3"></audio></div>
     </header>
 
-    <main class="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
-        <section class="gold-frame p-5 bg-black/90 backdrop-blur-xl">
+    <main class="max-w-md mx-auto relative z-10">
+        <section class="gold-frame p-6 bg-black/90 backdrop-blur-xl">
             <div id="auth-header" class="flex gap-6 border-b border-white/10 mb-6 pb-2">
                 <span onclick="switchAuthTab('register')" id="tab-register" class="auth-tab active text-xs font-bold uppercase">Register</span>
-                <span onclick="switchAuthTab('login')" id="tab-login" class="auth-tab text-xs font-bold uppercase opacity-40">Login</span>
+                <span onclick="switchAuthTab('login')" id="tab-login" class="auth-tab text-xs font-bold uppercase">Login</span>
             </div>
             
-            <div id="auth-inputs">
-                <input id="auth-alias" type="text" placeholder="OPERATIVE ALIAS..." class="uppercase">
-                <input id="auth-pass" type="password" placeholder="SECURE PASSCODE...">
-                <button onclick="handleAuthentication()" id="auth-submit-btn" class="btn-gold">Initialize</button>
-                <p id="auth-status-msg" class="text-[10px] mt-4 text-center italic text-blue-400"></p>
-            </div>
+            <div id="auth-ui">
+                <div id="input-area">
+                    <input id="auth-alias" type="text" placeholder="OPERATIVE ALIAS..." class="uppercase">
+                    <input id="auth-pass" type="password" placeholder="SECURE PASSCODE...">
+                    <button onclick="handleAuthentication()" id="auth-submit-btn" class="btn-gold">Initialize</button>
+                    <p id="auth-status-msg" class="text-[10px] mt-4 text-center italic text-blue-400"></p>
+                </div>
 
-            <div id="operative-profile" class="hidden">
-                <p class="text-sm tracking-widest mb-1">AGENT: <span id="display-alias" class="font-bold text-white uppercase">---</span></p>
-                <button onclick="location.reload()" class="text-[9px] underline opacity-50 uppercase">Logoff</button>
-                <div class="mt-8 border-t border-white/10 pt-4">
-                    <input type="file" id="op-file" class="hidden" accept="image/*" onchange="uploadOperativeIntel(event)">
-                    <button onclick="document.getElementById('op-file').click()" class="btn-gold text-[10px] mb-4">Upload Visual Intel</button>
-                    <textarea id="field-report" class="h-20" placeholder="Intel Report..."></textarea>
-                    <button onclick="sendReport()" class="btn-gold text-[10px]">Transmit Data</button>
+                <div id="operative-profile" class="hidden">
+                    <div class="text-center mb-4">
+                        <p class="text-sm tracking-widest">ACCESS GRANTED: <span id="display-alias" class="font-bold text-white uppercase">---</span></p>
+                        <p id="role-tag" class="text-[9px] blue-accent uppercase mt-1">Status: Active</p>
+                    </div>
+                    <button onclick="location.reload()" class="btn-gold !bg-transparent border border-white/20 text-white !py-1 text-[10px]">De-authenticate</button>
                 </div>
             </div>
-        </section>
-
-        <section class="lg:col-span-2 gold-frame p-5 bg-black/90 backdrop-blur-xl">
-            <h2 class="text-xs border-b border-white/10 mb-4 pb-2 flex justify-between font-bold uppercase tracking-widest">Bureau Feed <span id="mission-count" class="blue-accent">00</span></h2>
-            <div id="mission-feed" class="h-64 overflow-y-auto space-y-4"></div>
-        </section>
-
-        <section class="lg:col-span-3 gold-frame p-5 bg-black/90 backdrop-blur-xl">
-            <h2 class="text-xs border-b border-white/10 mb-4 pb-2 font-bold uppercase tracking-widest blue-accent">Ministry Archives</h2>
-            <div id="vault-grid" class="grid grid-cols-2 md:grid-cols-6 gap-4"></div>
         </section>
     </main>
 
@@ -92,16 +79,13 @@
             DIR_CODE: "@MOGProtocol2026"
         };
 
-        // Initialize Supabase Client properly
         const supabase = window.supabase.createClient(CONFIG.URL, CONFIG.KEY);
         let currentAuthMode = 'register';
 
         function switchAuthTab(mode) {
             currentAuthMode = mode;
             document.getElementById('tab-register').classList.toggle('active', mode === 'register');
-            document.getElementById('tab-register').classList.toggle('opacity-40', mode !== 'register');
             document.getElementById('tab-login').classList.toggle('active', mode === 'login');
-            document.getElementById('tab-login').classList.toggle('opacity-40', mode !== 'login');
             document.getElementById('auth-submit-btn').innerText = mode === 'register' ? 'Initialize' : 'Verify Clearance';
             document.getElementById('auth-status-msg').innerText = "";
         }
@@ -118,97 +102,62 @@
             }
 
             btn.disabled = true;
-            btn.innerText = "CONNECTING...";
+            btn.innerText = "COMMUNICATING...";
+            msg.innerText = "ESTABLISHING UPLINK...";
 
             try {
                 if (currentAuthMode === 'register') {
+                    // Registration Logic
                     const isDir = (pass === CONFIG.DIR_CODE);
-                    const { error } = await supabase.from('operatives').insert([{ alias, password: pass, is_director: isDir }]);
+                    const { error } = await supabase
+                        .from('operatives')
+                        .insert([{ alias: alias, password: pass, is_director: isDir }]);
                     
                     if (error) {
+                        console.error("Reg Error:", error);
                         msg.innerText = "ERROR: ALIAS REJECTED BY BUREAU";
                     } else {
                         msg.innerText = "SUCCESS: OPERATIVE LOGGED. PROCEED TO LOGIN.";
                         switchAuthTab('login');
                     }
                 } else {
-                    const { data, error } = await supabase.from('operatives')
+                    // Login Logic
+                    const { data, error } = await supabase
+                        .from('operatives')
                         .select('*')
                         .eq('alias', alias)
                         .eq('password', pass)
                         .maybeSingle();
 
-                    if (error || !data) {
+                    if (error) {
+                        console.error("Login Error:", error);
+                        msg.innerText = "SYSTEM ERROR: UPLINK FAILED";
+                    } else if (!data) {
                         msg.innerText = "ACCESS DENIED: INVALID CLEARANCE";
                     } else {
-                        // Successful Login
-                        document.getElementById('auth-inputs').classList.add('hidden');
-                        document.getElementById('auth-header').classList.add('hidden');
+                        // Login Success
+                        document.getElementById('input-area').classList.add('hidden');
                         document.getElementById('operative-profile').classList.remove('hidden');
                         document.getElementById('display-alias').innerText = alias;
                         
-                        if (data.is_director) document.body.classList.add('director-mode');
-                        loadVault();
-                        msg.innerText = "";
+                        if (data.is_director) {
+                            document.body.classList.add('director-mode');
+                            document.getElementById('role-tag').innerText = "Status: Director Override";
+                            document.getElementById('role-tag').style.color = "var(--mog-red)";
+                        }
+                        msg.innerText = "IDENTITY VERIFIED";
                     }
                 }
             } catch (err) {
-                msg.innerText = "SYSTEM ERROR: CHECK NETWORK";
-                console.error(err);
+                console.error("Fatal Error:", err);
+                msg.innerText = "FATAL ERROR: CHECK CONSOLE (F12)";
             } finally {
                 btn.disabled = false;
-                if (!document.getElementById('auth-inputs').classList.contains('hidden')) {
+                if (btn.innerText === "COMMUNICATING...") {
                     btn.innerText = currentAuthMode === 'register' ? 'Initialize' : 'Verify Clearance';
                 }
             }
         }
-
-        async function loadVault() {
-            const { data } = await supabase.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
-            if (data) {
-                document.getElementById('vault-grid').innerHTML = data.map(file => {
-                    const url = `${CONFIG.URL}/storage/v1/object/public/intel-vault/${file.name}`;
-                    return `<div class="recon-card"><img src="${url}"></div>`;
-                }).join('');
-            }
-        }
-
-        async function loadMissions() {
-            const { data } = await supabase.from('missions').select('*').order('created_at', { ascending: false });
-            if (data) {
-                document.getElementById('mission-feed').innerHTML = data.map(m => `
-                    <div class="border-l-2 border-blue-500 pl-4 py-1 bg-white/5">
-                        <p class="text-[10px] text-white/80">${m.content}</p>
-                    </div>
-                `).join('');
-                document.getElementById('mission-count').innerText = data.length.toString().padStart(2, '0');
-            }
-        }
-
-        async function sendReport() {
-            const report = document.getElementById('field-report').value;
-            const alias = document.getElementById('display-alias').innerText;
-            if (report) { 
-                await supabase.from('missions').insert([{ content: `[INTEL] ${alias}: ${report}` }]); 
-                document.getElementById('field-report').value = ''; 
-                loadMissions();
-            }
-        }
-
-        async function uploadOperativeIntel(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const ext = file.name.split('.').pop();
-            const name = `${Date.now()}_MOG.${ext}`;
-            const { error } = await supabase.storage.from('intel-vault').upload(name, file);
-            if (!error) loadVault();
-        }
-
-        document.addEventListener('DOMContentLoaded', () => { 
-            loadMissions();
-            // Optional: Auto-load vault if you want it visible without login
-            // loadVault();
-        });
     </script>
 </body>
 </html>
