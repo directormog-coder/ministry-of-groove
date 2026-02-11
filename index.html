@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.O.G. | SOVEREIGN v200</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+        body { font-family: 'JetBrains+Mono', monospace; background-color: #050505; color: #00ff41; }
+        .crteffect { background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 2px, 3px 100%; pointer-events: none; position: fixed; inset: 0; z-index: 50; }
+        .threat-bar { transition: width 1s ease-in-out; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="crteffect"></div>
+
+    <header class="border border-[#00ff41] p-4 mb-6 bg-black">
+        <div class="flex justify-between items-center mb-2">
+            <h1 class="text-xl font-bold tracking-widest">MINISTRY OF GROOVE // SOVEREIGN v200</h1>
+            <span id="network-pulse" class="text-xs animate-pulse text-red-500">NETWORK ACTIVE</span>
+        </div>
+        <div class="w-full bg-gray-900 h-4 border border-[#00ff41]/30">
+            <div id="threat-level" class="threat-bar bg-red-600 h-full w-[10%]"></div>
+        </div>
+        <p class="text-[10px] mt-1 opacity-70 uppercase tracking-tighter">System Status: All Systems Normal | Location: Emalahleni-Witbank Hub</p>
+    </header>
+
+    <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <section class="border border-[#00ff41] p-4 bg-black/80">
+            <h2 class="text-sm border-b border-[#00ff41] mb-4 pb-1">BIOMETRIC SCAN</h2>
+            <div id="auth-section">
+                <input id="operative-alias" type="text" placeholder="ENTER ALIAS..." class="w-full bg-transparent border border-[#00ff41]/50 p-2 mb-2 focus:outline-none focus:border-[#00ff41]">
+                <button onclick="registerOperative()" class="w-full bg-[#00ff41] text-black font-bold p-2 hover:bg-[#003300] hover:text-[#00ff41] transition">INITIALIZE SESSION</button>
+            </div>
+            <div id="operative-profile" class="hidden">
+                <p class="text-lg">OPERATIVE: <span id="display-alias">---</span></p>
+                <p class="text-xs opacity-60 mt-2">Rank: Field Agent | Sector: South Africa</p>
+            </div>
+        </section>
+
+        <section class="lg:col-span-2 border border-[#00ff41] p-4 bg-black/80">
+            <h2 class="text-sm border-b border-[#00ff41] mb-4 pb-1 flex justify-between">
+                PRIORITY DIRECTIVES
+                <span id="mission-count" class="text-xs">00 ACTIVE</span>
+            </h2>
+            <div id="mission-feed" class="h-64 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+                </div>
+            
+            <div id="director-controls" class="mt-4 pt-4 border-t border-red-500 hidden">
+                <textarea id="mission-content" class="w-full bg-transparent border border-red-500/50 p-2 text-sm focus:outline-none" placeholder="BROADCAST NEW DIRECTIVE..."></textarea>
+                <button onclick="broadcastMission()" class="mt-2 w-full bg-red-600 text-white p-2 text-xs font-bold uppercase">Execute Protocol Zero</button>
+            </div>
+        </section>
+
+        <section class="lg:col-span-3 border border-[#00ff41] p-4 bg-black/80">
+            <h2 class="text-sm border-b border-[#00ff41] mb-4 pb-1 flex justify-between">
+                SECURE INTEL STORAGE (VAULT)
+                <button onclick="document.getElementById('file-upload').click()" class="text-xs bg-[#00ff41] text-black px-2">+ UPLOAD INTEL</button>
+            </h2>
+            <input type="file" id="file-upload" class="hidden" accept="image/*" onchange="uploadIntel(event)">
+            <div id="vault-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                </div>
+        </section>
+    </main>
+
+    <script>
+        // CONFIGURATION
+        const CONFIG = {
+            SUPABASE_URL: "YOUR_SUPABASE_URL",
+            SUPABASE_KEY: "YOUR_SUPABASE_ANON_KEY",
+            DIRECTOR_ID: "YOUR_USER_ID_FROM_AUTH" 
+        };
+
+        const supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+
+        // INITIALIZATION
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMissions();
+            loadVault();
+            setupRealtime();
+            simulateThreatLevel();
+        });
+
+        async function loadMissions() {
+            const { data } = await supabase.from('missions').select('*').order('created_at', { ascending: false });
+            const feed = document.getElementById('mission-feed');
+            feed.innerHTML = data.map(m => `
+                <div class="border-l-2 border-[#00ff41] pl-3 py-1">
+                    <p class="text-xs opacity-50">[${new Date(m.created_at).toLocaleTimeString()}]</p>
+                    <p class="text-sm">${m.content}</p>
+                </div>
+            `).join('');
+            document.getElementById('mission-count').innerText = `${data.length.toString().padStart(2, '0')} ACTIVE`;
+        }
+
+        async function loadVault() {
+            const { data } = await supabase.from('gallery').select('*').order('created_at', { ascending: false });
+            const grid = document.getElementById('vault-grid');
+            grid.innerHTML = data.map(img => `
+                <div class="aspect-square border border-[#00ff41]/20 overflow-hidden bg-gray-900 group relative">
+                    <img src="${img.image_url}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition">
+                </div>
+            `).join('');
+        }
+
+        async function uploadIntel(event) {
+            const file = event.target.files[0];
+            const fileName = `${Date.now()}_${file.name}`;
+            
+            const { data: uploadData, error } = await supabase.storage
+                .from('vault')
+                .upload(fileName, file);
+
+            if (!error) {
+                const { data: urlData } = supabase.storage.from('vault').getPublicUrl(fileName);
+                await supabase.from('gallery').insert([{ image_url: urlData.publicUrl }]);
+                loadVault();
+            }
+        }
+
+        function setupRealtime() {
+            supabase.channel('custom-all-channel')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'missions' }, () => loadMissions())
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'gallery' }, () => loadVault())
+                .subscribe();
+        }
+
+        function simulateThreatLevel() {
+            const bar = document.getElementById('threat-level');
+            setInterval(() => {
+                const level = Math.floor(Math.random() * (90 - 10 + 1)) + 10;
+                bar.style.width = `${level}%`;
+            }, 5000);
+        }
+
+        // Logic for Director and Registration omitted for brevity but ready for expansion
+    </script>
+</body>
+</html>
