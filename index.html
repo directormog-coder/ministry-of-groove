@@ -24,7 +24,7 @@
             transition: all 0.5s ease; 
         }
 
-        /* Gold Branding Style */
+        /* Sovereign Gold Branding Style */
         .ministry-title {
             color: #D4AF37; 
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); 
@@ -33,7 +33,7 @@
             font-weight: bold;
         }
 
-        /* Video Background */
+        /* Video Background Logic */
         .video-background {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -49,7 +49,43 @@
             object-fit: cover;
             filter: sepia(0.5) hue-rotate(180deg) brightness(0.25) contrast(1.2);
             opacity: 0.5;
+            transition: filter 0.8s ease;
         }
+
+        /* Signal Interference Glitch */
+        @keyframes master-glitch {
+            0% { transform: translate(0); }
+            10% { transform: translate(-3px, 1px); color: var(--mog-blue); }
+            20% { transform: translate(3px, -1px); color: var(--mog-gold); opacity: 0.8; }
+            100% { transform: translate(0); }
+        }
+        .signal-glitch { animation: master-glitch 0.3s infinite; }
+
+        .terminal-overlay { 
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(0, 212, 255, 0.02), rgba(212, 175, 55, 0.02), rgba(0, 212, 255, 0.02)); 
+            background-size: 100% 2px, 3px 100%; 
+            pointer-events: none; position: fixed; inset: 0; z-index: 99; opacity: 0.4; 
+        }
+
+        /* Notification System */
+        #system-alert {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 90%;
+            max-width: 500px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid var(--mog-blue);
+            padding: 15px;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+        #system-alert.active { top: 20px; }
+        .alert-red { border-color: var(--mog-red) !important; box-shadow: 0 0 30px rgba(255, 51, 51, 0.4) !important; }
 
         /* UI Styling */
         .gold-frame { border: 1px solid var(--mog-gold); box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.05); }
@@ -70,38 +106,32 @@
             cursor: pointer;
         }
         .btn-gold:hover { background: white; box-shadow: 0 0 10px white; }
+        .btn-gold:disabled { opacity: 0.5; cursor: wait; }
 
-        .auth-tab { cursor: pointer; transition: 0.3s; padding-bottom: 2px; border-bottom: 2px solid transparent; }
+        .auth-tab { cursor: pointer; transition: 0.3s; padding-bottom: 2px; border-bottom: 2px solid transparent; opacity: 0.5; }
         .auth-tab.active { color: var(--mog-blue); border-bottom-color: var(--mog-blue); opacity: 1; }
 
-        /* Glitch Animation */
-        @keyframes master-glitch {
-            0% { transform: translate(0); }
-            10% { transform: translate(-3px, 1px); color: var(--mog-blue); }
-            20% { transform: translate(3px, -1px); color: var(--mog-gold); }
-            100% { transform: translate(0); }
-        }
-        .signal-glitch { animation: master-glitch 0.3s infinite; }
-
-        .terminal-overlay { 
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(0, 212, 255, 0.02), rgba(212, 175, 55, 0.02), rgba(0, 212, 255, 0.02)); 
-            background-size: 100% 2px, 3px 100%; 
-            pointer-events: none; position: fixed; inset: 0; z-index: 99; opacity: 0.4; 
-        }
+        .recon-card { height: 160px; border: 1px solid rgba(212, 175, 55, 0.2); background: black; overflow: hidden; position: relative; }
+        .recon-card img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) brightness(0.6); transition: 0.5s; }
+        .recon-card:hover img { filter: grayscale(0%) brightness(1); transform: scale(1.05); }
 
         .director-mode { color: var(--mog-red); }
         .director-mode .gold-frame { border-color: var(--mog-red) !important; }
         .director-mode .ministry-title { color: var(--mog-red); text-shadow: 0 0 10px rgba(255, 51, 51, 0.5); }
+        .director-mode .video-background video { filter: sepia(100%) hue-rotate(-50deg) brightness(0.2) contrast(1.4); }
         
         #mandate-audio { height: 30px; width: 100%; border-radius: 0; filter: invert(0.8) sepia(1) hue-rotate(180deg) brightness(1.2); }
         
-        .recon-card { height: 160px; border: 1px solid rgba(212, 175, 55, 0.2); background: black; overflow: hidden; position: relative; }
-        .recon-card img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) brightness(0.6); transition: 0.5s; }
-        .recon-card:hover img { filter: grayscale(0%) brightness(1); }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--mog-gold); }
     </style>
 </head>
 <body class="p-4 md:p-8">
+    <div id="system-alert">
+        <p id="alert-title" class="text-[10px] uppercase font-bold tracking-widest blue-accent mb-1">Bureau Alert</p>
+        <p id="alert-body" class="text-xs text-white uppercase"></p>
+    </div>
+
     <div class="video-background">
         <video id="bg-video" autoplay loop playsinline muted>
             <source src="1000211769.mp4" type="video/mp4">
@@ -115,63 +145,72 @@
             <img src="logo.png" alt="MOG" class="h-12 w-auto brightness-125">
             <div>
                 <h1 class="ministry-title text-xl md:text-2xl">The Ministry of Groove</h1>
-                <p class="text-[9px] opacity-60 uppercase tracking-widest blue-accent mt-1">Identity Management Terminal | Node: 2026.MOG</p>
+                <p class="text-[9px] opacity-60 uppercase tracking-widest blue-accent mt-1">Identity Management Terminal | Sector: Emalahleni</p>
             </div>
         </div>
         <div class="w-full md:w-64">
+            <p class="text-[8px] mb-1 font-bold uppercase text-red-500 animate-pulse text-right">Mandate Freq: 104.2</p>
             <audio id="mandate-audio" controls src="mandate_mix.mp3"></audio>
         </div>
     </header>
 
     <main class="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
         <section class="gold-frame p-5 bg-black/90 backdrop-blur-xl">
-            <div id="auth-header" class="flex gap-6 border-b border-white/10 mb-4 pb-2">
+            <div id="auth-header" class="flex gap-6 border-b border-white/10 mb-6 pb-2">
                 <span onclick="switchAuthTab('register')" id="tab-register" class="auth-tab active text-xs font-bold uppercase">Register</span>
-                <span onclick="switchAuthTab('login')" id="tab-login" class="auth-tab text-xs font-bold uppercase opacity-40">Login</span>
+                <span onclick="switchAuthTab('login')" id="tab-login" class="auth-tab text-xs font-bold uppercase">Login</span>
             </div>
 
             <div id="auth-ui">
                 <div id="input-area">
                     <input id="auth-alias" type="text" placeholder="OPERATIVE ALIAS..." class="w-full p-2 mb-2 text-sm uppercase">
-                    <input id="auth-pass" type="password" placeholder="PASSWORD..." class="w-full p-2 mb-4 text-sm">
-                    <button onclick="handleAuthentication()" id="auth-submit-btn" class="w-full btn-gold p-2 uppercase text-xs">Initialize Verification</button>
-                    <p id="auth-status-msg" class="text-[10px] mt-3 text-center italic blue-accent"></p>
+                    <input id="auth-pass" type="password" placeholder="SECURE PASSWORD..." class="w-full p-2 mb-4 text-sm">
+                    <button onclick="handleAuthentication()" id="auth-submit-btn" class="w-full btn-gold p-2 uppercase text-xs">Verify Clearance</button>
+                    <p id="auth-status-msg" class="text-[10px] mt-4 text-center italic blue-accent"></p>
                 </div>
 
-                <div id="operative-profile" class="hidden">
-                    <p class="text-xs uppercase tracking-widest mb-1 blue-accent">Active Agent:</p>
-                    <p id="display-alias" class="text-xl font-bold text-white uppercase mb-4">---</p>
-                    <button onclick="location.reload()" class="text-[8px] underline opacity-50 hover:opacity-100 uppercase">Logoff System</button>
-                    <div class="mt-6 border-t border-white/10 pt-4">
+                <div id="operative-profile" class="hidden text-center">
+                    <p class="text-[10px] uppercase blue-accent mb-1">Agent Identity Verified</p>
+                    <p id="display-alias" class="text-2xl font-bold text-white uppercase mb-4 tracking-tighter">---</p>
+                    <button onclick="location.reload()" class="text-[9px] underline opacity-50 uppercase mb-6 block mx-auto">Terminate Link</button>
+                    
+                    <div class="mt-4 border-t border-white/10 pt-4 text-left">
                         <input type="file" id="op-file" class="hidden" accept="image/*" onchange="uploadOperativeIntel(event)">
-                        <button onclick="document.getElementById('op-file').click()" class="w-full btn-gold text-[10px] mb-4">Sync Visual Recon</button>
-                        <textarea id="field-report" class="w-full p-2 text-xs h-20 focus:outline-none" placeholder="Draft Intelligence..."></textarea>
-                        <button onclick="sendReport()" class="w-full border border-[#00d4ff] text-[#00d4ff] mt-2 py-2 text-[10px] font-bold uppercase hover:bg-[#00d4ff] hover:text-black transition">Transmit Report</button>
+                        <button onclick="document.getElementById('op-file').click()" class="w-full btn-gold text-[10px] mb-4 p-2">Sync Recon Asset</button>
+                        <textarea id="field-report" class="w-full p-2 text-xs h-20 focus:outline-none" placeholder="Draft Intelligence Report..."></textarea>
+                        <button onclick="sendReport()" class="w-full border border-blue-400 text-blue-400 mt-2 py-2 text-[10px] font-bold uppercase hover:bg-blue-400 hover:text-black transition">Transmit Intel</button>
                     </div>
                 </div>
             </div>
         </section>
 
         <section class="lg:col-span-2 gold-frame p-5 bg-black/90 backdrop-blur-xl">
-            <h2 class="text-xs border-b border-current mb-4 pb-2 flex justify-between font-bold uppercase tracking-widest">Bureau Directives <span id="mission-count" class="text-xs blue-accent">00</span></h2>
+            <h2 class="text-xs border-b border-current mb-4 pb-2 flex justify-between font-bold uppercase tracking-widest">Active Directives <span id="mission-count" class="text-xs blue-accent">00</span></h2>
             <div id="mission-feed" class="h-64 overflow-y-auto space-y-3 pr-2"></div>
         </section>
 
         <section class="lg:col-span-3 gold-frame p-5 bg-black/90 backdrop-blur-xl">
             <h2 class="text-xs border-b border-current mb-4 pb-2 font-bold uppercase tracking-widest blue-accent">Ministry Recon Archives</h2>
-            <div id="vault-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
+            <div id="vault-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 min-h-[100px]"></div>
         </section>
 
         <section id="director-hub" class="hidden lg:col-span-3 border-2 border-red-600 p-6 bg-black/95 backdrop-blur-3xl mt-8">
-            <h3 class="text-red-500 font-bold tracking-[0.4em] uppercase text-lg mb-6 border-b border-red-900 pb-2 italic">Director High-Command</h3>
+            <div class="flex justify-between items-start mb-6 border-b border-red-900 pb-2">
+                <h3 class="text-red-500 font-bold tracking-[0.4em] uppercase text-xl italic">Director Override Hub</h3>
+                <button onclick="fetchArchives()" class="text-[9px] border border-red-500 px-3 text-red-500 hover:bg-red-500 hover:text-black transition">DECRYPT ARCHIVES</button>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div>
                     <input type="file" id="master-file" class="hidden" accept="image/*" onchange="uploadOperativeIntel(event)">
-                    <button onclick="document.getElementById('master-file').click()" class="w-full bg-red-600 text-white font-bold p-3 mb-6 uppercase text-xs">Update Assets</button>
-                    <textarea id="mission-content" class="w-full bg-black border border-red-900 p-3 text-white text-sm h-24 focus:outline-none" placeholder="Draft Mandate..."></textarea>
-                    <button onclick="broadcastMission()" class="w-full bg-red-600 text-white font-bold p-3 mt-4 uppercase text-xs">Execute Broadcast</button>
+                    <button onclick="document.getElementById('master-file').click()" class="w-full bg-red-600 text-white font-bold p-3 mb-6 uppercase text-xs hover:bg-red-500">Sync Master Recon Asset</button>
+                    <textarea id="mission-content" class="w-full bg-black border border-red-900 p-3 text-white text-sm h-24 focus:outline-none" placeholder="Protocol Zero Mandate..."></textarea>
+                    <button onclick="broadcastMission()" class="w-full bg-red-600 text-white font-bold p-3 mt-4 uppercase text-xs hover:bg-red-500 transition">Execute Global Broadcast</button>
                 </div>
-                <div id="system-logs" class="text-[10px] text-red-500 font-mono h-52 overflow-y-auto border-l border-red-900/40 pl-6"></div>
+                <div class="border-l border-red-900/40 pl-6">
+                    <p class="text-[10px] text-red-400 font-bold uppercase mb-3">Bureau Signal Logs</p>
+                    <div id="system-logs" class="text-[10px] text-red-500 font-mono h-52 overflow-y-auto leading-relaxed opacity-80"></div>
+                    <button onclick="retireOperative(prompt('SPECIFY ALIAS FOR PURGE:'))" class="mt-4 text-[8px] text-red-900 underline uppercase italic hover:text-red-500">Purge Record</button>
+                </div>
             </div>
         </section>
     </main>
@@ -179,4 +218,172 @@
     <script>
         const CONFIG = {
             URL: "https://lzqlkcrzununkgjohgxa.supabase.co", 
-            KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6cWxrY3J6dW51bmtnam9oZ3hhIiwicm9sZSI6
+            KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6cWxrY3J6dW51bmtnam9oZ3hhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3MTE0MTYsImV4cCI6MjA4NjI4NzQxNn0.xA_Lm4m03Trtbud1gn2gYk1xMJhhZt66NPca6uEtAwM", 
+            DIR_CODE: "@MOGProtocol2026",
+            DIRECTOR_ID: "34c6e8ba-97dd-46fa-ad03-d3cf76d6d64c"
+        };
+        const supabase = window.supabase.createClient(CONFIG.URL, CONFIG.KEY);
+
+        const bgVideo = document.getElementById('bg-video');
+        const mandateAudio = document.getElementById('mandate-audio');
+        let currentAuthMode = 'register';
+
+        // Audio Ducking Logic
+        bgVideo.volume = 0.2;
+        mandateAudio.onplay = () => { bgVideo.muted = true; };
+        mandateAudio.onpause = () => { bgVideo.muted = false; };
+
+        function showAlert(text, isRed = false) {
+            const alertBox = document.getElementById('system-alert');
+            const alertBody = document.getElementById('alert-body');
+            const alertTitle = document.getElementById('alert-title');
+            alertBox.classList.remove('active', 'alert-red');
+            void alertBox.offsetWidth; 
+            alertBody.innerText = text;
+            alertTitle.innerText = isRed ? "PRIORITY OVERRIDE" : "MINISTRY NOTIFICATION";
+            if (isRed) alertBox.classList.add('alert-red');
+            alertBox.classList.add('active');
+            setTimeout(() => { alertBox.classList.remove('active'); }, 5000);
+        }
+
+        function switchAuthTab(mode) {
+            currentAuthMode = mode;
+            document.getElementById('tab-register').classList.toggle('active', mode === 'register');
+            document.getElementById('tab-login').classList.toggle('active', mode === 'login');
+            document.getElementById('auth-submit-btn').innerText = mode === 'register' ? 'Initialize Verification' : 'Verify Clearance';
+        }
+
+        async function handleAuthentication() {
+            const alias = document.getElementById('auth-alias').value.trim().toUpperCase();
+            const pass = document.getElementById('auth-pass').value;
+            const btn = document.getElementById('auth-submit-btn');
+            const msg = document.getElementById('auth-status-msg');
+
+            if (!alias || !pass) return alert("CREDENTIALS INCOMPLETE");
+            btn.disabled = true;
+            btn.innerText = "ESTABLISHING UPLINK...";
+            bgVideo.play();
+
+            try {
+                if (currentAuthMode === 'register') {
+                    const isDir = (pass === CONFIG.DIR_CODE);
+                    const { error } = await supabase.from('operatives').insert([{ alias, password: pass, is_director: isDir }]);
+                    if (error) throw new Error("ALIAS ALREADY REGISTERED");
+                    showAlert(`OPERATIVE ${alias} LOGGED. PROCEED TO LOGIN.`);
+                    switchAuthTab('login');
+                } else {
+                    const { data, error } = await supabase.from('operatives').select('*').eq('alias', alias).eq('password', pass).maybeSingle();
+                    if (error || !data) throw new Error("INVALID CLEARANCE");
+
+                    document.getElementById('input-area').classList.add('hidden');
+                    document.getElementById('auth-header').classList.add('hidden');
+                    document.getElementById('operative-profile').classList.remove('hidden');
+                    document.getElementById('display-alias').innerText = alias;
+
+                    if (data.is_director) {
+                        document.body.classList.add('director-mode');
+                        document.getElementById('director-hub').classList.remove('hidden');
+                        showAlert("DIRECTOR OVERRIDE ACTIVE", true);
+                    } else {
+                        showAlert(`WELCOME BACK, AGENT ${alias}`);
+                    }
+                    loadVault();
+                }
+            } catch (err) {
+                msg.innerText = err.message;
+                showAlert(err.message, true);
+            } finally {
+                btn.disabled = false;
+                if (!document.getElementById('input-area').classList.contains('hidden')) {
+                    btn.innerText = currentAuthMode === 'register' ? 'Initialize Verification' : 'Verify Clearance';
+                }
+            }
+        }
+
+        async function loadVault() {
+            const { data } = await supabase.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
+            if (data) {
+                document.getElementById('vault-grid').innerHTML = data.map(file => {
+                    const url = `${CONFIG.URL}/storage/v1/object/public/intel-vault/${file.name}`;
+                    return `<div class="recon-card group"><img src="${url}">
+                    <div class="absolute inset-0 bg-red-600/60 hidden group-hover:flex items-center justify-center cursor-pointer text-[8px] font-bold" onclick="deleteIntel('${file.name}')">PURGE</div></div>`;
+                }).join('');
+            }
+        }
+
+        async function deleteIntel(fileName) {
+            if (confirm("PURGE VISUAL ASSET?")) { 
+                await supabase.storage.from('intel-vault').remove([fileName]); 
+                loadVault(); 
+                showAlert("ASSET PURGED");
+            }
+        }
+
+        async function loadMissions() {
+            const { data } = await supabase.from('missions').select('*').order('created_at', { ascending: false });
+            if (data) {
+                document.getElementById('mission-feed').innerHTML = data.map(m => {
+                    const isMandate = m.content.includes("[DIRECTOR]");
+                    return `<div class="border-l-2 ${isMandate ? 'border-red-600 bg-red-900/10' : 'border-blue-400 bg-white/5'} pl-4 py-2">
+                        <p class="text-[8px] opacity-40 uppercase mb-1">${new Date(m.created_at).toLocaleTimeString()}</p>
+                        <p class="text-xs ${isMandate ? 'text-red-400 font-bold' : 'text-blue-50/90'}">${m.content}</p>
+                    </div>`;
+                }).join('');
+                document.getElementById('mission-count').innerText = data.length.toString().padStart(2, '0');
+            }
+        }
+
+        async function uploadOperativeIntel(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const ext = file.name.split('.').pop();
+            const { error } = await supabase.storage.from('intel-vault').upload(`${Date.now()}_MOG.${ext}`, file);
+            if (!error) { loadVault(); triggerGlitch(); showAlert("INTEL UPLOADED"); }
+        }
+
+        async function sendReport() {
+            const report = document.getElementById('field-report').value;
+            if (report) { 
+                await supabase.from('missions').insert([{ content: `[INTEL] ${document.getElementById('display-alias').innerText}: ${report}` }]); 
+                document.getElementById('field-report').value = ''; 
+            }
+        }
+
+        async function broadcastMission() {
+            const content = document.getElementById('mission-content').value;
+            if (content) { 
+                await supabase.from('missions').insert([{ content: `[DIRECTOR MANDATE]: ${content}` }]); 
+                document.getElementById('mission-content').value = ''; 
+            }
+        }
+
+        async function fetchArchives() {
+            const { data } = await supabase.from('mission_archives').select('*').limit(15).order('archived_at', { ascending: false });
+            document.getElementById('system-logs').innerHTML = `<p class="text-white border-b border-red-900 mb-2 uppercase text-[10px]">--- Recovered Archives ---</p>` + data.map(a => `<p class="opacity-70 text-[8px]">[ARCHIVE]: ${a.content}</p>`).join('');
+        }
+
+        async function retireOperative(alias) {
+            if (alias && confirm(`PURGE OPERATIVE ${alias}?`)) { await supabase.from('operatives').delete().eq('alias', alias.toUpperCase()); location.reload(); }
+        }
+
+        function triggerGlitch() {
+            const main = document.querySelector('main');
+            [bgVideo, main].forEach(el => el.classList.add('signal-glitch'));
+            if(!bgVideo.muted) {
+                bgVideo.volume = 0.05;
+                setTimeout(() => { bgVideo.volume = 0.2; }, 800);
+            }
+            setTimeout(() => { [bgVideo, main].forEach(el => el.classList.remove('signal-glitch')); }, 800);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { 
+            loadMissions(); 
+            supabase.channel('any').on('postgres_changes', { event: '*', schema: 'public', table: 'missions' }, (p) => {
+                loadMissions(); 
+                triggerGlitch();
+                if (p.new && p.new.content.includes("[DIRECTOR]")) showAlert("INCOMING PRIORITY MANDATE", true);
+            }).subscribe();
+        });
+    </script>
+</body>
+</html>
