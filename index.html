@@ -10,15 +10,18 @@
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
         body { font-family: 'JetBrains+Mono', monospace; background-color: #050505; color: #00ff41; overflow-x: hidden; transition: all 0.5s ease; }
         .terminal-overlay { background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 2px, 3px 100%; pointer-events: none; position: fixed; inset: 0; z-index: 99; opacity: 0.15; }
+        
+        /* Director Mode Styles */
         .director-mode { box-shadow: inset 0 0 100px rgba(255, 0, 0, 0.3); border: 2px solid #ff0000 !important; color: #ff4444; }
         .director-mode .border-[#00ff41] { border-color: #ff0000 !important; }
+        .director-mode #mission-feed .border-[#00ff41] { border-color: #ff0000 !important; }
+        .director-mode ::-webkit-scrollbar-thumb { background: #ff0000; }
+        .director-mode .logo-frame { filter: drop-shadow(0 0 5px #ff0000); }
+
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: #00ff41; }
-        .director-mode::-webkit-scrollbar-thumb { background: #ff0000; }
         
-        /* Media Styling */
         .logo-frame { height: 40px; filter: drop-shadow(0 0 5px #00ff41); }
-        .director-mode .logo-frame { filter: drop-shadow(0 0 5px #ff0000); }
         audio { height: 30px; width: 100%; border-radius: 0; filter: invert(1) hue-rotate(90deg) brightness(1.5); }
     </style>
 </head>
@@ -103,7 +106,40 @@
         };
         const supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
 
-        document.addEventListener('DOMContentLoaded', () => { loadMissions(); loadVault(); setupRealtime(); setInterval(loadMissions, 60000); });
+        document.addEventListener('DOMContentLoaded', () => { 
+            loadMissions(); 
+            loadVault(); 
+            setupRealtime(); 
+            setInterval(loadMissions, 60000); 
+        });
+
+        async function registerOperative() {
+            const alias = document.getElementById('operative-alias').value.trim().toUpperCase();
+            const code = document.getElementById('access-code').value;
+            
+            if (!alias) return alert("SPECIFY ALIAS");
+            
+            if (code === "@MOGProtocol2026") {
+                // Access Granted: DIRECTOR
+                document.getElementById('auth-section').classList.add('hidden');
+                document.getElementById('operative-profile').classList.remove('hidden');
+                document.getElementById('display-alias').innerText = alias;
+                document.getElementById('director-hub').classList.remove('hidden');
+                document.body.classList.add('director-mode');
+            } else if (code === "OPERATIVE2026") { 
+                // Access Granted: STANDARD OPERATIVE
+                document.getElementById('auth-section').classList.add('hidden');
+                document.getElementById('operative-profile').classList.remove('hidden');
+                document.getElementById('display-alias').innerText = alias;
+                // Ensure director mode is hidden if standard user logs in
+                document.getElementById('director-hub').classList.add('hidden');
+                document.body.classList.remove('director-mode');
+            } else {
+                alert("ACCESS DENIED: INVALID CREDENTIALS");
+            }
+        }
+
+        /* --- Helper Functions --- */
 
         function getRemainingTime(createdAt) {
             const expiry = new Date(createdAt).getTime() + (72 * 60 * 60 * 1000);
@@ -133,50 +169,55 @@
             const { data } = await supabaseClient.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
             document.getElementById('vault-grid').innerHTML = data.map(file => {
                 const url = `${CONFIG.SUPABASE_URL}/storage/v1/object/public/intel-vault/${file.name}`;
-                return `<div class="vault-card h-20 border border-[#00ff41]/20 overflow-hidden"><img src="${url}" class="w-full h-full object-cover"><div class="delete-btn" onclick="deleteIntel('${file.name}')">WIPE</div></div>`;
+                return `<div class="group relative h-20 border border-[#00ff41]/20 overflow-hidden">
+                    <img src="${url}" class="w-full h-full object-cover">
+                    <div onclick="deleteIntel('${file.name}')" class="hidden group-hover:flex absolute inset-0 bg-red-600/80 items-center justify-center text-[8px] font-bold cursor-pointer">WIPE</div>
+                </div>`;
             }).join('');
-        }
-
-        async function registerOperative() {
-            const alias = document.getElementById('operative-alias').value.trim().toUpperCase();
-            const code = document.getElementById('access-code').value;
-            if (!alias || code !== "@MOGProtocol2026") return alert("ACCESS DENIED");
-            document.getElementById('auth-section').classList.add('hidden');
-            document.getElementById('operative-profile').classList.remove('hidden');
-            document.getElementById('display-alias').innerText = alias;
-            if (CONFIG.DIRECTOR_ID === "34c6e8ba-97dd-46fa-ad03-d3cf76d6d64c") {
-                document.getElementById('director-hub').classList.remove('hidden');
-                document.body.classList.add('director-mode');
-            }
         }
 
         async function uploadIntel(event) {
             const file = event.target.files[0];
-            await supabaseClient.storage.from('intel-vault').upload(`${Date.now()}_MOG.jpg`, file);
+            const ext = file.name.split('.').pop();
+            await supabaseClient.storage.from('intel-vault').upload(`${Date.now()}_MOG.${ext}`, file);
             loadVault();
         }
 
         async function deleteIntel(fileName) {
-            if (confirm("PURGE VISUAL?")) { await supabaseClient.storage.from('intel-vault').remove([fileName]); loadVault(); }
+            if (confirm("PURGE VISUAL?")) { 
+                await supabaseClient.storage.from('intel-vault').remove([fileName]); 
+                loadVault(); 
+            }
         }
 
         async function sendReport() {
             const report = document.getElementById('field-report').value;
-            if (report) { await supabaseClient.from('missions').insert([{ content: `[INTEL] ${document.getElementById('display-alias').innerText}: ${report}` }]); document.getElementById('field-report').value = ''; }
+            const alias = document.getElementById('display-alias').innerText;
+            if (report) { 
+                await supabaseClient.from('missions').insert([{ content: `[INTEL] ${alias}: ${report}` }]); 
+                document.getElementById('field-report').value = ''; 
+            }
         }
 
         async function broadcastMission() {
             const content = document.getElementById('mission-content').value;
-            if (content) { await supabaseClient.from('missions').insert([{ content: `[DIRECTOR MANDATE]: ${content}`, author_id: CONFIG.DIRECTOR_ID }]); document.getElementById('mission-content').value = ''; }
+            if (content) { 
+                await supabaseClient.from('missions').insert([{ content: `[DIRECTOR MANDATE]: ${content}`, author_id: CONFIG.DIRECTOR_ID }]); 
+                document.getElementById('mission-content').value = ''; 
+            }
         }
 
         async function fetchArchives() {
             const { data } = await supabaseClient.from('mission_archives').select('*').limit(15).order('archived_at', { ascending: false });
-            document.getElementById('system-logs').innerHTML = `<p class="text-white border-b border-red-900 mb-1 uppercase text-[10px]">--- Recovered Archives ---</p>` + data.map(a => `<p class="opacity-70 text-[8px]">[ARCHIVE]: ${a.content}</p>`).join('');
+            document.getElementById('system-logs').innerHTML = `<p class="text-white border-b border-red-900 mb-1 uppercase text-[10px]">--- Recovered Archives ---</p>` + 
+                data.map(a => `<p class="opacity-70 text-[8px]">[ARCHIVE]: ${a.content}</p>`).join('');
         }
 
         async function retireOperative(alias) {
-            if (alias && confirm(`PURGE ${alias}?`)) { await supabaseClient.from('operatives').delete().eq('alias', alias.toUpperCase()); location.reload(); }
+            if (alias && confirm(`PURGE ${alias}?`)) { 
+                await supabaseClient.from('operatives').delete().eq('alias', alias.toUpperCase()); 
+                location.reload(); 
+            }
         }
 
         function setupRealtime() {
