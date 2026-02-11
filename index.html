@@ -175,24 +175,37 @@
 
     function registerOperative() {
     const alias = document.getElementById('operative-alias').value;
+    const code = document.getElementById('access-code').value;
+    
+    // THE MASTER ACCESS CODE - You can change "MOG_2026" to your own password
+    const MASTER_CODE = "MOG_2026"; 
+
     if (!alias) return alert("BIOMETRIC SCAN FAILED: ALIAS REQUIRED");
     
-    // Switch to Operative Profile
+    // Security Gate
+    if (code !== MASTER_CODE) {
+        alert("ACCESS DENIED: INVALID SECURITY KEY");
+        return;
+    }
+
+    // Access Granted - Reveal Profile
     document.getElementById('auth-section').classList.add('hidden');
     document.getElementById('operative-profile').classList.remove('hidden');
     document.getElementById('display-alias').innerText = alias.toUpperCase();
 
-    // SENSITIVE: Unlock Director Hub ONLY for your UID
+    // DIRECTOR ELEVATION
     if (CONFIG.DIRECTOR_ID === "34c6e8ba-97dd-46fa-ad03-d3cf76d6d64c") {
         document.getElementById('director-hub').classList.remove('hidden');
         document.body.classList.add('director-mode');
         
-        // Auto-scroll to Command Center
         setTimeout(() => {
             document.getElementById('director-hub').scrollIntoView({ behavior: 'smooth' });
         }, 500);
         
         console.log("ACCESS GRANTED: WELCOME DIRECTOR.");
+    }
+    }
+        
     }
     }
     
