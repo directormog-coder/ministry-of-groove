@@ -19,21 +19,25 @@
         .glass-panel { background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(212, 175, 55, 0.2); transition: 0.3s; }
         .glass-panel:hover { border-color: var(--mog-blue); }
 
-        .btn-sovereign { background: var(--mog-gold); color: #000; font-weight: 700; padding: 18px; text-transform: uppercase; width: 100%; transition: 0.3s; cursor: pointer; }
+        .btn-sovereign { background: var(--mog-gold); color: #000; font-weight: 700; padding: 18px; text-transform: uppercase; width: 100%; transition: 0.3s; cursor: pointer; border: none; }
         .btn-sovereign:hover { background: #fff; box-shadow: 0 0 20px white; }
         
         input, textarea { background: rgba(20, 20, 20, 0.6) !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; color: var(--mog-blue) !important; padding: 18px; width: 100%; outline: none; margin-bottom: 15px; }
 
-        /* Gallery/Event Grid Styles */
-        .event-card { border-left: 3px solid var(--mog-gold); background: rgba(255,255,255,0.03); padding: 15px; margin-bottom: 10px; }
-        .gallery-item { position: relative; overflow: hidden; aspect-ratio: 1/1; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
+        /* Session Portal Styles */
+        .event-card { border-left: 3px solid var(--mog-gold); background: rgba(255,255,255,0.03); padding: 20px; margin-bottom: 15px; position: relative; }
+        .portal-link { display: inline-block; margin-top: 10px; font-size: 10px; color: var(--mog-blue); text-decoration: underline; text-transform: uppercase; letter-spacing: 2px; }
+
+        .gallery-item { position: relative; overflow: hidden; aspect-ratio: 1/1; border: 1px solid rgba(255,255,255,0.1); cursor: zoom-in; }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.6); transition: 0.5s; }
         .gallery-item:hover img { filter: grayscale(0) brightness(1); transform: scale(1.1); }
 
         .director-active { border-color: var(--mog-red) !important; }
         #mandate-audio { filter: invert(1); height: 35px; width: 100%; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--mog-gold); }
+        
+        /* Registry Pulse */
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .online { background: #00ff00; box-shadow: 0 0 8px #00ff00; }
     </style>
 </head>
 <body class="p-4 lg:p-12">
@@ -41,7 +45,7 @@
 
     <header class="glass-panel p-8 mb-10 flex flex-col lg:flex-row justify-between items-center relative z-10">
         <div class="flex items-center gap-8">
-            <img src="logo.png" alt="MOG" class="h-16 w-auto brightness-125">
+            <img src="logo.png" alt="MOG" class="h-16 w-auto">
             <h1 class="ministry-title">The Ministry of Groove</h1>
         </div>
         <div class="w-full lg:w-80">
@@ -51,46 +55,46 @@
 
     <main class="grid grid-cols-1 lg:grid-cols-3 gap-10 relative z-10">
         <section id="auth-panel" class="glass-panel p-8">
-            <h2 class="text-sm border-b border-white/10 mb-8 pb-3 font-bold uppercase tracking-widest">Identity Verification</h2>
+            <h2 class="text-sm border-b border-white/10 mb-8 pb-3 font-bold uppercase tracking-widest">Biometric Identity</h2>
             <div id="auth-form">
                 <input id="alias-in" type="text" placeholder="ALIAS_ID" class="uppercase">
                 <input id="pass-in" type="password" placeholder="ACCESS_CODE">
                 <input id="recovery-in" type="password" placeholder="SET RECOVERY KEY" class="hidden">
-                <button onclick="executeAuth()" id="auth-btn" class="btn-sovereign">Confirm Biometrics</button>
+                <button onclick="executeAuth()" id="auth-btn" class="btn-sovereign">Uplink Session</button>
             </div>
             <div id="op-profile" class="hidden">
                 <p id="active-alias" class="text-2xl font-bold text-white uppercase tracking-tighter"></p>
-                <button onclick="localStorage.removeItem('mog_session'); location.reload();" class="text-[11px] underline opacity-40 uppercase">Disconnect Link</button>
+                <p class="text-[10px] blue-accent mb-4">CLEARANCE: LEVEL_4_OPERATIVE</p>
+                <button onclick="localStorage.removeItem('mog_session'); location.reload();" class="text-[11px] underline opacity-40 uppercase">Sever Link</button>
             </div>
         </section>
 
         <section class="glass-panel p-8">
-            <h2 class="text-sm border-b border-white/10 mb-8 pb-3 font-bold uppercase tracking-widest blue-accent">Upcoming Sessions</h2>
+            <h2 class="text-sm border-b border-white/10 mb-8 pb-3 font-bold uppercase tracking-widest blue-accent">Active Portals</h2>
             <div id="event-feed" class="h-[400px] overflow-y-auto pr-2">
                 </div>
         </section>
 
         <section class="glass-panel p-8">
-            <h2 class="text-sm border-b border-white/10 mb-8 pb-3 font-bold uppercase tracking-widest flex justify-between">Directives Feed <span id="m-count" class="blue-accent">00</span></h2>
+            <h2 class="text-sm border-b border-white/10 mb-8 pb-3 font-bold uppercase tracking-widest flex justify-between">Mission Directives <span id="m-count" class="blue-accent">00</span></h2>
             <div id="mission-feed" class="h-[400px] overflow-y-auto space-y-4 pr-2"></div>
         </section>
 
         <section class="lg:col-span-3 glass-panel p-8">
-            <h2 class="text-sm border-b border-white/10 mb-8 pb-3 font-bold uppercase tracking-widest blue-accent text-center">Legacy Archive Gallery</h2>
-            <div id="legacy-gallery" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 min-h-[200px]">
-                </div>
+            <h2 class="text-sm border-b border-white/10 mb-8 pb-3 font-bold uppercase tracking-widest blue-accent text-center">Ministry Visual Archives</h2>
+            <div id="legacy-gallery" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 min-h-[200px]"></div>
         </section>
 
         <section id="director-node" class="hidden lg:col-span-3 border-4 border-red-600 p-10 bg-black mt-12">
-            <h3 class="text-red-500 font-bold uppercase text-2xl mb-8 italic">Director Command & Registry</h3>
+            <h3 class="text-red-500 font-bold uppercase text-2xl mb-8 italic">Director High Command</h3>
+            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div>
-                    <p class="text-xs uppercase font-bold mb-4 opacity-70 text-red-400">Registry Log</p>
-                    <div id="op-registry" class="h-60 overflow-y-auto bg-black/50 p-4 border border-red-900/40 text-[10px] text-red-500 font-mono">
-                        Loading operative database...
-                    </div>
+                    <p class="text-xs uppercase font-bold mb-4 opacity-70 text-red-400">Agent Registry Tracking</p>
+                    <div id="op-registry" class="h-60 overflow-y-auto bg-black/50 p-4 border border-red-900/40 text-[10px] text-red-500 font-mono"></div>
                 </div>
                 <div>
+                    <p class="text-xs uppercase font-bold mb-4 opacity-70 text-red-400">Broadcast Mandate</p>
                     <textarea id="dr-mandate" class="w-full h-40 bg-black border border-red-900 p-6 text-white" placeholder="Broadcast Global Mandate..."></textarea>
                     <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white font-bold p-5 mt-4 uppercase">Execute Broadcast</button>
                 </div>
@@ -140,16 +144,17 @@
                 return `<div class="gallery-item"><img src="${url}"></div>`;
             }).join('');
 
-            // Simulated Event Intel (These can be a new table 'sessions' in Supabase)
+            // Portal Data (Simulated Sessions with links)
             const sessions = [
-                { title: "Neon Vigil", date: "FEB 14 2026", status: "Active" },
-                { title: "Static Pulse", date: "FEB 21 2026", status: "Upcoming" }
+                { title: "Sovereign eMalahleni", date: "FEB 22 2026", link: "https://tickets.ministryofgroove.com", code: "MOG-2026-X" },
+                { title: "The High Command", date: "MAR 05 2026", link: "#", code: "PENDING" }
             ];
             document.getElementById('event-feed').innerHTML = sessions.map(s => `
                 <div class="event-card">
-                    <p class="text-xs blue-accent font-bold">${s.date}</p>
-                    <p class="text-lg font-bold">${s.title}</p>
-                    <p class="text-[9px] opacity-50 uppercase tracking-widest">${s.status}</p>
+                    <p class="text-[10px] blue-accent font-bold uppercase">${s.date}</p>
+                    <p class="text-xl font-bold uppercase">${s.title}</p>
+                    <p class="text-[9px] opacity-60 mt-2">ACCESS_CODE: ${s.code}</p>
+                    <a href="${s.link}" target="_blank" class="portal-link">Establish Access Portal</a>
                 </div>
             `).join('');
         }
@@ -157,19 +162,20 @@
         async function loadRegistry() {
             const { data: operatives } = await db.from('operatives').select('alias, last_seen').order('last_seen', { ascending: false });
             document.getElementById('op-registry').innerHTML = operatives.map(o => `
-                <div class="flex justify-between border-b border-red-900/20 py-1">
-                    <span>${o.alias}</span>
-                    <span class="opacity-50">${new Date(o.last_seen).toLocaleString()}</span>
+                <div class="flex justify-between border-b border-red-900/20 py-2 items-center">
+                    <span><span class="status-dot online"></span>${o.alias}</span>
+                    <span class="opacity-50">${new Date(o.last_seen).toLocaleTimeString()}</span>
                 </div>
             `).join('');
         }
 
-        // ... Previous Authentication logic (executeAuth) remains the same ...
         async function executeAuth() {
             const alias = document.getElementById('alias-in').value.trim().toUpperCase();
             const pass = document.getElementById('pass-in').value;
             if (!alias || !pass) return;
+
             let { data: operative } = await db.from('operatives').select('*').eq('alias', alias).maybeSingle();
+
             if (operative && operative.password === pass) {
                 await db.from('operatives').update({ last_seen: new Date() }).eq('alias', alias);
                 localStorage.setItem('mog_session', JSON.stringify(operative));
@@ -179,7 +185,7 @@
                 const { data: newOp } = await db.from('operatives').insert([{ alias, password: pass, is_director: isDir }]).select().single();
                 localStorage.setItem('mog_session', JSON.stringify(newOp));
                 mountSession(newOp);
-            } else { alert("ACCESS DENIED"); }
+            } else { alert("BIOMETRIC ERROR: IDENTITY REJECTED"); }
         }
 
         async function broadcastMandate() {
