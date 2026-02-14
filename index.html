@@ -10,10 +10,8 @@
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; --mog-red: #ff3333; }
         body { font-family: 'JetBrains+Mono', monospace; background-color: var(--mog-black); color: var(--mog-gold); overflow-x: hidden; }
-        .glass-panel { background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.15); transition: 0.3s; }
-        .glass-panel:hover { border-color: var(--mog-blue); }
-        .btn-uplink { background: var(--mog-gold); color: #000; font-weight: 700; padding: 15px; text-transform: uppercase; width: 100%; cursor: pointer; letter-spacing: 2px; }
-        .btn-uplink:hover { background: #fff; box-shadow: 0 0 15px #fff; }
+        .glass-panel { background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.15); }
+        .btn-uplink { background: var(--mog-gold); color: #000; font-weight: 700; padding: 15px; text-transform: uppercase; width: 100%; cursor: pointer; }
         input, textarea { background: rgba(20, 20, 20, 0.8) !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; color: var(--mog-blue) !important; padding: 15px; width: 100%; outline: none; margin-bottom: 12px; }
         .mission-card { border-left: 3px solid var(--mog-gold); background: rgba(255,255,255,0.02); padding: 15px; margin-bottom: 12px; }
     </style>
@@ -28,7 +26,6 @@
                 <p class="text-[10px] text-blue-400">SIGNAL STATUS: ENCRYPTED // EMALAHLENI</p>
             </div>
         </div>
-        <span class="text-[10px] text-green-500 animate-pulse">● SYSTEM_UPLINK_ACTIVE</span>
     </header>
 
     <main class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -36,44 +33,44 @@
             <h2 class="text-xs font-bold uppercase mb-6 border-b border-white/10 pb-2">Identity Uplink</h2>
             <div id="auth-form">
                 <input id="alias-in" type="text" placeholder="ALIAS" class="uppercase">
-                <input id="pass-in" type="password" placeholder="ACCESS_CODE">
-                <button onclick="executeAuth()" class="btn-uplink">Initialize Session</button>
+                <input id="pass-in" type="password" placeholder="CODE">
+                <button onclick="executeAuth()" class="btn-uplink">Uplink</button>
             </div>
             <div id="op-profile" class="hidden">
                 <p id="active-alias" class="text-2xl font-bold text-white uppercase"></p>
-                <p class="text-[10px] text-blue-400 mb-6">LEVEL_4_DIRECTORATE</p>
-                <button onclick="logout()" class="text-[10px] underline opacity-40 uppercase">Terminate Uplink</button>
+                <button onclick="logout()" class="text-[10px] underline opacity-40 uppercase">Sever Link</button>
             </div>
         </section>
 
         <section class="lg:col-span-8 glass-panel p-6">
-            <h2 class="text-xs font-bold uppercase mb-6 border-b border-white/10 pb-2 text-blue-400">Global Mission Feed</h2>
-            <div id="mission-feed" class="h-[300px] overflow-y-auto space-y-4 pr-2"></div>
+            <h2 class="text-xs font-bold uppercase mb-6 border-b border-white/10 pb-2 text-blue-400">Mission Feed</h2>
+            <div id="mission-feed" class="h-[300px] overflow-y-auto space-y-4"></div>
         </section>
 
-        <section id="director-node" class="hidden lg:col-span-12 glass-panel p-8 border-2 border-red-600/30 bg-red-900/5">
-            <h3 class="text-red-500 font-bold uppercase text-xl mb-8 tracking-tighter italic">Directorate High Command</h3>
+        <section id="director-node" class="hidden lg:col-span-12 glass-panel p-8 border-2 border-red-600/30">
+            <h3 class="text-red-500 font-bold uppercase text-xl mb-8">Director High Command</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Broadcast Global Mandate (Push Alert)</p>
-                    <textarea id="dr-mandate" class="h-32 text-white border-red-900/40" placeholder="Type mandate content..."></textarea>
-                    <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white font-bold p-4 uppercase text-xs hover:bg-red-500 transition">Execute Global Signal</button>
+                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Broadcast Global Mandate</p>
+                    <textarea id="dr-mandate" class="h-32 text-white" placeholder="Type message..."></textarea>
+                    <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white font-bold p-4 uppercase text-xs">Execute Global Signal</button>
                 </div>
                 <div>
-                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Intel-Vault Media Upload</p>
+                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Intel-Vault Upload</p>
                     <input type="file" id="media-upload" class="hidden" onchange="uploadToVault()">
-                    <button onclick="document.getElementById('media-upload').click()" class="w-full border border-red-600 text-red-600 p-4 uppercase text-[10px] hover:bg-red-600 hover:text-white transition">Select Intel File</button>
+                    <button onclick="document.getElementById('media-upload').click()" class="w-full border border-red-600 text-red-600 p-4 uppercase text-[10px]">Select Intel File</button>
                 </div>
             </div>
         </section>
     </main>
 
     <script>
-        // INTEGRATED INFRASTRUCTURE KEYS
         const CONFIG = {
             U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
             K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8",
             D_PASS: "@MOGProtocol2026",
+            
+            // --- UPDATED NOTIFICATION KEYS ---
             OS_ID: "3ef253d3-a093-42f5-bc88-91dd7576cf34",
             OS_KEY: "os_v2_app_h3zfhu5asnbplpeishoxk5wpgsedx7ey5awufq5igtoqvyqjs5irlyexuwezh3dx3yne25iopuh6pt447ggxwgvrahkcne2xjosgbua"
         };
@@ -89,26 +86,17 @@
         async function executeAuth() {
             const alias = document.getElementById('alias-in').value.trim().toUpperCase();
             const pass = document.getElementById('pass-in').value;
-            if (!alias || !pass) return alert("BIOMETRICS REQUIRED");
-
             let { data: op } = await db.from('operatives').select('*').eq('alias', alias).maybeSingle();
-
-            if (op && op.password === pass) {
-                loginSuccess(op);
-            } else if (!op) {
+            if (op && op.password === pass) loginSuccess(op);
+            else if (!op) {
                 const isDir = (pass === CONFIG.D_PASS);
                 const { data: newOp } = await db.from('operatives').insert([{ alias, password: pass, is_director: isDir }]).select().single();
                 loginSuccess(newOp);
-            } else { alert("ACCESS DENIED: IDENTITY REJECTED"); }
+            } else { alert("ACCESS DENIED"); }
         }
 
-        function loginSuccess(op) {
-            localStorage.setItem('mog_session', JSON.stringify(op));
-            mountSession(op);
-            db.from('operatives').update({ last_seen: new Date() }).eq('id', op.id);
-            location.reload();
-        }
-
+        function loginSuccess(op) { localStorage.setItem('mog_session', JSON.stringify(op)); mountSession(op); location.reload(); }
+        
         function mountSession(op) {
             document.getElementById('auth-form').classList.add('hidden');
             document.getElementById('op-profile').classList.remove('hidden');
@@ -118,25 +106,17 @@
 
         async function loadMissions() {
             const { data: m } = await db.from('missions').select('*').order('created_at', { ascending: false });
-            document.getElementById('mission-feed').innerHTML = m.map(i => `
-                <div class="mission-card">
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="text-[9px] text-blue-400 font-bold uppercase">Signal Log</span>
-                        <span class="text-[8px] opacity-30">${new Date(i.created_at).toLocaleTimeString()}</span>
-                    </div>
-                    <p class="text-sm text-white/80">${i.content}</p>
-                </div>
-            `).join('');
+            document.getElementById('mission-feed').innerHTML = m.map(i => `<div class="mission-card"><p class="text-sm">${i.content}</p></div>`).join('');
         }
 
         async function broadcastMandate() {
             const content = document.getElementById('dr-mandate').value;
             if (!content) return;
             
-            // 1. Database Entry
+            // 1. Save to Database
             await db.from('missions').insert([{ content: content, is_global_mandate: true }]);
 
-            // 2. OneSignal API Call
+            // 2. Send Push Notification
             await fetch("https://onesignal.com/api/v1/notifications", {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": `Basic ${CONFIG.OS_KEY}` },
@@ -150,16 +130,13 @@
 
             document.getElementById('dr-mandate').value = '';
             loadMissions();
-            alert("MANDATE EXECUTED: GLOBAL SIGNAL SENT");
+            alert("MANDATE BROADCASTED TO ALL DEVICES");
         }
 
         async function uploadToVault() {
             const file = document.getElementById('media-upload').files[0];
-            if (!file) return;
-            const fileName = `${Date.now()}_${file.name}`;
-            const { error } = await db.storage.from('intel-vault').upload(fileName, file);
-            if (error) alert("UPLOAD ERROR: " + error.message);
-            else { alert("INTEL SECURED"); location.reload(); }
+            await db.storage.from('intel-vault').upload(`${Date.now()}_${file.name}`, file);
+            location.reload();
         }
 
         function logout() { localStorage.removeItem('mog_session'); location.reload(); }
