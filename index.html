@@ -6,112 +6,142 @@
     <title>M.O.G. | THE MINISTRY OF GROOVE HQ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; --mog-red: #ff3333; }
-        body { font-family: 'JetBrains+Mono', monospace; background-color: var(--mog-black); color: var(--mog-gold); overflow-x: hidden; font-size: 0.95rem; }
-        body::before {
-            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 100; background-size: 100% 2px, 3px 100%; pointer-events: none;
-        }
-        .ministry-title { color: var(--mog-gold); text-shadow: 0 0 15px rgba(212, 175, 55, 0.5); letter-spacing: 0.5em; text-transform: uppercase; font-weight: 700; }
-        .glass-panel { background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.15); transition: 0.4s ease; }
-        .btn-uplink { background: var(--mog-gold); color: #000; font-weight: 700; padding: 15px; text-transform: uppercase; width: 100%; cursor: pointer; letter-spacing: 2px; }
-        input, textarea { background: rgba(20, 20, 20, 0.8) !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; color: var(--mog-blue) !important; padding: 12px; width: 100%; outline: none; margin-bottom: 8px; }
-        .mission-card { border-left: 3px solid var(--mog-gold); background: rgba(255,255,255,0.02); padding: 15px; margin-bottom: 12px; }
-        .chat-msg { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 8px 0; }
-        .download-btn { font-size: 8px; border: 1px solid var(--mog-gold); padding: 4px 8px; color: var(--mog-gold); text-decoration: none; transition: 0.3s; display: inline-block; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
-        .download-btn:hover { background: var(--mog-gold); color: black; }
-        .rank-tag { font-size: 7px; padding: 1px 4px; border-radius: 2px; margin-right: 5px; vertical-align: middle; font-weight: bold; }
+        body { font-family: 'JetBrains+Mono', monospace; background-color: var(--mog-black); color: var(--mog-gold); overflow-x: hidden; font-size: 0.95rem; margin: 0; }
+        
+        #bg-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -2; filter: grayscale(100%) brightness(15%) contrast(110%); object-fit: cover; pointer-events: none; }
+        .crt-overlay { position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05)); z-index: 50; background-size: 100% 2px, 3px 100%; pointer-events: none; opacity: 0.4; }
+        
+        .glass-panel { background: rgba(5, 5, 5, 0.88); backdrop-filter: blur(20px); border: 1px solid rgba(212, 175, 55, 0.25); transition: 0.3s; }
+        .btn-uplink { background: var(--mog-gold); color: #000; font-weight: 700; padding: 15px; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; border: none; }
+        input, textarea { background: rgba(10, 10, 10, 0.95) !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; color: var(--mog-blue) !important; padding: 12px; width: 100%; outline: none; margin-bottom: 8px; }
+        
+        /* Flash Alert Protocol */
+        #flash-alert { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 0, 0, 0.2); z-index: 2000; display: none; align-items: center; justify-content: center; pointer-events: none; border: 20px solid var(--mog-red); animation: alert-blink 0.5s infinite; }
+        @keyframes alert-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .social-icon { font-size: 1.5rem; transition: 0.3s; color: var(--mog-gold); opacity: 0.6; }
+        .social-icon:hover { opacity: 1; transform: translateY(-3px); color: var(--mog-blue); }
+        .download-btn { font-size: 8px; border: 1px solid var(--mog-gold); padding: 4px 8px; color: var(--mog-gold); background: rgba(0,0,0,0.8); text-decoration: none; }
+        .venue-pin { border-bottom: 1px solid rgba(0, 212, 255, 0.1); padding: 8px 0; }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
-    <header class="glass-panel p-6 mb-8 flex flex-col lg:flex-row justify-between items-center gap-6">
+    <div id="flash-alert"><h1 class="text-4xl md:text-6xl font-black text-white italic tracking-tighter">DIRECTORATE PRIORITY SIGNAL</h1></div>
+
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/1000211769.mp4" type="video/mp4">
+    </video>
+    <div class="crt-overlay"></div>
+
+    <header class="glass-panel p-6 mb-8 flex flex-col lg:flex-row justify-between items-center gap-6 relative z-50">
         <div class="flex items-center gap-6">
-            <div class="h-16 w-16 bg-gold rounded-full flex items-center justify-center border-2 border-gold shadow-lg"><span class="text-black font-bold text-xl">MOG</span></div>
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" alt="MOG Logo" class="h-16 w-16 border-2 border-gold rounded-full bg-black">
             <div>
-                <h1 class="ministry-title text-xl md:text-2xl">The Ministry of Groove</h1>
-                <p class="text-[10px] text-blue-400 tracking-[0.3em]">SECURE ACCESS POINT // EMALAHALENI NODE</p>
+                <h1 class="text-xl md:text-2xl font-bold uppercase tracking-[0.4em] text-gold">The Ministry of Groove</h1>
+                <p class="text-[10px] text-blue-400 tracking-[0.3em]">UPLINK STATUS: ENCRYPTED // EMALAHLENI</p>
             </div>
         </div>
-        <div id="active-track-title" class="text-[9px] uppercase tracking-widest text-gold animate-pulse hidden">SONIC_UPLINK_ACTIVE...</div>
+        <div class="flex gap-6 items-center">
+            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="social-icon"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://www.facebook.com/share/1D9jcB5998/" target="_blank" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://www.instagram.com/ministryofgroove_hq?igsh=Y3Rwc24zcmtsY2xj" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+            <a href="mailto:director.mog@gmail.com" class="social-icon"><i class="fa-solid fa-envelope"></i></a>
+        </div>
     </header>
 
-    <main class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main class="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-50">
         <section id="auth-panel" class="lg:col-span-4 glass-panel p-6">
             <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Biometric Identity</h2>
             <div id="auth-form">
                 <input id="alias-in" type="text" placeholder="ALIAS" class="uppercase">
                 <input id="pass-in" type="password" placeholder="CODE">
-                <button onclick="executeAuth()" class="btn-uplink">Uplink</button>
+                <button onclick="executeAuth()" class="btn-uplink w-full">Initialize Uplink</button>
             </div>
             <div id="op-profile" class="hidden text-center">
                 <p id="active-alias" class="text-2xl font-bold text-white uppercase"></p>
-                <div id="user-rank-display" class="mt-2"></div>
+                <div id="user-rank-display" class="mt-2 text-[10px] font-bold text-gold"></div>
                 <button onclick="logout()" class="text-[10px] underline opacity-40 uppercase mt-4 block mx-auto">Sever Link</button>
             </div>
         </section>
 
         <section class="lg:col-span-8 glass-panel p-6 border-l-4 border-blue-500">
             <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-2">
-                <h2 class="text-xs font-bold uppercase tracking-widest text-blue-400">Current Mission Uplink</h2>
+                <h2 class="text-xs font-bold uppercase tracking-widest text-blue-400">Mission Intent</h2>
                 <span id="rsvp-count" class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-1 rounded">0 ATTENDING</span>
             </div>
             <div id="event-display" class="flex flex-col md:flex-row justify-between items-center gap-4">
-                <div>
-                    <h3 id="event-title" class="text-xl font-bold text-white uppercase tracking-tighter italic">No Active Event</h3>
-                    <p id="event-desc" class="text-[10px] opacity-60">Stand by for Directorate instructions.</p>
-                </div>
-                <button id="rsvp-btn" onclick="submitRSVP()" class="hidden border border-blue-400 text-blue-400 px-6 py-3 uppercase text-xs hover:bg-blue-400 hover:text-black transition font-bold">Signal Intent (RSVP)</button>
+                <div><h3 id="event-title" class="text-xl font-bold text-white uppercase italic">No Active Event</h3><p class="text-[10px] opacity-60">Standing by...</p></div>
+                <button id="rsvp-btn" onclick="submitRSVP()" class="hidden border border-blue-400 text-blue-400 px-6 py-3 uppercase text-xs font-bold">Signal Intent (RSVP)</button>
             </div>
         </section>
 
         <section class="lg:col-span-8 glass-panel p-6">
             <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-blue-400">Sonic Uplink // Mix Archive</h2>
-            <audio id="main-audio-player" controls class="w-full h-10 mb-4"></audio>
-            <div id="mix-list" class="h-[150px] overflow-y-auto space-y-2 pr-2"></div>
+            <audio id="main-audio-player" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" controls class="w-full h-10 mb-4"></audio>
+            <div id="mix-list" class="h-[120px] overflow-y-auto space-y-2 pr-2"></div>
         </section>
 
         <section class="lg:col-span-4 glass-panel p-6">
-            <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-red-500">Global Mandates</h2>
-            <div id="mission-feed" class="h-[280px] overflow-y-auto pr-4 space-y-4 text-[11px]"></div>
+            <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-blue-400">Venue Map</h2>
+            <div id="venue-list" class="h-[180px] overflow-y-auto text-[10px] uppercase text-blue-400"></div>
         </section>
 
         <section class="lg:col-span-6 glass-panel p-6 flex flex-col">
             <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-blue-400">Live Frequency Chat</h2>
-            <div id="chat-window" class="h-[240px] overflow-y-auto mb-4 pr-2 space-y-1 text-white/90"></div>
-            <div id="chat-input-area" class="mt-auto hidden">
-                <input id="chat-msg-in" type="text" placeholder="TRANSMIT MESSAGE..." onkeypress="if(event.key==='Enter') sendChat()">
-            </div>
+            <div id="chat-window" class="h-[240px] overflow-y-auto mb-4 text-white/90 text-sm"></div>
+            <div id="chat-input-area" class="hidden mt-auto"><input id="chat-msg-in" type="text" placeholder="TRANSMIT..." onkeypress="if(event.key==='Enter') sendChat()"></div>
         </section>
 
         <section class="lg:col-span-6 glass-panel p-6">
-            <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-gold">Visual Archives // Intel-Vault</h2>
+            <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-gold">Visual Archives</h2>
             <div id="tile-gallery" class="grid grid-cols-2 md:grid-cols-3 gap-4 h-[240px] overflow-y-auto pr-2"></div>
         </section>
 
+        <section class="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-8 glass-panel p-8 border-t-2 border-gold/20">
+            <div>
+                <h2 class="text-xs font-bold uppercase tracking-widest mb-4 text-blue-400">Secure Frequency Subscription</h2>
+                <div class="flex flex-col gap-2">
+                    <input id="news-email" type="email" placeholder="EMAIL_UPLINK" class="text-xs">
+                    <button onclick="subscribeNewsletter()" class="btn-uplink text-[10px] py-3">Register Intel</button>
+                    <p id="news-status" class="text-[8px] mt-2 uppercase hidden"></p>
+                </div>
+            </div>
+            <div class="text-center md:text-left">
+                <p class="text-[10px] uppercase tracking-[0.5em] mb-6 opacity-60">External Signal Outposts</p>
+                <div class="flex justify-center md:justify-start gap-8">
+                    <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="social-icon"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://www.facebook.com/share/1D9jcB5998/" target="_blank" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/ministryofgroove_hq?igsh=Y3Rwc24zcmtsY2xj" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="mailto:director.mog@gmail.com" class="social-icon"><i class="fa-solid fa-envelope"></i></a>
+                </div>
+            </div>
+        </section>
+
         <section id="director-node" class="hidden lg:col-span-12 glass-panel p-8 border-2 border-red-600/30 bg-red-900/5">
-            <h3 class="text-red-500 font-bold uppercase text-xl mb-8 tracking-widest text-center italic text-center">Directorate Control Node</h3>
+            <h3 class="text-red-500 font-bold uppercase text-xl mb-8 tracking-widest text-center italic">Directorate Control Node</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
-                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Broadcast Mandate</p>
-                    <textarea id="dr-mandate" class="h-32 text-white" placeholder="Type message..."></textarea>
-                    <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white font-bold p-4 uppercase text-xs">Execute Global Signal</button>
+                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Mandate & Pin</p>
+                    <input id="pin-venue-name" type="text" placeholder="VENUE" class="text-xs mb-1">
+                    <input id="pin-coords" type="text" placeholder="COORDS" class="text-xs mb-1">
+                    <button onclick="pinVenue()" class="w-full bg-blue-600 text-white p-2 text-[10px] mb-4">PIN TO MAP</button>
+                    <textarea id="dr-mandate" class="h-24 text-white" placeholder="ALERT: Exclusive Drop Now..."></textarea>
+                    <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white p-4 uppercase text-xs">Execute Global Signal</button>
                 </div>
                 <div>
-                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Vault Upload</p>
+                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Vault Uplink</p>
                     <input type="file" id="media-upload" class="hidden" onchange="uploadToVault()">
-                    <button onclick="document.getElementById('media-upload').click()" class="w-full border border-red-600 text-red-600 p-4 uppercase text-[10px] mb-4 hover:bg-red-600 hover:text-white transition">Select Intel File</button>
-                    <div class="border-t border-red-900/20 pt-4">
-                        <button onclick="purgeChat()" class="w-full border-2 border-red-600 bg-red-600/20 text-red-600 font-bold p-2 uppercase text-[10px]">Purge Chat Frequency</button>
-                    </div>
+                    <button onclick="document.getElementById('media-upload').click()" class="w-full border border-red-600 text-red-600 p-4 uppercase text-[10px] mb-4">SELECT INTEL</button>
+                    <button onclick="purgeChat()" class="w-full border-2 border-red-600 text-red-600 p-2 uppercase text-[10px]">PURGE FREQUENCY</button>
                 </div>
-                <div>
-                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Operative Registry</p>
-                    <div id="op-registry" class="h-48 overflow-y-auto bg-black/40 p-4 border border-red-900/20 text-[11px]"></div>
+                <div id="op-registry" class="h-48 overflow-y-auto bg-black/40 p-4 border border-red-900/20 text-[11px]"></div>
+                <div class="md:col-span-3 border-t border-red-900/20 pt-4 mt-4">
+                    <textarea id="director-log" class="h-32 text-white bg-black/60 border-red-900/40" placeholder="Strategy Log..."></textarea>
                 </div>
             </div>
         </section>
@@ -121,57 +151,39 @@
         const CONFIG = {
             U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
             K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8",
-            D_PASS: "@MOGProtocol2026",
-            OS_ID: "3ef253d3-a093-42f5-bc88-91dd7576cf34",
-            OS_KEY: "os_v2_app_h3zfhu5asnbplpeishoxk5wpgsedx7ey5awufq5igtoqvyqjs5irlyexuwezh3dx3yne25iopuh6pt447ggxwgvrahkcne2xjosgbua"
+            D_PASS: "@MOGProtocol2026"
         };
-
         const db = window.supabase.createClient(CONFIG.U, CONFIG.K);
         let currentUser = null;
 
-        const RANKS = [
-            { limit: 0, label: "RECRUIT", color: "#808080" },
-            { limit: 10, label: "OPERATIVE", color: "#00d4ff" },
-            { limit: 50, label: "SPECIALIST", color: "#D4AF37" },
-            { limit: 100, label: "ELITE", color: "#ff3333" },
-            { limit: 999, label: "DIRECTOR", color: "#ff0000" }
-        ];
-
-        function getClearance(op) {
-            if (op.is_director) return RANKS[4];
-            const count = op.message_count || 0;
-            let currentRank = RANKS[0];
-            for (let r of RANKS) { if (count >= r.limit) currentRank = r; }
-            return currentRank;
-        }
-
         window.onload = () => {
-            const session = JSON.parse(localStorage.getItem('mog_session'));
-            if (session) mountSession(session);
-            loadMissions();
-            loadChat();
-            loadVault();
+            const s = JSON.parse(localStorage.getItem('mog_session'));
+            if (s) mountSession(s);
+            loadMissions(); loadChat(); loadVault(); loadVenues();
             
-            db.channel('public:chat').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat' }, payload => {
-                appendChatMessage(payload.new);
+            // Listen for Real-time ALERT Broadcasts
+            db.channel('global_signal').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'missions' }, p => {
+                if (p.new.content.toUpperCase().startsWith("ALERT:")) triggerFlash();
+                loadMissions();
             }).subscribe();
         };
 
+        function triggerFlash() {
+            const f = document.getElementById('flash-alert');
+            f.style.display = 'flex';
+            setTimeout(() => { f.style.display = 'none'; }, 5000);
+        }
+
         async function executeAuth() {
-            const alias = document.getElementById('alias-in').value.trim().toUpperCase();
-            const pass = document.getElementById('pass-in').value;
-            if (!alias || !pass) return alert("REQUIRED: ALIAS & CODE");
-
-            let { data: op } = await db.from('operatives').select('*').eq('alias', alias).maybeSingle();
-
-            if (op && op.password === pass) { 
-                loginSuccess(op); 
-            } else if (!op) {
-                const isDir = (pass === CONFIG.D_PASS);
-                const { data: newOp } = await db.from('operatives').insert([{ alias, password: pass, is_director: isDir }]).select().single();
-                await db.from('chat').insert([{ alias: "SYSTEM", message: `NEW UPLINK ESTABLISHED: Welcome Operative ${alias} to the Ministry.` }]);
-                loginSuccess(newOp);
-            } else { alert("ACCESS DENIED"); }
+            const a = document.getElementById('alias-in').value.trim().toUpperCase();
+            const p = document.getElementById('pass-in').value;
+            let { data: op } = await db.from('operatives').select('*').eq('alias', a).maybeSingle();
+            if (op && op.password === p) loginSuccess(op);
+            else if (!op) {
+                const { data: n } = await db.from('operatives').insert([{ alias: a, password: p, is_director: (p === CONFIG.D_PASS) }]).select().single();
+                await db.from('chat').insert([{ alias: "SYSTEM", message: `NEW UPLINK: Welcome ${a}.` }]);
+                loginSuccess(n);
+            }
         }
 
         function loginSuccess(op) { localStorage.setItem('mog_session', JSON.stringify(op)); location.reload(); }
@@ -183,133 +195,48 @@
             document.getElementById('op-profile').classList.remove('hidden');
             document.getElementById('active-alias').innerText = fresh.alias;
             document.getElementById('chat-input-area').classList.remove('hidden');
-            
-            const clearance = getClearance(fresh);
-            document.getElementById('user-rank-display').innerHTML = `<span class="text-[10px] font-bold" style="color:${clearance.color}">CLEARANCE: ${clearance.label}</span>`;
-            
             if (fresh.is_director) {
                 document.getElementById('director-node').classList.remove('hidden');
                 loadRegistry();
+                const l = document.getElementById('director-log');
+                l.value = localStorage.getItem('mog_director_log') || '';
+                l.addEventListener('input', (e) => localStorage.setItem('mog_director_log', e.target.value));
             }
             loadRSVPs();
         }
 
         async function loadVault() {
             const { data: files } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
-            if (!files) return;
-            const tileGallery = document.getElementById('tile-gallery');
+            let isSub = false;
+            if (currentUser) {
+                const { data: check } = await db.from('operative_newsletter').select('id').eq('operative_alias', currentUser.alias).maybeSingle();
+                if (check) isSub = true;
+            }
             const mixList = document.getElementById('mix-list');
-            tileGallery.innerHTML = ''; mixList.innerHTML = '';
-
-            files.forEach(f => {
-                if (f.name === '.emptyFolderPlaceholder') return;
+            const tileGallery = document.getElementById('tile-gallery');
+            mixList.innerHTML = `<div class="flex justify-between items-center p-2 border border-blue-500/30 bg-blue-500/5"><span class="text-[10px] cursor-pointer text-blue-400" onclick="playTrack('https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3', 'MANDATE')">MANDATE_MIX</span><a href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" download class="download-btn">SECURE</a></div>`;
+            if (files) files.forEach(f => {
                 const url = `${CONFIG.U}/storage/v1/object/public/intel-vault/${f.name}`;
-                if (f.name.endsWith('.mp3') || f.name.endsWith('.wav')) {
-                    const row = document.createElement('div');
-                    row.className = "flex justify-between items-center p-2 border border-white/5 bg-white/5 hover:bg-gold/10 transition";
-                    row.innerHTML = `<span class="text-[10px] uppercase truncate flex-grow cursor-pointer" onclick="playTrack('${url}', '${f.name}')">${f.name.split('_')[1] || f.name}</span>
-                                     <a href="${url}" download="${f.name}" target="_blank" class="download-btn">SECURE</a>`;
-                    mixList.appendChild(row);
+                const excl = f.name.toLowerCase().includes('exclusive');
+                if (f.name.match(/\.(mp3|wav)$/)) {
+                    mixList.innerHTML += `<div class="flex justify-between items-center p-2 border border-white/5 bg-white/5"><span class="text-[10px] uppercase truncate cursor-pointer" onclick="playTrack('${url}', '${f.name}')">${excl ? '[EXCL] ' : ''}${f.name.split('_')[1] || f.name}</span>${(!excl || isSub) ? `<a href="${url}" download class="download-btn">SECURE</a>` : `<span class="text-[7px] text-red-500">SUB_REQUIRED</span>`}</div>`;
                 } else {
-                    tileGallery.innerHTML += `
-                        <div class="relative group aspect-square glass-panel overflow-hidden border-white/5">
-                            <img src="${url}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
-                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex flex-col items-center justify-center p-4">
-                                <a href="${url}" download="${f.name}" target="_blank" class="download-btn">SECURE INTEL</a>
-                            </div>
-                        </div>`;
+                    tileGallery.innerHTML += `<div class="relative group aspect-square glass-panel overflow-hidden"><img src="${url}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700"><div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center"><a href="${url}" download class="download-btn">SECURE</a></div></div>`;
                 }
             });
         }
 
-        function playTrack(url, name) {
-            document.getElementById('main-audio-player').src = url;
-            document.getElementById('main-audio-player').play();
-            document.getElementById('active-track-title').innerText = "PLAYING: " + (name.split('_')[1] || name);
-            document.getElementById('active-track-title').classList.remove('hidden');
-        }
-
-        async function loadRSVPs() {
-            const eventName = document.getElementById('event-title').innerText;
-            if (eventName === "No Active Event") return;
-            const { count } = await db.from('event_rsvps').select('*', { count: 'exact', head: true }).eq('event_name', eventName);
-            document.getElementById('rsvp-count').innerText = `${count || 0} ATTENDING`;
-        }
-
-        async function submitRSVP() {
-            if (!currentUser) return alert("IDENTITY UPLINK REQUIRED");
-            const eventName = document.getElementById('event-title').innerText;
-            const { error } = await db.from('event_rsvps').insert([{ event_name: eventName, operative_alias: currentUser.alias }]);
-            if (error && error.code === '23505') alert("INTENT ALREADY SIGNALED");
-            else if (error) alert("SIGNAL FAILED: " + error.message);
-            else { alert("INTENT LOGGED."); loadRSVPs(); }
-        }
-
-        async function broadcastMandate() {
-            const content = document.getElementById('dr-mandate').value;
-            if (!content) return;
-            if (content.toUpperCase().startsWith("EVENT:")) {
-                const title = content.split('\n')[0].replace("EVENT:", "").trim();
-                document.getElementById('event-title').innerText = title;
-                document.getElementById('rsvp-btn').classList.remove('hidden');
-            }
-            await db.from('missions').insert([{ content, is_global_mandate: true }]);
-            await fetch("https://onesignal.com/api/v1/notifications", {
-                method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Basic ${CONFIG.OS_KEY}` },
-                body: JSON.stringify({ app_id: CONFIG.OS_ID, included_segments: ["All"], headings: {"en": "DIRECTORATE MANDATE"}, contents: {"en": content} })
-            });
-            document.getElementById('dr-mandate').value = '';
-            location.reload();
-        }
-
-        async function loadChat() {
-            const { data: msgs } = await db.from('chat').select('*').order('created_at', { ascending: true }).limit(50);
-            const { data: ops } = await db.from('operatives').select('alias, is_director, message_count');
-            if (msgs) msgs.forEach(m => {
-                const op = ops.find(o => o.alias === m.alias) || { message_count: 0 };
-                appendChatMessage(m, getClearance(op));
-            });
-        }
-
-        function appendChatMessage(m, cl) {
-            const win = document.getElementById('chat-window');
-            win.innerHTML += `<div class="chat-msg"><span class="rank-tag" style="border: 1px solid ${cl.color}; color: ${cl.color}">${cl.label}</span><span class="text-[9px] text-blue-400 font-bold">${m.alias}:</span> <span class="text-[11px]">${m.message}</span></div>`;
-            win.scrollTop = win.scrollHeight;
-        }
-
-        async function sendChat() {
-            const input = document.getElementById('chat-msg-in');
-            const msg = input.value.trim();
-            if (!msg || !currentUser) return;
-            await db.from('chat').insert([{ alias: currentUser.alias, message: msg }]);
-            input.value = '';
-        }
-
-        async function uploadToVault() {
-            const file = document.getElementById('media-upload').files[0];
-            if (!file) return;
-            const { error } = await db.storage.from('intel-vault').upload(`${Date.now()}_${file.name}`, file);
-            if (!error && file.type.includes('audio')) {
-                await fetch("https://onesignal.com/api/v1/notifications", {
-                    method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Basic ${CONFIG.OS_KEY}` },
-                    body: JSON.stringify({ app_id: CONFIG.OS_ID, included_segments: ["All"], headings: {"en": "SONIC UPLINK"}, contents: {"en": `Intel secured: ${file.name}`} })
-                });
-            }
-            location.reload();
-        }
-
-        async function loadMissions() {
-            const { data: m } = await db.from('missions').select('*').order('created_at', { ascending: false });
-            document.getElementById('mission-feed').innerHTML = m.map(i => `<div class="mission-card ${i.is_global_mandate ? 'border-red-600 bg-red-600/5' : ''}"><p class="text-xs">${i.content}</p></div>`).join('');
-        }
-
-        async function loadRegistry() {
-            const { data: ops } = await db.from('operatives').select('*').order('last_seen', { ascending: false });
-            document.getElementById('op-registry').innerHTML = ops.map(o => {
-                const cl = getClearance(o);
-                return `<div class="flex justify-between py-1 border-b border-white/5"><span><span style="color:${cl.color}">[${cl.label}]</span> ${o.alias}</span><span class="opacity-30">${o.last_seen ? new Date(o.last_seen).toLocaleTimeString() : '...'}</span></div>`;
-            }).join('');
-        }
-
-        async function purgeChat() { if (confirm("PURGE CHAT?")) { await db.rpc('clear_chat_history'); location.reload(); } }
-      
+        function playTrack(url, name) { document.getElementById('main-audio-player').src = url; document.getElementById('main-audio-player').play(); }
+        async function loadVenues() { const { data } = await db.from('venue_pins').select('*').order('created_at', { ascending: false }); document.getElementById('venue-list').innerHTML = data.map(v => `<div class="venue-pin">📍 ${v.venue_name} <br> <span class="opacity-40">${v.coordinates}</span></div>`).join(''); }
+        async function pinVenue() { const n = document.getElementById('pin-venue-name').value; const c = document.getElementById('pin-coords').value; await db.from('venue_pins').insert([{ venue_name: n, coordinates: c }]); location.reload(); }
+        async function loadRSVPs() { const et = document.getElementById('event-title').innerText; if (et === "No Active Event") return; const { count } = await db.from('event_rsvps').select('*', { count: 'exact', head: true }).eq('event_name', et); document.getElementById('rsvp-count').innerText = `${count || 0} ATTENDING`; }
+        async function submitRSVP() { const et = document.getElementById('event-title').innerText; await db.from('event_rsvps').insert([{ event_name: et, operative_alias: currentUser.alias }]); loadRSVPs(); }
+        async function broadcastMandate() { const c = document.getElementById('dr-mandate').value; if (c.toUpperCase().startsWith("EVENT:")) document.getElementById('rsvp-btn').classList.remove('hidden'); await db.from('missions').insert([{ content: c, is_global_mandate: true }]); location.reload(); }
+        async function loadChat() { const { data } = await db.from('chat').select('*').order('created_at', { ascending: true }).limit(50); data.forEach(m => document.getElementById('chat-window').innerHTML += `<div><span class="text-blue-400 font-bold">${m.alias}:</span> ${m.message}</div>`); }
+        async function sendChat() { const i = document.getElementById('chat-msg-in'); await db.from('chat').insert([{ alias: currentUser.alias, message: i.value }]); i.value = ''; }
+        async function uploadToVault() { const f = document.getElementById('media-upload').files[0]; await db.storage.from('intel-vault').upload(`${Date.now()}_${f.name}`, f); location.reload(); }
+        async function loadMissions() { const { data } = await db.from('missions').select('*').order('created_at', { ascending: false }); document.getElementById('mission-feed').innerHTML = data.map(i => `<div class="mission-card"><p>${i.content}</p></div>`).join(''); }
+        async function subscribeNewsletter() { const e = document.getElementById('news-email').value; await db.from('operative_newsletter').insert([{ operative_alias: currentUser.alias, email: e }]); location.reload(); }
+        function logout() { localStorage.removeItem('mog_session'); location.reload(); }
+        async function purgeChat() { await db.rpc('clear_chat_history'); location.reload(); }
+        function loadRegistry() { db.from('operatives').select('*').then(({data}) => document.getElementById('op-registry').innerHTML = dat
