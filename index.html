@@ -8,41 +8,40 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; --mog-red: #ff3333; }
-        
-        * { transition: background-color 0.3s ease, border-color 0.3s ease; scroll-behavior: smooth; }
+        * { transition: all 0.25s ease; scroll-behavior: smooth; }
         body { font-family: 'JetBrains+Mono', monospace; background-color: var(--mog-black); color: var(--mog-gold); overflow-x: hidden; font-size: 0.95rem; margin: 0; }
         
-        /* Background Protocol */
         #bg-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -2; filter: grayscale(100%) brightness(12%) contrast(115%); object-fit: cover; pointer-events: none; }
         .crt-overlay { position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)); z-index: 50; background-size: 100% 2px, 3px 100%; pointer-events: none; opacity: 0.5; }
         
-        /* UI Components */
-        .glass-panel { background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(30px); border: 1px solid rgba(212, 175, 55, 0.2); }
+        .glass-panel { background: rgba(5, 5, 5, 0.88); backdrop-filter: blur(30px); border: 1px solid rgba(212, 175, 55, 0.2); }
+        .glass-panel:hover { border-color: var(--mog-gold); box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); }
+        
         .btn-uplink { background: var(--mog-gold); color: #000; font-weight: 800; padding: 15px; text-transform: uppercase; cursor: pointer; letter-spacing: 3px; border: none; width: 100%; }
         input, textarea { background: rgba(10, 10, 10, 0.9) !important; border: 1px solid rgba(212, 175, 55, 0.1) !important; color: var(--mog-blue) !important; padding: 14px; width: 100%; outline: none; margin-bottom: 10px; }
         
-        /* Flash Alert Protocol */
         #flash-alert { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 0, 0, 0.2); z-index: 2000; display: none; align-items: center; justify-content: center; pointer-events: none; border: 20px solid var(--mog-red); animation: alert-blink 0.5s infinite; }
         @keyframes alert-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* Identity Card Rendering */
-        #qr-card { background: #fff; padding: 30px; border-radius: 5px; position: relative; border: 4px solid var(--mog-gold); color: #000; text-align: center; }
+        #qr-card { background: #fff; padding: 30px; border-radius: 4px; position: relative; border: 4px solid var(--mog-gold); color: #000; text-align: center; }
         #qr-logo-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 45px; height: 45px; border-radius: 50%; background: #000; border: 2px solid var(--mog-gold); z-index: 10; }
         
-        /* Lists */
-        .history-item { border-left: 2px solid rgba(212, 175, 55, 0.3); background: rgba(255, 255, 255, 0.02); padding: 8px; margin-bottom: 4px; }
-        .download-btn { font-size: 8px; border: 1px solid var(--mog-gold); padding: 5px 10px; color: var(--mog-gold); background: rgba(0,0,0,0.85); text-decoration: none; }
+        .history-item { border-left: 3px solid rgba(212, 175, 55, 0.3); background: rgba(255, 255, 255, 0.03); padding: 10px; margin-bottom: 5px; }
         .scrollbar-hidden::-webkit-scrollbar { width: 4px; }
         .scrollbar-hidden::-webkit-scrollbar-thumb { background: var(--mog-gold); }
+
+        /* Search Bar Glow */
+        .search-glow:focus { box-shadow: 0 0 15px rgba(0, 212, 255, 0.2); border-color: var(--mog-blue) !important; }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
-    <div id="flash-alert"><h1 class="text-4xl md:text-6xl font-black text-white italic tracking-tighter text-center">DIRECTORATE PRIORITY SIGNAL</h1></div>
+    <div id="flash-alert"><h1 class="text-4xl md:text-7xl font-black text-white italic text-center tracking-tighter">DIRECTORATE PRIORITY SIGNAL</h1></div>
 
     <video autoplay muted loop playsinline id="bg-video">
         <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/1000211769.mp4" type="video/mp4">
@@ -51,17 +50,16 @@
 
     <header class="glass-panel p-8 mb-10 flex flex-col lg:flex-row justify-between items-center gap-8 relative z-50">
         <div class="flex items-center gap-8">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" alt="MOG Logo" class="h-20 w-20 border-2 border-gold rounded-full bg-black shadow-xl">
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" alt="MOG Logo" class="h-20 w-20 border-2 border-gold rounded-full bg-black shadow-2xl">
             <div>
                 <h1 class="text-2xl md:text-3xl font-black uppercase tracking-[0.5em] text-gold">The Ministry of Groove</h1>
-                <p class="text-[10px] text-blue-400 tracking-[0.4em] mt-2 italic">ENCRYPTED FREQUENCY // EMALAHLENI</p>
+                <p class="text-[10px] text-blue-400 tracking-[0.4em] mt-2 italic">ENCRYPTED FREQUENCY // EMALAHLENI CORE</p>
             </div>
         </div>
         <div class="flex gap-8 items-center">
-            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="text-gold text-2xl hover:text-white transition"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="https://www.facebook.com/share/1D9jcB5998/" target="_blank" class="text-gold text-2xl hover:text-white transition"><i class="fa-brands fa-facebook"></i></a>
-            <a href="https://www.instagram.com/ministryofgroove_hq?igsh=Y3Rwc24zcmtsY2xj" target="_blank" class="text-gold text-2xl hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
-            <a href="mailto:director.mog@gmail.com" class="text-gold text-2xl hover:text-white transition"><i class="fa-solid fa-envelope"></i></a>
+            <div id="notification-status" class="text-[8px] font-bold text-gray-500 uppercase tracking-widest border border-gray-500 px-2 py-1">Signal Offline</div>
+            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="text-gold text-2xl hover:text-white"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://www.instagram.com/ministryofgroove_hq?igsh=Y3Rwc24zcmtsY2xj" target="_blank" class="text-gold text-2xl hover:text-white"><i class="fa-brands fa-instagram"></i></a>
         </div>
     </header>
 
@@ -69,25 +67,20 @@
         
         <section id="live-booth-display" class="lg:col-span-12 glass-panel p-10 relative">
             <div class="flex items-center justify-between border-b border-gold/10 pb-4 mb-8">
-                <p class="text-[10px] font-bold text-gold tracking-[0.5em] uppercase">● Live From The Booth</p>
+                <p class="text-[10px] font-bold text-gold tracking-[0.5em] uppercase"><span class="inline-block h-2 w-2 bg-green-500 rounded-full animate-pulse mr-2"></span> Active Stream</p>
                 <p id="live-timestamp" class="text-[10px] opacity-30"></p>
             </div>
-            <div class="text-center py-6">
-                <h2 id="current-track" class="text-4xl md:text-7xl font-black italic tracking-tighter text-white uppercase">Awaiting Signal...</h2>
-                <p id="current-artist" class="text-blue-400 text-xl font-bold uppercase tracking-[0.4em]">Director Offline</p>
+            <div class="text-center py-10">
+                <h2 id="current-track" class="text-5xl md:text-8xl font-black italic tracking-tighter text-white uppercase leading-none">Syncing...</h2>
+                <p id="current-artist" class="text-blue-400 text-xl font-bold uppercase tracking-[0.4em] mt-4">Director Offline</p>
             </div>
-            <div class="mt-8 pt-6 border-t border-white/5">
-                <div class="flex justify-between items-center mb-4">
+
+            <div class="mt-10 pt-8 border-t border-white/5">
+                <div class="flex justify-between items-center mb-6">
                     <p class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Sonic Archive</p>
-                    <button onclick="toggleHistory()" class="text-[8px] border border-blue-400 px-3 py-1 hover:bg-blue-400 hover:text-black uppercase font-bold">Access History</button>
+                    <button onclick="toggleHistory()" class="text-[9px] border border-blue-400/40 px-4 py-1 hover:bg-blue-400 hover:text-black uppercase font-bold">Access History</button>
                 </div>
-                <div id="setlist-history" class="hidden grid grid-cols-1 md:grid-cols-5 gap-3"></div>
-            </div>
-            <div id="request-area" class="mt-8 max-w-xl mx-auto hidden">
-                <div class="flex gap-2">
-                    <input id="track-req-in" type="text" placeholder="TRANSMIT TRACK REQUEST..." class="!mb-0 text-xs flex-grow">
-                    <button onclick="submitTrackRequest()" class="bg-blue-600 text-white px-6 text-xs font-black uppercase">Send</button>
-                </div>
+                <div id="setlist-history" class="hidden grid grid-cols-1 md:grid-cols-5 gap-4"></div>
             </div>
         </section>
 
@@ -95,24 +88,24 @@
             <h2 class="text-xs font-bold uppercase tracking-widest mb-8 border-b border-white/10 pb-2">Biometric Identity</h2>
             <div id="auth-form">
                 <div class="flex gap-6 mb-8">
-                    <button id="tab-login" onclick="toggleAuth('login')" class="text-[11px] font-black text-white border-b-2 border-gold pb-1">LOGIN</button>
-                    <button id="tab-register" onclick="toggleAuth('register')" class="text-[11px] font-black text-gray-600 pb-1">REGISTER</button>
+                    <button id="tab-login" onclick="toggleAuth('login')" class="text-[11px] font-black text-white border-b-2 border-gold pb-1 tracking-widest">LOGIN</button>
+                    <button id="tab-register" onclick="toggleAuth('register')" class="text-[11px] font-black text-gray-600 pb-1 tracking-widest">REGISTER</button>
                 </div>
                 <input id="operative-in" type="text" placeholder="OPERATIVE ID" class="uppercase">
                 <input id="password-in" type="password" placeholder="PASSWORD">
                 <button onclick="executeAuth()" id="auth-action-btn" class="btn-uplink">Initialize Uplink</button>
             </div>
             <div id="op-profile" class="hidden text-center">
-                <p id="active-alias" class="text-2xl font-black text-white uppercase mb-6"></p>
-                <div id="identity-download-zone" class="mb-6 inline-block">
+                <p id="active-alias" class="text-2xl font-black text-white uppercase mb-8 tracking-widest"></p>
+                <div id="identity-download-zone" class="mb-8 inline-block">
                     <div id="qr-card">
                         <div id="qrcode"></div>
                         <img id="qr-logo-overlay" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
-                        <p class="mt-4 text-[10px] font-black uppercase text-black">Official Operative</p>
+                        <p class="mt-6 text-[10px] font-black uppercase text-black tracking-[0.3em]">Official Operative</p>
                     </div>
                 </div>
-                <button onclick="downloadIdentityCard()" class="btn-uplink !bg-blue-600 !text-white !text-[10px] mb-2">Export ID Card</button>
-                <button onclick="logout()" class="text-[10px] underline opacity-40 hover:opacity-100 uppercase block mx-auto">Sever Link</button>
+                <button onclick="downloadIdentityCard()" class="btn-uplink !bg-blue-600 !text-white !text-[10px] mb-4">Export Identity</button>
+                <button onclick="logout()" class="text-[11px] underline opacity-30 hover:opacity-100 uppercase block mx-auto transition">Sever Link</button>
             </div>
         </section>
 
@@ -120,39 +113,47 @@
             <div class="glass-panel p-8 border-l-4 border-blue-500">
                 <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-2">
                     <h2 class="text-xs font-bold uppercase tracking-widest text-blue-400">Mission Intent</h2>
-                    <span id="rsvp-count" class="text-[11px] text-blue-400 font-black">0 SIGNALED</span>
+                    <span id="rsvp-count" class="text-[11px] text-blue-400 font-black tracking-widest">0 SIGNALED</span>
                 </div>
-                <h3 id="event-title" class="text-xl font-black text-white uppercase italic">No Active Mission</h3>
-                <button id="rsvp-btn" onclick="submitRSVP()" class="hidden btn-uplink !py-4 !text-[11px] mt-6">Signal Intent</button>
+                <h3 id="event-title" class="text-2xl font-black text-white uppercase italic">No Active Mission</h3>
+                <button id="rsvp-btn" onclick="submitRSVP()" class="hidden btn-uplink !py-4 !text-[11px] mt-8">Signal Intent</button>
             </div>
+            
             <div class="glass-panel p-8">
-                <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-blue-400">Sonic Uplink</h2>
+                <h2 class="text-xs font-bold uppercase tracking-widest mb-4 border-b border-white/10 pb-2 text-blue-400">Sonic Uplink</h2>
+                <div class="relative mb-6">
+                    <input type="text" id="archive-search" placeholder="SEARCH ARCHIVES..." class="text-[10px] !mb-0 search-glow w-full" oninput="filterArchives()">
+                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-4 text-blue-400 opacity-50"></i>
+                </div>
                 <audio id="main-audio-player" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" controls class="w-full h-10 mb-6"></audio>
-                <div id="mix-list" class="h-[120px] overflow-y-auto space-y-2 pr-2 scrollbar-hidden"></div>
+                <div id="mix-list" class="h-[140px] overflow-y-auto space-y-3 pr-2 scrollbar-hidden"></div>
             </div>
         </section>
 
         <section class="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="glass-panel p-8 flex flex-col">
-                <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-blue-400">Frequency Chat</h2>
-                <div id="chat-window" class="h-[240px] overflow-y-auto mb-6 text-white/90 text-sm space-y-3 scrollbar-hidden"></div>
-                <div id="chat-input-area" class="hidden mt-auto"><input id="chat-msg-in" type="text" placeholder="TRANSMIT MESSAGE..." onkeypress="if(event.key==='Enter') sendChat()"></div>
+                <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-blue-400">Live Frequency Chat</h2>
+                <div id="chat-window" class="h-[240px] overflow-y-auto mb-6 text-white/80 text-sm space-y-3 scrollbar-hidden"></div>
+                <div id="chat-input-area" class="hidden mt-auto">
+                    <input id="chat-msg-in" type="text" placeholder="TRANSMIT MESSAGE..." class="!mb-0" onkeypress="if(event.key==='Enter') sendChat()">
+                </div>
             </div>
             <div class="glass-panel p-8">
-                <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-blue-400">Venue Map</h2>
-                <div id="venue-list" class="h-[240px] overflow-y-auto space-y-3 text-[10px] uppercase text-blue-400 scrollbar-hidden"></div>
+                <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-gold">Visual Archives</h2>
+                <div id="tile-gallery" class="grid grid-cols-2 md:grid-cols-3 gap-6 h-[320px] overflow-y-auto pr-2 scrollbar-hidden"></div>
             </div>
         </section>
 
-        <section class="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="glass-panel p-8">
-                <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-gold">Visual Archives</h2>
-                <div id="tile-gallery" class="grid grid-cols-2 md:grid-cols-3 gap-6 h-[240px] overflow-y-auto pr-2 scrollbar-hidden"></div>
-            </div>
-            <div class="glass-panel p-8 border-t-2 border-gold/20">
-                <h2 class="text-xs font-bold uppercase tracking-widest mb-4 text-blue-400">Inner Circle Newsletter</h2>
-                <input id="news-email" type="email" placeholder="SECURE_EMAIL_ID">
-                <button onclick="subscribeNewsletter()" class="btn-uplink !py-3 !text-[10px]">Establish Newsletter Link</button>
+        <section class="lg:col-span-12 glass-panel p-10 border-t-2 border-gold/30">
+            <div class="flex flex-col md:flex-row items-center gap-10">
+                <div class="md:w-1/2">
+                    <h2 class="text-2xl font-black uppercase tracking-[0.3em] mb-4 text-blue-400">Inner Circle Uplink</h2>
+                    <p class="text-xs opacity-50 uppercase leading-relaxed">Join the network to unlock exclusive downloads and private mandates from HQ.</p>
+                </div>
+                <div class="md:w-1/2 flex flex-col gap-4 w-full">
+                    <input id="news-email" type="email" placeholder="SECURE_EMAIL_ID" class="!mb-0">
+                    <button id="news-btn" onclick="subscribeNewsletter()" class="btn-uplink">Establish Link</button>
+                </div>
             </div>
         </section>
 
@@ -163,26 +164,18 @@
                     <p class="text-[11px] uppercase font-black mb-6 text-red-500">Booth Control</p>
                     <input id="booth-track" type="text" placeholder="TRACK" class="text-xs mb-1">
                     <input id="booth-artist" type="text" placeholder="ARTIST" class="text-xs mb-4">
-                    <button onclick="pushToBooth()" class="btn-uplink !py-3 !text-[10px] !bg-red-600 !text-white font-black">Push to Live</button>
-                    <p class="text-[11px] uppercase font-black mt-10 mb-4 text-red-500">Live Requests</p>
-                    <div id="request-list" class="h-40 overflow-y-auto text-[10px] bg-black/60 p-4 border border-red-900/30 scrollbar-hidden"></div>
+                    <button onclick="pushToBooth()" class="btn-uplink !py-3 !text-[10px] !bg-red-600 !text-white font-black">Broadcast Track</button>
                 </div>
                 <div class="md:col-span-2 border-r border-red-900/20 pr-8">
-                    <p class="text-[11px] uppercase font-black mb-6 text-red-500">Logistics & Venue Pins</p>
-                    <div class="flex gap-4 mb-4">
-                        <input id="pin-venue-name" type="text" placeholder="VENUE" class="text-xs !mb-0 w-1/2">
-                        <input id="pin-coords" type="text" placeholder="COORDS" class="text-xs !mb-0 w-1/2">
-                    </div>
-                    <button onclick="pinVenue()" class="w-full bg-blue-900 text-white p-3 text-[11px] mb-8 uppercase font-black">Update Map</button>
+                    <p class="text-[11px] uppercase font-black mb-6 text-red-500">Global Mandate</p>
                     <textarea id="dr-mandate" class="h-32 text-white bg-black/40 border-red-900/30 mb-4" placeholder="Broadcast Directive..."></textarea>
-                    <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white p-5 uppercase font-black text-xs shadow-2xl">Execute Signal</button>
+                    <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white p-5 uppercase font-black text-xs">Execute Signal</button>
                 </div>
                 <div>
-                    <p class="text-[11px] uppercase font-black mb-6 text-red-500">Strategy Ledger</p>
-                    <textarea id="director-log" class="h-48 text-white bg-black/80 border-red-900/40 text-[11px] p-6 mb-6" placeholder="Secret strategies..."></textarea>
+                    <p class="text-[11px] uppercase font-black mb-6 text-red-500">Intel Archive</p>
                     <input type="file" id="media-upload" class="hidden" onchange="uploadToVault()">
-                    <button onclick="document.getElementById('media-upload').click()" class="w-full border-2 border-red-600 text-red-600 p-4 uppercase font-black text-[10px]">Upload Intel</button>
-                    <button onclick="purgeChat()" class="w-full border border-red-600 bg-red-600/10 text-red-600 p-2 text-[8px] mt-4">PURGE CHAT</button>
+                    <button onclick="document.getElementById('media-upload').click()" class="w-full border-2 border-red-600 text-red-600 p-4 uppercase font-black text-[10px] mb-4">Upload Intel</button>
+                    <button onclick="purgeChat()" class="w-full border border-red-600 bg-red-600/10 text-red-600 p-2 text-[8px]">Purge History</button>
                 </div>
             </div>
         </section>
@@ -192,22 +185,49 @@
         const CONFIG = {
             U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
             K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8",
-            D_PASS: "@MOGProtocol2026"
+            D_PASS: "@MOGProtocol2026",
+            ONESIGNAL_APP_ID: "3ef253d3-a093-42f5-bc88-91dd7576cf34"
         };
         const db = window.supabase.createClient(CONFIG.U, CONFIG.K);
         let currentUser = null;
         let authMode = 'login';
+        let fullVaultData = [];
+
+        // ONESIGNAL CUSTOM MINISTRY STYLING
+        window.OneSignal = window.OneSignal || [];
+        OneSignal.push(function() {
+            OneSignal.init({
+                appId: CONFIG.ONESIGNAL_APP_ID,
+                safari_web_id: "web.onesignal.auto.104256f1-678a-4d43-8f64-46c5970c73f5",
+                allowLocalhostAsSecureOrigin: true,
+                notifyButton: {
+                    enable: true,
+                    size: 'medium',
+                    theme: 'dark',
+                    position: 'bottom-right',
+                    offset: { bottom: '20px', right: '20px' },
+                    colors: {
+                        'circle.background': '#050505',
+                        'circle.foreground': '#D4AF37',
+                        'pulse.color': '#D4AF37'
+                    }
+                }
+            });
+            OneSignal.on('notificationPermissionChange', function(p) {
+                const s = document.getElementById('notification-status');
+                if(p.status === "granted") { s.innerText = "Signal Active"; s.classList.add('text-green-500'); }
+            });
+        });
 
         window.onload = () => {
             const s = JSON.parse(localStorage.getItem('mog_session'));
             if (s) mountSession(s);
-            loadMissions(); loadChat(); loadVault(); loadVenues(); loadCurrentBooth(); loadTrackHistory();
+            loadMissions(); loadChat(); loadVault(); loadCurrentBooth(); loadTrackHistory();
             setInterval(() => { document.getElementById('live-timestamp').innerText = new Date().toLocaleTimeString(); }, 1000);
 
-            db.channel('master_signal').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'live_setlist' }, p => {
+            db.channel('master_hq').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'live_setlist' }, p => {
                 updateBoothUI(p.new); loadTrackHistory();
-            }).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'track_requests' }, p => loadTrackRequests())
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat' }, p => appendChat(p.new))
+            }).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat' }, p => appendChat(p.new))
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'missions' }, p => {
                 if (p.new.content.toUpperCase().startsWith("ALERT:")) triggerFlash();
                 loadMissions();
@@ -216,8 +236,8 @@
 
         function toggleAuth(mode) {
             authMode = mode;
-            document.getElementById('tab-login').className = mode === 'login' ? "text-[11px] font-black text-white border-b-2 border-gold pb-1" : "text-[11px] font-black text-gray-600 pb-1";
-            document.getElementById('tab-register').className = mode === 'register' ? "text-[11px] font-black text-white border-b-2 border-gold pb-1" : "text-[11px] font-black text-gray-600 pb-1";
+            document.getElementById('tab-login').className = mode === 'login' ? "text-[11px] font-black text-white border-b-2 border-gold pb-1 tracking-widest" : "text-[11px] font-black text-gray-600 pb-1 tracking-widest";
+            document.getElementById('tab-register').className = mode === 'register' ? "text-[11px] font-black text-white border-b-2 border-gold pb-1 tracking-widest" : "text-[11px] font-black text-gray-600 pb-1 tracking-widest";
             document.getElementById('auth-action-btn').innerText = mode === 'login' ? "ESTABLISH UPLINK" : "CREATE OPERATIVE ACCOUNT";
         }
 
@@ -230,8 +250,7 @@
                 if (op && op.password === pass) loginSuccess(op); else alert("ACCESS DENIED");
             } else {
                 const { data: n, error } = await db.from('operatives').insert([{ alias: id, password: pass, is_director: (pass === CONFIG.D_PASS) }]).select().single();
-                if (error) return alert("UPLINK FAILED: ALREADY REGISTERED");
-                await db.from('chat').insert([{ alias: "SYSTEM", message: `NEW OPERATIVE REGISTERED: ${id}.` }]);
+                if (error) return alert("ALREADY REGISTERED");
                 loginSuccess(n);
             }
         }
@@ -243,21 +262,14 @@
             document.getElementById('auth-form').classList.add('hidden');
             document.getElementById('op-profile').classList.remove('hidden');
             document.getElementById('active-alias').innerText = op.alias;
-            document.getElementById('request-area').classList.remove('hidden');
             document.getElementById('chat-input-area').classList.remove('hidden');
             generateIdentityQR(op.alias, op.password);
-            if (op.is_director) {
-                document.getElementById('director-node').classList.remove('hidden');
-                loadTrackRequests();
-                const l = document.getElementById('director-log');
-                l.value = localStorage.getItem('mog_director_log') || '';
-                l.addEventListener('input', (e) => localStorage.setItem('mog_director_log', e.target.value));
-            }
+            if (op.is_director) document.getElementById('director-node').classList.remove('hidden');
             loadRSVPs();
         }
 
         function generateIdentityQR(id, pass) {
-            new QRCode(document.getElementById("qrcode"), { text: `${id}:${pass}`, width: 160, height: 160, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H });
+            new QRCode(document.getElementById("qrcode"), { text: `${id}:${pass}`, width: 170, height: 170, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H });
         }
 
         async function downloadIdentityCard() {
@@ -265,4 +277,8 @@
             const link = document.createElement('a'); link.download = `MOG_ID_${currentUser.alias}.png`; link.href = canvas.toDataURL("image/png"); link.click();
         }
 
-        functio
+        function toggleHistory() { document.getElementById('setlist-history').classList.toggle('hidden'); }
+
+        async function loadTrackHistory() {
+            const { data } = await db.from('live_setlist').select('*').order('active_at', { ascending: false }).limit(6);
+            if (data && data.leng
