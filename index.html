@@ -21,9 +21,12 @@
         .btn-uplink { background: var(--mog-gold); color: #000; font-weight: 800; padding: 15px; text-transform: uppercase; cursor: pointer; letter-spacing: 3px; border: none; width: 100%; }
         input, textarea { background: rgba(10, 10, 10, 0.9) !important; border: 1px solid rgba(212, 175, 55, 0.1) !important; color: var(--mog-blue) !important; padding: 14px; width: 100%; outline: none; margin-bottom: 10px; }
         #flash-alert { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 0, 0, 0.2); z-index: 2000; display: none; align-items: center; justify-content: center; pointer-events: none; border: 20px solid var(--mog-red); animation: alert-blink 0.5s infinite; }
-        @keyframes alert-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes alert-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
         #qr-card { background: #fff; padding: 30px; border-radius: 4px; position: relative; border: 4px solid var(--mog-gold); color: #000; text-align: center; }
         .history-item { border-left: 3px solid rgba(212, 175, 55, 0.3); background: rgba(255, 255, 255, 0.03); padding: 10px; margin-bottom: 5px; }
+        .signal-on-indicator { color: #00ff00 !important; border-color: #00ff00 !important; box-shadow: 0 0 10px #00ff00; animation: alert-blink 2s infinite; }
+        .cat-btn { font-size: 8px; border: 1px solid rgba(0, 212, 255, 0.3); padding: 4px 8px; cursor: pointer; color: var(--mog-blue); text-transform: uppercase; }
+        .cat-btn.active { background: var(--mog-blue); color: #000; font-weight: bold; }
         .scrollbar-hidden::-webkit-scrollbar { width: 4px; }
         .scrollbar-hidden::-webkit-scrollbar-thumb { background: var(--mog-gold); }
     </style>
@@ -42,7 +45,7 @@
             </div>
         </div>
         <div class="flex gap-6 items-center">
-            <div id="notification-status" class="text-[8px] font-bold text-gray-500 uppercase tracking-widest border border-gray-500 px-2 py-1">Signal Offline</div>
+            <div id="notification-status" class="text-[8px] font-bold text-gray-500 uppercase tracking-widest border border-gray-500 px-3 py-2 cursor-pointer hover:border-gold hover:text-gold" onclick="OneSignal.showNativePrompt()">Signal Offline</div>
             <a href="mailto:director@ministryofgroove.com" class="text-gold text-2xl hover:text-white"><i class="fa-solid fa-envelope"></i></a>
             <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="text-gold text-2xl hover:text-white"><i class="fa-brands fa-tiktok"></i></a>
             <a href="https://www.facebook.com/share/1D9jcB5998/" target="_blank" class="text-gold text-2xl hover:text-white"><i class="fa-brands fa-facebook"></i></a>
@@ -74,7 +77,7 @@
                 </div>
             </div>
         </section>
-
+        
         <section id="auth-panel" class="lg:col-span-4 glass-panel p-8">
             <h2 class="text-xs font-bold uppercase tracking-widest mb-8 border-b border-white/10 pb-2">Biometric Identity</h2>
             <div id="auth-form">
@@ -98,8 +101,8 @@
                 <button onclick="downloadIdentityCard()" class="btn-uplink !bg-blue-600 !text-white !text-[10px] mb-4">Export Identity</button>
                 <button onclick="logout()" class="text-[11px] underline opacity-30 hover:opacity-100 uppercase block mx-auto transition">Sever Link</button>
             </div>
-                </section>
-                
+        </section>
+
         <section class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="glass-panel p-8 border-l-4 border-blue-500">
                 <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-2">
@@ -111,6 +114,13 @@
             </div>
             <div class="glass-panel p-8">
                 <h2 class="text-xs font-bold uppercase tracking-widest mb-4 border-b border-white/10 pb-2 text-blue-400">Sonic Uplink</h2>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <button class="cat-btn active" onclick="setCategory('ALL', this)">All</button>
+                    <button class="cat-btn" onclick="setCategory('DEEP', this)">Deep</button>
+                    <button class="cat-btn" onclick="setCategory('TECH', this)">Tech</button>
+                    <button class="cat-btn" onclick="setCategory('CHILL', this)">Chill</button>
+                    <button class="cat-btn" onclick="setCategory('SOUL', this)">Soul</button>
+                </div>
                 <input type="text" id="archive-search" placeholder="SEARCH ARCHIVES..." class="text-[10px] mb-4 w-full" oninput="filterArchives()">
                 <audio id="main-audio-player" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" controls class="w-full h-10 mb-6"></audio>
                 <div id="mix-list" class="h-[140px] overflow-y-auto space-y-3 pr-2 scrollbar-hidden"></div>
@@ -141,7 +151,7 @@
                 </div>
             </div>
         </section>
-        
+
         <section id="director-node" class="hidden lg:col-span-12 glass-panel p-10 border-2 border-red-600/30 bg-red-900/10">
             <h3 class="text-red-500 font-black uppercase text-2xl mb-12 tracking-[0.8em] text-center italic">Directorate High Command</h3>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
@@ -150,7 +160,6 @@
                     <input id="booth-track" type="text" placeholder="TRACK" class="text-xs mb-1">
                     <input id="booth-artist" type="text" placeholder="ARTIST" class="text-xs mb-4">
                     <button onclick="pushToBooth()" class="btn-uplink !py-3 !text-[10px] !bg-red-600 !text-white">Broadcast Track</button>
-                    <button onclick="OneSignal.showNativePrompt()" class="w-full border border-red-600 text-red-500 p-2 text-[8px] mt-4 uppercase">Force Signal Uplink</button>
                     <div id="request-list" class="h-40 overflow-y-auto text-[11px] bg-black/60 p-4 border border-red-900/30 mt-6 scrollbar-hidden"></div>
                 </div>
                 <div class="md:col-span-2 border-r border-red-900/20 pr-8">
@@ -178,7 +187,7 @@
             ONESIGNAL_APP_ID: "3ef253d3-a093-42f5-bc88-91dd7576cf34"
         };
         const db = window.supabase.createClient(CONFIG.U, CONFIG.K);
-        let currentUser = null; let authMode = 'login'; let fullVaultData = [];
+        let currentUser = null; let authMode = 'login'; let fullVaultData = []; let currentCat = 'ALL';
 
         window.OneSignal = window.OneSignal || [];
         OneSignal.push(function() {
@@ -186,11 +195,11 @@
                 appId: CONFIG.ONESIGNAL_APP_ID, safari_web_id: "web.onesignal.auto.104256f1-678a-4d43-8f64-46c5970c73f5",
                 notifyButton: { enable: true, size: 'medium', theme: 'dark', colors: { 'circle.background': '#050505', 'circle.foreground': '#D4AF37', 'pulse.color': '#D4AF37' } }
             });
-            OneSignal.on('notificationPermissionChange', function(p) {
-                const s = document.getElementById('notification-status');
-                if(p.status === "granted") { s.innerText = "Signal Active"; s.classList.add('text-green-500'); }
-            });
+            OneSignal.getNotificationPermission().then(p => { if (p === 'granted') setSignalOn(); });
+            OneSignal.on('notificationPermissionChange', function(p) { if(p.status === "granted") setSignalOn(); });
         });
+
+        function setSignalOn() { const s = document.getElementById('notification-status'); s.innerText = "SIGNAL ON"; s.classList.add('signal-on-indicator'); }
 
         window.onload = () => {
             const s = JSON.parse(localStorage.getItem('mog_session'));
@@ -205,8 +214,8 @@
 
         function toggleAuth(mode) {
             authMode = mode;
-            document.getElementById('tab-login').className = mode === 'login' ? "text-[11px] font-black text-white border-b-2 border-gold pb-1 tracking-widest" : "text-[11px] font-black text-gray-600 pb-1 tracking-widest";
-            document.getElementById('tab-register').className = mode === 'register' ? "text-[11px] font-black text-white border-b-2 border-gold pb-1 tracking-widest" : "text-[11px] font-black text-gray-600 pb-1 tracking-widest";
+            document.getElementById('tab-login').className = mode === 'login' ? "text-[11px] font-black text-white border-b-2 border-gold pb-1" : "text-[11px] font-black text-gray-600 pb-1";
+            document.getElementById('tab-register').className = mode === 'register' ? "text-[11px] font-black text-white border-b-2 border-gold pb-1" : "text-[11px] font-black text-gray-600 pb-1";
             document.getElementById('auth-action-btn').innerText = mode === 'login' ? "Initialize Uplink" : "Create Operative Account";
         }
 
@@ -247,8 +256,30 @@
         async function loadTrackRequests() { const { data } = await db.from('track_requests').select('*').order('created_at', { ascending: false }); const list = document.getElementById('request-list'); if(data) list.innerHTML = data.map(r => `<div class="mb-2 p-1 border-b border-red-900/20 text-white"><span class="text-red-500 font-bold">${r.alias}:</span> ${r.track_name}</div>`).join(''); }
         async function subscribeNewsletter() { const email = document.getElementById('news-email').value; if(!email) return alert("EMAIL_REQUIRED"); const { error } = await db.from('operative_newsletter').insert([{ operative_alias: currentUser.alias, email: email }]); if (error) alert("ALREADY LINKED."); else { alert("LINK ESTABLISHED."); location.reload(); } }
         function triggerFlash() { const f = document.getElementById('flash-alert'); f.style.display = 'flex'; setTimeout(() => { f.style.display = 'none'; }, 5000); }
-        function filterArchives() { const term = document.getElementById('archive-search').value.toLowerCase(); renderVault(fullVaultData.filter(f => f.name.toLowerCase().includes(term))); }
-        async function loadVault() { const { data: files } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } }); fullVaultData = files || []; renderVault(fullVaultData); }
+        
+        // FILTER LOGIC
+        function setCategory(cat, btn) {
+            currentCat = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filterArchives();
+        }
+
+        function filterArchives() {
+            const term = document.getElementById('archive-search').value.toLowerCase();
+            const filtered = fullVaultData.filter(f => {
+                const matchTerm = f.name.toLowerCase().includes(term);
+                const matchCat = (currentCat === 'ALL' || f.name.toUpperCase().includes(currentCat));
+                return matchTerm && matchCat;
+            });
+            renderVault(filtered);
+        }
+
+        async function loadVault() {
+            const { data: files } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
+            fullVaultData = files || []; renderVault(fullVaultData);
+        }
+
         async function renderVault(files) {
             const { data: isSub } = await db.from('operative_newsletter').select('id').eq('operative_alias', currentUser?.alias).maybeSingle();
             const mixList = document.getElementById('mix-list'); const tileGallery = document.getElementById('tile-gallery');
