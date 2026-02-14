@@ -144,6 +144,16 @@
                     <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Broadcast Global Mandate</p>
                     <textarea id="dr-mandate" class="w-full h-32 bg-black/60 border border-red-900/40 p-4 text-white text-sm outline-none focus:border-red-500" placeholder="Enter directive content..."></textarea>
                     <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white font-bold p-4 mt-3 uppercase text-xs tracking-widest hover:bg-red-500 transition">Execute Broadcast</button>
+                    <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white font-bold p-4 mt-3 uppercase text-xs tracking-widest hover:bg-red-500 transition">Execute Broadcast</button>
+
+<div class="mt-6 border-t border-red-900/20 pt-4">
+    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Upload Media to Intel-Vault</p>
+    <input type="file" id="media-upload" class="hidden" onchange="uploadToVault()">
+    <button onclick="document.getElementById('media-upload').click()" class="w-full border border-red-600 text-red-600 p-3 uppercase text-[10px] hover:bg-red-600 hover:text-white transition">
+        Select Media File
+    </button>
+</div>
+                    
                 </div>
             </div>
         </section>
