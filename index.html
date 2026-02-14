@@ -15,33 +15,23 @@
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; --mog-red: #ff3333; }
         * { transition: all 0.25s ease; scroll-behavior: smooth; }
         body { font-family: 'JetBrains+Mono', monospace; background-color: var(--mog-black); color: var(--mog-gold); overflow-x: hidden; font-size: 0.95rem; margin: 0; }
-        
         #bg-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -2; filter: grayscale(100%) brightness(12%) contrast(115%); object-fit: cover; pointer-events: none; }
         .crt-overlay { position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)); z-index: 50; background-size: 100% 2px, 3px 100%; pointer-events: none; opacity: 0.5; }
-        
         .glass-panel { background: rgba(5, 5, 5, 0.88); backdrop-filter: blur(30px); border: 1px solid rgba(212, 175, 55, 0.2); }
         .btn-uplink { background: var(--mog-gold); color: #000; font-weight: 800; padding: 15px; text-transform: uppercase; cursor: pointer; letter-spacing: 3px; border: none; width: 100%; }
         input, textarea { background: rgba(10, 10, 10, 0.9) !important; border: 1px solid rgba(212, 175, 55, 0.1) !important; color: var(--mog-blue) !important; padding: 14px; width: 100%; outline: none; margin-bottom: 10px; }
-        
         #flash-alert { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 0, 0, 0.2); z-index: 2000; display: none; align-items: center; justify-content: center; pointer-events: none; border: 20px solid var(--mog-red); animation: alert-blink 0.5s infinite; }
         @keyframes alert-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
         #qr-card { background: #fff; padding: 30px; border-radius: 4px; position: relative; border: 4px solid var(--mog-gold); color: #000; text-align: center; }
         #qr-logo-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 45px; height: 45px; border-radius: 50%; background: #000; border: 2px solid var(--mog-gold); z-index: 10; }
-        
         .history-item { border-left: 3px solid rgba(212, 175, 55, 0.3); background: rgba(255, 255, 255, 0.03); padding: 10px; margin-bottom: 5px; }
         .scrollbar-hidden::-webkit-scrollbar { width: 4px; }
         .scrollbar-hidden::-webkit-scrollbar-thumb { background: var(--mog-gold); }
-        .search-glow:focus { box-shadow: 0 0 15px rgba(0, 212, 255, 0.2); border-color: var(--mog-blue) !important; }
     </style>
 </head>
 <body class="p-4 md:p-10">
-
-    <div id="flash-alert"><h1 class="text-4xl md:text-7xl font-black text-white italic text-center tracking-tighter">DIRECTORATE PRIORITY SIGNAL</h1></div>
-
-    <video autoplay muted loop playsinline id="bg-video">
-        <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/1000211769.mp4" type="video/mp4">
-    </video>
+    <div id="flash-alert"><h1 class="text-4xl md:text-7xl font-black text-white italic text-center tracking-tighter uppercase">Directorate Priority Signal</h1></div>
+    <video autoplay muted loop playsinline id="bg-video"><source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/1000211769.mp4" type="video/mp4"></video>
     <div class="crt-overlay"></div>
 
     <header class="glass-panel p-8 mb-10 flex flex-col lg:flex-row justify-between items-center gap-8 relative z-50">
@@ -49,18 +39,20 @@
             <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" alt="MOG Logo" class="h-20 w-20 border-2 border-gold rounded-full bg-black shadow-2xl">
             <div>
                 <h1 class="text-2xl md:text-3xl font-black uppercase tracking-[0.5em] text-gold">The Ministry of Groove</h1>
-                <p class="text-[10px] text-blue-400 tracking-[0.4em] mt-2 italic">ENCRYPTED FREQUENCY // EMALAHLENI CORE</p>
+                <p class="text-[10px] text-blue-400 tracking-[0.3em] mt-2 italic">ENCRYPTED FREQUENCY // EMALAHLENI CORE</p>
             </div>
         </div>
-        <div class="flex gap-8 items-center">
+        <div class="flex gap-6 items-center">
             <div id="notification-status" class="text-[8px] font-bold text-gray-500 uppercase tracking-widest border border-gray-500 px-2 py-1">Signal Offline</div>
+            <a href="mailto:director@ministryofgroove.com" class="text-gold text-2xl hover:text-white"><i class="fa-solid fa-envelope"></i></a>
             <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="text-gold text-2xl hover:text-white"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://www.facebook.com/share/1D9jcB5998/" target="_blank" class="text-gold text-2xl hover:text-white"><i class="fa-brands fa-facebook"></i></a>
             <a href="https://www.instagram.com/ministryofgroove_hq?igsh=Y3Rwc24zcmtsY2xj" target="_blank" class="text-gold text-2xl hover:text-white"><i class="fa-brands fa-instagram"></i></a>
         </div>
     </header>
+
     <main class="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-50">
-        
-        <section id="live-booth-display" class="lg:col-span-12 glass-panel p-10 relative">
+        <section class="lg:col-span-12 glass-panel p-10 relative">
             <div class="flex items-center justify-between border-b border-gold/10 pb-4 mb-8">
                 <p class="text-[10px] font-bold text-gold tracking-[0.5em] uppercase"><span class="inline-block h-2 w-2 bg-green-500 rounded-full animate-pulse mr-2"></span> Active Stream</p>
                 <p id="live-timestamp" class="text-[10px] opacity-30"></p>
@@ -76,8 +68,14 @@
                 </div>
                 <div id="setlist-history" class="hidden grid grid-cols-1 md:grid-cols-5 gap-4"></div>
             </div>
+            <div id="request-area" class="mt-10 max-w-xl mx-auto hidden">
+                <div class="flex gap-4 p-1 bg-white/5 border border-white/10">
+                    <input id="track-req-in" type="text" placeholder="REQUEST FREQUENCY..." class="!mb-0 !border-none !bg-transparent">
+                    <button onclick="submitTrackRequest()" class="bg-blue-600 text-white px-8 text-xs font-black uppercase">Send</button>
+                </div>
+            </div>
         </section>
-        
+
         <section id="auth-panel" class="lg:col-span-4 glass-panel p-8">
             <h2 class="text-xs font-bold uppercase tracking-widest mb-8 border-b border-white/10 pb-2">Biometric Identity</h2>
             <div id="auth-form">
@@ -102,38 +100,33 @@
                 <button onclick="logout()" class="text-[11px] underline opacity-30 hover:opacity-100 uppercase block mx-auto transition">Sever Link</button>
             </div>
         </section>
-        
+
         <section class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="glass-panel p-8 border-l-4 border-blue-500">
                 <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-2">
                     <h2 class="text-xs font-bold uppercase tracking-widest text-blue-400">Mission Intent</h2>
                     <span id="rsvp-count" class="text-[11px] text-blue-400 font-black tracking-widest">0 SIGNALED</span>
                 </div>
-                <h3 id="event-title" class="text-2xl font-black text-white uppercase italic leading-tight">No Active Mission</h3>
+                <h3 id="event-title" class="text-2xl font-black text-white uppercase italic">No Active Mission</h3>
                 <button id="rsvp-btn" onclick="submitRSVP()" class="hidden btn-uplink !py-4 !text-[11px] mt-8">Signal Intent</button>
             </div>
             <div class="glass-panel p-8">
                 <h2 class="text-xs font-bold uppercase tracking-widest mb-4 border-b border-white/10 pb-2 text-blue-400">Sonic Uplink</h2>
-                <div class="relative mb-6">
-                    <input type="text" id="archive-search" placeholder="SEARCH ARCHIVES..." class="text-[10px] !mb-0 search-glow w-full" oninput="filterArchives()">
-                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-4 text-blue-400 opacity-50"></i>
-                </div>
+                <input type="text" id="archive-search" placeholder="SEARCH ARCHIVES..." class="text-[10px] mb-4 w-full" oninput="filterArchives()">
                 <audio id="main-audio-player" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" controls class="w-full h-10 mb-6"></audio>
                 <div id="mix-list" class="h-[140px] overflow-y-auto space-y-3 pr-2 scrollbar-hidden"></div>
             </div>
         </section>
-        
+
         <section class="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="glass-panel p-8 flex flex-col">
                 <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-blue-400">Frequency Chat</h2>
                 <div id="chat-window" class="h-[240px] overflow-y-auto mb-6 text-white/80 text-sm space-y-3 scrollbar-hidden"></div>
-                <div id="chat-input-area" class="hidden mt-auto">
-                    <input id="chat-msg-in" type="text" placeholder="TRANSMIT MESSAGE..." class="!mb-0" onkeypress="if(event.key==='Enter') sendChat()">
-                </div>
+                <div id="chat-input-area" class="hidden mt-auto"><input id="chat-msg-in" type="text" placeholder="TRANSMIT MESSAGE..." class="!mb-0" onkeypress="if(event.key==='Enter') sendChat()"></div>
             </div>
             <div class="glass-panel p-8">
                 <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-gold">Visual Archives</h2>
-                <div id="tile-gallery" class="grid grid-cols-2 md:grid-cols-3 gap-6 h-[320px] overflow-y-auto pr-2 scrollbar-hidden"></div>
+                <div id="tile-gallery" class="grid grid-cols-2 md:grid-cols-3 gap-6 h-[240px] overflow-y-auto pr-2 scrollbar-hidden"></div>
             </div>
         </section>
 
@@ -149,7 +142,7 @@
                 </div>
             </div>
         </section>
-        
+
         <section id="director-node" class="hidden lg:col-span-12 glass-panel p-10 border-2 border-red-600/30 bg-red-900/10">
             <h3 class="text-red-500 font-black uppercase text-2xl mb-12 tracking-[0.8em] text-center italic">Directorate High Command</h3>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
@@ -157,23 +150,30 @@
                     <p class="text-[11px] uppercase font-black mb-6 text-red-500">Booth Control</p>
                     <input id="booth-track" type="text" placeholder="TRACK" class="text-xs mb-1">
                     <input id="booth-artist" type="text" placeholder="ARTIST" class="text-xs mb-4">
-                    <button onclick="pushToBooth()" class="btn-uplink !py-3 !text-[10px] !bg-red-600 !text-white font-black">Broadcast Track</button>
+                    <button onclick="pushToBooth()" class="btn-uplink !py-3 !text-[10px] !bg-red-600 !text-white">Broadcast Track</button>
+                    <p class="text-[11px] uppercase font-black mt-10 mb-4 text-red-500">Live Requests</p>
+                    <div id="request-list" class="h-40 overflow-y-auto text-[11px] bg-black/60 p-4 border border-red-900/30 scrollbar-hidden"></div>
                 </div>
                 <div class="md:col-span-2 border-r border-red-900/20 pr-8">
-                    <p class="text-[11px] uppercase font-black mb-6 text-red-500">Global Mandate</p>
+                    <p class="text-[11px] uppercase font-black mb-6 text-red-500">Logistics & Mandates</p>
+                    <div class="flex gap-4 mb-4">
+                        <input id="pin-venue-name" type="text" placeholder="VENUE" class="text-xs w-1/2 !mb-0">
+                        <input id="pin-coords" type="text" placeholder="COORDS" class="text-xs w-1/2 !mb-0">
+                    </div>
                     <textarea id="dr-mandate" class="h-32 text-white bg-black/40 border-red-900/30 mb-4" placeholder="Broadcast Directive..."></textarea>
-                    <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white p-5 uppercase font-black text-xs">Execute Signal</button>
+                    <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white p-5 uppercase font-black text-xs shadow-2xl">Execute Signal</button>
                 </div>
                 <div>
-                    <p class="text-[11px] uppercase font-black mb-6 text-red-500">Intel Archive</p>
+                    <p class="text-[11px] uppercase font-black mb-6 text-red-500">Intelligence Ledger</p>
+                    <textarea id="director-log" class="h-48 text-white bg-black/80 border-red-900/40 text-[11px] p-6 mb-6" placeholder="Secret strategies..."></textarea>
                     <input type="file" id="media-upload" class="hidden" onchange="uploadToVault()">
-                    <button onclick="document.getElementById('media-upload').click()" class="w-full border-2 border-red-600 text-red-600 p-4 uppercase font-black text-[10px] mb-4">Upload Intel</button>
-                    <button onclick="purgeChat()" class="w-full border border-red-600 bg-red-600/10 text-red-600 p-2 text-[8px]">Purge History</button>
+                    <button onclick="document.getElementById('media-upload').click()" class="w-full border-2 border-red-600 text-red-600 p-4 uppercase font-black text-[10px]">Upload Intel</button>
+                    <button onclick="purgeChat()" class="mt-4 w-full border border-red-600 bg-red-600/10 text-red-600 p-2 text-[8px]">Purge History</button>
                 </div>
             </div>
         </section>
     </main>
-    
+
     <script>
         const CONFIG = {
             U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
@@ -182,21 +182,13 @@
             ONESIGNAL_APP_ID: "3ef253d3-a093-42f5-bc88-91dd7576cf34"
         };
         const db = window.supabase.createClient(CONFIG.U, CONFIG.K);
-        let currentUser = null;
-        let authMode = 'login';
-        let fullVaultData = [];
+        let currentUser = null; let authMode = 'login'; let fullVaultData = [];
 
-        // ONESIGNAL CUSTOM MINISTRY STYLING
         window.OneSignal = window.OneSignal || [];
         OneSignal.push(function() {
             OneSignal.init({
-                appId: CONFIG.ONESIGNAL_APP_ID,
-                safari_web_id: "web.onesignal.auto.104256f1-678a-4d43-8f64-46c5970c73f5",
-                allowLocalhostAsSecureOrigin: true,
-                notifyButton: {
-                    enable: true, size: 'medium', theme: 'dark',
-                    colors: { 'circle.background': '#050505', 'circle.foreground': '#D4AF37', 'pulse.color': '#D4AF37' }
-                }
+                appId: CONFIG.ONESIGNAL_APP_ID, safari_web_id: "web.onesignal.auto.104256f1-678a-4d43-8f64-46c5970c73f5",
+                notifyButton: { enable: true, size: 'medium', theme: 'dark', colors: { 'circle.background': '#050505', 'circle.foreground': '#D4AF37', 'pulse.color': '#D4AF37' } }
             });
             OneSignal.on('notificationPermissionChange', function(p) {
                 const s = document.getElementById('notification-status');
@@ -209,33 +201,29 @@
             if (s) mountSession(s);
             loadMissions(); loadChat(); loadVault(); loadCurrentBooth(); loadTrackHistory();
             setInterval(() => { document.getElementById('live-timestamp').innerText = new Date().toLocaleTimeString(); }, 1000);
-
-            db.channel('master_hq').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'live_setlist' }, p => {
-                updateBoothUI(p.new); loadTrackHistory();
-            }).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat' }, p => appendChat(p.new))
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'missions' }, p => {
-                if (p.new.content.toUpperCase().startsWith("ALERT:")) triggerFlash();
-                loadMissions();
-            }).subscribe();
+            db.channel('master_hq').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'live_setlist' }, p => { updateBoothUI(p.new); loadTrackHistory(); })
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat' }, p => appendChat(p.new))
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'missions' }, p => { if (p.new.content.toUpperCase().startsWith("ALERT:")) triggerFlash(); loadMissions(); })
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'track_requests' }, p => loadTrackRequests())
+            .subscribe();
         };
 
         function toggleAuth(mode) {
             authMode = mode;
-                   document.getElementById('tab-login').className = mode === 'login' ? "text-[11px] font-black text-white border-b-2 border-gold pb-1 tracking-widest" : "text-[11px] font-black text-gray-600 pb-1 tracking-widest";
+            document.getElementById('tab-login').className = mode === 'login' ? "text-[11px] font-black text-white border-b-2 border-gold pb-1 tracking-widest" : "text-[11px] font-black text-gray-600 pb-1 tracking-widest";
             document.getElementById('tab-register').className = mode === 'register' ? "text-[11px] font-black text-white border-b-2 border-gold pb-1 tracking-widest" : "text-[11px] font-black text-gray-600 pb-1 tracking-widest";
-            document.getElementById('auth-action-btn').innerText = mode === 'login' ? "ESTABLISH UPLINK" : "CREATE OPERATIVE ACCOUNT";
+            document.getElementById('auth-action-btn').innerText = mode === 'login' ? "Initialize Uplink" : "Create Operative Account";
         }
 
         async function executeAuth() {
-            const id = document.getElementById('operative-in').value.trim().toUpperCase();
-            const pass = document.getElementById('password-in').value;
+            const id = document.getElementById('operative-in').value.trim().toUpperCase(); const pass = document.getElementById('password-in').value;
             if (!id || !pass) return;
             if (authMode === 'login') {
                 let { data: op } = await db.from('operatives').select('*').eq('alias', id).maybeSingle();
                 if (op && op.password === pass) loginSuccess(op); else alert("ACCESS DENIED");
             } else {
                 const { data: n, error } = await db.from('operatives').insert([{ alias: id, password: pass, is_director: (pass === CONFIG.D_PASS) }]).select().single();
-                if (error) return alert("ALREADY REGISTERED");
+                if (error) return alert("REGISTERED ALREADY");
                 loginSuccess(n);
             }
         }
@@ -243,84 +231,42 @@
         function loginSuccess(op) { localStorage.setItem('mog_session', JSON.stringify(op)); location.reload(); }
 
         async function mountSession(op) {
-            currentUser = op;
-            document.getElementById('auth-form').classList.add('hidden');
-            document.getElementById('op-profile').classList.remove('hidden');
-            document.getElementById('active-alias').innerText = op.alias;
-            document.getElementById('chat-input-area').classList.remove('hidden');
-            generateIdentityQR(op.alias, op.password);
-            if (op.is_director) document.getElementById('director-node').classList.remove('hidden');
+            currentUser = op; document.getElementById('auth-form').classList.add('hidden'); document.getElementById('op-profile').classList.remove('hidden');
+            document.getElementById('active-alias').innerText = op.alias; document.getElementById('request-area').classList.remove('hidden');
+            document.getElementById('chat-input-area').classList.remove('hidden'); generateIdentityQR(op.alias, op.password);
+            if (op.is_director) {
+                document.getElementById('director-node').classList.remove('hidden'); loadTrackRequests();
+                const l = document.getElementById('director-log'); l.value = localStorage.getItem('mog_director_log') || '';
+                l.addEventListener('input', (e) => localStorage.setItem('mog_director_log', e.target.value));
+            }
             loadRSVPs();
         }
 
-        function generateIdentityQR(id, pass) {
-            new QRCode(document.getElementById("qrcode"), { text: `${id}:${pass}`, width: 170, height: 170, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H });
-        }
-
-        async function downloadIdentityCard() {
-            const canvas = await html2canvas(document.getElementById('identity-download-zone'), { scale: 3, useCORS: true });
-            const link = document.createElement('a'); link.download = `MOG_ID_${currentUser.alias}.png`; link.href = canvas.toDataURL("image/png"); link.click();
-        }
-
+        function generateIdentityQR(id, pass) { new QRCode(document.getElementById("qrcode"), { text: `${id}:${pass}`, width: 170, height: 170 }); }
+        async function downloadIdentityCard() { const canvas = await html2canvas(document.getElementById('identity-download-zone'), { scale: 3, useCORS: true }); const link = document.createElement('a'); link.download = `MOG_ID_${currentUser.alias}.png`; link.href = canvas.toDataURL(); link.click(); }
         function toggleHistory() { document.getElementById('setlist-history').classList.toggle('hidden'); }
-
-        async function loadTrackHistory() {
-            const { data } = await db.from('live_setlist').select('*').order('active_at', { ascending: false }).limit(6);
-            if (data && data.length > 1) {
-                document.getElementById('setlist-history').innerHTML = data.slice(1).map(t => `
-                    <div class="history-item"><p class="text-white text-[10px] font-black uppercase truncate">${t.track_name}</p><p class="text-blue-400 text-[8px] uppercase opacity-60 tracking-widest">${t.artist_name || 'MOG'}</p></div>
-                `).join('');
-            }
-        }
-                async function pushToBooth() {
-            const t = document.getElementById('booth-track').value;
-            const a = document.getElementById('booth-artist').value;
-            if (t) await db.from('live_setlist').insert([{ track_name: t, artist_name: a }]);
-            document.getElementById('booth-track').value = ''; document.getElementById('booth-artist').value = '';
-        }
-
+        async function loadTrackHistory() { const { data } = await db.from('live_setlist').select('*').order('active_at', { ascending: false }).limit(6); if (data && data.length > 1) document.getElementById('setlist-history').innerHTML = data.slice(1).map(t => `<div class="history-item"><p class="text-white text-[10px] font-black uppercase truncate">${t.track_name}</p><p class="text-blue-400 text-[8px] uppercase opacity-60">${t.artist_name || 'MOG'}</p></div>`).join(''); }
+        async function pushToBooth() { const t = document.getElementById('booth-track').value; const a = document.getElementById('booth-artist').value; if (t) await db.from('live_setlist').insert([{ track_name: t, artist_name: a }]); document.getElementById('booth-track').value = ''; document.getElementById('booth-artist').value = ''; }
         function updateBoothUI(d) { document.getElementById('current-track').innerText = d.track_name; document.getElementById('current-artist').innerText = d.artist_name || 'Ministry Unknown'; }
-
-        async function subscribeNewsletter() {
-            const email = document.getElementById('news-email').value;
-            if(!email) return alert("EMAIL_REQUIRED");
-            const { error } = await db.from('operative_newsletter').insert([{ operative_alias: currentUser.alias, email: email }]);
-            if (error) alert("ALREADY LINKED."); else { alert("LINK ESTABLISHED."); location.reload(); }
-        }
-
-        function triggerFlash() {
-            const f = document.getElementById('flash-alert');
-            f.style.display = 'flex'; setTimeout(() => { f.style.display = 'none'; }, 5000);
-        }
-
-        function filterArchives() {
-            const term = document.getElementById('archive-search').value.toLowerCase();
-            renderVault(fullVaultData.filter(f => f.name.toLowerCase().includes(term)));
-        }
-
-        async function loadVault() {
-            const { data: files } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
-            fullVaultData = files || [];
-            renderVault(fullVaultData);
-        }
-
+        async function submitTrackRequest() { const t = document.getElementById('track-req-in').value; if(t) await db.from('track_requests').insert([{ alias: currentUser.alias, track_name: t }]); document.getElementById('track-req-in').value = ''; alert("REQUEST SENT"); }
+        async function loadTrackRequests() { const { data } = await db.from('track_requests').select('*').order('created_at', { ascending: false }); const list = document.getElementById('request-list'); if(data) list.innerHTML = data.map(r => `<div class="mb-2 p-1 border-b border-red-900/20 text-white"><span class="text-red-500 font-bold">${r.alias}:</span> ${r.track_name}</div>`).join(''); }
+        async function subscribeNewsletter() { const email = document.getElementById('news-email').value; if(!email) return alert("EMAIL_REQUIRED"); const { error } = await db.from('operative_newsletter').insert([{ operative_alias: currentUser.alias, email: email }]); if (error) alert("ALREADY LINKED."); else { alert("LINK ESTABLISHED."); location.reload(); } }
+        function triggerFlash() { const f = document.getElementById('flash-alert'); f.style.display = 'flex'; setTimeout(() => { f.style.display = 'none'; }, 5000); }
+        function filterArchives() { const term = document.getElementById('archive-search').value.toLowerCase(); renderVault(fullVaultData.filter(f => f.name.toLowerCase().includes(term))); }
+        async function loadVault() { const { data: files } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } }); fullVaultData = files || []; renderVault(fullVaultData); }
         async function renderVault(files) {
             const { data: isSub } = await db.from('operative_newsletter').select('id').eq('operative_alias', currentUser?.alias).maybeSingle();
-            const mixList = document.getElementById('mix-list');
-            const tileGallery = document.getElementById('tile-gallery');
+            const mixList = document.getElementById('mix-list'); const tileGallery = document.getElementById('tile-gallery');
             mixList.innerHTML = `<div class="p-3 border border-blue-500/20 bg-blue-500/5 mb-2 cursor-pointer" onclick="playTrack('https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3')">MANDATE_MIX // DIRECTORATE</div>`;
             tileGallery.innerHTML = '';
             files.forEach(f => {
                 const url = `${CONFIG.U}/storage/v1/object/public/intel-vault/${f.name}`;
                 const excl = f.name.toLowerCase().includes('exclusive');
-                if (f.name.match(/\.(mp3|wav)$/)) {
-                    mixList.innerHTML += `<div class="flex justify-between items-center p-3 border border-white/5 bg-white/5 mb-2"><span class="text-[10px] uppercase truncate cursor-pointer" onclick="playTrack('${url}')">${excl ? '[EXCL] ' : ''}${f.name}</span>${(!excl || isSub) ? `<a href="${url}" download class="text-[8px] border border-gold px-2 py-1">Secure</a>` : `<span class="text-[7px] text-red-500">LOCKED</span>`}</div>`;
-                } else if (f.name.match(/\.(jpg|jpeg|png|gif|webp)$/)) {
-                    tileGallery.innerHTML += `<div class="relative group aspect-square glass-panel overflow-hidden"><img src="${url}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-1000"><div class="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 flex items-center justify-center"><a href="${url}" download class="text-[8px] border border-gold px-3 py-1">Download</a></div></div>`;
-                }
+                if (f.name.match(/\.(mp3|wav)$/)) mixList.innerHTML += `<div class="flex justify-between items-center p-3 border border-white/5 bg-white/5 mb-2"><span class="text-[10px] uppercase truncate cursor-pointer" onclick="playTrack('${url}')">${excl ? '[EXCL] ' : ''}${f.name}</span>${(!excl || isSub) ? `<a href="${url}" download class="text-[8px] border border-gold px-2 py-1">Secure</a>` : `<span class="text-[7px] text-red-500">LOCKED</span>`}</div>`;
+                else if (f.name.match(/\.(jpg|jpeg|png|gif|webp)$/)) tileGallery.innerHTML += `<div class="relative group aspect-square glass-panel overflow-hidden"><img src="${url}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-1000"><div class="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 flex items-center justify-center"><a href="${url}" download class="text-[8px] border border-gold px-3 py-1">Download</a></div></div>`;
             });
-                }
-             function playTrack(u) { const p = document.getElementById('main-audio-player'); p.src = u; p.play(); }
+        }
+        function playTrack(u) { const p = document.getElementById('main-audio-player'); p.src = u; p.play(); }
         async function loadRSVPs() { const et = document.getElementById('event-title').innerText; if (et === "No Active Mission") return; const { count } = await db.from('event_rsvps').select('*', { count: 'exact', head: true }).eq('event_name', et); document.getElementById('rsvp-count').innerText = `${count || 0} SIGNALED`; }
         async function submitRSVP() { await db.from('event_rsvps').insert([{ event_name: document.getElementById('event-title').innerText, operative_alias: currentUser.alias }]); loadRSVPs(); }
         async function loadChat() { const { data } = await db.from('chat').select('*').order('created_at', { ascending: true }).limit(50); if(data) data.forEach(m => appendChat(m)); }
