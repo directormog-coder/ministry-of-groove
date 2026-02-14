@@ -20,6 +20,7 @@
             background-color: var(--mog-black); 
             color: var(--mog-gold); 
             overflow-x: hidden;
+            font-size: 0.95rem;
         }
 
         /* Scanline Effect */
@@ -59,6 +60,7 @@
             width: 100%; 
             transition: 0.3s; 
             letter-spacing: 2px;
+            cursor: pointer;
         }
         .btn-uplink:hover { background: #fff; box-shadow: 0 0 15px #fff; transform: translateY(-2px); }
         
@@ -70,7 +72,6 @@
             width: 100%; 
             outline: none; 
             margin-bottom: 12px;
-            font-size: 0.9rem;
         }
 
         .mission-card { 
@@ -80,8 +81,6 @@
             margin-bottom: 12px; 
         }
 
-        .director-mode { border-color: var(--mog-red) !important; }
-        
         .status-online { color: #00ff00; text-shadow: 0 0 5px #00ff00; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
@@ -108,13 +107,11 @@
         
         <section id="auth-panel" class="lg:col-span-4 glass-panel p-6">
             <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Biometric Identity</h2>
-            
             <div id="auth-form">
                 <input id="alias-in" type="text" placeholder="OPERATIVE_ALIAS" class="uppercase">
                 <input id="pass-in" type="password" placeholder="ACCESS_CODE">
                 <button onclick="executeAuth()" class="btn-uplink">Establish Uplink</button>
             </div>
-
             <div id="op-profile" class="hidden">
                 <p id="active-alias" class="text-2xl font-bold text-white uppercase"></p>
                 <p class="text-[10px] text-blue-400 mb-6">CLEARANCE: LEVEL_4_OPERATIVE</p>
@@ -124,54 +121,41 @@
 
         <section class="lg:col-span-8 glass-panel p-6">
             <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-blue-400">Global Mandates & Missions</h2>
-            <div id="mission-feed" class="h-[400px] overflow-y-auto pr-4 space-y-4">
-                <p class="text-xs opacity-50 italic">Scanning for encrypted data...</p>
-            </div>
+            <div id="mission-feed" class="h-[300px] overflow-y-auto pr-4 space-y-4"></div>
         </section>
 
-        <section class="lg:col-span-12 glass-panel p-6 mb-8">
-    <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-blue-400">Ministry Visual Archives</h2>
-    <div id="legacy-gallery" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 min-h-[100px]">
-        <p class="text-[10px] opacity-30 col-span-full italic">Retrieving visual intelligence...</p>
-    </div>
-</section>
-<section id="director-node" class="hidden lg:col-span-12 glass-panel p-8 border-2 border-red-600/30 bg-red-900/5">
-            <div class="flex justify-between items-center mb-8">
-                <h3 class="text-red-500 font-bold uppercase text-xl tracking-widest">Directorate Control Node</h3>
-                <span class="bg-red-600 text-white text-[10px] px-2 py-1">PRIORITY ALPHA</span>
-            </div>
-            
+        <section class="lg:col-span-12 glass-panel p-6">
+            <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-blue-400">Ministry Visual Archives</h2>
+            <div id="legacy-gallery" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 min-h-[100px]"></div>
+        </section>
+
+        <section id="director-node" class="hidden lg:col-span-12 glass-panel p-8 border-2 border-red-600/30 bg-red-900/5">
+            <h3 class="text-red-500 font-bold uppercase text-xl mb-8 tracking-widest">Directorate Control Node</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                     <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Operative Registry</p>
-                    <div id="op-registry" class="h-48 overflow-y-auto bg-black/40 p-4 border border-red-900/20 font-mono text-[11px]"></div>
+                    <div id="op-registry" class="h-48 overflow-y-auto bg-black/40 p-4 border border-red-900/20 text-[11px]"></div>
                 </div>
                 <div>
-                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Broadcast Global Mandate</p>
-                    <textarea id="dr-mandate" class="w-full h-32 bg-black/60 border border-red-900/40 p-4 text-white text-sm outline-none focus:border-red-500" placeholder="Enter directive content..."></textarea>
-                    <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white font-bold p-4 mt-3 uppercase text-xs tracking-widest hover:bg-red-500 transition">Execute Broadcast</button>
-                    <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white font-bold p-4 mt-3 uppercase text-xs tracking-widest hover:bg-red-500 transition">Execute Broadcast</button>
-
-<div class="mt-6 border-t border-red-900/20 pt-4">
-    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Upload Media to Intel-Vault</p>
-    <input type="file" id="media-upload" class="hidden" onchange="uploadToVault()">
-    <button onclick="document.getElementById('media-upload').click()" class="w-full border border-red-600 text-red-600 p-3 uppercase text-[10px] hover:bg-red-600 hover:text-white transition">
-        Select Media File
-    </button>
-</div>
+                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Broadcast Mandate</p>
+                    <textarea id="dr-mandate" class="w-full h-32 bg-black border border-red-900/40 p-4 text-white text-sm outline-none mb-4" placeholder="Enter directive..."></textarea>
+                    <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white font-bold p-4 uppercase text-xs mb-6">Execute Broadcast</button>
                     
+                    <div class="border-t border-red-900/20 pt-4">
+                        <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Upload Media to Intel-Vault</p>
+                        <input type="file" id="media-upload" class="hidden" onchange="uploadToVault()">
+                        <button onclick="document.getElementById('media-upload').click()" class="w-full border border-red-600 text-red-600 p-3 uppercase text-[10px] hover:bg-red-600 hover:text-white transition">Select Media File</button>
+                    </div>
                 </div>
             </div>
         </section>
-
     </main>
 
     <script>
-        // UPDATED INFRASTRUCTURE KEYS
         const CONFIG = {
-    U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
-    K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNDEwOTcsImV4cCI6MjA4NjYxNzA5N30.7vb8kniEog1CE0zojEkuJh3k_XbYIKLd9gE_SmLUmrY", 
-    D_CODE: "@MOGProtocol2026"
+            U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
+            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8",
+            D_PASS: "@MOGProtocol2026"
         };
 
         const db = window.supabase.createClient(CONFIG.U, CONFIG.K);
@@ -180,67 +164,23 @@
             const session = JSON.parse(localStorage.getItem('mog_session'));
             if (session) mountSession(session);
             loadMissions();
-        };async function loadGallery() {
-    // 1. List all files in the 'intel-vault' bucket
-    const { data: files, error } = await db.storage.from('intel-vault').list('', {
-        limit: 20,
-        offset: 0,
-        sortBy: { column: 'created_at', order: 'desc' }
-    });
-
-    if (error) {
-        console.error("Gallery Error:", error);
-        return;
-    }
-
-    const galleryContainer = document.getElementById('legacy-gallery');
-    
-    if (files && files.length > 0) {
-        galleryContainer.innerHTML = files.map(file => {
-            // 2. Construct the public URL for each image
-            const publicUrl = `${CONFIG.U}/storage/v1/object/public/intel-vault/${file.name}`;
-            
-            // Skip the placeholder file Supabase sometimes creates
-            if (file.name === '.emptyFolderPlaceholder') return '';
-
-            return `
-                <div class="relative overflow-hidden aspect-square border border-white/10 hover:border-blue-500 transition group cursor-pointer">
-                    <img src="${publicUrl}" class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition duration-500" 
-                         onclick="window.open('${publicUrl}', '_blank')">
-                    <div class="absolute bottom-0 left-0 right-0 bg-black/70 p-1 opacity-0 group-hover:opacity-100 transition">
-                        <p class="text-[8px] text-white truncate">${file.name}</p>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    } else {
-        galleryContainer.innerHTML = `<p class="text-[10px] opacity-30">ARCHIVES EMPTY. UPLOAD INTEL VIA DIRECTOR NODE.</p>`;
-    }
+            loadGallery();
+        };
 
         async function executeAuth() {
             const alias = document.getElementById('alias-in').value.trim().toUpperCase();
             const pass = document.getElementById('pass-in').value;
             if (!alias || !pass) return alert("REQUIRED: ALIAS & ACCESS_CODE");
 
-            // Attempt to find operative
-            let { data: operative, error } = await db.from('operatives').select('*').eq('alias', alias).maybeSingle();
+            let { data: operative } = await db.from('operatives').select('*').eq('alias', alias).maybeSingle();
 
-            if (operative) {
-                if (operative.password === pass) {
-                    loginSuccess(operative);
-                } else {
-                    alert("ACCESS DENIED: INVALID BIOMETRICS");
-                }
-            } else {
-                // New Registration
+            if (operative && operative.password === pass) {
+                loginSuccess(operative);
+            } else if (!operative) {
                 const isDir = (pass === CONFIG.D_PASS);
-                const { data: newOp, error: regError } = await db.from('operatives').insert([
-                    { alias, password: pass, is_director: isDir }
-                ]).select().single();
-                
-                if (regError) alert("REGISTRY ERROR: " + regError.message);
-                else loginSuccess(newOp);
-            }
+                const { data: newOp } = await db.from('operatives').insert([{ alias, password: pass, is_director: isDir }]).select().single();
+                loginSuccess(newOp);
+            } else { alert("ACCESS DENIED"); }
         }
 
         function loginSuccess(op) {
@@ -253,7 +193,6 @@
             document.getElementById('auth-form').classList.add('hidden');
             document.getElementById('op-profile').classList.remove('hidden');
             document.getElementById('active-alias').innerText = op.alias;
-            
             if (op.is_director) {
                 document.getElementById('director-node').classList.remove('hidden');
                 loadRegistry();
@@ -262,73 +201,46 @@
 
         async function loadMissions() {
             const { data: missions } = await db.from('missions').select('*').order('created_at', { ascending: false });
-            const feed = document.getElementById('mission-feed');
-            
-            if (missions && missions.length > 0) {
-                feed.innerHTML = missions.map(m => `
-                    <div class="mission-card ${m.is_global_mandate ? 'border-red-500 bg-red-500/5' : ''}">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="text-[9px] ${m.is_global_mandate ? 'text-red-500' : 'text-blue-400'} font-bold">
-                                ${m.is_global_mandate ? 'MANDATE' : 'OPERATIVE_LOG'}
-                            </span>
-                            <span class="text-[9px] opacity-40">${new Date(m.created_at).toLocaleString()}</span>
-                        </div>
-                        <p class="text-sm text-white/90 leading-relaxed">${m.content}</p>
-                    </div>
-                `).join('');
-            } else {
-                feed.innerHTML = `<p class="text-xs opacity-30">NO ACTIVE MISSIONS IN SECTOR.</p>`;
+            document.getElementById('mission-feed').innerHTML = missions.map(m => `
+                <div class="mission-card ${m.is_global_mandate ? 'border-red-500 bg-red-500/5' : ''}">
+                    <p class="text-[9px] ${m.is_global_mandate ? 'text-red-500' : 'text-blue-400'} font-bold mb-1">${m.is_global_mandate ? 'MANDATE' : 'LOG'}</p>
+                    <p class="text-sm text-white/90">${m.content}</p>
+                </div>
+            `).join('');
+        }
+
+        async function loadGallery() {
+            const { data: files } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
+            if (files) {
+                document.getElementById('legacy-gallery').innerHTML = files.map(f => {
+                    const url = `${CONFIG.U}/storage/v1/object/public/intel-vault/${f.name}`;
+                    if (f.name === '.emptyFolderPlaceholder') return '';
+                    return `<div class="aspect-square border border-white/10 group overflow-hidden"><img src="${url}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 cursor-pointer" onclick="window.open('${url}')"></div>`;
+                }).join('');
             }
         }
 
         async function loadRegistry() {
             const { data: ops } = await db.from('operatives').select('alias, last_seen').order('last_seen', { ascending: false });
-            document.getElementById('op-registry').innerHTML = ops.map(o => `
-                <div class="flex justify-between py-2 border-b border-white/5">
-                    <span class="text-white">${o.alias}</span>
-                    <span class="opacity-40">${new Date(o.last_seen).toLocaleTimeString()}</span>
-                </div>
-            `).join('');
+            document.getElementById('op-registry').innerHTML = ops.map(o => `<div class="flex justify-between py-1 border-b border-white/5"><span>${o.alias}</span><span class="opacity-40">${new Date(o.last_seen).toLocaleTimeString()}</span></div>`).join('');
         }
 
         async function broadcastMandate() {
             const content = document.getElementById('dr-mandate').value;
             if (!content) return;
-
-            const { error } = await db.from('missions').insert([
-                { content: content, is_global_mandate: true }
-            ]);
-
-            if (!error) {
-                document.getElementById('dr-mandate').value = '';
-                loadMissions();
-            }
+            await db.from('missions').insert([{ content: content, is_global_mandate: true }]);
+            document.getElementById('dr-mandate').value = '';
+            loadMissions();
         }
-
-        function logout() {
-            localStorage.removeItem('mog_session');
-            location.reload();
-        }
-            // ... existing logout() function ...
 
         async function uploadToVault() {
-            const fileInput = document.getElementById('media-upload');
-            const file = fileInput.files[0];
+            const file = document.getElementById('media-upload').files[0];
             if (!file) return;
-
-            const fileName = `${Date.now()}_${file.name}`;
-            const { data, error } = await db.storage
-                .from('intel-vault')
-                .upload(fileName, file);
-
-            if (error) {
-                alert("UPLOAD ERROR: " + error.message);
-            } else {
-                alert("INTEL SECURED: " + fileName);
-                location.reload(); 
-            }
+            const { error } = await db.storage.from('intel-vault').upload(`${Date.now()}_${file.name}`, file);
+            if (error) alert(error.message); else location.reload();
         }
+
+        function logout() { localStorage.removeItem('mog_session'); location.reload(); }
     </script>
 </body>
 </html>
-    
