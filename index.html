@@ -180,7 +180,42 @@
             const session = JSON.parse(localStorage.getItem('mog_session'));
             if (session) mountSession(session);
             loadMissions();
-        };
+        };async function loadGallery() {
+    // 1. List all files in the 'intel-vault' bucket
+    const { data: files, error } = await db.storage.from('intel-vault').list('', {
+        limit: 20,
+        offset: 0,
+        sortBy: { column: 'created_at', order: 'desc' }
+    });
+
+    if (error) {
+        console.error("Gallery Error:", error);
+        return;
+    }
+
+    const galleryContainer = document.getElementById('legacy-gallery');
+    
+    if (files && files.length > 0) {
+        galleryContainer.innerHTML = files.map(file => {
+            // 2. Construct the public URL for each image
+            const publicUrl = `${CONFIG.U}/storage/v1/object/public/intel-vault/${file.name}`;
+            
+            // Skip the placeholder file Supabase sometimes creates
+            if (file.name === '.emptyFolderPlaceholder') return '';
+
+            return `
+                <div class="relative overflow-hidden aspect-square border border-white/10 hover:border-blue-500 transition group cursor-pointer">
+                    <img src="${publicUrl}" class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition duration-500" 
+                         onclick="window.open('${publicUrl}', '_blank')">
+                    <div class="absolute bottom-0 left-0 right-0 bg-black/70 p-1 opacity-0 group-hover:opacity-100 transition">
+                        <p class="text-[8px] text-white truncate">${file.name}</p>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    } else {
+        galleryContainer.innerHTML = `<p class="text-[10px] opacity-30">ARCHIVES EMPTY. UPLOAD INTEL VIA DIRECTOR NODE.</p>`;
+    }
 
         async function executeAuth() {
             const alias = document.getElementById('alias-in').value.trim().toUpperCase();
