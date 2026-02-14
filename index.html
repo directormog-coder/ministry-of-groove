@@ -12,120 +12,177 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; --mog-red: #ff3333; }
+        
+        * { transition: background-color 0.3s ease, border-color 0.3s ease; scroll-behavior: smooth; }
         body { font-family: 'JetBrains+Mono', monospace; background-color: var(--mog-black); color: var(--mog-gold); overflow-x: hidden; font-size: 0.95rem; margin: 0; }
-        #bg-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -2; filter: grayscale(100%) brightness(15%) contrast(110%); object-fit: cover; pointer-events: none; }
-        .crt-overlay { position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05)); z-index: 50; background-size: 100% 2px, 3px 100%; pointer-events: none; opacity: 0.4; }
-        .glass-panel { background: rgba(5, 5, 5, 0.88); backdrop-filter: blur(20px); border: 1px solid rgba(212, 175, 55, 0.25); transition: 0.3s; }
-        .btn-uplink { background: var(--mog-gold); color: #000; font-weight: 700; padding: 15px; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; border: none; width: 100%; }
-        input, textarea { background: rgba(10, 10, 10, 0.95) !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; color: var(--mog-blue) !important; padding: 12px; width: 100%; outline: none; margin-bottom: 8px; }
-        #live-booth-display { background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%); border: 2px solid var(--mog-gold); animation: subtle-glow 3s infinite alternate; }
-        @keyframes subtle-glow { from { box-shadow: 0 0 5px rgba(212, 175, 55, 0.2); } to { box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); } }
-        #qr-card { background: #fff; padding: 20px; border-radius: 8px; display: inline-block; position: relative; border: 5px solid var(--mog-gold); color: #000; }
-        #qr-logo-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 45px; height: 45px; border-radius: 50%; background: #000; padding: 2px; border: 2px solid var(--mog-gold); }
+        
+        /* Background Protocol */
+        #bg-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -2; filter: grayscale(100%) brightness(12%) contrast(115%); object-fit: cover; pointer-events: none; }
+        .crt-overlay { position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)); z-index: 50; background-size: 100% 2px, 3px 100%; pointer-events: none; opacity: 0.5; }
+        
+        /* UI Components */
+        .glass-panel { background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(30px); border: 1px solid rgba(212, 175, 55, 0.2); }
+        .btn-uplink { background: var(--mog-gold); color: #000; font-weight: 800; padding: 15px; text-transform: uppercase; cursor: pointer; letter-spacing: 3px; border: none; width: 100%; }
+        input, textarea { background: rgba(10, 10, 10, 0.9) !important; border: 1px solid rgba(212, 175, 55, 0.1) !important; color: var(--mog-blue) !important; padding: 14px; width: 100%; outline: none; margin-bottom: 10px; }
+        
+        /* Flash Alert Protocol */
+        #flash-alert { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 0, 0, 0.2); z-index: 2000; display: none; align-items: center; justify-content: center; pointer-events: none; border: 20px solid var(--mog-red); animation: alert-blink 0.5s infinite; }
+        @keyframes alert-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* Identity Card Rendering */
+        #qr-card { background: #fff; padding: 30px; border-radius: 5px; position: relative; border: 4px solid var(--mog-gold); color: #000; text-align: center; }
+        #qr-logo-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 45px; height: 45px; border-radius: 50%; background: #000; border: 2px solid var(--mog-gold); z-index: 10; }
+        
+        /* Lists */
+        .history-item { border-left: 2px solid rgba(212, 175, 55, 0.3); background: rgba(255, 255, 255, 0.02); padding: 8px; margin-bottom: 4px; }
+        .download-btn { font-size: 8px; border: 1px solid var(--mog-gold); padding: 5px 10px; color: var(--mog-gold); background: rgba(0,0,0,0.85); text-decoration: none; }
+        .scrollbar-hidden::-webkit-scrollbar { width: 4px; }
+        .scrollbar-hidden::-webkit-scrollbar-thumb { background: var(--mog-gold); }
     </style>
 </head>
 <body class="p-4 md:p-10">
+
+    <div id="flash-alert"><h1 class="text-4xl md:text-6xl font-black text-white italic tracking-tighter text-center">DIRECTORATE PRIORITY SIGNAL</h1></div>
 
     <video autoplay muted loop playsinline id="bg-video">
         <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/1000211769.mp4" type="video/mp4">
     </video>
     <div class="crt-overlay"></div>
 
-    <header class="glass-panel p-6 mb-8 flex flex-col lg:flex-row justify-between items-center gap-6 relative z-50">
-        <div class="flex items-center gap-6">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" alt="MOG Logo" class="h-16 w-16 border-2 border-gold rounded-full bg-black">
+    <header class="glass-panel p-8 mb-10 flex flex-col lg:flex-row justify-between items-center gap-8 relative z-50">
+        <div class="flex items-center gap-8">
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" alt="MOG Logo" class="h-20 w-20 border-2 border-gold rounded-full bg-black shadow-xl">
             <div>
-                <h1 class="text-xl md:text-2xl font-bold uppercase tracking-[0.4em] text-gold">The Ministry of Groove</h1>
-                <p class="text-[10px] text-blue-400 tracking-[0.3em]">SECURE UPLINK // EMALAHLENI HQ</p>
+                <h1 class="text-2xl md:text-3xl font-black uppercase tracking-[0.5em] text-gold">The Ministry of Groove</h1>
+                <p class="text-[10px] text-blue-400 tracking-[0.4em] mt-2 italic">ENCRYPTED FREQUENCY // EMALAHLENI</p>
             </div>
         </div>
-        <div class="flex gap-4">
-            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="text-gold text-xl opacity-60 hover:opacity-100"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="https://www.facebook.com/share/1D9jcB5998/" target="_blank" class="text-gold text-xl opacity-60 hover:opacity-100"><i class="fa-brands fa-facebook"></i></a>
-            <a href="https://www.instagram.com/ministryofgroove_hq?igsh=Y3Rwc24zcmtsY2xj" target="_blank" class="text-gold text-xl opacity-60 hover:opacity-100"><i class="fa-brands fa-instagram"></i></a>
+        <div class="flex gap-8 items-center">
+            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="text-gold text-2xl hover:text-white transition"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://www.facebook.com/share/1D9jcB5998/" target="_blank" class="text-gold text-2xl hover:text-white transition"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://www.instagram.com/ministryofgroove_hq?igsh=Y3Rwc24zcmtsY2xj" target="_blank" class="text-gold text-2xl hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
+            <a href="mailto:director.mog@gmail.com" class="text-gold text-2xl hover:text-white transition"><i class="fa-solid fa-envelope"></i></a>
         </div>
     </header>
 
     <main class="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-50">
         
-        <section id="live-booth-display" class="lg:col-span-12 glass-panel p-6">
-            <div class="flex items-center justify-between border-b border-gold/20 pb-2 mb-4">
+        <section id="live-booth-display" class="lg:col-span-12 glass-panel p-10 relative">
+            <div class="flex items-center justify-between border-b border-gold/10 pb-4 mb-8">
                 <p class="text-[10px] font-bold text-gold tracking-[0.5em] uppercase">● Live From The Booth</p>
-                <div class="h-2 w-2 bg-red-600 rounded-full animate-pulse"></div>
+                <p id="live-timestamp" class="text-[10px] opacity-30"></p>
             </div>
-            <div class="text-center py-4">
-                <h2 id="current-track" class="text-3xl md:text-5xl font-black italic tracking-tighter text-white uppercase">Uplink Pending...</h2>
-                <p id="current-artist" class="text-blue-400 text-sm font-bold mt-2 uppercase tracking-widest">Awaiting Signal</p>
+            <div class="text-center py-6">
+                <h2 id="current-track" class="text-4xl md:text-7xl font-black italic tracking-tighter text-white uppercase">Awaiting Signal...</h2>
+                <p id="current-artist" class="text-blue-400 text-xl font-bold uppercase tracking-[0.4em]">Director Offline</p>
             </div>
-            <div id="request-area" class="mt-6 max-w-md mx-auto hidden">
+            <div class="mt-8 pt-6 border-t border-white/5">
+                <div class="flex justify-between items-center mb-4">
+                    <p class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Sonic Archive</p>
+                    <button onclick="toggleHistory()" class="text-[8px] border border-blue-400 px-3 py-1 hover:bg-blue-400 hover:text-black uppercase font-bold">Access History</button>
+                </div>
+                <div id="setlist-history" class="hidden grid grid-cols-1 md:grid-cols-5 gap-3"></div>
+            </div>
+            <div id="request-area" class="mt-8 max-w-xl mx-auto hidden">
                 <div class="flex gap-2">
-                    <input id="track-req-in" type="text" placeholder="REQUEST A TRACK..." class="!mb-0 text-xs">
-                    <button onclick="submitTrackRequest()" class="bg-blue-600 text-white px-4 text-[10px] font-bold uppercase">Send</button>
+                    <input id="track-req-in" type="text" placeholder="TRANSMIT TRACK REQUEST..." class="!mb-0 text-xs flex-grow">
+                    <button onclick="submitTrackRequest()" class="bg-blue-600 text-white px-6 text-xs font-black uppercase">Send</button>
                 </div>
             </div>
         </section>
 
-        <section id="auth-panel" class="lg:col-span-4 glass-panel p-6">
-            <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Biometric Identity</h2>
+        <section id="auth-panel" class="lg:col-span-4 glass-panel p-8">
+            <h2 class="text-xs font-bold uppercase tracking-widest mb-8 border-b border-white/10 pb-2">Biometric Identity</h2>
             <div id="auth-form">
-                <div class="flex gap-4 mb-4">
-                    <button id="tab-login" onclick="toggleAuth('login')" class="text-[10px] font-bold text-white border-b-2 border-gold pb-1">LOGIN</button>
-                    <button id="tab-register" onclick="toggleAuth('register')" class="text-[10px] font-bold text-gray-500 pb-1">REGISTER</button>
+                <div class="flex gap-6 mb-8">
+                    <button id="tab-login" onclick="toggleAuth('login')" class="text-[11px] font-black text-white border-b-2 border-gold pb-1">LOGIN</button>
+                    <button id="tab-register" onclick="toggleAuth('register')" class="text-[11px] font-black text-gray-600 pb-1">REGISTER</button>
                 </div>
                 <input id="operative-in" type="text" placeholder="OPERATIVE ID" class="uppercase">
                 <input id="password-in" type="password" placeholder="PASSWORD">
                 <button onclick="executeAuth()" id="auth-action-btn" class="btn-uplink">Initialize Uplink</button>
             </div>
             <div id="op-profile" class="hidden text-center">
-                <p id="active-alias" class="text-xl font-bold text-white uppercase mb-4"></p>
-                <div id="identity-download-zone" class="mb-4">
+                <p id="active-alias" class="text-2xl font-black text-white uppercase mb-6"></p>
+                <div id="identity-download-zone" class="mb-6 inline-block">
                     <div id="qr-card">
                         <div id="qrcode"></div>
                         <img id="qr-logo-overlay" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
+                        <p class="mt-4 text-[10px] font-black uppercase text-black">Official Operative</p>
                     </div>
                 </div>
-                <button onclick="downloadIdentityCard()" class="text-[8px] bg-blue-600 text-white p-2 mb-2 w-full uppercase">Download Identity Card</button>
-                <button onclick="logout()" class="text-[10px] underline opacity-40 uppercase block mx-auto">Sever Link</button>
+                <button onclick="downloadIdentityCard()" class="btn-uplink !bg-blue-600 !text-white !text-[10px] mb-2">Export ID Card</button>
+                <button onclick="logout()" class="text-[10px] underline opacity-40 hover:opacity-100 uppercase block mx-auto">Sever Link</button>
             </div>
         </section>
 
-        <section class="lg:col-span-8 glass-panel p-6 border-l-4 border-blue-500">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xs font-bold uppercase tracking-widest text-blue-400">Mission Intent</h2>
-                <span id="rsvp-count" class="text-[10px] text-blue-400">0 ATTENDING</span>
+        <section class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="glass-panel p-8 border-l-4 border-blue-500">
+                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-2">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-blue-400">Mission Intent</h2>
+                    <span id="rsvp-count" class="text-[11px] text-blue-400 font-black">0 SIGNALED</span>
+                </div>
+                <h3 id="event-title" class="text-xl font-black text-white uppercase italic">No Active Mission</h3>
+                <button id="rsvp-btn" onclick="submitRSVP()" class="hidden btn-uplink !py-4 !text-[11px] mt-6">Signal Intent</button>
             </div>
-            <h3 id="event-title" class="text-xl font-bold text-white uppercase italic">No Active Event</h3>
-            <button id="rsvp-btn" onclick="submitRSVP()" class="hidden btn-uplink !w-auto px-6 mt-4">Signal Intent</button>
+            <div class="glass-panel p-8">
+                <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-blue-400">Sonic Uplink</h2>
+                <audio id="main-audio-player" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" controls class="w-full h-10 mb-6"></audio>
+                <div id="mix-list" class="h-[120px] overflow-y-auto space-y-2 pr-2 scrollbar-hidden"></div>
+            </div>
         </section>
 
-        <section id="director-node" class="hidden lg:col-span-12 glass-panel p-8 border-2 border-red-600/30 bg-red-900/5">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="border-r border-red-900/20 pr-4">
-                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Live Booth Control</p>
+        <section class="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="glass-panel p-8 flex flex-col">
+                <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-blue-400">Frequency Chat</h2>
+                <div id="chat-window" class="h-[240px] overflow-y-auto mb-6 text-white/90 text-sm space-y-3 scrollbar-hidden"></div>
+                <div id="chat-input-area" class="hidden mt-auto"><input id="chat-msg-in" type="text" placeholder="TRANSMIT MESSAGE..." onkeypress="if(event.key==='Enter') sendChat()"></div>
+            </div>
+            <div class="glass-panel p-8">
+                <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-blue-400">Venue Map</h2>
+                <div id="venue-list" class="h-[240px] overflow-y-auto space-y-3 text-[10px] uppercase text-blue-400 scrollbar-hidden"></div>
+            </div>
+        </section>
+
+        <section class="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="glass-panel p-8">
+                <h2 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-2 text-gold">Visual Archives</h2>
+                <div id="tile-gallery" class="grid grid-cols-2 md:grid-cols-3 gap-6 h-[240px] overflow-y-auto pr-2 scrollbar-hidden"></div>
+            </div>
+            <div class="glass-panel p-8 border-t-2 border-gold/20">
+                <h2 class="text-xs font-bold uppercase tracking-widest mb-4 text-blue-400">Inner Circle Newsletter</h2>
+                <input id="news-email" type="email" placeholder="SECURE_EMAIL_ID">
+                <button onclick="subscribeNewsletter()" class="btn-uplink !py-3 !text-[10px]">Establish Newsletter Link</button>
+            </div>
+        </section>
+
+        <section id="director-node" class="hidden lg:col-span-12 glass-panel p-10 border-2 border-red-600/30 bg-red-900/10">
+            <h3 class="text-red-500 font-black uppercase text-2xl mb-12 tracking-[0.8em] text-center italic">Directorate High Command</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <div class="border-r border-red-900/20 pr-8">
+                    <p class="text-[11px] uppercase font-black mb-6 text-red-500">Booth Control</p>
                     <input id="booth-track" type="text" placeholder="TRACK" class="text-xs mb-1">
-                    <input id="booth-artist" type="text" placeholder="ARTIST" class="text-xs mb-2">
-                    <button onclick="pushToBooth()" class="btn-uplink !py-2 !text-[10px]">Push Track</button>
-                    
-                    <p class="text-[10px] uppercase font-bold mt-6 mb-2 text-red-400">Live Requests</p>
-                    <div id="request-list" class="h-32 overflow-y-auto text-[10px] bg-black/40 p-2 border border-red-900/20"></div>
+                    <input id="booth-artist" type="text" placeholder="ARTIST" class="text-xs mb-4">
+                    <button onclick="pushToBooth()" class="btn-uplink !py-3 !text-[10px] !bg-red-600 !text-white font-black">Push to Live</button>
+                    <p class="text-[11px] uppercase font-black mt-10 mb-4 text-red-500">Live Requests</p>
+                    <div id="request-list" class="h-40 overflow-y-auto text-[10px] bg-black/60 p-4 border border-red-900/30 scrollbar-hidden"></div>
+                </div>
+                <div class="md:col-span-2 border-r border-red-900/20 pr-8">
+                    <p class="text-[11px] uppercase font-black mb-6 text-red-500">Logistics & Venue Pins</p>
+                    <div class="flex gap-4 mb-4">
+                        <input id="pin-venue-name" type="text" placeholder="VENUE" class="text-xs !mb-0 w-1/2">
+                        <input id="pin-coords" type="text" placeholder="COORDS" class="text-xs !mb-0 w-1/2">
+                    </div>
+                    <button onclick="pinVenue()" class="w-full bg-blue-900 text-white p-3 text-[11px] mb-8 uppercase font-black">Update Map</button>
+                    <textarea id="dr-mandate" class="h-32 text-white bg-black/40 border-red-900/30 mb-4" placeholder="Broadcast Directive..."></textarea>
+                    <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white p-5 uppercase font-black text-xs shadow-2xl">Execute Signal</button>
                 </div>
                 <div>
-                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Mandate & Pin</p>
-                    <input id="pin-venue-name" type="text" placeholder="VENUE" class="text-xs mb-1">
-                    <input id="pin-coords" type="text" placeholder="COORDS" class="text-xs mb-1">
-                    <button onclick="pinVenue()" class="w-full bg-blue-600 text-white p-2 text-[10px] mb-4">PIN VENUE</button>
-                    <textarea id="dr-mandate" class="h-24 text-white" placeholder="Broadcast..."></textarea>
-                    <button onclick="broadcastMandate()" class="w-full bg-red-600 text-white p-3 uppercase text-xs">Execute</button>
-                </div>
-                <div>
-                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Intelligence Vault</p>
+                    <p class="text-[11px] uppercase font-black mb-6 text-red-500">Strategy Ledger</p>
+                    <textarea id="director-log" class="h-48 text-white bg-black/80 border-red-900/40 text-[11px] p-6 mb-6" placeholder="Secret strategies..."></textarea>
                     <input type="file" id="media-upload" class="hidden" onchange="uploadToVault()">
-                    <button onclick="document.getElementById('media-upload').click()" class="w-full border border-red-600 text-red-600 p-4 uppercase text-[10px] mb-4">UPLOAD</button>
-                    <button onclick="purgeChat()" class="w-full border border-red-600 text-red-600 p-2 text-[10px]">PURGE CHAT</button>
-                </div>
-                <div>
-                    <p class="text-[10px] uppercase font-bold mb-4 text-red-400">Operative Strategy</p>
-                    <textarea id="director-log" class="h-40 text-white bg-black/60 border-red-900/40 text-xs" placeholder="Secret notes..."></textarea>
+                    <button onclick="document.getElementById('media-upload').click()" class="w-full border-2 border-red-600 text-red-600 p-4 uppercase font-black text-[10px]">Upload Intel</button>
+                    <button onclick="purgeChat()" class="w-full border border-red-600 bg-red-600/10 text-red-600 p-2 text-[8px] mt-4">PURGE CHAT</button>
                 </div>
             </div>
         </section>
@@ -144,17 +201,23 @@
         window.onload = () => {
             const s = JSON.parse(localStorage.getItem('mog_session'));
             if (s) mountSession(s);
-            loadMissions(); loadChat(); loadVault(); loadVenues(); loadCurrentBooth();
-            
-            // Real-time Booth & Request Listeners
-            db.channel('booth_signal').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'live_setlist' }, p => updateBoothUI(p.new)).subscribe();
-            db.channel('request_signal').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'track_requests' }, p => loadTrackRequests()).subscribe();
+            loadMissions(); loadChat(); loadVault(); loadVenues(); loadCurrentBooth(); loadTrackHistory();
+            setInterval(() => { document.getElementById('live-timestamp').innerText = new Date().toLocaleTimeString(); }, 1000);
+
+            db.channel('master_signal').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'live_setlist' }, p => {
+                updateBoothUI(p.new); loadTrackHistory();
+            }).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'track_requests' }, p => loadTrackRequests())
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat' }, p => appendChat(p.new))
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'missions' }, p => {
+                if (p.new.content.toUpperCase().startsWith("ALERT:")) triggerFlash();
+                loadMissions();
+            }).subscribe();
         };
 
         function toggleAuth(mode) {
             authMode = mode;
-            document.getElementById('tab-login').className = mode === 'login' ? "text-[10px] font-bold text-white border-b-2 border-gold pb-1" : "text-[10px] font-bold text-gray-500 pb-1";
-            document.getElementById('tab-register').className = mode === 'register' ? "text-[10px] font-bold text-white border-b-2 border-gold pb-1" : "text-[10px] font-bold text-gray-500 pb-1";
+            document.getElementById('tab-login').className = mode === 'login' ? "text-[11px] font-black text-white border-b-2 border-gold pb-1" : "text-[11px] font-black text-gray-600 pb-1";
+            document.getElementById('tab-register').className = mode === 'register' ? "text-[11px] font-black text-white border-b-2 border-gold pb-1" : "text-[11px] font-black text-gray-600 pb-1";
             document.getElementById('auth-action-btn').innerText = mode === 'login' ? "ESTABLISH UPLINK" : "CREATE OPERATIVE ACCOUNT";
         }
 
@@ -181,6 +244,7 @@
             document.getElementById('op-profile').classList.remove('hidden');
             document.getElementById('active-alias').innerText = op.alias;
             document.getElementById('request-area').classList.remove('hidden');
+            document.getElementById('chat-input-area').classList.remove('hidden');
             generateIdentityQR(op.alias, op.password);
             if (op.is_director) {
                 document.getElementById('director-node').classList.remove('hidden');
@@ -192,63 +256,13 @@
             loadRSVPs();
         }
 
-        async function pushToBooth() {
-            const track = document.getElementById('booth-track').value;
-            const artist = document.getElementById('booth-artist').value;
-            await db.from('live_setlist').insert([{ track_name: track, artist_name: artist }]);
-        }
-
-        async function submitTrackRequest() {
-            const req = document.getElementById('track-req-in').value;
-            if (!req) return;
-            await db.from('track_requests').insert([{ operative_alias: currentUser.alias, request_text: req }]);
-            document.getElementById('track-req-in').value = '';
-            alert("REQUEST TRANSMITTED TO THE BOOTH");
-        }
-
-        async function loadTrackRequests() {
-            const { data } = await db.from('track_requests').select('*').order('created_at', { ascending: false }).limit(20);
-            document.getElementById('request-list').innerHTML = data.map(r => `<div class="mb-1 border-b border-white/5 pb-1"><span class="text-blue-400">${r.operative_alias}:</span> ${r.request_text}</div>`).join('');
-        }
-
         function generateIdentityQR(id, pass) {
-            new QRCode(document.getElementById("qrcode"), { text: `${id}:${pass}`, width: 150, height: 150, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H });
+            new QRCode(document.getElementById("qrcode"), { text: `${id}:${pass}`, width: 160, height: 160, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H });
         }
 
         async function downloadIdentityCard() {
-            const canvas = await html2canvas(document.getElementById('identity-download-zone'), { scale: 2 });
-            const link = document.createElement('a'); link.download = `MOG_ID_${currentUser.alias}.png`; link.href = canvas.toDataURL(); link.click();
+            const canvas = await html2canvas(document.getElementById('identity-download-zone'), { scale: 3, useCORS: true });
+            const link = document.createElement('a'); link.download = `MOG_ID_${currentUser.alias}.png`; link.href = canvas.toDataURL("image/png"); link.click();
         }
 
-        function updateBoothUI(data) {
-            document.getElementById('current-track').innerText = data.track_name;
-            document.getElementById('current-artist').innerText = data.artist_name || 'Ministry Unknown';
-        }
-
-        async function loadCurrentBooth() {
-            const { data } = await db.from('live_setlist').select('*').order('active_at', { ascending: false }).limit(1).maybeSingle();
-            if (data) updateBoothUI(data);
-        }
-
-        // Standard Preservation Logic for Chat, Vault, RSVP, Venues
-        async function loadVault() {
-            const { data: files } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
-            const mixList = document.getElementById('mix-list');
-            mixList.innerHTML = `<div class="flex justify-between items-center p-2 border border-blue-500/30 bg-blue-500/5"><span class="text-[10px] cursor-pointer text-blue-400" onclick="playTrack('https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3', 'MANDATE')">MANDATE_MIX</span><a href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" download class="download-btn">SECURE</a></div>`;
-            if (files) files.forEach(f => {
-                const url = `${CONFIG.U}/storage/v1/object/public/intel-vault/${f.name}`;
-                if (f.name.match(/\.(mp3|wav)$/)) mixList.innerHTML += `<div class="flex justify-between items-center p-2 border border-white/5 bg-white/5"><span class="text-[10px] cursor-pointer" onclick="playTrack('${url}', '${f.name}')">${f.name}</span><a href="${url}" download class="download-btn">SECURE</a></div>`;
-            });
-        }
-        function playTrack(url, name) { document.getElementById('main-audio-player').src = url; document.getElementById('main-audio-player').play(); }
-        async function loadVenues() { const { data } = await db.from('venue_pins').select('*'); }
-        async function loadRSVPs() { const et = document.getElementById('event-title').innerText; if (et === "No Active Event") return; const { count } = await db.from('event_rsvps').select('*', { count: 'exact', head: true }).eq('event_name', et); document.getElementById('rsvp-count').innerText = `${count || 0} ATTENDING`; }
-        async function submitRSVP() { await db.from('event_rsvps').insert([{ event_name: document.getElementById('event-title').innerText, operative_alias: currentUser.alias }]); loadRSVPs(); }
-        async function loadChat() { const { data } = await db.from('chat').select('*').order('created_at', { ascending: true }).limit(50); data.forEach(m => document.getElementById('chat-window').innerHTML += `<div><span class="text-blue-400 font-bold">${m.alias}:</span> ${m.message}</div>`); }
-        async function sendChat() { const i = document.getElementById('chat-msg-in'); await db.from('chat').insert([{ alias: currentUser.alias, message: i.value }]); i.value = ''; }
-        function logout() { localStorage.removeItem('mog_session'); location.reload(); }
-        async function loadMissions() { const { data } = await db.from('missions').select('*').order('created_at', { ascending: false }); document.getElementById('mission-feed').innerHTML = data.map(i => `<div class="mission-card"><p>${i.content}</p></div>`).join(''); }
-    </script>
-</body>
-                </html>
-                
+        functio
