@@ -268,7 +268,26 @@
             localStorage.removeItem('mog_session');
             location.reload();
         }
+            // ... existing logout() function ...
+
+        async function uploadToVault() {
+            const fileInput = document.getElementById('media-upload');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const fileName = `${Date.now()}_${file.name}`;
+            const { data, error } = await db.storage
+                .from('intel-vault')
+                .upload(fileName, file);
+
+            if (error) {
+                alert("UPLOAD ERROR: " + error.message);
+            } else {
+                alert("INTEL SECURED: " + fileName);
+                location.reload(); 
+            }
+        }
     </script>
 </body>
-    </html>
+</html>
     
