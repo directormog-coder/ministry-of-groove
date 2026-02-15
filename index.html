@@ -11,182 +11,172 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; --mog-red: #ff3333; }
-        * { transition: all 0.25s ease; scroll-behavior: smooth; }
-        body { font-family: 'JetBrains+Mono', monospace; background-color: var(--mog-black); color: var(--mog-gold); overflow-x: hidden; font-size: 0.95rem; margin: 0; }
+        * { transition: all 0.2s ease; scroll-behavior: smooth; }
+        body { font-family: 'JetBrains+Mono', monospace; background-color: var(--mog-black); color: var(--mog-gold); overflow-x: hidden; font-size: 0.9rem; margin: 0; }
         
-        body.lockdown { background-color: #0a0000; }
-        body.lockdown .glass-panel { border-color: rgba(255, 51, 51, 0.4); background: rgba(15, 0, 0, 0.98); }
-        body.lockdown .text-gold { color: var(--mog-red); }
-
-        #bg-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -2; filter: grayscale(100%) brightness(12%) contrast(115%); object-fit: cover; pointer-events: none; }
-        .crt-overlay { position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)); z-index: 50; background-size: 100% 2px, 3px 100%; pointer-events: none; opacity: 0.4; }
-        .glass-panel { background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(25px); border: 1px solid rgba(212, 175, 55, 0.15); }
-        
-        #readiness-track { height: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 5px; overflow: hidden; border: 1px solid rgba(0, 212, 255, 0.1); }
-        #readiness-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--mog-blue), #00ff88); box-shadow: 0 0 10px var(--mog-blue); transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
-
-        #cipher-node { display: none; background: rgba(0, 212, 255, 0.05); border: 1px solid var(--mog-blue); padding: 15px; margin-top: 10px; text-align: center; }
-        #decryption-buffer { display: none; background: rgba(212, 175, 55, 0.05); border: 1px dashed var(--mog-gold); padding: 15px; text-align: center; margin-top: 10px; }
-        
-        #map-overlay { height: 0; opacity: 0; overflow: hidden; transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
-        #map-overlay.active { height: 230px; opacity: 1; margin-top: 15px; border: 1px solid rgba(0, 212, 255, 0.2); }
-        #map-container { 
-            height: 100%; width: 100%;
-            background: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg') no-repeat center; 
-            background-size: contain; position: relative; 
-            filter: invert(1) brightness(0.6) sepia(1) saturate(3) hue-rotate(180deg);
+        /* THE CRITICAL VISUAL UPGRADE: GLOW & DEPTH */
+        .glass-panel { 
+            background: rgba(10, 10, 10, 0.85); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(212, 175, 55, 0.05);
+            border-radius: 4px;
         }
 
-        .btn-uplink { background: var(--mog-gold); color: #000; font-weight: 800; padding: 15px; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; border: none; width: 100%; }
-        input, textarea { background: rgba(10, 10, 10, 0.9) !important; border: 1px solid rgba(212, 175, 55, 0.1) !important; color: var(--mog-blue) !important; padding: 14px; width: 100%; outline: none; margin-bottom: 10px; }
+        #bg-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -2; filter: grayscale(100%) brightness(15%) contrast(120%); object-fit: cover; pointer-events: none; }
+        .crt-overlay { position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02)); z-index: 50; background-size: 100% 2px, 3px 100%; pointer-events: none; opacity: 0.3; }
+
+        /* DATA BARS & PROGRESS */
+        .status-bar { height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; border: 1px solid rgba(0, 212, 255, 0.1); }
+        .status-fill-blue { height: 100%; width: 65%; background: var(--mog-blue); box-shadow: 0 0 10px var(--mog-blue); }
+        .status-fill-gold { height: 100%; width: 40%; background: var(--mog-gold); box-shadow: 0 0 10px var(--mog-gold); }
+
+        /* PERSISTENT AFRICA MAP SCANNER */
+        .map-section {
+            height: 250px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg') no-repeat center;
+            background-size: contain;
+            position: relative;
+            filter: invert(1) brightness(0.7) sepia(1) saturate(2) hue-rotate(180deg);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            background-color: rgba(0,0,0,0.3);
+        }
+        .map-scanline {
+            position: absolute; width: 100%; height: 2px; background: rgba(0, 212, 255, 0.4);
+            top: 0; animation: scan 4s linear infinite; box-shadow: 0 0 15px var(--mog-blue);
+        }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+
+        .btn-uplink { background: var(--mog-gold); color: #000; font-weight: 800; padding: 12px; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; border: none; width: 100%; }
+        .btn-uplink:hover { background: #fff; box-shadow: 0 0 20px var(--mog-gold); }
         
-        .map-ping { position: absolute; width: 4px; height: 4px; background: var(--mog-blue); border-radius: 50%; box-shadow: 0 0 6px var(--mog-blue); animation: map-pulse 2s infinite; }
-        .map-ping.priority { background: var(--mog-red); box-shadow: 0 0 15px var(--mog-red); width: 10px; height: 10px; z-index: 30; }
+        input, textarea { background: rgba(0, 0, 0, 0.6) !important; border: 1px solid rgba(212, 175, 55, 0.2) !important; color: var(--mog-blue) !important; padding: 12px; width: 100%; outline: none; margin-bottom: 8px; font-size: 0.8rem; }
         
-        #transmission-ledger { max-height: 100px; overflow-y: auto; font-size: 8px; border: 1px solid rgba(255, 51, 51, 0.2); background: rgba(0,0,0,0.4); padding: 5px; }
+        .map-ping { position: absolute; width: 6px; height: 6px; background: var(--mog-blue); border-radius: 50%; box-shadow: 0 0 10px var(--mog-blue); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
 
         .scrollbar-hidden::-webkit-scrollbar { width: 4px; }
         .scrollbar-hidden::-webkit-scrollbar-thumb { background: var(--mog-gold); }
     </style>
 </head>
-<body id="main-body">
+<body>
     <video autoplay muted loop playsinline id="bg-video"><source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/1000211769.mp4" type="video/mp4"></video>
     <div class="crt-overlay"></div>
 
-    <header class="glass-panel p-6 mb-8 flex flex-col md:flex-row justify-between items-center gap-6 relative z-50">
-        <div class="flex items-center gap-6">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 rounded-full border border-gold">
-            <h1 class="text-xl md:text-2xl font-black uppercase tracking-tighter text-gold italic">The Ministry of Groove</h1>
+    <header class="glass-panel p-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4 relative z-50 mx-4 mt-4 border-b-2">
+        <div class="flex items-center gap-4">
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-14 w-14 rounded-full border-2 border-gold shadow-[0_0_15px_rgba(212,175,55,0.5)]">
+            <div>
+                <h1 class="text-xl md:text-2xl font-black uppercase tracking-tighter text-gold italic">The Ministry of Groove</h1>
+                <p class="text-[8px] tracking-[0.4em] text-blue-400">ENCRYPTED SONIC COMMAND CENTER</p>
+            </div>
         </div>
-        <div class="flex gap-5 items-center">
-            <div id="signal-sign" class="text-[9px] font-bold text-gray-500 border border-gray-500 px-3 py-1 uppercase">SIGNAL OFFLINE</div>
-            <button id="logout-btn" onclick="logout()" class="hidden text-[9px] border border-red-500 text-red-500 px-2 py-1 uppercase font-bold">Sever Link</button>
+        <div class="flex gap-4 items-center">
+            <div id="signal-sign" class="text-[9px] font-bold text-green-500 border border-green-500 px-3 py-1 uppercase">SATELLITE ONLINE</div>
+            <button id="logout-btn" onclick="logout()" class="hidden text-[9px] border border-red-500 text-red-500 px-2 py-1 uppercase font-bold">Sever</button>
         </div>
     </header>
 
-    <main class="p-4 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-50">
-        <section id="auth-panel" class="lg:col-span-4 glass-panel p-6">
-            <h2 class="text-xs font-bold uppercase mb-6 border-b border-white/10 pb-2 flex justify-between">
-                <span>Identity Hub</span>
-                <span id="clearance-level" class="text-[8px] text-blue-400">LEVEL: --</span>
+    <main class="p-4 grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-50">
+        
+        <section id="auth-panel" class="lg:col-span-3 glass-panel p-5">
+            <h2 class="text-xs font-bold uppercase mb-4 border-b border-white/10 pb-2 flex justify-between">
+                <span>Operative Profile</span>
+                <span class="text-blue-400">v4.2</span>
             </h2>
             <div id="auth-form">
                 <input id="email-in" type="email" placeholder="EMAIL" class="lowercase">
                 <input id="password-in" type="password" placeholder="PASSWORD">
-                <button onclick="handleAuth()" class="btn-uplink">Initialize</button>
+                <button onclick="handleAuth()" class="btn-uplink">Authorize</button>
             </div>
-            <div id="op-profile" class="hidden text-center">
-                <p id="active-alias" class="text-xl font-black text-white uppercase mb-4"></p>
-                <div id="qrcode" class="bg-white p-2 inline-block mb-4"></div>
+            <div id="op-profile" class="hidden">
+                <p id="active-alias" class="text-xl font-black text-white uppercase tracking-widest text-center mb-4"></p>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-[8px] uppercase mb-1">Clearance Level</p>
+                        <div class="status-bar"><div class="status-fill-gold" style="width: 85%;"></div></div>
+                    </div>
+                    <div>
+                        <p class="text-[8px] uppercase mb-1">Signal Strength</p>
+                        <div class="status-bar"><div class="status-fill-blue" id="dynamic-signal"></div></div>
+                    </div>
+                    <div id="qrcode" class="bg-white p-2 mx-auto block w-32 h-32 mt-4"></div>
+                </div>
             </div>
         </section>
-        
-        <section class="lg:col-span-8 glass-panel p-6">
+              
+        <section class="lg:col-span-6 glass-panel p-5">
             <div class="flex justify-between items-center mb-4">
-                <p id="live-indicator" class="text-[9px] font-bold text-gold uppercase animate-pulse">● Live Frequency</p>
-                <p id="live-time" class="text-[9px] opacity-40"></p>
+                <p class="text-[9px] font-bold text-gold uppercase flex items-center gap-2">
+                    <span class="w-2 h-2 bg-red-600 rounded-full animate-ping"></span> Live Frequency
+                </p>
+                <p id="live-time" class="text-[10px] font-mono opacity-60"></p>
             </div>
-            <div class="text-center py-6">
-                <h2 id="live-track" class="text-4xl md:text-6xl font-black italic text-white uppercase tracking-tighter">SYNCING...</h2>
-                <p id="live-artist" class="text-blue-400 text-sm font-bold tracking-[0.3em] uppercase">DIRECTOR OFFLINE</p>
-                <div id="signal-meter"><div id="signal-fill"></div></div>
+            <div class="text-center py-4 bg-black/40 border border-white/5 rounded">
+                <h2 id="live-track" class="text-3xl md:text-5xl font-black italic text-white uppercase tracking-tighter">Initializing...</h2>
+                <p id="live-artist" class="text-blue-400 text-sm font-bold tracking-[0.5em] mt-3 uppercase">Standby</p>
             </div>
             <div id="history-grid" class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3 border-t border-white/5 pt-4"></div>
         </section>
-        
-        <section class="lg:col-span-12 glass-panel p-6">
+
+        <section class="lg:col-span-3 glass-panel p-5">
+            <h2 class="text-xs font-bold uppercase mb-4 text-blue-400 border-b border-white/10 pb-2">Satellite Africa</h2>
+            <div class="map-section" id="map-container">
+                <div class="map-scanline"></div>
+                <div id="map-pings"></div>
+            </div>
+            <div class="mt-4 text-[9px] font-mono text-blue-400 space-y-1">
+                <p id="telemetry-lat">LAT: --.---</p>
+                <p id="telemetry-lng">LNG: --.---</p>
+                <p id="telemetry-status">STATUS: MONITORING</p>
+            </div>
+        </section>
+
+        <section class="lg:col-span-8 glass-panel p-5">
             <h2 class="text-xs font-bold uppercase mb-4 text-blue-400 border-b border-white/10 pb-2">Sonic Archive</h2>
-            <audio id="player" src="" controls class="w-full h-10 mb-4" onplay="simulateSignalPulse()"></audio>
-            <div id="mix-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[180px] overflow-y-auto pr-2 scrollbar-hidden"></div>
+            <audio id="player" src="" controls class="w-full h-10 mb-4 opacity-80"></audio>
+            <div id="mix-list" class="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[200px] overflow-y-auto pr-2 scrollbar-hidden"></div>
         </section>
 
-        <section class="lg:col-span-6 glass-panel p-6 border-l-4 border-blue-600">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xs font-bold uppercase text-blue-400 border-b border-white/10 pb-1">Active Mission</h2>
-                <span id="rsvp-count" class="text-[9px] text-white/40">0 SIGNALED</span>
-            </div>
-            <h3 id="mission-title" class="text-xl font-black text-white italic mb-4">NO ASSIGNED MISSION</h3>
-            
-            <div class="mb-6">
-                <div class="flex justify-between text-[8px] uppercase font-black text-blue-400 mb-1">
-                    <span>Mission Readiness</span>
-                    <span id="readiness-pct">0%</span>
-                </div>
-                <div id="readiness-track"><div id="readiness-fill"></div></div>
-            </div>
-
-            <div id="cipher-node">
-                <p class="text-[9px] font-black text-blue-400 mb-2 uppercase">ENCRYPTED SIGNAL DETECTED. ENTER CIPHER KEY:</p>
-                <input id="cipher-input" type="text" placeholder="KEY..." class="!text-center !mb-2 !p-2 !text-xs font-bold">
-                <button onclick="verifyCipherKey()" class="w-full bg-blue-600 text-white py-2 text-[8px] font-black uppercase">Initialize Handshake</button>
-            </div>
-
-            <div id="decryption-buffer">
-                <p class="text-[10px] font-black text-gold mb-1">DECRYPTING INCOMING MANDATE...</p>
-                <div id="decrypt-time" class="text-xl font-black text-white mb-2">00:15</div>
-                <div class="data-stream" id="stream-code">-- SCANNING --</div>
-            </div>
-
-            <button id="tactical-btn" onclick="toggleTacticalMap()" class="hidden w-full border border-blue-400/30 py-3 text-[10px] text-blue-400 font-black tracking-widest hover:bg-blue-400 hover:text-black flex justify-between px-4 items-center">
-                <span id="scan-text">AFRICA-PRIME SCAN</span>
-                <i class="fa-solid fa-satellite-dish"></i>
-            </button>
-            
-            <div id="map-overlay">
-                <div id="map-container"></div>
-                <div id="map-telem" class="absolute bottom-2 left-2 text-[7px] text-blue-400 font-bold opacity-50">AFRICA_SECTOR_V4</div>
-            </div>
-
-            <div id="arrival-node" class="hidden mt-4 grid grid-cols-2 gap-2">
-                <button onclick="downloadIntelManifest()" class="bg-blue-900/40 text-blue-400 border border-blue-400/20 py-3 text-[8px] font-black uppercase">Manifest</button>
-                <button id="checkin-btn" onclick="signalArrival()" class="bg-green-900/40 text-green-400 border border-green-400/20 py-3 text-[8px] font-black uppercase">Signal Arrival</button>
-            </div>
-        </section>
-
-        <section class="lg:col-span-6 glass-panel p-6">
+        <section class="lg:col-span-4 glass-panel p-5">
             <h2 class="text-xs font-bold uppercase mb-4 text-gold border-b border-white/10 pb-2">Visual Vault</h2>
-            <div id="tile-gallery" class="grid grid-cols-3 gap-2 max-h-[300px] overflow-y-auto pr-2 scrollbar-hidden"></div>
+            <div id="tile-gallery" class="grid grid-cols-3 gap-2 max-h-[250px] overflow-y-auto pr-2 scrollbar-hidden"></div>
         </section>
 
-        <section class="lg:col-span-12 glass-panel p-6">
-            <h2 class="text-xs font-bold uppercase mb-4 text-blue-400 border-b border-white/10 pb-2">Frequency Chat</h2>
-            <div id="chat-box" class="h-[200px] overflow-y-auto mb-4 text-sm space-y-2 pr-2 scrollbar-hidden"></div>
+        <section class="lg:col-span-12 glass-panel p-5">
+            <h2 class="text-xs font-bold uppercase mb-4 text-blue-400 border-b border-white/10 pb-2">Encrypted Comms</h2>
+            <div id="chat-box" class="h-[200px] overflow-y-auto mb-4 text-sm space-y-3 pr-2 scrollbar-hidden font-mono"></div>
             <div id="chat-input-area" class="hidden flex gap-2">
-                <input id="chat-in" type="text" placeholder="TRANSMIT..." class="!mb-0" onkeypress="if(event.key==='Enter') sendChat()">
-                <button onclick="sendChat()" class="bg-blue-600 px-4 py-2 text-white text-xs font-black">SEND</button>
+                <input id="chat-in" type="text" placeholder="TRANSMIT MESSAGE..." class="!mb-0" onkeypress="if(event.key==='Enter') sendChat()">
+                <button onclick="sendChat()" class="bg-blue-600 px-6 py-2 text-white text-xs font-black hover:bg-white hover:text-black">SEND</button>
             </div>
         </section>
 
-        <section id="director-node" class="hidden lg:col-span-12 glass-panel p-8 border-2 border-red-900/40 bg-red-900/5">
+        <section id="director-node" class="hidden lg:col-span-12 glass-panel p-8 border-2 border-red-900/40 bg-red-900/10">
             <h3 class="text-red-600 font-black uppercase mb-8 italic text-center tracking-[1em]">Directorate Command</h3>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
                     <p class="text-[10px] font-bold text-red-600 mb-2 uppercase">Booth</p>
                     <input id="dr-track" placeholder="TRACK">
                     <input id="dr-artist" placeholder="ARTIST">
-                    <button onclick="pushTrack()" class="btn-uplink !bg-red-600 !text-white !text-[9px]">Push Live</button>
+                    <button onclick="pushTrack()" class="btn-uplink !bg-red-600 !text-white !text-[9px]">Update Live</button>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold text-red-600 mb-2 uppercase">Intel Deployment</p>
-                    <input id="venue-name" placeholder="CITY / SECTOR">
-                    <input id="dr-cipher-key" placeholder="SET CIPHER KEY">
-                    <button onclick="transmitIntelAndReport()" class="w-full bg-red-600 text-white py-2 text-[10px] font-bold uppercase">Initialize Transmission</button>
+                    <p class="text-[10px] font-bold text-red-600 mb-2 uppercase">Mission Intel</p>
+                    <input id="venue-name" placeholder="AFRICA SECTOR">
+                    <textarea id="field-report-in" placeholder="REPORT..." class="h-16 text-[10px]"></textarea>
+                    <button onclick="transmitIntelAndReport()" class="w-full bg-red-600 text-white py-2 text-[10px] font-bold uppercase">Push Mandate</button>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold text-red-600 mb-2 uppercase">Transmission Ledger</p>
-                    <div id="transmission-ledger" class="scrollbar-hidden h-20 border border-red-900/30 p-1 mb-2"></div>
-                    <button onclick="broadcastKeyDirectly()" class="w-full text-[8px] border border-red-600 text-red-600 py-2 hover:bg-red-600 hover:text-white transition uppercase font-bold">Broadcast Key</button>
+                    <p class="text-[10px] font-bold text-red-600 mb-2 uppercase">Systems</p>
+                    <button onclick="toggleLockdown()" class="w-full border-2 border-red-600 text-red-600 py-3 text-[9px] font-black mb-2 hover:bg-red-600">TOGGLE LOCKDOWN</button>
+                    <input id="mission-input" placeholder="MISSION NAME">
                 </div>
-                <div>
-                    <p class="text-[10px] font-bold text-red-600 mb-2">Tactical State</p>
-                    <button onclick="toggleLockdown()" class="w-full border-2 border-red-600 text-red-600 py-3 text-[9px] font-black mb-2">TOGGLE LOCKDOWN</button>
-                    <input id="mission-input" placeholder="MISSION">
-                    <button onclick="updateMission()" class="btn-uplink !bg-red-600 !text-white !text-[9px]">Update</button>
-                </div>
+                <div><p class="text-[10px] font-bold text-red-600 mb-2 uppercase">Log</p><textarea id="dr-log" class="h-40 text-[10px]"></textarea></div>
             </div>
         </section>
     </main>
-       
+    
     <script>
         const CFG = {
             U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
@@ -194,114 +184,37 @@
             D: "director.mog@gmail.com"
         };
         const db = window.supabase.createClient(CFG.U, CFG.K);
-        let activeKey = sessionStorage.getItem('mog_active_key') || "";
-        let currentVenue = sessionStorage.getItem('mog_active_venue') || "NONE";
 
-        // EFFICIENCY: Precise Audio Signal Fill
-        function simulateSignalPulse() {
-            const fill = document.getElementById('signal-fill');
-            const audio = document.getElementById('player');
-            const interval = setInterval(() => {
-                if(audio.paused) { fill.style.width = '0%'; clearInterval(interval); return; }
-                // Use random jitter for "effectiveness" without full WebAudio node overhead
-                fill.style.width = (30 + Math.random() * 70) + '%';
-            }, 100);
+        // AUTO-TELEMETRY & DYNAMIC UI
+        function runDiagnostics() {
+            setInterval(() => {
+                document.getElementById('live-time').innerText = new Date().toLocaleTimeString();
+                document.getElementById('dynamic-signal').style.width = (Math.random() * 40 + 60) + "%";
+                document.getElementById('telemetry-lat').innerText = "LAT: " + (Math.random() * 30 - 35).toFixed(3);
+                document.getElementById('telemetry-lng').innerText = "LNG: " + (Math.random() * 40 + 15).toFixed(3);
+                spawnPing();
+            }, 2000);
         }
-
-        // EFFECTIVENESS: Morse Code Audio Feedback
-        function playTransmissionBeep() {
-            const context = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = context.createOscillator();
-            const gain = context.createGain();
-            osc.connect(gain); gain.connect(context.destination);
-            osc.type = 'square'; osc.frequency.setValueAtTime(800, context.currentTime);
-            gain.gain.setValueAtTime(0.05, context.currentTime);
-            osc.start(); 
-            setTimeout(() => osc.stop(), 200); // 0.2s beep
-        }
-
-        function broadcastKeyDirectly() {
-            if(!activeKey) return alert("No active key.");
-            db.from('chat').insert([{ alias: "DIRECTOR", message: `CIPHER KEY: [ ${activeKey} ]`, rank: "DIRECTORATE" }]);
-            playTransmissionBeep();
-        }
-
-        async function transmitIntelAndReport() {
-            const v = document.getElementById('venue-name').value.trim();
-            const k = document.getElementById('dr-cipher-key').value.trim().toUpperCase();
-            if (v && k) {
-                activeKey = k; currentVenue = v.toUpperCase();
-                sessionStorage.setItem('mog_active_key', activeKey);
-                sessionStorage.setItem('mog_active_venue', currentVenue);
-                
-                const ledger = document.getElementById('transmission-ledger');
-                ledger.innerHTML = `<div class='text-red-500'>[${new Date().toLocaleTimeString()}] ${v}:${k}</div>` + ledger.innerHTML;
-                
-                await db.from('chat').insert([{ alias: "DIRECTOR", message: `[MANDATE ENCRYPTED] SECTOR: ${v}. HANDSHAKE REQUIRED.`, rank: "DIRECTORATE" }]);
-                document.getElementById('cipher-node').style.display = 'block';
-                spawnPing(40 + (Math.random()*25), 30 + (Math.random()*40), true);
-            }
-        }
-
-        function verifyCipherKey() {
-            if (document.getElementById('cipher-input').value.toUpperCase() === activeKey) {
-                document.getElementById('cipher-node').style.display = 'none';
-                startDecryption();
-            } else { alert("INVALID CIPHER."); }
-        }
-
-        function startDecryption() {
-            const buffer = document.getElementById('decryption-buffer');
-            buffer.style.display = 'block';
-            let sec = 15;
-            const int = setInterval(() => {
-                sec--;
-                document.getElementById('decrypt-time').innerText = `00:${sec < 10 ? '0' : ''}${sec}`;
-                document.getElementById('stream-code').innerText = Math.random().toString(2).substring(2, 20);
-                if (sec <= 0) {
-                    clearInterval(int);
-                    buffer.style.display = 'none';
-                    document.getElementById('tactical-btn').style.display = 'flex';
-                    document.getElementById('arrival-node').classList.remove('hidden');
-                }
-            }, 1000);
-        }
-
-        function toggleTacticalMap() { document.getElementById('map-overlay').classList.toggle('active'); }
-        function toggleLockdown() { document.getElementById('main-body').classList.toggle('lockdown'); }
-        
-        async function signalArrival() {
-            const user = (await db.auth.getUser()).data.user;
-            await db.from('chat').insert([{ alias: user.email.split('@')[0], message: "SIGNALED ARRIVAL AT SECTOR.", rank: "FIELD" }]);
-            document.getElementById('checkin-btn').classList.add('opacity-50', 'pointer-events-none');
-            document.getElementById('readiness-fill').style.width = '20%';
-        }
-
-        function downloadIntelManifest() {
-            const content = `M.O.G. AFRICA MANDATE\nVENUE: ${currentVenue}\nKEY: ${activeKey}\nSTATUS: DECRYPTED.`;
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = `MOG_INTEL.txt`; a.click();
-        }
-
-        function spawnPing(x, y, isPriority) {
-            const map = document.getElementById('map-container');
+               function spawnPing() {
+            const container = document.getElementById('map-pings');
             const ping = document.createElement('div');
-            ping.className = `map-ping ${isPriority ? 'priority' : ''}`;
-            ping.style.left = x + '%'; ping.style.top = y + '%';
-            map.appendChild(ping);
-            if(!isPriority) setTimeout(() => ping.remove(), 2000);
+            ping.className = 'map-ping';
+            ping.style.left = (Math.random() * 80 + 10) + "%";
+            ping.style.top = (Math.random() * 80 + 10) + "%";
+            container.appendChild(ping);
+            setTimeout(() => ping.remove(), 2000);
         }
 
+        // AUTH & PROFILE
         db.auth.onAuthStateChange((event, session) => {
             if (session) {
                 document.getElementById('auth-form').classList.add('hidden');
                 document.getElementById('op-profile').classList.remove('hidden');
                 document.getElementById('chat-input-area').classList.remove('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
                 document.getElementById('active-alias').innerText = session.user.email.split('@')[0].toUpperCase();
-                document.getElementById('clearance-level').innerText = "LEVEL: 05";
                 if (session.user.email === CFG.D) document.getElementById('director-node').classList.remove('hidden');
-                new QRCode(document.getElementById("qrcode"), { text: session.user.id, width: 140, height: 140 });
+                new QRCode(document.getElementById("qrcode"), { text: session.user.id, width: 128, height: 128 });
             }
         });
 
@@ -313,25 +226,23 @@
 
         async function loadVault() {
             const { data: files } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
-            const tiles = document.getElementById('tile-gallery'); tiles.innerHTML = "";
+            const tiles = document.getElementById('tile-gallery');
+            const mixList = document.getElementById('mix-list');
+            tiles.innerHTML = ""; mixList.innerHTML = "";
             (files || []).forEach(f => {
+                const url = `${CFG.U}/storage/v1/object/public/intel-vault/${f.name}`;
                 if (f.name.match(/\.(jpg|png|webp|gif)$/i)) {
-                    const url = `${CFG.U}/storage/v1/object/public/intel-vault/${f.name}`;
-                    tiles.innerHTML += `<div class="aspect-square bg-black border border-white/10 overflow-hidden cursor-pointer" onclick="window.open('${url}', '_blank')"><img src="${url}" class="w-full h-full object-cover grayscale hover:grayscale-0"></div>`;
+                    tiles.innerHTML += `<div class="aspect-square bg-black border border-white/10 overflow-hidden cursor-pointer"><img src="${url}" class="w-full h-full object-cover grayscale hover:grayscale-0"></div>`;
+                } else if (f.name.match(/\.(mp3|wav)$/i)) {
+                    mixList.innerHTML += `<div class="p-2 border border-white/5 bg-white/5 flex justify-between items-center text-[10px]"><span class="truncate cursor-pointer" onclick="document.getElementById('player').src='${url}';document.getElementById('player').play()">${f.name}</span></div>`;
                 }
             });
         }
 
+        function toggleLockdown() { document.body.classList.toggle('lockdown'); }
         async function logout() { await db.auth.signOut(); location.reload(); }
 
-        window.onload = () => {
-            loadVault();
-            setInterval(() => { 
-                document.getElementById('live-time').innerText = new Date().toLocaleTimeString(); 
-                spawnPing(40 + (Math.random()*25), 35 + (Math.random()*40), false);
-            }, 1000);
-            if(activeKey) document.getElementById('cipher-node').style.display = 'block';
-        };
+        window.onload = () => { runDiagnostics(); loadVault(); };
     </script>
 </body>
 </html>
