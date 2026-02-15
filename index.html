@@ -14,94 +14,92 @@
         :root { 
             --mog-gold: #D4AF37; 
             --mog-blue: #00d4ff; 
-            --mog-dark-blue: #020b1a;
+            --mog-black: #050505;
             --mog-red: #ff3333; 
         }
 
         * { transition: all 0.2s ease; font-family: 'JetBrains+Mono', monospace; }
 
+        /* UPGRADED: ELECTRIC BLUE NEURAL GRID BACKGROUND */
         body { 
-            background-color: var(--mog-dark-blue);
+            background-color: var(--mog-black);
             background-image: 
-                radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 80%),
-                linear-gradient(rgba(0, 212, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px);
-            background-size: 100% 100%, 40px 40px, 40px 40px;
-            color: var(--mog-blue);
+                linear-gradient(to bottom, rgba(5, 5, 5, 0.9), rgba(5, 5, 5, 0.9)),
+                linear-gradient(var(--mog-blue) 1.5px, transparent 1.5px),
+                linear-gradient(90deg, var(--mog-blue) 1.5px, transparent 1.5px);
+            background-size: 100% 100%, 45px 45px, 45px 45px;
+            background-attachment: fixed;
+            color: var(--mog-gold);
             margin: 0;
             overflow-x: hidden;
-            padding-bottom: 40px; /* Space for ticker */
+            padding-bottom: 40px; 
         }
 
+        /* Scanline CRT logic preserved */
         .crt-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
             background-size: 100% 4px;
-            z-index: 100; pointer-events: none; opacity: 0.1;
+            z-index: 100; pointer-events: none; opacity: 0.15;
         }
 
         .command-tile {
-            background: rgba(4, 15, 30, 0.85);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 8px;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0, 212, 255, 0.05);
+            background: rgba(5, 5, 5, 0.95);
+            border: 1px solid var(--mog-gold);
+            border-radius: 4px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 1), inset 0 0 15px rgba(0, 212, 255, 0.05);
             position: relative;
         }
 
         .tile-header {
-            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-            padding: 10px 15px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 8px 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: rgba(0, 212, 255, 0.03);
         }
 
         .tile-title {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
+            color: var(--mog-gold);
         }
 
-        .tile-header::after { content: '△ □'; font-size: 8px; opacity: 0.5; }
+        .tile-header::after { content: '△ □'; font-size: 8px; color: var(--mog-blue); opacity: 0.8; }
 
-        /* HUD PROGRESS BARS */
-        .hud-bar-bg { height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; width: 100%; margin-top: 4px; }
-        .hud-bar-fill { height: 100%; border-radius: 2px; box-shadow: 0 0 8px currentColor; }
-
-        /* SATELLITE AFRICA CONTAINER */
+        /* MAP ELEMENTS PRESERVED */
         #map-frame {
             height: 220px;
             background: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg') no-repeat center;
             background-size: contain;
-            filter: invert(1) brightness(0.8) sepia(1) saturate(4) hue-rotate(180deg);
+            filter: invert(1) brightness(0.9) sepia(1) saturate(3) hue-rotate(185deg);
             position: relative;
-            border: 1px solid rgba(0, 212, 255, 0.1);
         }
 
         .map-scanline {
             position: absolute; width: 100%; height: 2px; background: var(--mog-blue);
-            top: 0; animation: scan 3s linear infinite; box-shadow: 0 0 10px var(--mog-blue);
+            top: 0; animation: scan 3s linear infinite; box-shadow: 0 0 15px var(--mog-blue);
         }
         @keyframes scan { 0% { top: 0; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
 
-        /* BUTTONS & INPUTS */
-        .mog-input { background: rgba(0, 0, 0, 0.5) !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; color: #fff !important; padding: 10px; font-size: 0.75rem; width: 100%; margin-bottom: 8px; }
-        .mog-btn { border: 1px solid var(--mog-blue); color: var(--mog-blue); padding: 8px 20px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; cursor: pointer; }
-        .mog-btn:hover { background: var(--mog-blue); color: #000; box-shadow: 0 0 15px var(--mog-blue); }
+        /* HUD CONTROLS */
+        .mog-input { background: #000 !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; color: var(--mog-blue) !important; padding: 10px; font-size: 0.75rem; width: 100%; margin-bottom: 8px; outline: none; }
+        .mog-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 8px 20px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; cursor: pointer; background: transparent; }
+        .mog-btn:hover { background: var(--mog-gold); color: #000; box-shadow: 0 0 20px var(--mog-gold); }
 
-        .director-tile { border: 1px solid rgba(255, 51, 51, 0.4) !important; }
+        .director-tile { border: 1px solid var(--mog-red) !important; box-shadow: 0 0 30px rgba(255, 51, 51, 0.2); }
 
-        /* NEW: MISSION LOG TICKER */
+        /* TICKER SYSTEM PRESERVED */
         #event-ticker {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 30px;
-            background: rgba(2, 11, 26, 0.95);
-            border-top: 1px solid var(--mog-blue);
-            z-index: 200; display: flex; align-items: center;
-            overflow: hidden; white-space: nowrap;
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 32px;
+            background: #000; border-top: 1px solid var(--mog-blue);
+            z-index: 200; display: flex; align-items: center; overflow: hidden;
         }
-        .ticker-label { background: var(--mog-blue); color: #000; padding: 0 10px; font-size: 10px; font-weight: 900; height: 100%; display: flex; align-items: center; z-index: 210; }
-        #ticker-content { display: inline-block; padding-left: 100%; animation: ticker-scroll 30s linear infinite; font-size: 10px; color: var(--mog-blue); font-weight: bold; }
+        .ticker-label { background: var(--mog-blue); color: #000; padding: 0 12px; font-size: 10px; font-weight: 900; height: 100%; display: flex; align-items: center; z-index: 210; }
+        #ticker-content { display: inline-block; padding-left: 100%; animation: ticker-scroll 40s linear infinite; font-size: 10px; color: var(--mog-blue); text-transform: uppercase; }
         @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
         .scrollbar-hidden::-webkit-scrollbar { width: 4px; }
@@ -110,58 +108,53 @@
 </head>
 <body>
     <div class="crt-overlay"></div>
-       <header class="p-6 flex justify-between items-center relative z-50">
+
+    <header class="p-6 flex justify-between items-center relative z-50">
         <div class="flex items-center gap-4">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16">
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold rounded-full shadow-[0_0_15px_rgba(0,212,255,0.3)]">
             <div>
                 <h1 class="text-2xl font-black text-white italic tracking-tighter">MINISTRY OF GROOVE</h1>
-                <p class="text-[9px] tracking-[0.4em] text-blue-400">ENCRYPTED SONIC COMMAND CENTER</p>
+                <p class="text-[9px] tracking-[0.4em] text-blue-400">NEURAL GRID COMMAND CENTER</p>
             </div>
         </div>
         <div class="flex gap-4 items-center">
-            <div class="flex items-center gap-2 text-[10px] text-blue-300">
-                <i class="fa-solid fa-satellite animate-pulse"></i> SATELLITE ONLINE
+            <div class="text-[10px] text-blue-400 font-bold border border-blue-900 px-2 py-1 bg-blue-950/20">
+                <i class="fa-solid fa-link animate-pulse"></i> GRID SECURE
             </div>
-            <button onclick="logout()" class="mog-btn border-white/20 text-white/50">Sever</button>
+            <button onclick="logout()" class="mog-btn !border-white/10 !text-white/30 !px-4">Disconnect</button>
         </div>
     </header>
-
+    
     <main class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-50">
         
         <div class="lg:col-span-4 space-y-6">
             <section id="auth-panel" class="command-tile">
-                <div class="tile-header"><span class="tile-title">Operative Profile</span></div>
+                <div class="tile-header"><span class="tile-title">Operative Handshake</span></div>
                 <div class="p-4">
                     <div id="auth-form">
-                        <input id="email-in" type="email" placeholder="OPERATIVE EMAIL" class="mog-input">
+                        <input id="email-in" type="email" placeholder="IDENTIFICATION EMAIL" class="mog-input">
                         <input id="password-in" type="password" placeholder="PASSWORD" class="mog-input">
-                        <button onclick="handleAuth()" class="mog-btn w-full">Initialize Handshake</button>
+                        <button onclick="handleAuth()" class="mog-btn w-full">Initialize</button>
                     </div>
                     <div id="op-profile" class="hidden flex gap-4">
                         <div id="qrcode" class="bg-white p-1 w-24 h-24"></div>
                         <div class="flex-grow space-y-3">
                             <p id="active-alias" class="text-sm font-bold text-white uppercase"></p>
-                            <div>
-                                <p class="text-[7px] uppercase">Clearance</p>
-                                <div class="hud-bar-bg"><div class="hud-bar-fill bg-blue-400" style="width: 85%"></div></div>
-                            </div>
-                            <div>
-                                <p class="text-[7px] uppercase">Signal</p>
-                                <div class="hud-bar-bg"><div class="hud-bar-fill bg-green-400 animate-pulse" style="width: 95%"></div></div>
-                            </div>
+                            <div class="hud-bar-bg"><div class="hud-bar-fill bg-gold" style="width: 88%"></div></div>
+                            <div class="hud-bar-bg"><div class="hud-bar-fill bg-blue-400 animate-pulse" style="width: 96%"></div></div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <section class="command-tile">
-                <div class="tile-header"><span class="tile-title">Live Frequency</span></div>
+                <div class="tile-header"><span class="tile-title">Active Frequency</span></div>
                 <div class="p-6 text-center">
-                    <h2 id="live-track" class="text-2xl font-black text-white italic">DIRECTOR OFFLINE</h2>
+                    <h2 id="live-track" class="text-2xl font-black text-white italic">SCANNING...</h2>
                     <div class="flex justify-center items-end gap-1 h-12 mt-4">
-                        <div class="w-1 bg-blue-500 animate-bounce" style="height: 40%"></div>
-                        <div class="w-1 bg-blue-300 animate-bounce" style="height: 100%; animation-delay: 0.2s"></div>
-                        <div class="w-1 bg-blue-500 animate-bounce" style="height: 40%; animation-delay: 0.4s"></div>
+                        <div class="w-1 bg-blue-500 animate-bounce" style="height: 50%"></div>
+                        <div class="w-1 bg-gold animate-bounce" style="height: 100%; animation-delay: 0.2s"></div>
+                        <div class="w-1 bg-blue-500 animate-bounce" style="height: 50%; animation-delay: 0.4s"></div>
                     </div>
                 </div>
             </section>
@@ -169,7 +162,7 @@
             <section class="command-tile">
                 <div class="tile-header"><span class="tile-title">Sonic Archive</span></div>
                 <div class="p-4">
-                    <audio id="player" src="" controls class="w-full h-8 opacity-50 mb-3"></audio>
+                    <audio id="player" src="" controls class="w-full h-8 opacity-40 mb-3"></audio>
                     <div id="mix-list" class="space-y-2 max-h-40 overflow-y-auto scrollbar-hidden"></div>
                 </div>
             </section>
@@ -178,15 +171,12 @@
         <div class="lg:col-span-8 space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <section class="command-tile">
-                    <div class="tile-header"><span class="tile-title">Satellite Africa</span></div>
+                    <div class="tile-header"><span class="tile-title">Satellite Africa-Prime</span></div>
                     <div class="p-4">
-                        <div id="map-frame">
-                            <div class="map-scanline"></div>
-                            <div id="map-pings"></div>
-                        </div>
-                        <div class="flex justify-between mt-4 text-[8px] font-mono text-blue-300">
+                        <div id="map-frame"><div class="map-scanline"></div><div id="map-pings"></div></div>
+                        <div class="flex justify-between mt-4 text-[8px] font-mono text-blue-400">
                             <span id="telemetry-coords">LAT: -- / LNG: --</span>
-                            <span class="animate-pulse">SIGNAL LOCKED</span>
+                            <span class="animate-pulse">NEURAL LINK ACTIVE</span>
                         </div>
                     </div>
                 </section>
@@ -195,47 +185,47 @@
                     <div class="tile-header"><span class="tile-title">Visual Vault</span></div>
                     <div class="p-4">
                         <div id="tile-gallery" class="grid grid-cols-4 gap-2 max-h-44 overflow-y-auto scrollbar-hidden"></div>
-                        <button onclick="downloadIntelManifest()" class="mog-btn w-full mt-4 text-[8px]">DOWNLOAD MANIFEST</button>
+                        <button onclick="downloadIntelManifest()" class="mog-btn w-full mt-4 text-[8px]">GET MANIFEST</button>
                     </div>
                 </section>
             </div>
-            
+
             <section id="director-node" class="command-tile director-tile hidden">
-                <div class="tile-header"><span class="tile-title text-red-500">Directorate Command</span></div>
+                <div class="tile-header"><span class="tile-title">Directorate Terminal</span></div>
                 <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                        <input id="dr-track" placeholder="TRACK" class="mog-input !border-red-900">
-                        <input id="dr-artist" placeholder="ARTIST" class="mog-input !border-red-900">
-                        <button onclick="pushTrack()" class="mog-btn !border-red-500 !text-red-500 w-full">PUSH SETLIST</button>
+                        <input id="dr-track" placeholder="TRACK" class="mog-input">
+                        <input id="dr-artist" placeholder="ARTIST" class="mog-input">
+                        <button onclick="pushTrack()" class="mog-btn !border-red-500 !text-red-500 w-full uppercase">Broadcast</button>
                     </div>
                     <div>
-                        <input id="venue-name" placeholder="AFRICA SECTOR" class="mog-input !border-red-900">
-                        <input id="dr-cipher-key" placeholder="CIPHER KEY" class="mog-input !border-red-900">
-                        <button onclick="transmitIntelAndReport()" class="mog-btn !border-red-500 !text-red-500 w-full">INITIATE PUSH</button>
+                        <input id="venue-name" placeholder="AFRICA SECTOR" class="mog-input">
+                        <input id="dr-cipher-key" placeholder="CIPHER KEY" class="mog-input">
+                        <button onclick="transmitIntelAndReport()" class="mog-btn !border-red-500 !text-red-500 w-full uppercase">Deploy</button>
                     </div>
                     <div class="flex flex-col gap-2">
                         <button onclick="toggleLockdown()" class="mog-btn !border-red-500 !text-red-500">LOCKDOWN</button>
-                        <button onclick="broadcastKeyDirectly()" class="mog-btn !border-red-500 !text-red-500">BROADCAST KEY</button>
+                        <button onclick="broadcastKeyDirectly()" class="mog-btn !border-red-500 !text-red-500">PUSH KEY</button>
                     </div>
                 </div>
             </section>
 
             <section class="command-tile">
-                <div class="tile-header"><span class="tile-title">Frequency Chat</span></div>
+                <div class="tile-header"><span class="tile-title">Encrypted Chat</span></div>
                 <div class="p-4">
                     <div id="chat-box" class="h-40 overflow-y-auto scrollbar-hidden text-[10px] space-y-2 mb-4"></div>
                     <div id="chat-input-area" class="hidden flex gap-2">
-                        <input id="chat-in" type="text" placeholder="TRANSMIT MESSAGE..." class="mog-input !mb-0">
+                        <input id="chat-in" type="text" placeholder="TRANSMIT DATA..." class="mog-input !mb-0">
                         <button onclick="sendChat()" class="mog-btn">SEND</button>
                     </div>
                 </div>
             </section>
         </div>
     </main>
-
+    
     <div id="event-ticker">
-        <div class="ticker-label">MISSION LOG</div>
-        <div id="ticker-content">... WAITING FOR INCOMING FREQUENCIES ... SYSTEM STANDBY ... AFRICA SECTOR ACTIVE ...</div>
+        <div class="ticker-label">GRID STATUS</div>
+        <div id="ticker-content">... GRID STABILIZED ... NEURAL LINK ESTABLISHED ... WAITING FOR SECTOR MANDATE ... AFRICA SECTOR MONITORING ...</div>
     </div>
     
     <script>
@@ -245,16 +235,13 @@
             D: "director.mog@gmail.com"
         };
         const db = window.supabase.createClient(CFG.U, CFG.K);
-        let activeKey = ""; let currentVenue = "NONE";
+        let activeKey = "";
 
-        // TICKER LOGIC
         function updateTicker(msg) {
             const content = document.getElementById('ticker-content');
-            const stamp = new Date().toLocaleTimeString();
-            content.innerText = `[${stamp}] ${msg.toUpperCase()} --- ${content.innerText}`;
+            content.innerText = `[${new Date().toLocaleTimeString()}] ${msg.toUpperCase()} --- ${content.innerText}`;
         }
 
-        // MAP & TELEMETRY
         setInterval(() => {
             const lat = (Math.random()*30 - 35).toFixed(3);
             const lng = (Math.random()*40 + 15).toFixed(3);
@@ -271,17 +258,10 @@
             const v = document.getElementById('venue-name').value.trim();
             const k = document.getElementById('dr-cipher-key').value.trim().toUpperCase();
             if (v && k) {
-                activeKey = k; currentVenue = v.toUpperCase();
-                updateTicker(`New Mandate Pushed to ${currentVenue} with Cipher: ${activeKey}`);
+                activeKey = k;
+                updateTicker(`Mandate Pushed: ${v}`);
                 await db.from('chat').insert([{ alias: "DIRECTOR", message: `[MANDATE ENCRYPTED] DATA PUSHED TO SECTOR: ${v}. HANDSHAKE REQUIRED.`, rank: "DIRECTORATE" }]);
             }
-        }
-
-        async function signalArrival() {
-            const user = (await db.auth.getUser()).data.user;
-            const alias = user.email.split('@')[0].toUpperCase();
-            updateTicker(`Operative ${alias} signaled arrival in Sector`);
-            await db.from('chat').insert([{ alias: alias, message: "SIGNALED ARRIVAL.", rank: "FIELD" }]);
         }
 
         db.auth.onAuthStateChange((event, session) => {
@@ -292,7 +272,7 @@
                 document.getElementById('active-alias').innerText = session.user.email.split('@')[0].toUpperCase();
                 if (session.user.email === CFG.D) document.getElementById('director-node').classList.remove('hidden');
                 new QRCode(document.getElementById("qrcode"), { text: session.user.id, width: 90, height: 90 });
-                updateTicker(`Operative ${session.user.email.split('@')[0].toUpperCase()} Handshake Initialized`);
+                updateTicker(`Operative Handshake: ${session.user.email.split('@')[0].toUpperCase()}`);
             }
         });
 
@@ -310,16 +290,16 @@
             (files || []).forEach(f => {
                 const url = `${CFG.U}/storage/v1/object/public/intel-vault/${f.name}`;
                 if (f.name.match(/\.(jpg|png|webp|gif)$/i)) {
-                    gallery.innerHTML += `<div class="aspect-square bg-black border border-white/10" onclick="window.open('${url}','_blank')"><img src="${url}" class="w-full h-full object-cover opacity-50 hover:opacity-100"></div>`;
+                    gallery.innerHTML += `<div class="aspect-square bg-black border border-white/5" onclick="window.open('${url}','_blank')"><img src="${url}" class="w-full h-full object-cover grayscale hover:grayscale-0 opacity-40 hover:opacity-100"></div>`;
                 } else if (f.name.match(/\.(mp3|wav)$/i)) {
-                    list.innerHTML += `<div class="p-2 border border-blue-900/30 bg-blue-900/10 text-[9px] cursor-pointer hover:bg-blue-500 hover:text-black" onclick="document.getElementById('player').src='${url}';document.getElementById('player').play()">${f.name}</div>`;
+                    list.innerHTML += `<div class="p-2 border border-blue-900/30 bg-blue-950/20 text-[9px] cursor-pointer hover:bg-gold hover:text-black" onclick="document.getElementById('player').src='${url}';document.getElementById('player').play()">${f.name}</div>`;
                 }
             });
         }
 
         function toggleLockdown() { 
-            document.body.style.filter = document.body.style.filter ? '' : 'sepia(1) hue-rotate(-50deg) saturate(4)';
-            updateTicker(document.body.style.filter ? "CRITICAL: LOCKDOWN INITIATED" : "SYSTEM: LOCKDOWN LIFTED");
+            document.body.style.filter = document.body.style.filter ? '' : 'sepia(1) saturate(5) hue-rotate(-50deg)';
+            updateTicker("SECURITY ALERT: LOCKDOWN TRIGGERED");
         }
         
         async function logout() { await db.auth.signOut(); location.reload(); }
