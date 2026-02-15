@@ -20,22 +20,24 @@
 
         * { transition: all 0.2s ease; font-family: 'JetBrains+Mono', monospace; }
 
-        /* UPGRADED: ELECTRIC BLUE NEURAL GRID BACKGROUND */
+        /* THE LIGHTNING DESIGN CORE BACKGROUND */
         body { 
             background-color: var(--mog-black);
-            background-image: 
-                linear-gradient(to bottom, rgba(5, 5, 5, 0.9), rgba(5, 5, 5, 0.9)),
-                linear-gradient(var(--mog-blue) 1.5px, transparent 1.5px),
-                linear-gradient(90deg, var(--mog-blue) 1.5px, transparent 1.5px);
-            background-size: 100% 100%, 45px 45px, 45px 45px;
-            background-attachment: fixed;
-            color: var(--mog-gold);
             margin: 0;
             overflow-x: hidden;
             padding-bottom: 40px; 
+            position: relative;
         }
 
-        /* Scanline CRT logic preserved */
+        /* Lightning Fractal Canvas Overlay */
+        #lightning-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle at center, #001a33 0%, #050505 100%);
+        }
+
         .crt-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
@@ -44,10 +46,11 @@
         }
 
         .command-tile {
-            background: rgba(5, 5, 5, 0.95);
+            background: rgba(5, 5, 5, 0.92);
+            backdrop-filter: blur(10px);
             border: 1px solid var(--mog-gold);
             border-radius: 4px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 1), inset 0 0 15px rgba(0, 212, 255, 0.05);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 1), inset 0 0 15px rgba(0, 212, 255, 0.1);
             position: relative;
         }
 
@@ -57,7 +60,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 212, 255, 0.03);
+            background: rgba(0, 212, 255, 0.05);
         }
 
         .tile-title {
@@ -70,7 +73,6 @@
 
         .tile-header::after { content: '△ □'; font-size: 8px; color: var(--mog-blue); opacity: 0.8; }
 
-        /* MAP ELEMENTS PRESERVED */
         #map-frame {
             height: 220px;
             background: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg') no-repeat center;
@@ -85,14 +87,10 @@
         }
         @keyframes scan { 0% { top: 0; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
 
-        /* HUD CONTROLS */
         .mog-input { background: #000 !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; color: var(--mog-blue) !important; padding: 10px; font-size: 0.75rem; width: 100%; margin-bottom: 8px; outline: none; }
         .mog-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 8px 20px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; cursor: pointer; background: transparent; }
         .mog-btn:hover { background: var(--mog-gold); color: #000; box-shadow: 0 0 20px var(--mog-gold); }
 
-        .director-tile { border: 1px solid var(--mog-red) !important; box-shadow: 0 0 30px rgba(255, 51, 51, 0.2); }
-
-        /* TICKER SYSTEM PRESERVED */
         #event-ticker {
             position: fixed; bottom: 0; left: 0; width: 100%; height: 32px;
             background: #000; border-top: 1px solid var(--mog-blue);
@@ -107,32 +105,33 @@
     </style>
 </head>
 <body>
+    <canvas id="lightning-canvas"></canvas>
+    
     <div class="crt-overlay"></div>
 
     <header class="p-6 flex justify-between items-center relative z-50">
         <div class="flex items-center gap-4">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold rounded-full shadow-[0_0_15px_rgba(0,212,255,0.3)]">
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold rounded-full">
             <div>
                 <h1 class="text-2xl font-black text-white italic tracking-tighter">MINISTRY OF GROOVE</h1>
-                <p class="text-[9px] tracking-[0.4em] text-blue-400">NEURAL GRID COMMAND CENTER</p>
+                <p class="text-[9px] tracking-[0.4em] text-blue-400">LIGHTNING CORE COMMAND CENTER</p>
             </div>
         </div>
         <div class="flex gap-4 items-center">
             <div class="text-[10px] text-blue-400 font-bold border border-blue-900 px-2 py-1 bg-blue-950/20">
-                <i class="fa-solid fa-link animate-pulse"></i> GRID SECURE
+                <i class="fa-solid fa-bolt animate-pulse"></i> POWER ACTIVE
             </div>
             <button onclick="logout()" class="mog-btn !border-white/10 !text-white/30 !px-4">Disconnect</button>
         </div>
     </header>
-    
+
     <main class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-50">
-        
         <div class="lg:col-span-4 space-y-6">
             <section id="auth-panel" class="command-tile">
                 <div class="tile-header"><span class="tile-title">Operative Handshake</span></div>
                 <div class="p-4">
                     <div id="auth-form">
-                        <input id="email-in" type="email" placeholder="IDENTIFICATION EMAIL" class="mog-input">
+                        <input id="email-in" type="email" placeholder="EMAIL" class="mog-input">
                         <input id="password-in" type="password" placeholder="PASSWORD" class="mog-input">
                         <button onclick="handleAuth()" class="mog-btn w-full">Initialize</button>
                     </div>
@@ -140,13 +139,13 @@
                         <div id="qrcode" class="bg-white p-1 w-24 h-24"></div>
                         <div class="flex-grow space-y-3">
                             <p id="active-alias" class="text-sm font-bold text-white uppercase"></p>
-                            <div class="hud-bar-bg"><div class="hud-bar-fill bg-gold" style="width: 88%"></div></div>
-                            <div class="hud-bar-bg"><div class="hud-bar-fill bg-blue-400 animate-pulse" style="width: 96%"></div></div>
+                            <div class="hud-bar-bg" style="height:4px;background:rgba(255,255,255,0.1)"><div class="bg-gold h-full" style="width: 88%"></div></div>
+                            <div class="hud-bar-bg" style="height:4px;background:rgba(255,255,255,0.1)"><div class="bg-blue-400 h-full animate-pulse" style="width: 96%"></div></div>
                         </div>
                     </div>
                 </div>
             </section>
-
+            
             <section class="command-tile">
                 <div class="tile-header"><span class="tile-title">Active Frequency</span></div>
                 <div class="p-6 text-center">
@@ -176,7 +175,7 @@
                         <div id="map-frame"><div class="map-scanline"></div><div id="map-pings"></div></div>
                         <div class="flex justify-between mt-4 text-[8px] font-mono text-blue-400">
                             <span id="telemetry-coords">LAT: -- / LNG: --</span>
-                            <span class="animate-pulse">NEURAL LINK ACTIVE</span>
+                            <span class="animate-pulse">LIGHTNING LINK ACTIVE</span>
                         </div>
                     </div>
                 </section>
@@ -190,18 +189,18 @@
                 </section>
             </div>
 
-            <section id="director-node" class="command-tile director-tile hidden">
-                <div class="tile-header"><span class="tile-title">Directorate Terminal</span></div>
+            <section id="director-node" class="command-tile hidden border-red-500/40">
+                <div class="tile-header"><span class="tile-title text-red-500">Directorate Terminal</span></div>
                 <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                         <input id="dr-track" placeholder="TRACK" class="mog-input">
                         <input id="dr-artist" placeholder="ARTIST" class="mog-input">
-                        <button onclick="pushTrack()" class="mog-btn !border-red-500 !text-red-500 w-full uppercase">Broadcast</button>
+                        <button onclick="pushTrack()" class="mog-btn !border-red-500 !text-red-500 w-full">Broadcast</button>
                     </div>
                     <div>
                         <input id="venue-name" placeholder="AFRICA SECTOR" class="mog-input">
                         <input id="dr-cipher-key" placeholder="CIPHER KEY" class="mog-input">
-                        <button onclick="transmitIntelAndReport()" class="mog-btn !border-red-500 !text-red-500 w-full uppercase">Deploy</button>
+                        <button onclick="transmitIntelAndReport()" class="mog-btn !border-red-500 !text-red-500 w-full">Deploy</button>
                     </div>
                     <div class="flex flex-col gap-2">
                         <button onclick="toggleLockdown()" class="mog-btn !border-red-500 !text-red-500">LOCKDOWN</button>
@@ -222,13 +221,62 @@
             </section>
         </div>
     </main>
-    
+
     <div id="event-ticker">
         <div class="ticker-label">GRID STATUS</div>
-        <div id="ticker-content">... GRID STABILIZED ... NEURAL LINK ESTABLISHED ... WAITING FOR SECTOR MANDATE ... AFRICA SECTOR MONITORING ...</div>
+        <div id="ticker-content">... LIGHTNING CORE CHARGED ... AFRICA SECTOR MONITORING ... STANDBY ...</div>
     </div>
     
     <script>
+        // --- Lightning Canvas Logic ---
+        const canvas = document.getElementById('lightning-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        function createLightning() {
+            ctx.strokeStyle = 'rgba(0, 212, 255, 0.3)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            
+            // Start point: Center
+            let x = width / 2;
+            let y = height / 2;
+            ctx.moveTo(x, y);
+
+            for (let i = 0; i < 20; i++) {
+                x += (Math.random() - 0.5) * 150;
+                y += (Math.random() - 0.5) * 150;
+                ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            
+            // Glow effect
+            ctx.strokeStyle = 'rgba(0, 212, 255, 0.1)';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+        }
+
+        function animateLightning() {
+            // Fade effect to leave trails
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.15)';
+            ctx.fillRect(0, 0, width, height);
+            
+            if (Math.random() > 0.9) {
+                createLightning();
+            }
+            requestAnimationFrame(animateLightning);
+        }
+        
+        window.addEventListener('resize', resize);
+        resize();
+        animateLightning();
+
+        // --- Core Application Logic ---
         const CFG = {
             U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
             K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8",
@@ -246,23 +294,7 @@
             const lat = (Math.random()*30 - 35).toFixed(3);
             const lng = (Math.random()*40 + 15).toFixed(3);
             document.getElementById('telemetry-coords').innerText = `LAT: ${lat} / LNG: ${lng}`;
-            const p = document.createElement('div');
-            p.className = 'map-ping';
-            p.style.left = (Math.random() * 60 + 20) + "%";
-            p.style.top = (Math.random() * 60 + 20) + "%";
-            document.getElementById('map-pings').appendChild(p);
-            setTimeout(() => p.remove(), 2000);
         }, 3000);
-
-        async function transmitIntelAndReport() {
-            const v = document.getElementById('venue-name').value.trim();
-            const k = document.getElementById('dr-cipher-key').value.trim().toUpperCase();
-            if (v && k) {
-                activeKey = k;
-                updateTicker(`Mandate Pushed: ${v}`);
-                await db.from('chat').insert([{ alias: "DIRECTOR", message: `[MANDATE ENCRYPTED] DATA PUSHED TO SECTOR: ${v}. HANDSHAKE REQUIRED.`, rank: "DIRECTORATE" }]);
-            }
-        }
 
         db.auth.onAuthStateChange((event, session) => {
             if (session) {
@@ -272,7 +304,6 @@
                 document.getElementById('active-alias').innerText = session.user.email.split('@')[0].toUpperCase();
                 if (session.user.email === CFG.D) document.getElementById('director-node').classList.remove('hidden');
                 new QRCode(document.getElementById("qrcode"), { text: session.user.id, width: 90, height: 90 });
-                updateTicker(`Operative Handshake: ${session.user.email.split('@')[0].toUpperCase()}`);
             }
         });
 
@@ -290,19 +321,13 @@
             (files || []).forEach(f => {
                 const url = `${CFG.U}/storage/v1/object/public/intel-vault/${f.name}`;
                 if (f.name.match(/\.(jpg|png|webp|gif)$/i)) {
-                    gallery.innerHTML += `<div class="aspect-square bg-black border border-white/5" onclick="window.open('${url}','_blank')"><img src="${url}" class="w-full h-full object-cover grayscale hover:grayscale-0 opacity-40 hover:opacity-100"></div>`;
+                    gallery.innerHTML += `<div class="aspect-square bg-black border border-white/5"><img src="${url}" class="w-full h-full object-cover opacity-40 hover:opacity-100"></div>`;
                 } else if (f.name.match(/\.(mp3|wav)$/i)) {
                     list.innerHTML += `<div class="p-2 border border-blue-900/30 bg-blue-950/20 text-[9px] cursor-pointer hover:bg-gold hover:text-black" onclick="document.getElementById('player').src='${url}';document.getElementById('player').play()">${f.name}</div>`;
                 }
             });
         }
 
-        function toggleLockdown() { 
-            document.body.style.filter = document.body.style.filter ? '' : 'sepia(1) saturate(5) hue-rotate(-50deg)';
-            updateTicker("SECURITY ALERT: LOCKDOWN TRIGGERED");
-        }
-        
-        async function logout() { await db.auth.signOut(); location.reload(); }
         window.onload = loadVault;
     </script>
 </body>
