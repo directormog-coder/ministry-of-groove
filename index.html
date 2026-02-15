@@ -12,22 +12,36 @@
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; --mog-red: #ff3333; }
         * { transition: all 0.2s ease; font-family: 'JetBrains+Mono', monospace; }
-        body { background-color: var(--mog-black); margin: 0; overflow-x: hidden; padding-bottom: 50px; position: relative; }
+        body { background-color: var(--mog-black); margin: 0; overflow-x: hidden; padding-bottom: 60px; position: relative; color: var(--mog-gold); }
+        
+        /* Lightning Background */
         #lightning-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; background: #050505; }
+        
         .crt-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%); background-size: 100% 4px; z-index: 100; pointer-events: none; opacity: 0.1; }
-        .command-tile { background: rgba(5, 5, 5, 0.95); border: 1px solid var(--mog-gold); border-radius: 4px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); position: relative; margin-bottom: 20px; }
+        
+        .command-tile { background: rgba(5, 5, 5, 0.95); border: 1px solid var(--mog-gold); border-radius: 4px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); position: relative; margin-bottom: 10px; }
         .tile-header { border-bottom: 1px solid rgba(212, 175, 55, 0.3); padding: 10px; display: flex; justify-content: space-between; align-items: center; background: rgba(0, 212, 255, 0.05); }
         .tile-title { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: var(--mog-gold); }
+        
+        /* Map Focus */
         #map-frame { height: 220px; background: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg') no-repeat center; background-size: contain; filter: invert(1) brightness(0.8) sepia(1) saturate(3) hue-rotate(185deg); position: relative; }
         .map-scanline { position: absolute; width: 100%; height: 2px; background: var(--mog-blue); top: 0; animation: scan 3s linear infinite; }
         @keyframes scan { 0% { top: 0; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
-        .mog-input { background: #000 !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; color: var(--mog-blue) !important; padding: 10px; width: 100%; margin-bottom: 8px; outline: none; }
+        
+        .mog-input { background: #000 !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; color: var(--mog-blue) !important; padding: 10px; width: 100%; margin-bottom: 8px; outline: none; font-size: 0.8rem; }
         .mog-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 8px 15px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; cursor: pointer; background: transparent; width: 100%; }
         .mog-btn:hover { background: var(--mog-gold); color: #000; }
+        
+        /* Social Icons */
+        .social-link { color: var(--mog-gold); font-size: 1.2rem; transition: 0.3s; }
+        .social-link:hover { color: var(--mog-blue); transform: scale(1.2); }
+
+        /* Ticker */
         #event-ticker { position: fixed; bottom: 0; left: 0; width: 100%; height: 35px; background: #000; border-top: 1px solid var(--mog-gold); z-index: 200; display: flex; align-items: center; overflow: hidden; }
         .ticker-label { background: var(--mog-gold); color: #000; padding: 0 15px; font-size: 10px; font-weight: 900; height: 100%; display: flex; align-items: center; }
         #ticker-content { display: inline-block; padding-left: 100%; animation: ticker-scroll 30s linear infinite; font-size: 10px; color: var(--mog-blue); white-space: nowrap; }
         @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        
         .scrollbar-hidden::-webkit-scrollbar { width: 4px; }
         .scrollbar-hidden::-webkit-scrollbar-thumb { background: var(--mog-blue); }
     </style>
@@ -36,35 +50,49 @@
     <canvas id="lightning-canvas"></canvas>
     <div class="crt-overlay"></div>
 
-    <header class="p-6 flex justify-between items-center relative z-50">
+    <header class="p-6 flex flex-col md:flex-row justify-between items-center relative z-50 gap-4">
         <div class="flex items-center gap-4">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold rounded-full">
-            <h1 class="text-2xl font-black text-white italic tracking-tighter">MINISTRY OF GROOVE HQ</h1>
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold rounded-full shadow-lg">
+            <div>
+                <h1 class="text-2xl font-black text-white italic tracking-tighter">MINISTRY OF GROOVE HQ</h1>
+                <div class="flex gap-4 mt-1">
+                    <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://www.instagram.com/ministryofgroove_hq" target="_blank" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/share/1D9jcB5998/" target="_blank" class="social-link"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="mailto:director.mog@gmail.com" class="social-link"><i class="fa-solid fa-envelope"></i></a>
+                </div>
+            </div>
         </div>
-        <button onclick="logout()" class="mog-btn !w-auto !px-4 !border-white/20 !text-white/50">Sever Link</button>
+        <div class="flex items-center gap-4">
+             <div class="text-[10px] text-blue-400 font-bold border border-blue-900 px-2 py-1 bg-blue-950/20">SATELLITE ONLINE</div>
+             <button onclick="logout()" class="mog-btn !w-auto !px-4 !border-white/20 !text-white/50">Disconnect</button>
+        </div>
     </header>
 
     <main class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-50">
-        <div class="lg:col-span-4">
+        
+        <div class="lg:col-span-4 space-y-4">
             <section id="auth-panel" class="command-tile">
                 <div class="tile-header"><span class="tile-title">Operative Identity</span></div>
                 <div class="p-4 text-center">
                     <div id="auth-form">
                         <input id="email-in" type="email" placeholder="EMAIL" class="mog-input">
                         <input id="password-in" type="password" placeholder="PASSWORD" class="mog-input">
-                        <button onclick="handleAuth()" class="mog-btn">Initialize</button>
+                        <button onclick="handleAuth()" class="mog-btn">Initialize Handshake</button>
                     </div>
                     <div id="op-profile" class="hidden">
-                        <p id="active-alias" class="text-xl font-black text-white uppercase mb-4"></p>
+                        <p id="active-alias" class="text-xl font-black text-white uppercase mb-2"></p>
                         <div id="qrcode" class="bg-white p-2 inline-block mb-4"></div>
+                        <p class="text-[8px] text-blue-400 uppercase tracking-widest">Clearance Level: 05</p>
                     </div>
                 </div>
             </section>
-
+            
             <section class="command-tile">
                 <div class="tile-header"><span class="tile-title">Live Frequency</span></div>
                 <div class="p-6 text-center">
-                    <h2 id="live-track" class="text-2xl font-black text-white italic">OFFLINE</h2>
+                    <h2 id="live-track" class="text-2xl font-black text-white italic tracking-tighter">SYSTEM STANDBY</h2>
+                    <p id="live-artist" class="text-blue-400 text-[10px] mt-2 tracking-widest">WAITING FOR DIRECTOR</p>
                     <div class="flex justify-center items-end gap-1 h-12 mt-4">
                         <div class="w-1 bg-blue-500 animate-bounce" style="height: 50%"></div>
                         <div class="w-1 bg-gold animate-bounce" style="height: 100%; animation-delay: 0.2s"></div>
@@ -77,47 +105,50 @@
                 <div class="tile-header"><span class="tile-title">Sonic Archive</span></div>
                 <div class="p-4">
                     <audio id="player" src="" controls class="w-full h-8 opacity-60 mb-4"></audio>
-                    <div id="mix-list" class="space-y-2 max-h-40 overflow-y-auto scrollbar-hidden"></div>
+                    <div id="mix-list" class="space-y-2 max-h-48 overflow-y-auto scrollbar-hidden">
+                        </div>
                 </div>
             </section>
         </div>
 
-        <div class="lg:col-span-8 space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="lg:col-span-8 space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <section class="command-tile">
-                    <div class="tile-header"><span class="tile-title">Africa Sector Satellite</span></div>
+                    <div class="tile-header"><span class="tile-title">Satellite Africa-Prime</span></div>
                     <div class="p-4">
                         <div id="map-frame"><div class="map-scanline"></div><div id="map-pings"></div></div>
                         <div class="flex justify-between mt-4 text-[8px] font-mono text-blue-300">
                             <span id="telemetry-coords">LAT: -- / LNG: --</span>
-                            <span class="animate-pulse">LINK ACTIVE</span>
+                            <span class="animate-pulse">SIGNAL LOCKED</span>
                         </div>
                     </div>
                 </section>
-                
+
                 <section class="command-tile">
                     <div class="tile-header"><span class="tile-title">Visual Vault</span></div>
                     <div class="p-4">
-                        <div id="tile-gallery" class="grid grid-cols-4 gap-2 max-h-40 overflow-y-auto scrollbar-hidden"></div>
-                        <button onclick="downloadIntelManifest()" class="mog-btn mt-4">Download Intel Manifest</button>
+                        <div id="tile-gallery" class="grid grid-cols-4 gap-2 max-h-48 overflow-y-auto scrollbar-hidden"></div>
+                        <button onclick="downloadIntelManifest()" class="mog-btn mt-4"><i class="fa-solid fa-download mr-2"></i>Download Intel Manifest</button>
                     </div>
                 </section>
             </div>
 
             <section id="director-node" class="command-tile hidden !border-red-500">
                 <div class="tile-header"><span class="tile-title !text-red-500">Directorate Command</span></div>
-                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
+                <div class="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="space-y-2">
                         <input id="dr-track" placeholder="TRACK" class="mog-input">
-                        <button onclick="pushTrack()" class="mog-btn !border-red-500 !text-red-500">Push Live</button>
+                        <input id="dr-artist" placeholder="ARTIST" class="mog-input">
+                        <button onclick="pushTrack()" class="mog-btn !border-red-500 !text-red-500">Update Live</button>
                     </div>
-                    <div>
+                    <div class="space-y-2">
                         <input id="venue-name" placeholder="AFRICA SECTOR" class="mog-input">
                         <input id="dr-cipher-key" placeholder="CIPHER" class="mog-input">
                         <button onclick="transmitIntelAndReport()" class="mog-btn !border-red-500 !text-red-500">Push Mandate</button>
                     </div>
-                    <div>
+                    <div class="space-y-2">
                         <button onclick="toggleLockdown()" class="mog-btn !border-red-500 !text-red-500">Lockdown</button>
+                        <button onclick="broadcastKeyDirectly()" class="mog-btn !border-red-500 !text-red-500 mt-2">Broadcast Key</button>
                     </div>
                 </div>
             </section>
@@ -127,7 +158,7 @@
                 <div class="p-4">
                     <div id="chat-box" class="h-40 overflow-y-auto text-[10px] space-y-2 mb-4 scrollbar-hidden"></div>
                     <div id="chat-input-area" class="hidden flex gap-2">
-                        <input id="chat-in" type="text" placeholder="TRANSMIT..." class="mog-input !mb-0">
+                        <input id="chat-in" type="text" placeholder="TRANSMIT DATA..." class="mog-input !mb-0">
                         <button onclick="sendChat()" class="mog-btn !w-auto px-6">Send</button>
                     </div>
                 </div>
@@ -137,7 +168,7 @@
 
     <div id="event-ticker">
         <div class="ticker-label">MISSION LOG</div>
-        <div id="ticker-content">... SYSTEM RESTORED ... AFRICA SECTOR ACTIVE ... SCANNING FOR FREQUENCIES ...</div>
+        <div id="ticker-content">... SYSTEM RESTORED ... AFRICA SECTOR ACTIVE ... ENCRYPTION HANDSHAKE READY ...</div>
     </div>
 
     <script>
@@ -148,7 +179,7 @@
         };
         const db = window.supabase.createClient(CFG.U, CFG.K);
 
-        // RESTORED: Archive Loader
+        // RESTORED: COMPLETE VAULT LOADER (Images + MP3s)
         async function loadVault() {
             const { data: files } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
             const gallery = document.getElementById('tile-gallery');
@@ -157,21 +188,24 @@
             (files || []).forEach(f => {
                 const url = `${CFG.U}/storage/v1/object/public/intel-vault/${f.name}`;
                 if (f.name.match(/\.(jpg|png|webp|gif)$/i)) {
-                    gallery.innerHTML += `<div class="aspect-square bg-black border border-white/10 cursor-pointer" onclick="window.open('${url}','_blank')"><img src="${url}" class="w-full h-full object-cover"></div>`;
+                    gallery.innerHTML += `<div class="aspect-square bg-black border border-white/10 cursor-pointer overflow-hidden"><img src="${url}" class="w-full h-full object-cover grayscale hover:grayscale-0"></div>`;
                 } else if (f.name.match(/\.(mp3|wav)$/i)) {
-                    list.innerHTML += `<div class="p-2 border border-blue-900/30 bg-blue-950/20 text-[9px] cursor-pointer hover:bg-gold" onclick="document.getElementById('player').src='${url}';document.getElementById('player').play()">${f.name}</div>`;
+                    list.innerHTML += `<div class="p-2 border border-blue-900/30 bg-blue-950/20 text-[9px] flex justify-between items-center">
+                        <span class="cursor-pointer hover:text-white" onclick="document.getElementById('player').src='${url}';document.getElementById('player').play()">${f.name.toUpperCase()}</span>
+                        <a href="${url}" download class="text-blue-400 hover:text-white"><i class="fa-solid fa-download"></i></a>
+                    </div>`;
                 }
             });
         }
 
         function downloadIntelManifest() {
-            const content = `M.O.G. HQ INTEL MANIFEST\nSECTOR: AFRICA PRIME\nDATE: ${new Date().toLocaleString()}\nSTATUS: ENCRYPTED`;
+            const content = `M.O.G. HQ INTEL MANIFEST\nSECTOR: AFRICA PRIME\nSTATUS: DECRYPTED\nDATE: ${new Date().toLocaleString()}`;
             const blob = new Blob([content], { type: 'text/plain' });
             const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = "MOG_MANIFEST.txt"; a.click();
+            const a = document.createElement('a'); a.href = url; a.download = "MOG_INTEL_MANDATE.txt"; a.click();
         }
 
-        // Lightning Logic (Preserved)
+        // Lightning Logic
         const canvas = document.getElementById('lightning-canvas');
         const ctx = canvas.getContext('2d');
         let w, h;
@@ -179,16 +213,16 @@
         window.onresize = resize; resize();
         function animate() {
             ctx.fillStyle = 'rgba(5, 5, 5, 0.15)'; ctx.fillRect(0, 0, w, h);
-            if (Math.random() > 0.93) {
+            if (Math.random() > 0.94) {
                 ctx.strokeStyle = '#00d4ff'; ctx.lineWidth = 1; ctx.beginPath();
                 let x = w/2, y = h/2; ctx.moveTo(x, y);
-                for(let i=0; i<15; i++) { x += (Math.random()-0.5)*180; y += (Math.random()-0.5)*180; ctx.lineTo(x, y); }
+                for(let i=0; i<12; i++) { x += (Math.random()-0.5)*200; y += (Math.random()-0.5)*200; ctx.lineTo(x, y); }
                 ctx.stroke();
             }
             requestAnimationFrame(animate);
         }
         animate();
-
+        
         db.auth.onAuthStateChange((event, session) => {
             if (session) {
                 document.getElementById('auth-form').classList.add('hidden');
