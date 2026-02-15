@@ -24,7 +24,7 @@
         .cat-btn { font-size: 8px; border: 1px solid rgba(0, 212, 255, 0.2); padding: 5px 10px; cursor: pointer; color: var(--mog-blue); text-transform: uppercase; }
         .cat-btn.active { background: var(--mog-blue); color: #000; font-weight: bold; }
         .spotlight-glow { border: 1px solid var(--mog-gold); background: rgba(212, 175, 55, 0.05); animation: pulse-gold 3s infinite; }
-        @keyframes pulse-gold { 0%, 100% { box-shadow: 0 0 5px var(--mog-gold); } 50% { box-shadow: 0 0 20px var(--mog-gold); } }
+        @keyframes pulse-gold { 0%, 100% { box-shadow: 0 0 5px var(--mog-gold); } 50% { box-shadow: 0 0 10px var(--mog-gold); } }
         .scrollbar-hidden::-webkit-scrollbar { width: 4px; }
         .scrollbar-hidden::-webkit-scrollbar-thumb { background: var(--mog-gold); }
     </style>
@@ -44,15 +44,16 @@
             <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="text-gold text-xl"><i class="fa-brands fa-tiktok"></i></a>
             <a href="https://www.facebook.com/share/1D9jcB5998/" target="_blank" class="text-gold text-xl"><i class="fa-brands fa-facebook"></i></a>
             <a href="https://www.instagram.com/ministryofgroove_hq?igsh=Y3Rwc24zcmtsY2xj" target="_blank" class="text-gold text-xl"><i class="fa-brands fa-instagram"></i></a>
-            <button id="logout-btn" onclick="logout()" class="hidden text-[9px] border border-red-500 text-red-500 px-2 py-1 uppercase font-bold">Sever</button>
+            <button id="logout-btn" onclick="logout()" class="hidden text-[9px] border border-red-500 text-red-500 px-2 py-1 uppercase font-bold">Sever Link</button>
         </div>
     </header>
 
     <main class="p-4 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-50">
         
         <section id="auth-panel" class="lg:col-span-4 glass-panel p-6">
+            <h2 class="text-xs font-bold uppercase mb-6 border-b border-white/10 pb-2">Identity Hub</h2>
             <div id="auth-form">
-                <div class="flex gap-4 mb-6 border-b border-white/10 pb-2">
+                <div class="flex gap-4 mb-6">
                     <button id="tab-login" onclick="toggleAuth('login')" class="text-xs font-black text-white border-b-2 border-gold pb-1">LOGIN</button>
                     <button id="tab-register" onclick="toggleAuth('register')" class="text-xs font-black text-gray-500 pb-1">REGISTER</button>
                 </div>
@@ -61,12 +62,15 @@
                 <button onclick="handleAuth()" id="auth-action-btn" class="btn-uplink">Initialize Uplink</button>
             </div>
             <div id="op-profile" class="hidden text-center">
-                <p id="active-alias" class="text-xl font-black text-white uppercase mb-4 tracking-widest"></p>
+                <div class="flex items-center justify-center gap-2 mb-4">
+                    <p id="active-alias" class="text-xl font-black text-white uppercase tracking-widest"></p>
+                    <span id="rank-badge" class="text-[9px] px-2 py-1 border border-white/20 uppercase font-black">Recruit</span>
+                </div>
                 <div id="qrcode" class="bg-white p-2 inline-block mb-4"></div>
                 <button onclick="logout()" class="btn-uplink !bg-red-600 !text-white !text-[10px]">SEVER LINK</button>
             </div>
         </section>
-
+        
         <section class="lg:col-span-8 glass-panel p-6">
             <div class="flex justify-between items-center border-b border-white/10 pb-4 mb-4">
                 <p class="text-[9px] font-bold text-gold uppercase animate-pulse">● Active Frequency</p>
@@ -76,7 +80,7 @@
                 <h2 id="live-track" class="text-4xl md:text-6xl font-black italic text-white leading-none">SYNCING...</h2>
                 <p id="live-artist" class="text-blue-400 text-sm font-bold tracking-[0.3em] mt-2 uppercase">DIRECTOR OFFLINE</p>
             </div>
-            <div id="history-grid" class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+            <div id="history-grid" class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3 border-t border-white/5 pt-4"></div>
         </section>
 
         <section class="lg:col-span-12 glass-panel p-6">
@@ -85,49 +89,69 @@
                 <button class="cat-btn active" onclick="setCategory('ALL', this)">All</button>
                 <button class="cat-btn" onclick="setCategory('DEEP', this)">Deep</button>
                 <button class="cat-btn" onclick="setCategory('TECH', this)">Tech</button>
+                <button class="cat-btn" onclick="setCategory('CHILL', this)">Chill</button>
             </div>
+            <input type="text" id="archive-search" placeholder="SEARCH ARCHIVES..." class="text-[10px] mb-4 w-full" oninput="filterArchives()">
             <audio id="player" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" controls class="w-full h-10 mb-4"></audio>
             <div style="height:4px; background:rgba(255,255,255,0.1); margin-top:-10px; margin-bottom:20px;"><div id="progress-bar"></div></div>
             <div id="mix-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[200px] overflow-y-auto pr-2 scrollbar-hidden"></div>
+            
+            <div id="request-node" class="hidden mt-8 pt-8 border-t border-white/5">
+                <input id="track-req-in" type="text" placeholder="REQUEST FREQUENCY..." class="!mb-4">
+                <button onclick="submitTrackRequest()" class="bg-blue-600 text-white w-full py-3 text-xs font-black uppercase">Send Request</button>
+            </div>
         </section>
-        
+
+        <section class="lg:col-span-6 glass-panel p-6 border-l-4 border-blue-600">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xs font-bold uppercase text-blue-400 border-b border-white/10 pb-1">Active Mission</h2>
+                <span id="rsvp-count" class="text-[9px] text-white/40">0 SIGNALED</span>
+            </div>
+            <h3 id="mission-title" class="text-xl font-black text-white italic">NO ASSIGNED MISSION</h3>
+            <button id="rsvp-btn" onclick="submitRSVP()" class="hidden btn-uplink !py-3 !text-[10px] mt-6">Signal Presence</button>
+        </section>
+
         <section class="lg:col-span-6 glass-panel p-6">
             <h2 class="text-xs font-bold uppercase mb-4 text-gold border-b border-white/10 pb-2">Visual Vault</h2>
             <div id="tile-gallery" class="grid grid-cols-3 gap-2 max-h-[200px] overflow-y-auto pr-2 scrollbar-hidden"></div>
         </section>
 
-        <section class="lg:col-span-6 glass-panel p-6 border-l-4 border-blue-600">
-            <h2 class="text-xs font-bold uppercase mb-4 text-blue-400 border-b border-white/10 pb-2">Active Mission</h2>
-            <h3 id="mission-title" class="text-xl font-black text-white italic">NO ASSIGNED MISSION</h3>
-            <button id="rsvp-btn" onclick="submitRSVP()" class="hidden btn-uplink !py-3 !text-[10px] mt-6">Signal Presence</button>
-        </section>
-
         <section class="lg:col-span-12 glass-panel p-6">
             <div id="spotlight" class="hidden spotlight-glow p-4 mb-4 rounded flex justify-between items-center">
                 <p class="text-xs font-black uppercase text-gold italic">Operative Spotlight: <span id="spotlight-name" class="text-white">...</span></p>
-                <p id="spotlight-mixes" class="text-[10px] text-white/50"></p>
+                <p id="spotlight-score" class="text-[10px] text-white/50">0 Mixes</p>
             </div>
-            <div id="chat-box" class="h-[300px] overflow-y-auto mb-4 text-sm space-y-2 pr-2 scrollbar-hidden"></div>
-            <input id="chat-in" type="text" placeholder="TRANSMIT MESSAGE..." class="!mb-0 hidden" onkeypress="if(event.key==='Enter') sendChat()">
+            <h2 class="text-xs font-bold uppercase mb-4 text-blue-400 border-b border-white/10 pb-2">Frequency Chat</h2>
+            <div id="chat-box" class="h-[240px] overflow-y-auto mb-4 text-sm space-y-2 pr-2 scrollbar-hidden"></div>
+            <div id="chat-input-area" class="hidden flex gap-2">
+                <input id="chat-in" type="text" placeholder="TRANSMIT MESSAGE..." class="!mb-0" onkeypress="if(event.key==='Enter') sendChat()">
+                <button onclick="sendChat()" class="bg-blue-600 px-4 py-2 text-white text-xs font-black">SEND</button>
+            </div>
         </section>
 
         <section id="director-node" class="hidden lg:col-span-12 glass-panel p-8 border-2 border-red-900/40 bg-red-900/5">
             <h3 class="text-red-600 font-black uppercase mb-8 italic tracking-[0.5em] text-center">Directorate Command</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
                     <p class="text-[10px] font-bold text-red-600 mb-4 uppercase">Booth Control</p>
-                    <input id="dr-track" placeholder="TRACK">
-                    <input id="dr-artist" placeholder="ARTIST">
-                    <button onclick="pushTrack()" class="btn-uplink !bg-red-600 !text-white !text-[9px]">Push to Booth</button>
+                    <input id="dr-track" placeholder="TRACK NAME">
+                    <input id="dr-artist" placeholder="ARTIST NAME">
+                    <button onclick="pushTrack()" class="btn-uplink !bg-red-600 !text-white !text-[9px]">Broadcast to Live</button>
+                    <div id="dr-request-list" class="mt-4 text-[9px] h-20 overflow-y-auto bg-black/40 p-2"></div>
                 </div>
                 <div class="md:col-span-2">
                     <p class="text-[10px] font-bold text-red-600 mb-4 uppercase">Intelligence Ledger</p>
-                    <textarea id="dr-log" class="h-32 text-[10px]" placeholder="Secret directives..."></textarea>
+                    <textarea id="dr-log" class="h-40 text-[10px]" placeholder="Director's secure logs..."></textarea>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-red-600 mb-4 uppercase">Signal Priority</p>
+                    <input id="mission-input" placeholder="SET MISSION">
+                    <button onclick="updateMission()" class="btn-uplink !bg-red-600 !text-white !text-[9px]">Push Mission</button>
                 </div>
             </div>
         </section>
     </main>
-
+    
     <script>
         const CFG = {
             U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
@@ -135,24 +159,22 @@
             D: "director.mog@gmail.com"
         };
         const db = window.supabase.createClient(CFG.U, CFG.K);
-        let authMode = 'login'; let vaultData = []; let currentCat = 'ALL';
+        let authMode = 'login'; let vaultData = []; let currentCat = 'ALL'; let opRank = 'Recruit';
 
-        // THE SECURE AUTH HANDSHAKE
+        // THE SECURE HANDSHAKE ENGINE
         async function handleAuth() {
             const e = document.getElementById('email-in').value.trim();
             const p = document.getElementById('password-in').value;
-            if (!e || !p) return alert("Missing credentials.");
-            
             if (authMode === 'register') {
                 const { error } = await db.auth.signUp({ email: e, password: p });
-                if (error) alert(error.message); else alert("Recruitment initiated. Confirm via email.");
+                if (error) alert(error.message); else alert("Check email to confirm recruitment.");
             } else {
                 const { error } = await db.auth.signInWithPassword({ email: e, password: p });
-                if (error) alert("Access Denied: " + error.message);
+                if (error) alert(error.message);
             }
         }
 
-        // PERSISTENCE LISTENER (Fixes the "Registration not working" issue)
+        // PERSISTENCE LISTENER (THE FIX)
         db.auth.onAuthStateChange((event, session) => {
             if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
                 if (session) mountSession(session.user);
@@ -160,12 +182,13 @@
                 location.reload();
             }
         });
-        
-        function mountSession(u) {
+
+        async function mountSession(u) {
             document.getElementById('auth-form').classList.add('hidden');
             document.getElementById('op-profile').classList.remove('hidden');
             document.getElementById('logout-btn').classList.remove('hidden');
-            document.getElementById('chat-in').classList.remove('hidden');
+            document.getElementById('chat-input-area').classList.remove('hidden');
+            document.getElementById('request-node').classList.remove('hidden');
             document.getElementById('active-alias').innerText = u.email.split('@')[0].toUpperCase();
             
             if (u.email === CFG.D) {
@@ -174,24 +197,25 @@
                 document.getElementById('dr-log').oninput = (e) => localStorage.setItem('mog_dr_log', e.target.value);
             }
             new QRCode(document.getElementById("qrcode"), { text: u.id, width: 140, height: 140 });
+            loadRSVPs();
         }
 
         async function logout() { await db.auth.signOut(); }
 
         window.onload = () => {
-            loadVault(); loadChat(); loadSpotlight();
+            loadVault(); loadChat(); loadMissions(); loadHistory();
             setInterval(() => { document.getElementById('live-time').innerText = new Date().toLocaleTimeString(); }, 1000);
             const p = document.getElementById('player');
             p.ontimeupdate = () => document.getElementById('progress-bar').style.width = (p.currentTime/p.duration)*100 + "%";
             
-            // Live Booth Subscription
             db.channel('live').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'live_setlist' }, payload => {
                 document.getElementById('live-track').innerText = payload.new.track_name;
                 document.getElementById('live-artist').innerText = payload.new.artist_name;
+                loadHistory();
             }).subscribe();
         };
 
-        // ... [Restored: Vault, Chat, Category, and Spotlight logic exactly as before] ...
+        // RESTORED: VAULT, CHAT, MISSIONS, HISTORY
         async function loadVault() {
             const { data: files } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
             vaultData = files || []; renderVault(vaultData);
@@ -205,15 +229,42 @@
                 if (f.name.match(/\.(mp3|wav)$/)) {
                     list.innerHTML += `<div class="p-3 border border-white/5 bg-white/5 flex justify-between items-center"><span class="text-[10px] truncate cursor-pointer" onclick="document.getElementById('player').src='${url}';document.getElementById('player').play()">${f.name}</span><a href="${url}" download class="text-[8px] border border-gold px-2 py-1">Secure</a></div>`;
                 } else if (f.name.match(/\.(jpg|png|webp)$/)) {
-                    tiles.innerHTML += `<div class="aspect-square bg-black/40 border border-white/5 overflow-hidden"><img src="${url}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition"></div>`;
+                    tiles.innerHTML += `<div class="aspect-square bg-black/40 border border-white/5 overflow-hidden"><img src="${url}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-1000"></div>`;
                 }
             });
         }
 
+        async function loadHistory() {
+            const { data } = await db.from('live_setlist').select('*').order('created_at', { ascending: false }).limit(4);
+            const grid = document.getElementById('history-grid');
+            if(data) grid.innerHTML = data.map(t => `<div class="text-[8px] border-l border-gold/20 pl-2"><p class="text-white uppercase truncate">${t.track_name}</p><p class="text-blue-400 opacity-50">${t.artist_name}</p></div>`).join('');
+        }
+
+        async function sendChat() {
+            const i = document.getElementById('chat-in');
+            const { data: { user } } = await db.auth.getUser();
+            if(!i.value || !user) return;
+            await db.from('chat').insert([{ alias: user.email.split('@')[0], message: i.value, rank: opRank }]);
+            i.value = '';
+        }
+
+        async function loadChat() {
+            const { data } = await db.from('chat').select('*').order('created_at', { ascending: true }).limit(50);
+            if(data) data.forEach(m => {
+                document.getElementById('chat-box').innerHTML += `<div><span class="text-blue-400 font-bold">${m.alias}:</span> ${m.message}</div>`;
+            });
+        }
+        
         function toggleAuth(m) {
             authMode = m;
             document.getElementById('tab-login').className = m === 'login' ? "text-xs font-black text-white border-b-2 border-gold pb-1" : "text-xs font-black text-gray-500 pb-1";
             document.getElementById('tab-register').className = m === 'register' ? "text-xs font-black text-white border-b-2 border-gold pb-1" : "text-xs font-black text-gray-500 pb-1";
+        }
+
+        async function pushTrack() {
+            const t = document.getElementById('dr-track').value;
+            const a = document.getElementById('dr-artist').value;
+            await db.from('live_setlist').insert([{ track_name: t, artist_name: a }]);
         }
     </script>
 </body>
