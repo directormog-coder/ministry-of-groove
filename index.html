@@ -3,189 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M.O.G. | SUPREME COMMAND CENTER</title>
+    <title>M.O.G. | TIER-0 COMMAND</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
+        :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #020202; --mog-red: #ff3333; }
         
-        :root { 
-            --mog-gold: #D4AF37; 
-            --mog-blue: #00d4ff; 
-            --mog-black: #010101;
-            --mog-red: #ff3333;
-            --mog-glow: rgba(0, 212, 255, 0.2);
-        }
+        * { transition: all 0.3s cubic-bezier(0.2, 1, 0.2, 1); font-family: 'JetBrains+Mono', monospace; }
+        body { background-color: var(--mog-black); margin: 0; overflow-x: hidden; color: var(--mog-gold); padding-bottom: 70px; }
+        
+        #lightning-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; }
 
-        * { 
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
-            font-family: 'JetBrains+Mono', monospace; 
-            box-sizing: border-box;
-        }
-
-        body { 
-            background-color: var(--mog-black); 
-            margin: 0; 
-            overflow-x: hidden; 
-            color: var(--mog-gold); 
-            padding-bottom: 60px;
-        }
-
-        /* PERFORMANCE-OPTIMIZED LIGHTNING CANVAS */
-        #lightning-canvas { 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100vw; height: 100vh; 
-            z-index: -1; 
-            background: radial-gradient(circle at center, #001529 0%, #000 100%);
-        }
-
-        /* COMMAND TILE ARCHITECTURE (FLAGSHIP LEVEL) */
+        /* KINETIC TILES */
         .command-tile { 
-            background: rgba(8, 8, 8, 0.98); 
-            border: 1px solid rgba(212, 175, 55, 0.4); 
-            border-radius: 4px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.9); 
-            position: relative;
-            backdrop-filter: blur(10px);
+            background: rgba(5, 5, 5, 0.98); 
+            border: 1px solid var(--mog-gold); 
+            border-radius: 2px; 
+            box-shadow: 0 15px 45px rgba(0,0,0,0.95); 
+            margin-bottom: 2rem;
+            backdrop-filter: blur(15px);
         }
+        .command-tile:hover { border-color: #fff; box-shadow: 0 0 30px rgba(0, 212, 255, 0.1); }
 
         .tile-header { 
             border-bottom: 1px solid rgba(212, 175, 55, 0.2); 
-            padding: 14px 20px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            background: linear-gradient(90deg, rgba(0,212,255,0.05), transparent);
+            padding: 15px; display: flex; justify-content: space-between; align-items: center; 
+            background: linear-gradient(90deg, rgba(0,212,255,0.05) 0%, transparent 100%);
         }
 
-        .tile-title { 
-            font-size: 0.8rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            letter-spacing: 4px; 
-            color: var(--mog-gold);
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        /* SONIC ARCHIVE LISTING */
+        .track-node { 
+            padding: 15px; border: 1px solid rgba(0, 212, 255, 0.1); 
+            background: rgba(0, 212, 255, 0.02); display: flex; 
+            justify-content: space-between; align-items: center; 
+            cursor: pointer; margin-bottom: 8px; font-size: 0.75rem; 
         }
+        .track-node:hover { background: var(--mog-gold); color: #000; transform: scale(1.02); }
 
-        /* SATELLITE HUD */
-        #map-frame { 
-            height: 250px; 
-            background: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg') no-repeat center; 
-            background-size: contain; 
-            filter: invert(1) brightness(0.9) sepia(1) saturate(3) hue-rotate(185deg); 
-            position: relative;
-            border: 1px solid rgba(0, 212, 255, 0.15);
-            background-color: rgba(0,0,0,0.4);
-        }
+        /* UI CONTROLS */
+        .mog-input { background: #000 !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; color: #fff !important; padding: 15px; width: 100%; margin-bottom: 10px; outline: none; }
+        .mog-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 12px 25px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; cursor: pointer; background: transparent; letter-spacing: 2px; }
+        .mog-btn:hover { background: var(--mog-gold); color: #000; box-shadow: 0 0 25px var(--mog-gold); }
+        
+        .social-link { color: var(--mog-gold); font-size: 1.5rem; transition: 0.4s; }
+        .social-link:hover { color: #fff; transform: translateY(-5px) rotate(5deg); filter: drop-shadow(0 0 10px var(--mog-blue)); }
 
-        .map-scanline { 
-            position: absolute; 
-            width: 100%; height: 3px; 
-            background: var(--mog-blue); 
-            top: 0; 
-            animation: scan 4s linear infinite; 
-            box-shadow: 0 0 20px var(--mog-blue);
-            opacity: 0.6;
-        }
-
-        @keyframes scan { 0% { top: 0; opacity: 0; } 50% { opacity: 0.8; } 100% { top: 100%; opacity: 0; } }
-
-        /* SONIC LIST COMPONENTS */
-        .archive-track { 
-            padding: 14px; 
-            border: 1px solid rgba(0, 212, 255, 0.1); 
-            background: rgba(0, 212, 255, 0.03); 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            cursor: pointer; 
-            margin-bottom: 8px; 
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        .archive-track:hover { 
-            background: var(--mog-gold); 
-            color: #000; 
-            border-color: #fff;
-            transform: translateX(5px);
-        }
-
-        /* PRODUCTION INPUTS */
-        .mog-input { 
-            background: #000 !important; 
-            border: 1px solid rgba(0, 212, 255, 0.3) !important; 
-            color: var(--mog-blue) !important; 
-            padding: 14px; 
-            width: 100%; 
-            margin-bottom: 12px; 
-            outline: none;
-            font-size: 0.8rem;
-        }
-
-        .mog-btn { 
-            border: 1px solid var(--mog-gold); 
-            color: var(--mog-gold); 
-            padding: 12px 24px; 
-            font-size: 0.75rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            cursor: pointer; 
-            background: transparent;
-            letter-spacing: 2px;
-        }
-
-        .mog-btn:hover { 
-            background: var(--mog-gold); 
-            color: #000; 
-            box-shadow: 0 0 30px var(--mog-gold); 
-        }
-
-        .social-link { color: var(--mog-gold); font-size: 1.5rem; transition: 0.3s; }
-        .social-link:hover { color: var(--mog-blue); filter: drop-shadow(0 0 8px var(--mog-blue)); transform: translateY(-4px); }
-
-        /* MISSION TICKER (ENHANCED) */
-        #event-ticker { 
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 40px; 
-            background: #000; border-top: 2px solid var(--mog-gold); 
-            z-index: 500; display: flex; align-items: center; overflow: hidden; 
-        }
-
-        .ticker-label { 
-            background: var(--mog-gold); color: #000; padding: 0 25px; 
-            font-size: 11px; font-weight: 900; height: 100%; 
-            display: flex; align-items: center; z-index: 510;
-            box-shadow: 10px 0 20px rgba(0,0,0,0.5);
-        }
-
-        #ticker-content { 
-            display: inline-block; padding-left: 100%; 
-            animation: ticker-scroll 45s linear infinite; 
-            font-size: 11px; color: var(--mog-blue); 
-            white-space: nowrap; text-transform: uppercase; 
-            letter-spacing: 1px;
-        }
-
+        #event-ticker { position: fixed; bottom: 0; left: 0; width: 100%; height: 40px; background: #000; border-top: 2px solid var(--mog-gold); z-index: 500; display: flex; align-items: center; overflow: hidden; }
+        .ticker-label { background: var(--mog-gold); color: #000; padding: 0 25px; font-size: 12px; font-weight: 900; height: 100%; display: flex; align-items: center; }
+        #ticker-content { display: inline-block; padding-left: 100%; animation: ticker-scroll 35s linear infinite; font-size: 11px; color: var(--mog-blue); white-space: nowrap; font-weight: bold; }
         @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-
-        .scrollbar-hidden::-webkit-scrollbar { width: 4px; }
-        .scrollbar-hidden::-webkit-scrollbar-thumb { background: var(--mog-gold); }
     </style>
 </head>
 <body>
     <canvas id="lightning-canvas"></canvas>
 
-    <header class="p-10 flex flex-col lg:flex-row justify-between items-center relative z-50 gap-8">
+    <header class="p-10 flex flex-col lg:flex-row justify-between items-center relative z-50 gap-10">
         <div class="flex items-center gap-8">
-            <div class="relative">
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-24 w-24 border-2 border-gold rounded-full shadow-[0_0_30px_rgba(212,175,55,0.4)]">
-                <div class="absolute -bottom-2 -right-2 bg-blue-500 w-6 h-6 rounded-full border-2 border-black animate-pulse"></div>
-            </div>
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-24 w-24 border-2 border-gold rounded-full shadow-2xl">
             <div>
-                <h1 class="text-4xl font-black text-white italic tracking-tighter leading-none">MINISTRY OF GROOVE</h1>
+                <h1 class="text-4xl font-black text-white italic tracking-tighter">MINISTRY OF GROOVE</h1>
                 <div class="flex gap-8 mt-4">
                     <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
                     <a href="https://www.instagram.com/ministryofgroove_hq" target="_blank" class="social-link"><i class="fa-brands fa-instagram"></i></a>
@@ -195,39 +74,37 @@
             </div>
         </div>
         <div class="flex items-center gap-6">
-             <div class="text-[11px] text-blue-400 font-bold border-2 border-blue-900 px-6 py-3 bg-blue-950/20 tracking-[0.3em] uppercase shadow-inner">Core Status: Optimized</div>
-             <button onclick="logout()" class="mog-btn !border-white/10 !text-white/40">Sever Link</button>
+             <div class="text-[12px] text-blue-400 font-bold border-2 border-blue-900 px-6 py-2 bg-blue-950/20 tracking-widest uppercase">Tier-0 Status: Active</div>
+             <button onclick="logout()" class="mog-btn !px-6 !border-white/10 !text-white/40">Sever</button>
         </div>
     </header>
-    
+
     <main class="p-10 grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-50">
-        
         <div class="lg:col-span-4 space-y-10">
             <section class="command-tile">
-                <div class="tile-header"><span class="tile-title">Operative Authorization</span></div>
+                <div class="tile-header"><span class="tile-title">Identity Handshake</span></div>
                 <div class="p-8">
-                    <div id="auth-form">
-                        <input id="email-in" type="email" placeholder="OPERATIVE IDENTIFIER" class="mog-input">
-                        <input id="password-in" type="password" placeholder="SECURITY KEY" class="mog-input">
-                        <button onclick="handleAuth()" class="mog-btn w-full">Verify Identity</button>
+                    <div id="auth-form" class="space-y-4">
+                        <input id="email-in" type="email" placeholder="OPERATIVE EMAIL" class="mog-input">
+                        <input id="password-in" type="password" placeholder="SECURITY CIPHER" class="mog-input">
+                        <div class="grid grid-cols-2 gap-4">
+                            <button onclick="auth('login')" class="mog-btn">Login</button>
+                            <button onclick="auth('signup')" class="mog-btn">Register</button>
+                        </div>
                     </div>
-                    <div id="op-profile" class="hidden flex flex-col items-center">
-                        <p id="active-alias" class="text-3xl font-black text-white uppercase mb-6 tracking-tighter"></p>
-                        <div id="qrcode" class="bg-white p-4 rounded-sm mb-6 shadow-2xl"></div>
-                        <div class="w-full bg-blue-900/20 p-2 text-center text-[10px] text-blue-400 border border-blue-800/30">LEVEL 5 CLEARANCE ACTIVE</div>
+                    <div id="op-profile" class="hidden text-center">
+                        <p id="active-alias" class="text-3xl font-black text-white uppercase mb-6"></p>
+                        <div id="qrcode" class="bg-white p-3 inline-block rounded shadow-2xl"></div>
                     </div>
                 </div>
             </section>
 
             <section class="command-tile">
-                <div class="tile-header">
-                    <span class="tile-title">Sonic Archive</span>
-                    <button onclick="syncArchive()" class="text-blue-400 text-xs hover:text-white"><i id="sync-icon" class="fa-solid fa-rotate"></i></button>
-                </div>
+                <div class="tile-header"><span class="tile-title">Sonic Archive</span></div>
                 <div class="p-6">
-                    <audio id="player" src="" controls class="w-full h-12 mb-8 bg-black rounded-none border border-gold/20"></audio>
-                    <div id="mix-list" class="space-y-3 max-h-[400px] overflow-y-auto pr-3 scrollbar-hidden">
-                        <p class="text-[11px] text-blue-400 italic animate-pulse">Establishing Frequency Link...</p>
+                    <audio id="player" src="" controls class="w-full h-12 mb-8 bg-black rounded-none border border-gold/30"></audio>
+                    <div id="mix-list" class="space-y-2 max-h-80 overflow-y-auto scrollbar-hidden">
+                        <p class="text-[11px] italic animate-pulse">Scanning Frequencies...</p>
                     </div>
                 </div>
             </section>
@@ -236,53 +113,40 @@
         <div class="lg:col-span-8 space-y-10">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <section class="command-tile">
-                    <div class="tile-header"><span class="tile-title">Satellite Surveillance</span></div>
+                    <div class="tile-header"><span class="tile-title">Satellite Africa</span></div>
                     <div class="p-6">
-                        <div id="map-frame"><div class="map-scanline"></div></div>
-                        <div class="flex justify-between mt-6 text-[10px] font-mono text-blue-300 border-t border-blue-900/30 pt-4">
-                            <span id="tel-coords">LAT: 00.000 | LNG: 00.000</span>
-                            <span class="animate-pulse font-black">SIGNAL ENCRYPTED</span>
+                        <div id="map-frame" class="h-60 bg-[url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg')] bg-contain bg-no-repeat bg-center filter invert brightness-90 sepia saturate-200 hue-rotate-180 relative border border-blue-900/30">
+                            <div class="absolute w-full h-1 bg-blue-500 top-0 animate-[scan_4s_linear_infinite] shadow-[0_0_15px_#00d4ff]"></div>
                         </div>
+                        <p class="text-[10px] font-mono text-blue-400 mt-4 tracking-tighter uppercase">Signal Locked: Africa-Prime Sector</p>
                     </div>
                 </section>
 
                 <section class="command-tile">
-                    <div class="tile-header"><span class="tile-title">Field Assets</span></div>
+                    <div class="tile-header"><span class="tile-title">Intel Vault</span></div>
                     <div class="p-6">
-                        <div id="tile-gallery" class="grid grid-cols-4 gap-3 h-52 overflow-y-auto scrollbar-hidden"></div>
-                        <button onclick="downloadManifest()" class="mog-btn w-full mt-8"><i class="fa-solid fa-file-export mr-4"></i>Export Mission Manifest</button>
+                        <div id="tile-gallery" class="grid grid-cols-4 gap-3 h-48 overflow-y-auto scrollbar-hidden"></div>
+                        <button onclick="downloadIntel()" class="mog-btn w-full mt-8"><i class="fa-solid fa-download mr-3"></i>Download Manifest</button>
                     </div>
                 </section>
             </div>
-
-            <section id="director-node" class="command-tile hidden !border-red-600 shadow-[0_0_50px_rgba(255,51,51,0.15)]">
-                <div class="tile-header !background-red-950/20"><span class="tile-title !text-red-500">Directorate Overrides</span></div>
+            
+            <section id="director-node" class="command-tile hidden !border-red-600">
+                <div class="tile-header"><span class="tile-title !text-red-500">Directorate Terminal</span></div>
                 <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="space-y-4">
-                        <p class="text-[11px] text-red-600 font-black">BOOTH PUSH</p>
-                        <input id="dr-track" placeholder="SET TRACK" class="mog-input !border-red-900">
-                        <button onclick="pushTrack()" class="mog-btn !border-red-600 !text-red-600">Broadcast</button>
-                    </div>
-                    <div class="space-y-4">
-                        <p class="text-[11px] text-red-600 font-black">SECTOR MANDATE</p>
-                        <input id="venue-name" placeholder="SET COORDINATES" class="mog-input !border-red-900">
-                        <button onclick="transmitIntel()" class="mog-btn !border-red-600 !text-red-600">Deploy</button>
-                    </div>
-                    <div class="space-y-4">
-                        <p class="text-[11px] text-red-600 font-black">SYSTEM STATE</p>
-                        <button onclick="toggleLockdown()" class="mog-btn !border-red-600 !text-red-600 w-full mb-2">Initialize Lockdown</button>
-                        <button onclick="broadcastKeyDirectly()" class="mog-btn !border-red-600 !text-red-600 w-full">Broadcast Cipher</button>
-                    </div>
+                    <input id="dr-track" placeholder="PUSH TRACK" class="mog-input">
+                    <input id="venue-name" placeholder="SET SECTOR" class="mog-input">
+                    <button onclick="deployMandate()" class="mog-btn !border-red-500 !text-red-500">Deploy</button>
                 </div>
             </section>
 
             <section class="command-tile">
-                <div class="tile-header"><span class="tile-title">Neural Frequency Chat</span></div>
+                <div class="tile-header"><span class="tile-title">Frequency Comms</span></div>
                 <div class="p-6">
-                    <div id="chat-box" class="h-52 overflow-y-auto text-[12px] space-y-4 mb-6 scrollbar-hidden font-mono text-blue-100"></div>
+                    <div id="chat-box" class="h-48 overflow-y-auto text-[11px] space-y-4 mb-6 scrollbar-hidden font-mono text-blue-100"></div>
                     <div id="chat-input-area" class="hidden flex gap-4">
-                        <input id="chat-in" type="text" placeholder="TRANSMIT SECURE PACKET..." class="mog-input !mb-0">
-                        <button onclick="sendChat()" class="mog-btn !w-40">Transmit</button>
+                        <input id="chat-in" type="text" placeholder="TRANSMIT DATA..." class="mog-input !mb-0">
+                        <button onclick="sendChat()" class="mog-btn !w-40">Send</button>
                     </div>
                 </div>
             </section>
@@ -290,8 +154,8 @@
     </main>
 
     <div id="event-ticker">
-        <div class="ticker-label">SYSTEM LOG</div>
-        <div id="ticker-content">... ESTABLISHING SUPREME COMMAND ... NEURAL GRID STABILIZED ... AFRICA SECTOR ACTIVE ... ENCRYPTION HANDSHAKE READY ...</div>
+        <div class="ticker-label">TIER-0 LOG</div>
+        <div id="ticker-content">... SYSTEM V17.0 ACTIVE ... AFRICA SECTOR STABILIZED ... WAITING FOR FREQUENCIES ...</div>
     </div>
 
     <script>
@@ -302,68 +166,37 @@
         };
         const db = window.supabase.createClient(CFG.U, CFG.K);
 
-        // PRODUCTION SONIC SYNC ENGINE
-        async function syncArchive() {
+        // ASYNC ARCHIVE LOADER
+        async function refreshArchive() {
             const list = document.getElementById('mix-list');
             const gallery = document.getElementById('tile-gallery');
-            const syncIcon = document.getElementById('sync-icon');
-            syncIcon.classList.add('fa-spin');
-            
             const { data, error } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
 
-            if(error) { logEvent("Archive Sync Failure"); return; }
-
-            list.innerHTML = ""; gallery.innerHTML = "";
-            data.forEach(file => {
-                const url = `${CFG.U}/storage/v1/object/public/intel-vault/${file.name}`;
-                
-                if (file.name.match(/\.(mp3|wav|m4a)$/i)) {
-                    const track = document.createElement('div');
-                    track.className = "archive-track";
-                    track.innerHTML = `<span><i class="fa-solid fa-wave-square mr-4"></i>${file.name.toUpperCase()}</span><i class="fa-solid fa-play text-blue-400"></i>`;
-                    track.onclick = () => {
-                        const p = document.getElementById('player');
-                        p.src = url; p.play();
-                        logEvent("Now Transmitting: " + file.name);
-                    };
-                    list.appendChild(track);
-                }
-                
-                if (file.name.match(/\.(jpg|png|webp|gif)$/i)) {
-                    gallery.innerHTML += `<div class="aspect-square bg-black border border-white/5 overflow-hidden cursor-pointer hover:border-gold"><img src="${url}" class="w-full h-full object-cover"></div>`;
-                }
-            });
-            syncIcon.classList.remove('fa-spin');
-            logEvent("Archive Handshake Optimized");
-        }
-
-        function downloadManifest() {
-            const blob = new Blob([`M.O.G. HQ COMMAND MANIFEST\nVERSION: 15.0\nSTAMP: ${new Date().toISOString()}`], { type: 'text/plain' });
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "MOG_COMMAND_MANIFEST.txt"; a.click();
-        }
-
-        // 60FPS Lightning Engine
-        const canvas = document.getElementById('lightning-canvas');
-        const ctx = canvas.getContext('2d');
-        let w, h;
-        function res() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
-        window.onresize = res; res();
-        function draw() {
-            ctx.fillStyle = 'rgba(0,0,0,0.18)'; ctx.fillRect(0,0,w,h);
-            if(Math.random() > 0.97) {
-                ctx.strokeStyle = '#00d4ff'; ctx.lineWidth = 1; ctx.beginPath();
-                let x = w/2, y = h/2; ctx.moveTo(x,y);
-                for(let i=0; i<15; i++) { x+=(Math.random()-0.5)*250; y+=(Math.random()-0.5)*250; ctx.lineTo(x,y); }
-                ctx.stroke();
+            if(!error) {
+                list.innerHTML = ""; gallery.innerHTML = "";
+                data.forEach(file => {
+                    const url = `${CFG.U}/storage/v1/object/public/intel-vault/${file.name}`;
+                    if (file.name.match(/\.(mp3|wav)$/i)) {
+                        const row = document.createElement('div');
+                        row.className = "track-node";
+                        row.innerHTML = `<span><i class="fa-solid fa-play mr-3"></i>${file.name.toUpperCase()}</span>`;
+                        row.onclick = () => { document.getElementById('player').src = url; document.getElementById('player').play(); log("Transmitting: " + file.name); };
+                        list.appendChild(row);
+                    }
+                    if (file.name.match(/\.(jpg|png|webp|gif)$/i)) {
+                        gallery.innerHTML += `<div class="aspect-square bg-black border border-white/5 overflow-hidden cursor-pointer hover:border-blue-400"><img src="${url}" class="w-full h-full object-cover"></div>`;
+                    }
+                });
             }
-            requestAnimationFrame(draw);
         }
-        draw();
 
-        // High-Precision Telemetry
-        setInterval(() => {
-            document.getElementById('tel-coords').innerText = `LAT: ${(Math.random()*30-35).toFixed(4)} | LNG: ${(Math.random()*40+15).toFixed(4)}`;
-        }, 3000);
+        // TIER-0 AUTH
+        async function auth(mode) {
+            const e = document.getElementById('email-in').value;
+            const p = document.getElementById('password-in').value;
+            if(mode === 'login') await db.auth.signInWithPassword({ email: e, password: p });
+            else await db.auth.signUp({ email: e, password: p });
+        }
 
         db.auth.onAuthStateChange((event, session) => {
             if (session) {
@@ -372,23 +205,42 @@
                 document.getElementById('chat-input-area').classList.remove('hidden');
                 document.getElementById('active-alias').innerText = session.user.email.split('@')[0].toUpperCase();
                 if (session.user.email === CFG.D) document.getElementById('director-node').classList.remove('hidden');
-                new QRCode(document.getElementById("qrcode"), { text: session.user.id, width: 120, height: 120 });
-                logEvent("Operative " + session.user.email.split('@')[0].toUpperCase() + " Online");
+                new QRCode(document.getElementById("qrcode"), { text: session.user.id, width: 100, height: 100 });
+                refreshArchive();
+                log("Handshake Complete: Operative " + session.user.email.split('@')[0].toUpperCase());
             }
         });
 
-        async function handleAuth() {
-            const e = document.getElementById('email-in').value, p = document.getElementById('password-in').value;
-            await db.auth.signInWithPassword({ email: e, password: p });
+        function log(msg) {
+            const ticker = document.getElementById('ticker-content');
+            ticker.innerText = `[${new Date().toLocaleTimeString()}] ${msg.toUpperCase()} --- ${ticker.innerText}`;
         }
 
-        function logEvent(msg) {
-            const content = document.getElementById('ticker-content');
-            content.innerText = `[${new Date().toLocaleTimeString()}] ${msg.toUpperCase()} --- ${content.innerText}`;
+        function downloadIntel() {
+            const blob = new Blob([`M.O.G. TIER-0 MANIFEST\n${new Date().toLocaleString()}`], { type: 'text/plain' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "MOG_TIER0_INTEL.txt"; a.click();
         }
+
+        // PERFORMANCE KINETIC LIGHTNING
+        const canvas = document.getElementById('lightning-canvas');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+        function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
+        function animate() {
+            ctx.fillStyle = 'rgba(0,0,0,0.15)'; ctx.fillRect(0,0,w,h);
+            if(Math.random() > 0.96) {
+                ctx.strokeStyle = '#00d4ff'; ctx.lineWidth = 1; ctx.beginPath();
+                let x = w/2, y = h/2; ctx.moveTo(x,y);
+                for(let i=0; i<15; i++) { x+=(Math.random()-0.5)*250; y+=(Math.random()-0.5)*250; ctx.lineTo(x,y); }
+                ctx.stroke();
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
 
         async function logout() { await db.auth.signOut(); location.reload(); }
-        window.onload = syncArchive;
+        window.onload = () => { if(db.auth.session) refreshArchive(); };
     </script>
 </body>
 </html>
