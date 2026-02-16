@@ -13,23 +13,33 @@
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; --mog-red: #ff3333; }
         * { transition: all 0.2s ease; font-family: 'JetBrains+Mono', monospace; }
         body { background-color: var(--mog-black); margin: 0; overflow-x: hidden; padding-bottom: 60px; position: relative; color: var(--mog-gold); }
+        
+        /* Lightning Core Background */
         #lightning-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; background: #050505; }
         .crt-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%); background-size: 100% 4px; z-index: 100; pointer-events: none; opacity: 0.1; }
+        
         .command-tile { background: rgba(5, 5, 5, 0.95); border: 1px solid var(--mog-gold); border-radius: 4px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); position: relative; margin-bottom: 10px; }
         .tile-header { border-bottom: 1px solid rgba(212, 175, 55, 0.3); padding: 10px; display: flex; justify-content: space-between; align-items: center; background: rgba(0, 212, 255, 0.05); }
         .tile-title { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: var(--mog-gold); }
+        
+        /* Africa Focus */
         #map-frame { height: 220px; background: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg') no-repeat center; background-size: contain; filter: invert(1) brightness(0.8) sepia(1) saturate(3) hue-rotate(185deg); position: relative; }
         .map-scanline { position: absolute; width: 100%; height: 2px; background: var(--mog-blue); top: 0; animation: scan 3s linear infinite; }
         @keyframes scan { 0% { top: 0; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+        
         .mog-input { background: #000 !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; color: var(--mog-blue) !important; padding: 10px; width: 100%; margin-bottom: 8px; outline: none; font-size: 0.8rem; }
         .mog-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 8px 15px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; cursor: pointer; background: transparent; width: 100%; }
         .mog-btn:hover { background: var(--mog-gold); color: #000; }
+        
         .social-link { color: var(--mog-gold); font-size: 1.2rem; transition: 0.3s; }
         .social-link:hover { color: var(--mog-blue); transform: scale(1.2); }
+        
+        /* Mission Log Ticker */
         #event-ticker { position: fixed; bottom: 0; left: 0; width: 100%; height: 35px; background: #000; border-top: 1px solid var(--mog-gold); z-index: 200; display: flex; align-items: center; overflow: hidden; }
         .ticker-label { background: var(--mog-gold); color: #000; padding: 0 15px; font-size: 10px; font-weight: 900; height: 100%; display: flex; align-items: center; }
         #ticker-content { display: inline-block; padding-left: 100%; animation: ticker-scroll 30s linear infinite; font-size: 10px; color: var(--mog-blue); white-space: nowrap; }
         @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        
         .scrollbar-hidden::-webkit-scrollbar { width: 4px; }
         .scrollbar-hidden::-webkit-scrollbar-thumb { background: var(--mog-blue); }
     </style>
@@ -40,7 +50,7 @@
 
     <header class="p-6 flex flex-col md:flex-row justify-between items-center relative z-50 gap-4">
         <div class="flex items-center gap-4">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold rounded-full shadow-lg">
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold rounded-full">
             <div>
                 <h1 class="text-2xl font-black text-white italic tracking-tighter">MINISTRY OF GROOVE HQ</h1>
                 <div class="flex gap-4 mt-1">
@@ -73,7 +83,7 @@
                     </div>
                 </div>
             </section>
-
+            
             <section class="command-tile">
                 <div class="tile-header"><span class="tile-title">Live Frequency</span></div>
                 <div class="p-6 text-center">
@@ -89,13 +99,13 @@
             <section class="command-tile">
                 <div class="tile-header"><span class="tile-title">Sonic Archive</span></div>
                 <div class="p-4">
-                    <audio id="player" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" controls class="w-full h-8 opacity-60 mb-4"></audio>
+                    <audio id="player" src="" controls class="w-full h-8 opacity-60 mb-4"></audio>
                     <div id="mix-list" class="space-y-2 max-h-48 overflow-y-auto pr-2 scrollbar-hidden">
                         </div>
                 </div>
             </section>
         </div>
-        
+
         <div class="lg:col-span-8 space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <section class="command-tile">
@@ -104,7 +114,7 @@
                         <div id="map-frame"><div class="map-scanline"></div><div id="map-pings"></div></div>
                         <div class="flex justify-between mt-4 text-[8px] font-mono text-blue-300">
                             <span id="telemetry-coords">LAT: -- / LNG: --</span>
-                            <span class="animate-pulse">NEURAL LINK ACTIVE</span>
+                            <span class="animate-pulse">SIGNAL SECURED</span>
                         </div>
                     </div>
                 </section>
@@ -142,7 +152,7 @@
 
     <div id="event-ticker">
         <div class="ticker-label">MISSION LOG</div>
-        <div id="ticker-content">... SONIC ARCHIVE REACTIVATED ... AFRICA SECTOR MONITORING ... GRID STABILIZED ...</div>
+        <div id="ticker-content">... GRID STABILIZED ... AFRICA SECTOR MONITORING ... SONIC ARCHIVE ACTIVE ...</div>
     </div>
 
     <script>
@@ -153,7 +163,17 @@
         };
         const db = window.supabase.createClient(CFG.U, CFG.K);
 
-        // INITIAL CODING ARCHIVE LOADER (Restored)
+        // NEW: Audio Beep Protocol
+        function playSignalBeep() {
+            const context = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = context.createOscillator();
+            const gain = context.createGain();
+            osc.connect(gain); gain.connect(context.destination);
+            osc.type = 'sine'; osc.frequency.setValueAtTime(1200, context.currentTime);
+            gain.gain.setValueAtTime(0.1, context.currentTime);
+            osc.start(); setTimeout(() => osc.stop(), 150);
+        }
+
         async function loadVault() {
             const { data: files } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
             const gallery = document.getElementById('tile-gallery');
@@ -162,18 +182,25 @@
             (files || []).forEach(f => {
                 const url = `${CFG.U}/storage/v1/object/public/intel-vault/${f.name}`;
                 if (f.name.match(/\.(jpg|png|webp|gif)$/i)) {
-                    gallery.innerHTML += `<div class="aspect-square bg-black border border-white/10" onclick="window.open('${url}','_blank')"><img src="${url}" class="w-full h-full object-cover grayscale hover:grayscale-0 opacity-40"></div>`;
+                    gallery.innerHTML += `<div class="aspect-square bg-black border border-white/10" onclick="window.open('${url}','_blank')"><img src="${url}" class="w-full h-full object-cover"></div>`;
                 } else if (f.name.match(/\.(mp3|wav)$/i)) {
                     const row = document.createElement('div');
                     row.className = "p-2 border border-blue-900/30 bg-blue-950/20 text-[9px] flex justify-between items-center cursor-pointer hover:bg-gold hover:text-black";
                     row.innerHTML = `<span>${f.name.toUpperCase()}</span><i class="fa-solid fa-play"></i>`;
                     row.onclick = () => {
+                        playSignalBeep(); // Audio Handshake
                         document.getElementById('player').src = url;
                         document.getElementById('player').play();
+                        updateTicker(`Transmission Initialized: ${f.name.toUpperCase()}`);
                     };
                     list.appendChild(row);
                 }
             });
+        }
+        
+        function updateTicker(msg) {
+            const content = document.getElementById('ticker-content');
+            content.innerText = `[${new Date().toLocaleTimeString()}] ${msg.toUpperCase()} --- ${content.innerText}`;
         }
 
         function downloadIntelManifest() {
@@ -183,7 +210,7 @@
             const a = document.createElement('a'); a.href = url; a.download = "MOG_INTEL.txt"; a.click();
         }
 
-        // Lightning Logic
+        // Lightning Canvas
         const canvas = document.getElementById('lightning-canvas');
         const ctx = canvas.getContext('2d');
         let w, h;
