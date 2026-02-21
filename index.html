@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | ETERNAL GRID V28.6</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V28.6</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,7 +17,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@300;400;600;800&display=swap');
+        @import url('https://api.fontshare.com/v2/css?f[]=clash-display@200,400,700&f[]=satoshi@300,400,700,900&display=swap');
+        
         :root { 
             --mog-gold: #D4AF37; 
             --mog-blue: #00d4ff; 
@@ -25,7 +26,10 @@
             --mog-panel: #262626; 
         }
         
-        * { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        * { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Satoshi', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        h1, .tile-title, .active-alias { font-family: 'Clash Display', sans-serif; font-weight: 700; }
+        
         body { background-color: var(--mog-bg); color: var(--mog-gold); margin: 0; overflow-x: hidden; -webkit-user-select: none; user-select: none; }
         
         #preloader { 
@@ -42,30 +46,34 @@
             border: 1px solid rgba(212, 175, 55, 0.25); 
             backdrop-filter: blur(40px); position: relative; overflow: hidden; 
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border-radius: 12px;
         }
         .tile-header { 
             border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding: 12px 18px; 
             background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%); 
         }
-        .tile-title { font-family: 'Tenor Sans', sans-serif; letter-spacing: 5px; text-transform: uppercase; font-size: 9px; color: #fff; }
+        .tile-title { letter-spacing: 5px; text-transform: uppercase; font-size: 10px; color: #fff; }
         
         #radar-container { position: relative; height: 320px; width: 100%; background: #202020; overflow: hidden; }
         #radar-canvas { position: absolute; inset: 0; z-index: 5; }
+        
+        /* UPDATED RSA TERRITORIAL MAP - LATEST VERSION */
         .map-underlay { 
             position: absolute; inset: 0; 
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_map_of_South_Africa.svg');
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e0/Map_of_the_administrative_geography_of_South_Africa.svg');
             background-repeat: no-repeat; background-position: center; background-size: contain; 
-            filter: invert(0.8) brightness(1.2); opacity: 0.15;
+            filter: invert(0.8) brightness(1.2); opacity: 0.18;
         }
 
-        .intel-feed { height: 75px; overflow: hidden; font-family: 'Courier New', monospace; font-size: 9px; color: var(--mog-blue); }
+        .intel-feed { height: 75px; overflow: hidden; font-family: 'Satoshi', monospace; font-size: 10px; color: var(--mog-blue); }
         .feed-scroll { animation: feed-up 18s linear infinite; }
         @keyframes feed-up { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
 
         .mog-btn { 
             border: 2px solid var(--mog-gold); color: var(--mog-gold); padding: 14px; 
-            font-size: 0.75rem; font-weight: 800; text-transform: uppercase; 
-            background: rgba(212, 175, 55, 0.05); letter-spacing: 3px; width: 100%; cursor: pointer;
+            font-size: 0.85rem; font-weight: 900; text-transform: uppercase; 
+            background: rgba(212, 175, 55, 0.05); letter-spacing: 4px; width: 100%; cursor: pointer;
+            border-radius: 8px;
         }
         
         .locked-blur { filter: blur(12px); opacity: 0.2; pointer-events: none; }
@@ -78,7 +86,7 @@
 
     <div id="preloader">
         <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="preloader-logo h-24 w-24 mb-6">
-        <div class="text-[10px] text-blue-500 tracking-[1em] font-mono animate-pulse uppercase italic">Synchronizing_Grid_V28.6</div>
+        <div class="text-[11px] text-blue-500 tracking-[1em] font-bold animate-pulse uppercase italic">Synchronizing_Grid_V28.6</div>
     </div>
 
     <div id="app-content" class="opacity-0 p-4 lg:p-10 space-y-10 transition-opacity duration-1000">
@@ -87,15 +95,15 @@
             <div class="flex items-center gap-6">
                 <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold/50 rounded-full bg-white/5">
                 <div>
-                    <h1 class="text-3xl text-white italic tracking-[.4em] font-serif uppercase">Ministry of Groove</h1>
-                    <p class="text-[9px] text-blue-500 tracking-[.6em] mt-2 uppercase font-bold">National Sovereignty // Tactical Amapiano Grid</p>
+                    <h1 class="text-4xl text-white tracking-[.2em] uppercase">Ministry of Groove</h1>
+                    <p class="text-[10px] text-blue-500 tracking-[.6em] mt-2 uppercase font-black">National Sovereignty // Tactical Amapiano Grid</p>
                 </div>
             </div>
             <div class="flex flex-col items-end">
-                <div class="text-[11px] text-gold font-bold border-2 border-gold/40 px-8 py-2 bg-gold/10 tracking-[.5em] uppercase shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                <div class="text-[12px] text-gold font-black border-2 border-gold/40 px-8 py-2 bg-gold/10 tracking-[.5em] uppercase shadow-[0_0_20px_rgba(212,175,55,0.2)] rounded-lg">
                     Operatives: <span id="op-count">0</span> / 500
                 </div>
-                <p id="system-time" class="text-[8px] text-zinc-400 mt-2 font-mono tracking-widest uppercase font-bold"></p>
+                <p id="system-time" class="text-[9px] text-zinc-400 mt-2 font-black tracking-widest uppercase"></p>
             </div>
         </header>
 
@@ -120,8 +128,8 @@
                     <div class="tile-header"><span class="tile-title">Operative Registry</span></div>
                     <div class="p-8 text-center">
                         <div id="auth-ui">
-                            <input id="email-in" type="email" placeholder="ENTER ACCESS EMAIL" class="w-full bg-zinc-800/50 border border-blue-500/30 p-4 text-white mb-4 outline-none text-[10px] tracking-widest uppercase">
-                            <select id="province-select" class="w-full bg-zinc-800/50 border border-blue-500/30 p-4 text-zinc-200 mb-6 outline-none text-[10px] tracking-widest uppercase">
+                            <input id="email-in" type="email" placeholder="ENTER ACCESS EMAIL" class="w-full bg-zinc-800/50 border border-blue-500/30 p-4 text-white mb-4 outline-none text-[10px] tracking-widest uppercase rounded-lg">
+                            <select id="province-select" class="w-full bg-zinc-800/50 border border-blue-500/30 p-4 text-zinc-200 mb-6 outline-none text-[10px] tracking-widest uppercase rounded-lg">
                                 <option value="" disabled selected>SELECT SECTOR DEPLOYMENT</option>
                                 <option value="GP">Gauteng (GP)</option>
                                 <option value="WC">Western Cape (WC)</option>
@@ -136,7 +144,7 @@
                             <button onclick="handleAuth()" class="mog-btn">Initiate Handshake</button>
                         </div>
                         <div id="op-profile" class="hidden text-center">
-                            <p id="active-alias" class="text-2xl font-black text-white uppercase mb-4 tracking-[0.3em] italic"></p>
+                            <p id="active-alias" class="text-3xl font-black text-white uppercase mb-4 tracking-[0.3em] italic active-alias"></p>
                             <div id="qrcode" class="bg-white p-3 inline-block rounded-sm mb-4"></div>
                         </div>
                     </div>
@@ -156,10 +164,10 @@
                     <section class="command-tile">
                         <div class="tile-header"><span class="tile-title">Sonic Archive</span></div>
                         <div class="p-6">
-                            <audio id="player" controls class="w-full h-12 mb-6 bg-zinc-800 border border-white/20"></audio>
+                            <audio id="player" controls class="w-full h-12 mb-6 bg-zinc-800 border border-white/20 rounded-full"></audio>
                             <div class="locked-blur space-y-3">
-                                <div class="p-4 border border-gold/20 bg-gold/5 text-[10px] tracking-widest text-white uppercase font-bold">UNRELEASED_SECTOR_MIX_01.MP3</div>
-                                <div class="p-4 border border-gold/20 bg-gold/5 text-[10px] tracking-widest text-white uppercase font-bold">UNRELEASED_SECTOR_MIX_02.MP3</div>
+                                <div class="p-4 border border-gold/20 bg-gold/5 text-[11px] tracking-widest text-white uppercase font-black rounded-lg">UNRELEASED_SECTOR_MIX_01.MP3</div>
+                                <div class="p-4 border border-gold/20 bg-gold/5 text-[11px] tracking-widest text-white uppercase font-black rounded-lg">UNRELEASED_SECTOR_MIX_02.MP3</div>
                             </div>
                         </div>
                     </section>
@@ -171,34 +179,34 @@
                         <div class="p-6 space-y-6">
                             <iframe width="100%" height="100" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1144007629&color=%2300d4ff&auto_play=false&hide_related=true"></iframe>
                             <iframe width="100%" height="100" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1243167190&color=%23d4af37&auto_play=false&hide_related=true"></iframe>
-                            <button class="mog-btn !text-[9px]">Cast Selection</button>
+                            <button class="mog-btn !text-[10px]">Cast Selection</button>
                         </div>
                     </section>
 
                     <section class="command-tile">
-                        <div class="tile-header flex justify-between"><span class="tile-title">Frequency Chat</span><span class="text-[7px] text-zinc-400 uppercase">Encrypted</span></div>
+                        <div class="tile-header flex justify-between"><span class="tile-title">Frequency Chat</span><span class="text-[8px] text-zinc-400 uppercase font-black">Encrypted</span></div>
                         <div class="p-6">
-                            <div id="chat-stream" class="h-32 overflow-y-auto font-mono text-[10px] text-blue-400 space-y-3 mb-4 scrollbar-hide"></div>
-                            <input type="text" placeholder="TRANSMIT PACKET..." class="w-full bg-zinc-800 border border-blue-500/20 p-4 text-[10px] outline-none text-white tracking-widest">
+                            <div id="chat-stream" class="h-32 overflow-y-auto font-black text-[11px] text-blue-400 space-y-3 mb-4 scrollbar-hide"></div>
+                            <input type="text" placeholder="TRANSMIT PACKET..." class="w-full bg-zinc-800 border border-blue-500/20 p-4 text-[11px] outline-none text-white tracking-widest rounded-lg">
                         </div>
                     </section>
                 </div>
             </div>
         </main>
-
+        
         <footer class="relative z-50 p-12 mt-20 border-t border-gold/20 bg-white/5 backdrop-blur-md">
             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
                 <div class="text-left">
-                    <p class="text-[10px] text-white tracking-[.5em] font-black uppercase">Ministry of Groove</p>
-                    <p class="text-[8px] text-zinc-400 tracking-widest uppercase">Command V28.6 // National Amapiano Grid</p>
+                    <p class="text-[11px] text-white tracking-[.5em] font-black uppercase">Ministry of Groove</p>
+                    <p class="text-[9px] text-zinc-400 tracking-widest uppercase font-black">Command V28.6 // National Amapiano Grid</p>
                 </div>
                 <div class="flex gap-10">
-                    <a href="privacy.html" class="text-[9px] text-gold hover:text-white tracking-[0.4em] uppercase font-bold transition-all">Privacy Protocol</a>
-                    <a href="terms.html" class="text-[9px] text-gold hover:text-white tracking-[0.4em] uppercase font-bold transition-all">Operative Terms</a>
+                    <a href="privacy.html" class="text-[10px] text-gold hover:text-white tracking-[0.4em] uppercase font-black transition-all">Privacy Protocol</a>
+                    <a href="terms.html" class="text-[10px] text-gold hover:text-white tracking-[0.4em] uppercase font-black transition-all">Operative Terms</a>
                 </div>
                 <div class="inline-flex items-center gap-2 px-3 py-1 border border-green-400 rounded-full bg-green-400/10">
                     <span class="h-1.5 w-1.5 bg-green-400 rounded-full animate-pulse"></span>
-                    <span class="text-[8px] text-green-400 font-mono tracking-tighter uppercase font-bold">Grid_Stable_RSA</span>
+                    <span class="text-[9px] text-green-400 font-mono tracking-tighter uppercase font-black">Grid_Stable_RSA</span>
                 </div>
             </div>
         </footer>
@@ -241,9 +249,9 @@
                 { op: "DIR_MOG", msg: "AMAPIANO GRID V28.6 ONLINE.", time: "04:00" },
                 { op: "SYSTEM", msg: "LOG DRUM FREQUENCY SYNCED.", time: "05:31" }
             ];
-            chatStream.innerHTML = packets.map(p => `<p class="mb-3 leading-relaxed"><span class="text-[7px] text-zinc-500 font-mono">[${p.time}]</span> <span class="${p.op.includes('DIR') ? 'text-gold' : 'text-blue-500'} font-bold">[${p.op}]:</span> <span class="text-white">${p.msg}</span></p>`).join('');
+            chatStream.innerHTML = packets.map(p => `<p class="mb-3 leading-relaxed"><span class="text-[8px] text-zinc-500 font-black">[${p.time}]</span> <span class="${p.op.includes('DIR') ? 'text-gold' : 'text-blue-500'} font-black">[${p.op}]:</span> <span class="text-white">${p.msg}</span></p>`).join('');
         }
-                       
+
         async function handleAuth() {
             const email = document.getElementById('email-in').value;
             const prov = document.getElementById('province-select').value;
@@ -303,4 +311,4 @@
         lAnimate();
     </script>
 </body>
-</html> 
+</html>
