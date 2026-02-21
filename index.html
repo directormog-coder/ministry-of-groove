@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | PRESTIGE COMMAND</title>
+    <title>M.O.G. | SOVEREIGN COMMAND V24.0</title>
     
-    <meta name="description" content="Ministry of Groove Prestige Command. Africa Sector Monitoring & Sonic Archive.">
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
+    <meta name="theme-color" content="#050505">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -18,35 +18,28 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@300;400;600;800&display=swap');
-        :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; --mog-red: #ff3333; }
+        :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; }
         
-        * { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { 
-            background-color: var(--mog-black); margin: 0; overflow-x: hidden; color: var(--mog-gold); 
-            padding-bottom: env(safe-area-inset-bottom); overscroll-behavior-y: contain; /* Prevents pull-to-refresh */
-        }
+        * { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        body { background-color: var(--mog-black); color: var(--mog-gold); overscroll-behavior-y: contain; margin:0; }
         
-        #lightning-canvas { position: fixed; inset: 0; z-index: -1; background: #000; }
+        /* THE PRESTIGE THEME V24 */
+        .command-tile { background: rgba(8, 8, 8, 0.98); border: 1px solid rgba(212, 175, 55, 0.2); backdrop-filter: blur(30px); position: relative; overflow: hidden; }
+        .tile-header { border-bottom: 1px solid rgba(212, 175, 55, 0.1); padding: 14px 20px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.08) 0%, transparent 100%); }
+        .tile-title { font-family: 'Tenor Sans', sans-serif; letter-spacing: 4px; text-transform: uppercase; font-size: 10px; color: #fff; }
         
-        /* PRE-LOADER UI */
-        #preloader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .loading-text { font-family: monospace; font-size: 10px; color: var(--mog-blue); letter-spacing: 5px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-        .command-tile { background: rgba(8, 8, 8, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); backdrop-filter: blur(25px); box-shadow: 0 20px 60px rgba(0,0,0,1); }
-        .tile-header { border-bottom: 1px solid rgba(212, 175, 55, 0.1); padding: 14px 20px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, transparent 100%); }
-        .tile-title { font-family: 'Tenor Sans', sans-serif !important; letter-spacing: 3px; text-transform: uppercase; font-size: 10px; }
-        
-        .mog-input { background: #000 !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; color: var(--mog-blue) !important; padding: 14px; width: 100%; margin-bottom: 12px; outline: none; border-radius: 0; }
-        .mog-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 12px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; cursor: pointer; background: transparent; width: 100%; letter-spacing: 2px; }
+        /* UI ANIMATIONS */
+        @keyframes scan { from { top: 0; } to { top: 100%; } }
+        .mog-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 12px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; cursor: pointer; background: transparent; letter-spacing: 2px; text-align: center; }
         .mog-btn:hover { background: var(--mog-gold); color: #000; box-shadow: 0 0 30px var(--mog-gold); }
-
-        #event-ticker { position: fixed; bottom: 0; left: 0; width: 100%; height: 40px; background: #000; border-top: 1px solid var(--mog-gold); z-index: 500; display: flex; align-items: center; overflow: hidden; }
-        #ticker-content { display: inline-block; padding-left: 100%; animation: ticker-scroll 45s linear infinite; font-size: 11px; color: var(--mog-blue); white-space: nowrap; }
-        @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-
-        .track-row:hover { background: var(--mog-gold); color: #000; }
-        .scrollbar-hidden::-webkit-scrollbar { display: none; }
+        .buy-btn { background: var(--mog-gold); color: #000; border: none; font-size: 0.65rem; padding: 6px 14px; font-weight: 900; }
+        
+        #lightning-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.4; }
+        #preloader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s ease; }
+        
+        .intelligence-feed { height: 100px; overflow: hidden; position: relative; font-family: monospace; font-size: 9px; color: #004455; }
+        .feed-line { animation: scroll-up 10s linear infinite; position: absolute; width: 100%; }
+        @keyframes scroll-up { 0% { bottom: -100%; } 100% { bottom: 100%; } }
     </style>
 </head>
 <body>
@@ -54,206 +47,187 @@
 
     <div id="preloader">
         <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-24 w-24 mb-6 animate-pulse">
-        <div class="loading-text">DECRYPTING_PRESTIGE_V20.2...</div>
+        <div class="text-[9px] text-blue-400 tracking-[0.8em] font-mono animate-pulse uppercase">Uplink_Immortality_V24.0</div>
     </div>
 
-    <div id="app-content" class="opacity-0 transition-opacity duration-1000">
-        <header class="p-8 lg:p-12 flex flex-col lg:flex-row justify-between items-center gap-8 relative z-50">
+    <div id="app-content" class="opacity-0 p-4 lg:p-12 space-y-12 transition-opacity duration-1000">
+        
+        <header class="flex flex-col lg:flex-row justify-between items-center gap-8 relative z-50">
             <div class="flex items-center gap-8">
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-20 w-20 border-2 border-gold rounded-full">
+                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border-2 border-gold rounded-full shadow-2xl">
                 <div>
-                    <h1 class="text-3xl text-white italic tracking-[.25em] font-serif">MINISTRY OF GROOVE</h1>
-                    <div class="flex gap-6 mt-3">
-                        <a href="https://tiktok.com/@ministryofgroove" class="text-gold"><i class="fa-brands fa-tiktok"></i></a>
-                        <a href="https://www.instagram.com/ministryofgroove_hq" class="text-gold"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="mailto:director.mog@gmail.com" class="text-gold"><i class="fa-solid fa-envelope"></i></a>
+                    <h1 class="text-3xl text-white italic tracking-[.3em] font-serif uppercase">Ministry of Groove</h1>
+                    <div class="flex gap-4 mt-2">
+                        <span id="phase-label" class="text-[8px] text-blue-400 tracking-[.5em] uppercase animate-pulse">Phase 1: Grid Expansion</span>
+                        <span class="text-[8px] text-zinc-600 font-bold tracking-[.5em] uppercase">Status: Online</span>
                     </div>
                 </div>
             </div>
-            <div class="flex gap-4">
-                 <div id="link-status" class="text-[9px] text-blue-400 font-bold border border-blue-900 px-5 py-2 bg-blue-950/20 tracking-[.3em] uppercase">Satellite Link Offline</div>
-                 <button onclick="logout()" class="mog-btn !w-auto !px-6 !border-white/10 !text-white/30">Sever</button>
+            <div id="counter-tile" class="text-[10px] text-gold font-bold border border-gold/20 px-6 py-2 bg-gold/5 tracking-[.4em] uppercase shadow-[0_0_15px_rgba(212,175,55,0.1)]">
+                Operatives: <span id="op-count">0</span> / 500
             </div>
         </header>
 
-        <main class="p-8 grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-50">
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-50">
+            
             <div class="lg:col-span-4 space-y-8">
-                <section class="command-tile">
-                    <div class="tile-header"><span class="tile-title">Handshake & Profile</span></div>
-                    <div class="p-8">
-                        <div id="auth-form">
-                            <input id="email-in" type="email" placeholder="OPERATIVE EMAIL" class="mog-input">
-                            <input id="password-in" type="password" placeholder="SECURITY KEY" class="mog-input">
-                            <div class="grid grid-cols-2 gap-4 mb-8">
-                                <button onclick="handleAuth('login')" class="mog-btn">Login</button>
-                                <button onclick="handleAuth('signup')" class="mog-btn">Register</button>
-                            </div>
-                            <div class="border-t border-gold/10 pt-8 text-center">
-                                <p class="text-[9px] mb-4 text-blue-400 font-bold tracking-widest uppercase italic">Emergency Vault Push</p>
-                                <input type="file" id="emergency-file" class="hidden" onchange="emergencyUpload(this)">
-                                <button onclick="document.getElementById('emergency-file').click()" class="mog-btn !border-blue-500 !text-blue-500 !text-[8px]">Push Binary</button>
-                            </div>
-                        </div>
-                        <div id="op-profile" class="hidden text-center">
-                            <p id="active-alias" class="text-2xl font-black text-white uppercase mb-6 italic tracking-wider"></p>
-                            <div id="qrcode" class="bg-white p-2 inline-block rounded-sm mb-6"></div>
-                            <button onclick="deleteAccount()" class="block w-full text-[8px] text-red-600 tracking-[.4em] uppercase opacity-40 hover:opacity-100">Decommission Profile</button>
+                
+                <section class="command-tile border-blue-900/20">
+                    <div class="tile-header flex justify-between">
+                        <span class="tile-title text-blue-400">Intelligence Feed</span>
+                        <span class="text-[7px] text-blue-900 font-mono">LIVE_STREAM</span>
+                    </div>
+                    <div class="p-4 intelligence-feed">
+                        <div class="feed-line">
+                            [INTEL] New operative detected in Johannesburg...<br>
+                            [SYSTEM] Satellite GP-012 recalibrating...<br>
+                            [GRID] Handshake protocol 98% efficient...<br>
+                            [INTEL] Amapiano Sector signal strength: PEAK...<br>
+                            [VOICE] Director: "The Cabinet is watching."
                         </div>
                     </div>
                 </section>
 
                 <section class="command-tile">
-                    <div class="tile-header"><span class="tile-title">Sonic Archive</span></div>
-                    <div class="p-6">
-                        <audio id="player" controls class="w-full h-10 mb-6 bg-black"></audio>
-                        <div id="mix-list" class="space-y-3 max-h-80 overflow-y-auto pr-2 scrollbar-hidden"></div>
+                    <div class="tile-header"><span class="tile-title">Identity Registry</span></div>
+                    <div class="p-8 text-center">
+                        <div id="auth-ui">
+                            <input id="email-in" type="email" placeholder="OPERATIVE EMAIL" class="w-full bg-black border border-blue-900/40 p-4 text-blue-400 mb-4 outline-none text-[10px] tracking-widest">
+                            <button onclick="handleAuth()" class="mog-btn w-full">Join the Manifest</button>
+                        </div>
+                        <div id="op-profile" class="hidden">
+                            <p id="active-alias" class="text-2xl font-black text-white uppercase mb-4 tracking-[0.2em] italic"></p>
+                            <div id="qrcode" class="bg-white p-2 inline-block rounded-sm mb-4"></div>
+                            <p class="text-[8px] text-zinc-500 mb-2 uppercase tracking-widest">Secure Mission Entry Key</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="command-tile !border-gold">
+                    <div class="tile-header flex justify-between">
+                        <span class="tile-title text-gold">Procurement</span>
+                        <i class="fa-solid fa-lock text-[10px] text-gold/40"></i>
+                    </div>
+                    <div class="p-6 text-center">
+                        <p class="text-[8px] text-zinc-600 tracking-widest uppercase">Commerce Links Locked until Phase 3</p>
                     </div>
                 </section>
             </div>
-
+            
             <div class="lg:col-span-8 space-y-8">
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <section class="command-tile">
-                        <div class="tile-header"><span class="tile-title">Satellite Africa</span></div>
-                        <div class="p-6">
-                            <div class="h-60 bg-[url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg')] bg-contain bg-no-repeat bg-center filter invert sepia saturate-200 hue-rotate-180 relative border border-blue-900/10">
-                                <div class="absolute w-full h-1 bg-blue-500 top-0 animate-[scan_4s_linear_infinite] shadow-[0_0_15px_#00d4ff]"></div>
+                    <section class="command-tile !border-blue-500/50">
+                        <div class="tile-header flex justify-between">
+                            <span class="tile-title text-blue-400">Sector Selection Vote</span>
+                            <span class="text-[8px] text-blue-400 animate-pulse">CLEARANCE_REQUIRED</span>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <div>
+                                <div class="flex justify-between text-[9px] mb-2 uppercase font-bold tracking-widest">
+                                    <span>Kabza De Small</span>
+                                    <span class="text-blue-400">89%</span>
+                                </div>
+                                <iframe width="100%" height="80" scrolling="no" frameborder="no" allow="autoplay" 
+                                    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1144007629&color=%2300d4ff&auto_play=false&hide_related=true&show_comments=false&show_user=false">
+                                </iframe>
                             </div>
+                            <div>
+                                <div class="flex justify-between text-[9px] mb-2 uppercase font-bold tracking-widest">
+                                    <span>Uncle Waffles</span>
+                                    <span class="text-gold">74%</span>
+                                </div>
+                                <iframe width="100%" height="80" scrolling="no" frameborder="no" allow="autoplay" 
+                                    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1243167190&color=%23d4af37&auto_play=false&hide_related=true&show_comments=false&show_user=false">
+                                </iframe>
+                            </div>
+                            <button class="mog-btn w-full !text-[8px] !border-blue-900">Cast Frequency Vote</button>
                         </div>
                     </section>
+
                     <section class="command-tile">
-                        <div class="tile-header"><span class="tile-title">Visual Vault</span></div>
-                        <div class="p-6">
-                            <div id="tile-gallery" class="grid grid-cols-4 gap-3 h-52 overflow-y-auto scrollbar-hidden"></div>
-                            <button onclick="downloadManifest()" class="mog-btn w-full mt-8">Export Mission Manifest</button>
+                        <div class="tile-header"><span class="tile-title">Satellite Africa Scan</span></div>
+                        <div class="p-6 relative">
+                            <div class="h-48 bg-[url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg')] bg-contain bg-no-repeat bg-center filter invert sepia saturate-200 hue-rotate-180 opacity-20">
+                                <div class="absolute w-full h-0.5 bg-blue-500 top-0 animate-[scan_5s_linear_infinite] shadow-[0_0_15px_#00d4ff]"></div>
+                            </div>
+                            <p class="text-center text-[8px] text-blue-900 mt-4 tracking-[0.5em] font-bold">SECTOR: GP-012 (ACTIVE)</p>
                         </div>
                     </section>
                 </div>
 
-                <section id="director-node" class="command-tile hidden !border-red-600">
-                    <div class="tile-header"><span class="tile-title !text-red-500">Directorate Command</span></div>
-                    <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <input id="dr-track" placeholder="BROADCAST_SIGNAL" class="mog-input !mb-0 !border-red-900">
-                        <button onclick="alert('SIGNAL_SENT')" class="mog-btn !border-red-600 !text-red-500">Broadcast</button>
-                    </div>
-                </section>
-
-                <section class="command-tile">
-                    <div class="tile-header"><span class="tile-title">Frequency Chat</span></div>
-                    <div class="p-6">
-                        <div id="chat-box" class="h-52 overflow-y-auto text-[10px] space-y-4 mb-6 font-mono text-blue-100/60 scrollbar-hidden"></div>
-                        <div id="chat-input-area" class="hidden flex gap-4">
-                            <input id="chat-in" type="text" placeholder="TRANSMIT PACKET..." class="mog-input !mb-0">
-                            <button onclick="sendChat()" class="mog-btn !w-40">Send</button>
+                <section class="command-tile !border-blue-950">
+                    <div class="p-10 flex flex-col items-center text-center">
+                        <h2 class="text-white font-serif italic text-xl tracking-[0.2em] mb-2 uppercase">Mission: Prestige Live</h2>
+                        <p class="text-blue-900 text-[10px] tracking-[0.4em] mb-8 font-bold">LOCKED UNTIL 500 OPERATIVES VERIFIED</p>
+                        <div class="w-full max-w-sm bg-zinc-900/50 p-6 border border-zinc-800 opacity-20">
+                            <p class="text-[9px] text-zinc-500 tracking-widest uppercase italic">Secure Ticket Portal Offline</p>
                         </div>
                     </div>
                 </section>
             </div>
-    </main>
-    
-        <footer class="p-10 text-center opacity-40 hover:opacity-100">
-            <div class="flex justify-center gap-10 text-[9px] tracking-[0.4em] uppercase mb-4 font-bold">
-                <a href="privacy.html" class="hover:text-blue-400 underline">Privacy Protocol</a>
-                <a href="terms.html" class="hover:text-blue-400 underline">Code of Conduct</a>
-            </div>
-            <p class="text-[7px] text-zinc-600 tracking-[.5em] uppercase">© 2026 MINISTRY OF GROOVE | PRESTIGE COMMAND V20.2</p>
-        </footer>
+        </main>
 
-        <div id="event-ticker"><div id="ticker-content">... SYSTEM V20.2 PRESTIGE ONLINE ... AFRICA SECTOR MONITORING ... SONIC ARCHIVE ACTIVE ... DIRECT DIRECTORATE LINK ESTABLISHED ...</div></div>
+        <footer class="p-10 text-center opacity-30">
+            <p class="text-[7px] text-zinc-600 tracking-[0.5em] uppercase mb-4">Ministry of Groove | V24.0 Master Build</p>
+            <div class="flex justify-center gap-10 text-[8px] uppercase tracking-widest">
+                <a href="privacy.html" class="hover:text-blue-400">Privacy</a>
+                <a href="terms.html" class="hover:text-blue-400">Conduct</a>
+            </div>
+        </footer>
     </div>
 
     <script>
         const CFG = { 
             U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
-            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8",
-            D: "director.mog@gmail.com"
+            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8"
         };
         const db = window.supabase.createClient(CFG.U, CFG.K);
 
-        // INITIALIZE APP
-        window.addEventListener('load', async () => {
+        // HYDRATION & RE-ENTRY LOGIC
+        async function hydrate() {
             const { data: { session } } = await db.auth.getSession();
-            updateUI(session);
+            if (session) renderProfile(session.user);
+            
+            const { count, error } = await db.from('profiles').select('*', { count: 'exact', head: true });
+            document.getElementById('op-count').innerText = count || 0;
+            
             setTimeout(() => {
                 document.getElementById('preloader').style.opacity = '0';
-                document.getElementById('app-content').classList.remove('opacity-0');
+                document.getElementById('app-content').classList.replace('opacity-0', 'opacity-100');
                 setTimeout(() => document.getElementById('preloader').remove(), 1000);
             }, 2500);
-        });
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js'); });
         }
 
-        async function handleAuth(mode) {
-            const e = document.getElementById('email-in').value, p = document.getElementById('password-in').value;
-            try {
-                if(mode === 'signup') await db.auth.signUp({ email: e, password: p });
-                else await db.auth.signInWithPassword({ email: e, password: p });
-            } catch(err) { alert("LINK_FAILED: " + err.message); }
+        async function handleAuth() {
+            const email = document.getElementById('email-in').value;
+            if(!email) return alert("SIGNAL_ERROR");
+            const { error } = await db.auth.signInWithOtp({ email });
+            if(error) alert("HANDSHAKE_FAILED");
+            else alert("SIGNAL_SENT: Check Email");
         }
 
-        db.auth.onAuthStateChange((event, session) => { updateUI(session); });
-
-        function updateUI(session) {
-            const status = document.getElementById('link-status');
-            if (session) {
-                status.innerText = "Satellite Link Active"; status.classList.replace('text-blue-400', 'text-green-400');
-                document.getElementById('auth-form').classList.add('hidden');
-                document.getElementById('op-profile').classList.remove('hidden');
-                document.getElementById('chat-input-area').classList.remove('hidden');
-                document.getElementById('active-alias').innerText = session.user.email.split('@')[0].toUpperCase();
-                if (session.user.email === CFG.D) document.getElementById('director-node').classList.remove('hidden');
-                document.getElementById("qrcode").innerHTML = "";
-                new QRCode(document.getElementById("qrcode"), { text: session.user.id, width: 100, height: 100 });
-                fetchVault();
-            } else {
-                status.innerText = "Satellite Link Offline"; status.classList.replace('text-green-400', 'text-blue-400');
-            }
+        function renderProfile(user) {
+            document.getElementById('auth-ui').classList.add('hidden');
+            document.getElementById('op-profile').classList.remove('hidden');
+            document.getElementById('active-alias').innerText = user.email.split('@')[0].toUpperCase();
+            new QRCode(document.getElementById("qrcode"), { text: user.id, width: 100, height: 100 });
         }
 
-        async function fetchVault() {
-            try {
-                const { data } = await db.storage.from('intel-vault').list();
-                const list = document.getElementById('mix-list');
-                const gallery = document.getElementById('tile-gallery');
-                list.innerHTML = ""; gallery.innerHTML = "";
-                data?.forEach(f => {
-                    const url = `${CFG.U}/storage/v1/object/public/intel-vault/${f.name}`;
-                    if (f.name.match(/\.(mp3|wav)$/i)) {
-                        const row = document.createElement('div');
-                        row.className = "track-row p-3 border border-white/5 bg-white/5 mb-2 cursor-pointer text-xs uppercase";
-                        row.innerHTML = `<span><i class="fa-solid fa-play mr-3 text-blue-400"></i>${f.name}</span>`;
-                        row.onclick = () => { document.getElementById('player').src = url; document.getElementById('player').play(); };
-                        list.appendChild(row);
-                    } else if (f.name.match(/\.(jpg|png|webp)$/i)) {
-                        gallery.innerHTML += `<div class="aspect-square bg-black border border-white/10 overflow-hidden"><img src="${url}" class="w-full h-full object-cover opacity-60 hover:opacity-100"></div>`;
-                    }
-                });
-            } catch(e) { console.error("VAULT_ACCESS_DENIED"); }
-        }
+        window.addEventListener('load', hydrate);
 
-        async function emergencyUpload(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const { error } = await db.storage.from('intel-vault').upload(`${Date.now()}_${file.name}`, file);
-            if (!error) fetchVault();
-        }
-
-        async function logout() { await db.auth.signOut(); location.reload(); }
-
-        // LIGHTNING FX
+        // VISUAL FX
         const canvas = document.getElementById('lightning-canvas');
         const ctx = canvas.getContext('2d');
         let w, h;
         function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
         window.onresize = resize; resize();
         function animate() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.08)'; ctx.fillRect(0, 0, w, h);
-            if (Math.random() > 0.97) {
-                ctx.strokeStyle = 'rgba(0, 212, 255, 0.3)'; ctx.lineWidth = 1; ctx.beginPath();
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.15)'; ctx.fillRect(0, 0, w, h);
+            if (Math.random() > 0.98) {
+                ctx.strokeStyle = 'rgba(212, 175, 55, 0.2)'; ctx.lineWidth = 1; ctx.beginPath();
                 let x = Math.random()*w, y = Math.random()*h; ctx.moveTo(x,y);
-                for(let i=0; i<6; i++){ x+=(Math.random()-0.5)*180; y+=(Math.random()-0.5)*180; ctx.lineTo(x,y); }
+                for(let i=0; i<4; i++){ x+=(Math.random()-0.5)*180; y+=(Math.random()-0.5)*180; ctx.lineTo(x,y); }
                 ctx.stroke();
             }
             requestAnimationFrame(animate);
