@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | ETERNAL GRID V27.0</title>
+    <title>M.O.G. | NATIONAL GRID V28.5</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,7 +23,7 @@
         * { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--mog-black); color: var(--mog-gold); margin: 0; overflow-x: hidden; -webkit-user-select: none; user-select: none; }
         
-        /* THE PRESTIGE COMMAND INTERFACE */
+        /* PRESTIGE TILES */
         .command-tile { 
             background: rgba(10, 10, 10, 0.95); 
             border: 1px solid rgba(212, 175, 55, 0.15); 
@@ -39,38 +39,45 @@
         }
         .tile-title { font-family: 'Tenor Sans', sans-serif; letter-spacing: 5px; text-transform: uppercase; font-size: 9px; color: #fff; opacity: 0.9; }
         
-        /* DYNAMIC RADAR */
-        #radar-container { position: relative; height: 220px; width: 100%; background: #000; cursor: crosshair; }
+        /* RSA RADAR */
+        #radar-container { position: relative; height: 320px; width: 100%; background: #000; cursor: crosshair; overflow: hidden; }
         #radar-canvas { position: absolute; inset: 0; z-index: 5; }
-        .map-underlay { position: absolute; inset: 0; background: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg') no-repeat center; background-size: contain; filter: invert(1) opacity(0.04) brightness(1.5); }
+        .map-underlay { 
+            position: absolute; inset: 0; 
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_map_of_South_Africa.svg');
+            background-repeat: no-repeat; background-position: center; background-size: contain; 
+            filter: invert(1) brightness(1.5); opacity: 0.08;
+        }
 
-        /* SCROLLING INTEL */
-        .intel-feed { height: 70px; overflow: hidden; font-family: 'Courier New', monospace; font-size: 9px; color: var(--mog-blue); opacity: 0.6; }
-        .feed-scroll { animation: feed-up 15s linear infinite; }
+        /* FEED ANIMATION */
+        .intel-feed { height: 75px; overflow: hidden; font-family: 'Courier New', monospace; font-size: 9px; color: var(--mog-blue); opacity: 0.6; }
+        .feed-scroll { animation: feed-up 18s linear infinite; }
         @keyframes feed-up { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
 
-        /* INTERACTIVE BUTTONS */
+        /* BUTTONS & INPUTS */
         .mog-btn { 
-            border: 1px solid var(--mog-gold); 
-            color: var(--mog-gold); 
-            padding: 14px; 
-            font-size: 0.75rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            cursor: pointer; 
-            background: transparent; 
-            letter-spacing: 3px; 
-            width: 100%; 
-            position: relative;
+            border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 14px; 
+            font-size: 0.75rem; font-weight: 800; text-transform: uppercase; 
+            background: transparent; letter-spacing: 3px; width: 100%; cursor: pointer;
         }
-        .mog-btn:active { transform: scale(0.97); filter: brightness(1.2); }
         .mog-btn:hover { background: var(--mog-gold); color: #000; box-shadow: 0 0 25px rgba(212, 175, 55, 0.4); }
         
-        /* VISUAL FX CANVASES */
+        .province-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23D4AF37' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.5em;
+        }
+
+        /* SCANNER FX */
+        @keyframes scan { 0% { top: 0%; } 100% { top: 85%; } }
+        .scanner-line { 
+            position: absolute; inset: 0; height: 15%; 
+            background: linear-gradient(to bottom, rgba(0, 212, 255, 0.2), transparent);
+            border-top: 2px solid rgba(0, 212, 255, 0.5);
+            animation: scan 2s linear infinite; pointer-events: none;
+        }
+
         #lightning-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.3; }
-        #preloader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        
-        .locked-blur { filter: blur(12px); opacity: 0.2; pointer-events: none; }
+        #preloader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -79,7 +86,7 @@
 
     <div id="preloader">
         <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-24 w-24 mb-6 animate-pulse">
-        <div class="text-[10px] text-blue-400 tracking-[1em] font-mono animate-pulse uppercase italic">Synchronizing_Grid_V27.0</div>
+        <div class="text-[10px] text-blue-400 tracking-[1em] font-mono animate-pulse uppercase italic">Synchronizing_National_Grid_V28.5</div>
     </div>
 
     <div id="app-content" class="opacity-0 p-4 lg:p-10 space-y-10 transition-opacity duration-1000">
@@ -89,12 +96,12 @@
                 <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold/30 rounded-full shadow-2xl">
                 <div>
                     <h1 class="text-3xl text-white italic tracking-[.4em] font-serif uppercase">Ministry of Groove</h1>
-                    <p class="text-[9px] text-blue-400 tracking-[.6em] mt-2 uppercase">Sovereign Grid // Phase 1 Operational</p>
+                    <p class="text-[9px] text-blue-400 tracking-[.6em] mt-2 uppercase">National Sovereignty // Republic Deployment</p>
                 </div>
             </div>
             <div class="flex flex-col items-end">
                 <div class="text-[11px] text-gold font-bold border border-gold/20 px-8 py-2 bg-gold/5 tracking-[.5em] uppercase shadow-[0_0_20px_rgba(212,175,55,0.1)]">
-                    Operatives: <span id="op-count">0</span> / 500
+                    RSA Operatives: <span id="op-count">0</span> / 500
                 </div>
                 <p id="system-time" class="text-[8px] text-zinc-600 mt-2 font-mono tracking-widest uppercase"></p>
             </div>
@@ -104,38 +111,53 @@
             
             <div class="lg:col-span-4 space-y-8">
                 <section class="command-tile">
-                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Tactical Intel Feed</span><i class="fa-solid fa-signal text-[8px] animate-pulse"></i></div>
+                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">National Intel Feed</span><i class="fa-solid fa-tower-broadcast text-[8px] animate-pulse"></i></div>
                     <div class="p-6 intel-feed">
                         <div class="feed-scroll">
-                            [03:37:25] GP-012 SATELLITE HANDSHAKE SUCCESSFUL<br>
-                            [03:37:26] DECRYPTING AMAPIANO FREQUENCY SECTORS...<br>
-                            [03:37:28] ENCRYPTED PROFILE DETECTED IN GAUTENG...<br>
-                            [03:37:30] PRESTIGE COMMAND V27.0 STABLE...<br>
-                            [03:37:32] AWAITING PHASE 2 AUTHORIZATION...<br>
-                            [03:37:35] DIRECTORATE ALERT: THE CABINET IS WATCHING.
+                            [05:42:01] GP-012 SATELLITE HANDSHAKE SUCCESSFUL<br>
+                            [05:42:04] DECRYPTING NATIONAL AMAPIANO FREQUENCIES...<br>
+                            [05:42:08] SIGNAL DETECTED: CAPE TOWN METRO SECTOR...<br>
+                            [05:42:12] SIGNAL DETECTED: ETHEKWINI COASTAL NODES...<br>
+                            [05:42:15] ENCRYPTED PROFILE DETECTED IN GAUTENG...<br>
+                            [05:42:18] MAPPING MPUMALANGA LOWVELD FREQUENCIES...<br>
+                            [05:42:22] DIRECTORATE ALERT: THE CABINET IS WATCHING NATIONWIDE.
                         </div>
                     </div>
                 </section>
 
                 <section class="command-tile">
-                    <div class="tile-header"><span class="tile-title">Operative Registry</span></div>
+                    <div class="tile-header flex justify-between">
+                        <span class="tile-title">Operative Registry</span>
+                        <i class="fa-solid fa-fingerprint text-[10px] text-blue-500/40"></i>
+                    </div>
                     <div class="p-8 text-center">
                         <div id="auth-ui">
-                            <input id="email-in" type="email" placeholder="ENTER ACCESS EMAIL" class="w-full bg-black border border-blue-900/30 p-4 text-blue-400 mb-5 outline-none text-[10px] tracking-widest uppercase">
+                            <input id="email-in" type="email" placeholder="ENTER ACCESS EMAIL" class="w-full bg-black border border-blue-900/30 p-4 text-blue-400 mb-4 outline-none text-[10px] tracking-widest uppercase focus:border-gold">
+                            
+                            <select id="province-select" class="w-full bg-black border border-blue-900/30 p-4 text-zinc-500 mb-6 outline-none text-[10px] tracking-widest uppercase focus:border-gold province-select appearance-none">
+                                <option value="" disabled selected>SELECT SECTOR DEPLOYMENT</option>
+                                <option value="GP">Gauteng (GP)</option>
+                                <option value="WC">Western Cape (WC)</option>
+                                <option value="KZN">KwaZulu-Natal (KZN)</option>
+                                <option value="LP">Limpopo (LP)</option>
+                                <option value="MP">Mpumalanga (MP)</option>
+                                <option value="NW">North West (NW)</option>
+                                <option value="FS">Free State (FS)</option>
+                                <option value="EC">Eastern Cape (EC)</option>
+                                <option value="NC">Northern Cape (NC)</option>
+                            </select>
+
                             <button onclick="handleAuth()" class="mog-btn">Initiate Handshake</button>
                         </div>
                         <div id="op-profile" class="hidden">
-                            <p id="active-alias" class="text-2xl font-black text-white uppercase mb-6 tracking-[0.3em] italic"></p>
-                            <div id="qrcode" class="bg-white p-3 inline-block rounded-sm mb-4 shadow-white/5 shadow-2xl"></div>
-                            <p class="text-[9px] text-zinc-500 tracking-widest">DIGITAL CLEARANCE KEY</p>
+                            <div class="relative inline-block mb-4">
+                                <div id="qrcode" class="bg-white p-3 rounded-sm shadow-2xl shadow-white/5"></div>
+                                <div class="scanner-line"></div>
+                            </div>
+                            <p id="active-alias" class="text-2xl font-black text-white uppercase mb-2 tracking-[0.3em] italic"></p>
+                            <p id="active-sector" class="text-[10px] text-gold tracking-[.5em] uppercase font-bold mb-6"></p>
+                            <div class="py-2 px-4 border border-gold/20 inline-block text-[8px] text-zinc-500 tracking-widest">CLEARANCE: LEVEL_01_OPERATIVE</div>
                         </div>
-                    </div>
-                </section>
-
-                <section class="command-tile !border-gold/40">
-                    <div class="tile-header flex justify-between"><span class="tile-title text-gold font-bold">Procurement Node</span><i class="fa-solid fa-lock text-gold/30"></i></div>
-                    <div class="p-8 text-center opacity-30">
-                        <div class="p-4 border border-zinc-800 bg-zinc-900/20 italic text-[10px]">LOCKED // PHASE 3 REVENUE ACCESS</div>
                     </div>
                 </section>
             </div>
@@ -143,7 +165,7 @@
             <div class="lg:col-span-8 space-y-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <section class="command-tile !border-blue-500/30">
-                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Sector Radar</span><i class="fa-solid fa-satellite animate-bounce text-blue-400/50"></i></div>
+                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">RSA Territorial Radar</span><i class="fa-solid fa-satellite animate-bounce text-blue-400/50"></i></div>
                         <div id="radar-container">
                             <div class="map-underlay"></div>
                             <canvas id="radar-canvas"></canvas>
@@ -155,8 +177,8 @@
                         <div class="p-6">
                             <audio id="player" controls class="w-full h-12 mb-6 bg-black border border-white/5"></audio>
                             <div class="locked-blur space-y-3">
-                                <div class="p-4 border border-white/5 bg-white/5 text-[10px] tracking-widest">UNRELEASED_SECTOR_MIX_01.MP3</div>
-                                <div class="p-4 border border-white/5 bg-white/5 text-[10px] tracking-widest">UNRELEASED_SECTOR_MIX_02.MP3</div>
+                                <div class="p-4 border border-white/5 bg-white/5 text-[10px] tracking-widest uppercase">National_Anthem_Remix_RSA.MP3</div>
+                                <div class="p-4 border border-white/5 bg-white/5 text-[10px] tracking-widest uppercase">Sector_GP_Underground.MP3</div>
                             </div>
                         </div>
                     </section>
@@ -164,7 +186,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <section class="command-tile !border-blue-400/20">
-                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Frequency Vote // Phase 2</span></div>
+                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Frequency Vote // RSA</span></div>
                         <div class="p-6 space-y-6">
                             <iframe width="100%" height="100" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1144007629&color=%2300d4ff&auto_play=false&hide_related=true"></iframe>
                             <iframe width="100%" height="100" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1243167190&color=%23d4af37&auto_play=false&hide_related=true"></iframe>
@@ -176,9 +198,9 @@
                         <div class="tile-header flex justify-between"><span class="tile-title">Frequency Chat</span><span class="text-[7px] text-zinc-600">ENCRYPTED</span></div>
                         <div class="p-6">
                             <div id="chat-stream" class="h-32 overflow-y-auto font-mono text-[10px] text-blue-300/40 space-y-3 mb-4 scrollbar-hide">
-                                <p>[OP_001]: Initializing grid link.</p>
-                                <p>[OP_254]: Gauteng sector scanning.</p>
-                                <p>[OP_312]: Mission live date encrypted.</p>
+                                <p>[OP_001]: National grid online.</p>
+                                <p>[OP_254]: Cape Town signal stable.</p>
+                                <p>[OP_312]: KZN sector scanning...</p>
                             </div>
                             <input type="text" placeholder="TRANSMIT PACKET..." class="w-full bg-black border border-white/10 p-4 text-[10px] outline-none text-blue-400 tracking-widest">
                         </div>
@@ -187,12 +209,8 @@
             </div>
         </main>
 
-        <footer class="p-12 text-center opacity-30 hover:opacity-100">
-            <p class="text-[9px] text-zinc-600 tracking-[0.8em] uppercase mb-4">Ministry of Groove | Command V27.0 Final Build</p>
-            <div class="flex justify-center gap-12 text-[10px] uppercase tracking-widest font-bold">
-                <a href="privacy.html" class="hover:text-gold transition-colors">Privacy Protocol</a>
-                <a href="terms.html" class="hover:text-gold transition-colors">Operative Conduct</a>
-            </div>
+        <footer class="p-12 text-center opacity-30">
+            <p class="text-[9px] text-zinc-600 tracking-[0.8em] uppercase mb-4">Ministry of Groove | Build V28.5 RSA</p>
         </footer>
     </div>
 
@@ -203,7 +221,6 @@
         };
         const db = window.supabase.createClient(CFG.U, CFG.K);
 
-        // SYSTEM INITIALIZATION
         window.addEventListener('load', async () => {
             initRadar();
             updateTime();
@@ -228,20 +245,30 @@
 
         async function handleAuth() {
             const email = document.getElementById('email-in').value;
+            const province = document.getElementById('province-select').value;
             if(!email) return alert("SIGNAL_ERROR: ENTER_EMAIL");
-            const { error } = await db.auth.signInWithOtp({ email });
+            if(!province) return alert("SIGNAL_ERROR: SELECT_PROVINCE");
+
+            const { error } = await db.auth.signInWithOtp({ 
+                email, 
+                options: { data: { province_code: province } } 
+            });
             alert(error ? "HANDSHAKE_FAILED" : "SIGNAL_SENT: CHECK_INBOX");
         }
 
         function renderProfile(user) {
+            const pCode = user.user_metadata?.province_code || "GP";
+            const pNames = {"GP":"Gauteng","WC":"Western Cape","KZN":"KwaZulu-Natal","LP":"Limpopo","MP":"Mpumalanga","NW":"North West","FS":"Free State","EC":"Eastern Cape","NC":"Northern Cape"};
+            
             document.getElementById('auth-ui').classList.add('hidden');
             document.getElementById('op-profile').classList.remove('hidden');
             document.getElementById('active-alias').innerText = user.email.split('@')[0].toUpperCase();
+            document.getElementById('active-sector').innerText = `SECTOR: ${pNames[pCode] || pCode}`;
+            
             document.getElementById("qrcode").innerHTML = "";
             new QRCode(document.getElementById("qrcode"), { text: user.id, width: 120, height: 120 });
         }
 
-        // --- GPU ACCELERATED RADAR ---
         function initRadar() {
             const canvas = document.getElementById('radar-canvas');
             const ctx = canvas.getContext('2d');
@@ -254,23 +281,23 @@
             window.addEventListener('resize', resize); resize();
             function draw() {
                 ctx.clearRect(0, 0, w, h);
-                radius += 1.4; if (radius > w) radius = 0;
+                radius += 1.8; if (radius > w * 0.8) radius = 0;
                 ctx.beginPath();
-                ctx.arc(w/2, h/1.2, radius, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(0, 212, 255, ${1 - radius/w})`;
-                ctx.lineWidth = 1.5; ctx.stroke();
-                if (Math.random() > 0.985) pings.push({x: Math.random()*w, y: Math.random()*h, a: 1.0});
+                ctx.arc(w/2, h/2, radius, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(0, 212, 255, ${1 - radius/(w*0.8)})`;
+                ctx.lineWidth = 1; ctx.stroke();
+                if (Math.random() > 0.97) pings.push({x: (Math.random()*0.6+0.2)*w, y: (Math.random()*0.6+0.2)*h, a: 1.0});
                 pings.forEach((p, i) => {
-                    ctx.fillStyle = `rgba(0, 212, 255, ${p.a})`;
-                    ctx.beginPath(); ctx.arc(p.x, p.y, 2.5, 0, Math.PI*2); ctx.fill();
-                    p.a -= 0.008; if (p.a <= 0) pings.splice(i, 1);
+                    ctx.fillStyle = `rgba(212, 175, 55, ${p.a})`;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, Math.PI*2); ctx.fill();
+                    p.a -= 0.005; if (p.a <= 0) pings.splice(i, 1);
                 });
                 requestAnimationFrame(draw);
             }
             draw();
         }
 
-        // --- GOLD LIGHTNING FX ---
+        // Lightning FX
         const lCanvas = document.getElementById('lightning-canvas');
         const lCtx = lCanvas.getContext('2d');
         let lw, lh;
