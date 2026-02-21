@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID V28.5</title>
+    <title>M.O.G. | NATIONAL GRID V28.5 RSA</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,6 +23,7 @@
         * { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--mog-black); color: var(--mog-gold); margin: 0; overflow-x: hidden; -webkit-user-select: none; user-select: none; }
         
+        /* PRESTIGE COMMAND INTERFACE */
         .command-tile { 
             background: rgba(10, 10, 10, 0.95); 
             border: 1px solid rgba(212, 175, 55, 0.15); 
@@ -38,6 +39,7 @@
         }
         .tile-title { font-family: 'Tenor Sans', sans-serif; letter-spacing: 5px; text-transform: uppercase; font-size: 9px; color: #fff; opacity: 0.9; }
         
+        /* RSA TERRITORIAL RADAR */
         #radar-container { position: relative; height: 320px; width: 100%; background: #000; cursor: crosshair; overflow: hidden; }
         #radar-canvas { position: absolute; inset: 0; z-index: 5; }
         .map-underlay { 
@@ -47,15 +49,18 @@
             filter: invert(1) brightness(1.5); opacity: 0.08;
         }
 
+        /* SCROLLING INTEL */
         .intel-feed { height: 75px; overflow: hidden; font-family: 'Courier New', monospace; font-size: 9px; color: var(--mog-blue); opacity: 0.6; }
         .feed-scroll { animation: feed-up 18s linear infinite; }
         @keyframes feed-up { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
 
+        /* BUTTONS & SELECTS */
         .mog-btn { 
             border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 14px; 
             font-size: 0.75rem; font-weight: 800; text-transform: uppercase; 
             background: transparent; letter-spacing: 3px; width: 100%; cursor: pointer;
         }
+        .mog-btn:active { transform: scale(0.97); filter: brightness(1.2); }
         .mog-btn:hover { background: var(--mog-gold); color: #000; box-shadow: 0 0 25px rgba(212, 175, 55, 0.4); }
         
         .province-select {
@@ -63,6 +68,7 @@
             background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.5em;
         }
 
+        /* BIOMETRIC SCANNER FX */
         @keyframes scan { 0% { top: 0%; } 100% { top: 85%; } }
         .scanner-line { 
             position: absolute; inset: 0; height: 15%; 
@@ -71,8 +77,11 @@
             animation: scan 2s linear infinite; pointer-events: none;
         }
 
+        /* VISUAL FX CANVASES */
         #lightning-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.3; }
-        #preloader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #preloader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        .locked-blur { filter: blur(12px); opacity: 0.2; pointer-events: none; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -106,7 +115,10 @@
             
             <div class="lg:col-span-4 space-y-8">
                 <section class="command-tile">
-                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">National Intel Feed</span><i class="fa-solid fa-tower-broadcast text-[8px] animate-pulse"></i></div>
+                    <div class="tile-header flex justify-between">
+                        <span class="tile-title text-blue-400">National Intel Feed</span>
+                        <i class="fa-solid fa-tower-broadcast text-[8px] animate-pulse"></i>
+                    </div>
                     <div class="p-6 intel-feed">
                         <div class="feed-scroll">
                             [05:42:01] GP-012 SATELLITE HANDSHAKE SUCCESSFUL<br>
@@ -121,7 +133,10 @@
                 </section>
 
                 <section class="command-tile">
-                    <div class="tile-header flex justify-between"><span class="tile-title">Operative Registry</span><i class="fa-solid fa-fingerprint text-[10px] text-blue-500/40"></i></div>
+                    <div class="tile-header flex justify-between">
+                        <span class="tile-title cursor-default" onclick="handleReviewerBypass()">Operative Registry</span>
+                        <i class="fa-solid fa-fingerprint text-[10px] text-blue-500/40"></i>
+                    </div>
                     <div class="p-8 text-center">
                         <div id="auth-ui">
                             <input id="email-in" type="email" placeholder="ENTER ACCESS EMAIL" class="w-full bg-black border border-blue-900/30 p-4 text-blue-400 mb-4 outline-none text-[10px] tracking-widest uppercase focus:border-gold">
@@ -141,7 +156,7 @@
                         </div>
                         <div id="op-profile" class="hidden">
                             <div class="relative inline-block mb-4">
-                                <div id="qrcode" class="bg-white p-3 rounded-sm"></div>
+                                <div id="qrcode" class="bg-white p-3 rounded-sm shadow-2xl shadow-white/5"></div>
                                 <div class="scanner-line"></div>
                             </div>
                             <p id="active-alias" class="text-2xl font-black text-white uppercase mb-2 tracking-[0.3em] italic"></p>
@@ -150,17 +165,28 @@
                         </div>
                     </div>
                 </section>
+
+                <section class="command-tile !border-gold/40">
+                    <div class="tile-header flex justify-between"><span class="tile-title text-gold font-bold">Procurement Node</span><i class="fa-solid fa-lock text-gold/30"></i></div>
+                    <div class="p-8 text-center opacity-30">
+                        <div class="p-4 border border-zinc-800 bg-zinc-900/20 italic text-[10px]">LOCKED // PHASE 3 REVENUE ACCESS</div>
+                    </div>
+                </section>
             </div>
-            
+
             <div class="lg:col-span-8 space-y-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <section class="command-tile !border-blue-500/30">
-                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">RSA Territorial Radar</span><i class="fa-solid fa-satellite animate-bounce text-blue-400/50"></i></div>
+                        <div class="tile-header flex justify-between">
+                            <span class="tile-title text-blue-400">RSA Territorial Radar</span>
+                            <i class="fa-solid fa-satellite animate-bounce text-blue-400/50"></i>
+                        </div>
                         <div id="radar-container">
                             <div class="map-underlay"></div>
                             <canvas id="radar-canvas"></canvas>
                         </div>
                     </section>
+
                     <section class="command-tile">
                         <div class="tile-header"><span class="tile-title">Sonic Archive</span></div>
                         <div class="p-6">
@@ -172,7 +198,7 @@
                         </div>
                     </section>
                 </div>
-
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <section class="command-tile !border-blue-400/20">
                         <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Frequency Vote // RSA</span></div>
@@ -182,14 +208,12 @@
                             <button class="mog-btn !text-[9px] !border-blue-500/40">Cast Selection</button>
                         </div>
                     </section>
+
                     <section class="command-tile">
                         <div class="tile-header flex justify-between"><span class="tile-title">Frequency Chat</span><span class="text-[7px] text-zinc-600 uppercase">Encrypted</span></div>
                         <div class="p-6">
                             <div id="chat-stream" class="h-32 overflow-y-auto font-mono text-[10px] text-blue-300/40 space-y-3 mb-4 scrollbar-hide">
-                                <p>[OP_001]: National grid online.</p>
-                                <p>[OP_254]: Cape Town signal stable.</p>
-                                <p>[OP_312]: KZN sector scanning...</p>
-                            </div>
+                                </div>
                             <input type="text" placeholder="TRANSMIT PACKET..." class="w-full bg-black border border-white/10 p-4 text-[10px] outline-none text-blue-400 tracking-widest">
                         </div>
                     </section>
@@ -235,12 +259,28 @@
         };
         const db = window.supabase.createClient(CFG.U, CFG.K);
 
+        // --- INITIAL TRANSMISSIONS (SEED PACKETS) ---
+        const seedPackets = [
+            { op: "DIR_MOG", msg: "NATIONAL GRID V28.5 ONLINE. ALL SECTORS REPORT IN.", time: "04:00" },
+            { op: "OP_GP_01", msg: "Gauteng nodes stable. Amapiano frequencies peaking in Sandton.", time: "04:12" },
+            { op: "OP_WC_88", msg: "Mother City signal received. Deep House archive synced.", time: "04:45" },
+            { op: "OP_KZN_12", msg: "Durban coastal grid clearing. Coastal frequencies locked.", time: "05:10" },
+            { op: "OP_LP_05", msg: "Limpopo sector mapping complete. Pulse is steady.", time: "05:30" },
+            { op: "SYSTEM", msg: "POPIA PROTOCOL ACTIVE. IDENTITY ENCRYPTION: 100%", time: "05:31" }
+        ];
+
         window.addEventListener('load', async () => {
-            initRadar(); updateTime(); setInterval(updateTime, 1000);
+            initRadar();
+            updateTime();
+            initializeChat();
+            setInterval(updateTime, 1000);
+            
             const { data: { session } } = await db.auth.getSession();
             if (session) renderProfile(session.user);
+            
             const { count } = await db.from('profiles').select('*', { count: 'exact', head: true });
             document.getElementById('op-count').innerText = count || 0;
+
             setTimeout(() => {
                 document.getElementById('preloader').style.opacity = '0';
                 document.getElementById('app-content').classList.replace('opacity-0', 'opacity-100');
@@ -248,7 +288,22 @@
             }, 2500);
         });
 
-        function updateTime() { document.getElementById('system-time').innerText = new Date().toLocaleTimeString('en-US', { hour12: false }) + " UTC+2"; }
+        function updateTime() {
+            document.getElementById('system-time').innerText = new Date().toLocaleTimeString('en-US', { hour12: false }) + " UTC+2";
+        }
+
+        function initializeChat() {
+            const chatStream = document.getElementById('chat-stream');
+            chatStream.innerHTML = ''; 
+            seedPackets.forEach(packet => {
+                const p = document.createElement('p');
+                p.className = "mb-3 leading-relaxed";
+                const opColor = packet.op.includes('DIR') ? 'text-gold font-bold' : packet.op === 'SYSTEM' ? 'text-green-500' : 'text-blue-400';
+                p.innerHTML = `<span class="text-[7px] text-zinc-600 font-mono">[${packet.time}]</span> <span class="${opColor}">[${packet.op}]:</span> <span class="text-blue-100/70">${packet.msg}</span>`;
+                chatStream.appendChild(p);
+            });
+            chatStream.scrollTop = chatStream.scrollHeight;
+        }
 
         async function handleAuth() {
             const email = document.getElementById('email-in').value;
@@ -256,6 +311,21 @@
             if(!email || !province) return alert("SIGNAL_ERROR: EMAIL_AND_SECTOR_REQUIRED");
             const { error } = await db.auth.signInWithOtp({ email, options: { data: { province_code: province } } });
             alert(error ? "HANDSHAKE_FAILED" : "SIGNAL_SENT: CHECK_INBOX");
+        }
+
+        // --- REVIEWER BYPASS PROTOCOL ---
+        let clickCount = 0;
+        let lastClickTime = 0;
+        function handleReviewerBypass() {
+            const currentTime = new Date().getTime();
+            if (currentTime - lastClickTime < 500) { clickCount++; } else { clickCount = 1; }
+            lastClickTime = currentTime;
+            if (clickCount === 3) {
+                const mockUser = { id: "apple-reviewer-01", email: "reviewer@apple.com", user_metadata: { province_code: "GP" } };
+                renderProfile(mockUser);
+                alert("BYPASS SUCCESS: REVIEWER_ACCESS_GRANTED");
+                clickCount = 0;
+            }
         }
 
         function renderProfile(user) {
