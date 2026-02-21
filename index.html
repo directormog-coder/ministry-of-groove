@@ -3,96 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V42.0 PRESTIGE</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V42.3 SOVEREIGN</title>
     
-    <link rel="manifest" href="/manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
-    <meta name="theme-color" content="#1a1a1a">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        @import url('https://api.fontshare.com/v2/css?f[]=clash-display@200,400,700&f[]=satoshi@300,400,700,900&display=swap');
+        @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,700,900&display=swap');
         
         :root { 
             --mog-gold: #D4AF37; 
             --mog-blue: #00d4ff; 
-            --mog-bg: #0d0d0d; 
-            --mog-panel: rgba(30, 30, 30, 0.7); 
-            --mog-chat-bg: #121212;
-            --glow: 0 0 15px rgba(212, 175, 55, 0.3);
+            --mog-bg: #030303; 
+            --mog-panel: rgba(18, 18, 18, 0.8); 
+            --glow-blue: 0 0 20px rgba(0, 212, 255, 0.2);
         }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); font-family: 'Satoshi', sans-serif; -webkit-tap-highlight-color: transparent; }
-        h1, .tile-title, .active-alias { font-family: 'Clash Display', sans-serif; font-weight: 700; letter-spacing: 0.1em; }
-        
-        body { background-color: var(--mog-bg); color: var(--mog-gold); overflow-x: hidden; scroll-behavior: smooth; }
-        
-        /* HIGH-END TEXTURE OVERLAY */
-        body::before { content: ""; position: fixed; inset: 0; background-image: url('https://grainy-gradients.vercel.app/noise.svg'); opacity: 0.03; z-index: 999; pointer-events: none; }
 
-        /* PRELOADER */
-        #preloader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        #preloader.exit-protocol { opacity: 0; visibility: hidden; transform: scale(1.1); filter: blur(30px); pointer-events: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Satoshi', sans-serif; -webkit-font-smoothing: antialiased; }
+        body { background: var(--mog-bg); color: var(--mog-gold); overflow-x: hidden; scroll-behavior: smooth; }
 
-        /* UI COMPONENTS */
+        /* V42.3 SOVEREIGN TILE PHYSICS */
         .command-tile { 
             background: var(--mog-panel); 
-            border: 1px solid rgba(212, 175, 55, 0.15); 
-            backdrop-filter: blur(20px); 
-            border-radius: 16px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            border: 1px solid rgba(212, 175, 55, 0.1); 
+            border-radius: 28px;
+            backdrop-filter: blur(40px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
             position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
-        .tile-header { border-bottom: 1px solid rgba(212, 175, 55, 0.1); padding: 14px 20px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, transparent 100%); }
-        .tile-title { letter-spacing: 4px; text-transform: uppercase; font-size: 9px; color: #eee; }
+        .command-tile:hover { border-color: var(--mog-gold); transform: translateY(-4px); box-shadow: 0 40px 80px rgba(0,0,0,0.8); }
+
+        .tile-header { 
+            padding: 20px 24px; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            background: rgba(255,255,255,0.02);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .tile-title { font-family: 'Clash Display'; text-transform: uppercase; font-size: 11px; letter-spacing: 5px; color: #fff; font-weight: 700; }
+
+        /* ADVANCED SCROLL & CHAT */
+        .grid-scroll-container {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding: 24px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--mog-gold) transparent;
+        }
+        .grid-scroll-container::-webkit-scrollbar { width: 4px; }
+        .grid-scroll-container::-webkit-scrollbar-thumb { background: var(--mog-gold); border-radius: 10px; }
+
+        .chat-bubble {
+            background: rgba(255,255,255,0.03);
+            border-left: 2px solid var(--mog-blue);
+            padding: 12px;
+            border-radius: 0 12px 12px 12px;
+            margin-bottom: 10px;
+            font-size: 11px;
+            color: #ccc;
+        }
+
+        /* LIGHTNING EFFECT */
+        #lightning-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.15; pointer-events: none; }
         
-        /* CHAT SYSTEM */
-        #chat-stream::-webkit-scrollbar { width: 4px; }
-        #chat-stream::-webkit-scrollbar-thumb { background: var(--mog-gold); border-radius: 10px; }
-        .msg-bubble { padding: 12px 16px; border-radius: 14px; max-width: 85%; font-size: 11px; background: var(--mog-chat-bg); border: 1px solid rgba(255,255,255,0.05); }
-        .msg-dir { border-left: 3px solid var(--mog-gold); background: rgba(212, 175, 55, 0.08); }
-
-        /* NEON BUTTONS */
-        .mog-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 16px; font-size: 10px; font-weight: 900; text-transform: uppercase; background: transparent; letter-spacing: 4px; border-radius: 8px; position: relative; overflow: hidden; }
-        .mog-btn:hover { background: var(--mog-gold); color: #000; box-shadow: var(--glow); }
-
-        /* GRID ANIMATION */
-        #lightning-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.15; }
-        .intel-feed { font-family: 'Courier New', monospace; font-size: 9px; color: #555; height: 120px; overflow: hidden; }
+        .mog-btn-primary {
+            background: var(--mog-gold);
+            color: #000;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 14px;
+            border-radius: 12px;
+            transition: 0.3s;
+            font-size: 11px;
+        }
+        .mog-btn-primary:hover { filter: brightness(1.2); transform: scale(1.02); }
     </style>
 </head>
-<body class="scrollbar-hide">
+<body>
     <canvas id="lightning-canvas"></canvas>
 
-    <div id="preloader">
-        <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-20 w-20 animate-pulse mb-8" alt="MOG LOGO">
-        <div class="text-[9px] text-blue-400 tracking-[1.5em] font-black uppercase italic animate-bounce">Initializing_Core_v42.0</div>
-    </div>
-
-    <div id="app-content" class="opacity-0 p-4 md:p-8 lg:p-12 space-y-12">
+    <div class="p-6 md:p-12 max-w-[1700px] mx-auto space-y-12">
         
-        <header class="flex flex-col lg:flex-row justify-between items-center gap-10">
+        <header class="flex flex-col lg:flex-row justify-between items-center gap-10 relative z-50">
             <div class="flex items-center gap-8">
-                <div class="relative">
-                    <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-20 w-20 border border-gold/30 rounded-full shadow-2xl relative z-10">
-                    <div class="absolute inset-0 bg-gold/20 blur-2xl rounded-full"></div>
-                </div>
+                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-24 w-24 rounded-full border border-gold/40 shadow-2xl">
                 <div>
-                    <h1 class="text-4xl md:text-5xl text-white tracking-tighter uppercase">Ministry of Groove</h1>
-                    <p class="text-[9px] text-blue-400 tracking-[.7em] mt-3 uppercase font-black opacity-80">National Amapiano Sovereignty // Ultra-Low Latency Grid</p>
+                    <h1 class="text-5xl text-white font-black tracking-tighter uppercase italic">Ministry of Groove</h1>
+                    <p class="text-[10px] text-blue-400 tracking-[0.8em] font-black uppercase mt-2">National Amapiano Sovereignty // V42.3</p>
                 </div>
             </div>
-            <div class="flex flex-col items-center lg:items-end">
-                <div class="text-[12px] text-gold font-bold border border-gold/30 px-10 py-3 bg-gold/5 tracking-[.4em] uppercase rounded-full shadow-inner">
-                    Operatives Online: <span id="op-count" class="text-white">...</span>
+            <div class="flex items-center gap-6">
+                <div class="text-right">
+                    <p id="system-time" class="text-xs font-mono text-zinc-500"></p>
+                    <p class="text-[9px] text-gold font-bold uppercase tracking-widest mt-1">Grid Operational: South Africa</p>
                 </div>
-                <p id="system-time" class="text-[10px] text-zinc-500 mt-3 font-mono tracking-widest"></p>
+                <div class="bg-blue-500/10 border border-blue-500/30 p-4 rounded-2xl flex items-center gap-4">
+                    <span class="text-[10px] font-black uppercase">Operatives: <span id="op-count" class="text-white">...</span></span>
+                    <div class="h-2 w-2 bg-green-500 rounded-full animate-ping"></div>
+                </div>
             </div>
         </header>
 
@@ -100,266 +116,196 @@
             
             <div class="lg:col-span-4 space-y-8">
                 <section class="command-tile">
-                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Tactical Intel</span><i class="fa-solid fa-satellite-dish animate-pulse"></i></div>
-                    <div class="p-6 intel-feed" id="intel-scroll">
+                    <div class="tile-header"><span class="tile-title text-blue-400">Registry Handshake</span><i class="fa-solid fa-id-card"></i></div>
+                    <div class="p-8">
+                        <div id="auth-ui" class="space-y-5">
+                            <input id="email-in" type="email" placeholder="ACCESS_ID@MOG.SOV" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white text-xs outline-none focus:border-gold">
+                            <select id="province-select" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-zinc-400 text-xs outline-none">
+                                <option value="MP">Mpumalanga Sector</option>
+                                <option value="GP">Gauteng Sector</option>
+                            </select>
+                            <button onclick="handleAuth()" class="mog-btn-primary w-full">Synchronize Identity</button>
                         </div>
+                        <div id="op-profile" class="hidden text-center flex flex-col items-center">
+                            <div id="qrcode" class="p-3 bg-white rounded-xl mb-4"></div>
+                            <h2 id="active-alias" class="text-2xl font-black text-white uppercase"></h2>
+                            <p id="active-sector" class="text-[10px] text-gold tracking-widest font-black uppercase"></p>
+                        </div>
+                    </div>
                 </section>
 
-                <section class="command-tile">
-                    <div class="tile-header flex justify-between items-center"><span class="tile-title text-blue-400">Operative Handshake</span><i class="fa-solid fa-key text-[10px] text-gold/50"></i></div>
-                    <div class="p-8">
-                        <div id="auth-ui" class="space-y-6">
-                            <input id="email-in" type="email" placeholder="ACCESS_ID@GROOVE.GOV" class="w-full bg-white/5 border border-white/10 p-4 text-white text-[11px] tracking-widest rounded-lg focus:border-blue-500 transition-colors">
-                            <select id="province-select" class="w-full bg-white/5 border border-white/10 p-4 text-zinc-400 text-[11px] tracking-widest rounded-lg">
-                                <option value="" disabled selected>SELECT SECTOR</option>
-                                <option value="MP">Mpumalanga (MP)</option>
-                                <option value="GP">Gauteng (GP)</option>
-                                <option value="KZN">KwaZulu-Natal (KZN)</option>
-                                <option value="WC">Western Cape (WC)</option>
-                            </select>
-                            <button onclick="handleAuth()" class="mog-btn w-full">Begin Sync</button>
+                <section class="command-tile h-[400px]">
+                    <div class="tile-header"><span class="tile-title">Sovereign Chat</span><i class="fa-solid fa-comment-dots text-blue-400"></i></div>
+                    <div class="p-6 flex flex-col h-full">
+                        <div id="chat-stream" class="flex-grow overflow-y-auto mb-4 space-y-3 scrollbar-hide">
+                            <div class="chat-bubble">SYSTEM: Secure line established.</div>
+                            <div class="chat-bubble">DIR_MOG: All nodes report for sync.</div>
                         </div>
-                        <div id="op-profile" class="hidden flex flex-col items-center">
-                            <div id="qrcode" class="p-4 bg-white rounded-2xl mb-6 shadow-[0_0_30px_rgba(255,255,255,0.1)]"></div>
-                            <h2 id="active-alias" class="text-2xl text-white mb-1"></h2>
-                            <div id="active-sector" class="text-[10px] text-blue-400 tracking-widest font-black uppercase"></div>
+                        <div class="relative">
+                            <input type="text" id="chat-msg" placeholder="SEND PACKET..." class="w-full bg-white/5 border border-white/10 p-3 rounded-lg text-[10px] text-white outline-none">
+                            <button onclick="sendMsg()" class="absolute right-2 top-2 text-gold"><i class="fa-solid fa-paper-plane"></i></button>
                         </div>
                     </div>
                 </section>
             </div>
-
-            <div class="lg:col-span-8 space-y-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <section class="command-tile overflow-hidden">
-                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">National Radar</span><i class="fa-solid fa-crosshairs animate-spin-slow"></i></div>
-                        <div id="radar-container" class="relative h-64 md:h-80 bg-black/40">
-                            <canvas id="radar-canvas" class="absolute inset-0 z-20"></canvas>
+            
+            <div class="lg:col-span-8">
+                <section class="command-tile h-[850px]">
+                    <div class="tile-header">
+                        <span class="tile-title text-blue-400">Frequency Grid: National Top 10</span>
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-satellite animate-bounce text-gold"></i>
+                            <span class="text-[9px] font-black uppercase">Live_Ranking</span>
                         </div>
-                    </section>
-
-                    <section class="command-tile">
-                        <div class="tile-header flex justify-between"><span class="tile-title">Frequency Archive</span><i class="fa-solid fa-compact-disc fa-spin text-gold/30"></i></div>
-                        <div class="p-6 space-y-4">
-                            <audio id="player" controls class="w-full h-10 opacity-60 hover:opacity-100 transition-opacity"></audio>
-                            <div class="grid grid-cols-1 gap-2">
-                                <div class="p-3 bg-white/5 border border-white/5 rounded-md text-[10px] flex justify-between items-center">
-                                    <span>KABZA DE SMALL - KONKA 2026</span>
-                                    <i class="fa-solid fa-play text-gold cursor-pointer"></i>
-                                </div>
-                                <div class="p-3 bg-white/5 border border-white/5 rounded-md text-[10px] flex justify-between items-center">
-                                    <span>KELVIN MOMO - PRIVATE SCHOOL</span>
-                                    <i class="fa-solid fa-play text-gold cursor-pointer"></i>
-                                </div>
-                            </div>
+                    </div>
+                    <div id="grid-container" class="grid-scroll-container">
                         </div>
-                    </section>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <section class="command-tile h-[450px] flex flex-col">
-                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Frequency Grid</span><i class="fa-brands fa-soundcloud"></i></div>
-                        <div class="p-6 overflow-y-auto flex-grow space-y-4 scrollbar-hide">
-                            <iframe width="100%" height="120" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1144007629&color=%2300d4ff"></iframe>
-                            <iframe width="100%" height="120" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1243167190&color=%23d4af37"></iframe>
-                        </div>
-                    </section>
-
-                    <section class="command-tile h-[450px] flex flex-col">
-                        <div class="tile-header flex justify-between"><span class="tile-title">Secure Comms</span><span class="text-[8px] opacity-40 font-mono">E2EE:ACTIVE</span></div>
-                        <div class="p-6 flex-grow flex flex-col overflow-hidden">
-                            <div id="chat-stream" class="flex-grow overflow-y-auto space-y-4 mb-4 pr-2"></div>
-                            <div class="relative">
-                                <input type="text" id="chat-msg-in" placeholder="TRANSMIT PACKET..." class="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-[11px] text-white focus:outline-none focus:border-gold/50">
-                                <button onclick="sendPacket()" class="absolute right-2 top-2 h-10 w-10 bg-gold rounded-full text-black hover:scale-105 active:scale-95 transition-transform">
-                                    <i class="fa-solid fa-paper-plane text-xs"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </section>
-                </div>
+                </section>
             </div>
         </main>
-
-        <footer class="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 opacity-60">
-            <div class="text-[9px] tracking-[.3em] font-black uppercase">M.O.G. Operational Interface © 2026</div>
-            <div class="flex gap-8">
-                <a href="#" class="text-[9px] uppercase tracking-widest hover:text-white">Security Protocol</a>
-                <a href="#" class="text-[9px] uppercase tracking-widest hover:text-white">Privacy</a>
-            </div>
-            <div class="flex items-center gap-2">
-                <span class="h-2 w-2 bg-green-500 rounded-full animate-ping"></span>
-                <span class="text-[9px] font-mono">GRID_STABLE_RSA_71</span>
-            </div>
+        
+        <footer class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+            <section class="command-tile h-48">
+                <div class="tile-header"><span class="tile-title">Territorial Radar</span></div>
+                <div class="relative h-full w-full bg-black/40">
+                    <canvas id="radar-canvas" class="absolute inset-0"></canvas>
+                </div>
+            </section>
+            <section class="command-tile h-48">
+                <div class="tile-header"><span class="tile-title">System Intel Feed</span></div>
+                <div id="intel-feed" class="p-6 font-mono text-[9px] text-zinc-500 overflow-hidden leading-relaxed">
+                    </div>
+            </section>
         </footer>
     </div>
 
     <script>
-        // CORE CONFIGURATION
-        const CONFIG = {
-            U: "https://vbkpatwvgvwarybbpiky.supabase.co",
-            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8"
+        const CFG = { 
+            U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
+            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" 
         };
-        
-        const db = window.supabase.createClient(CONFIG.U, CONFIG.K);
+        const db = window.supabase.createClient(CFG.U, CFG.K);
 
-        // INITIALIZATION
-        window.addEventListener('DOMContentLoaded', async () => {
-            initRadar();
+        // TRACK ARCHIVE (AMAPIANO TOP 10)
+        const tracks = [
+            { id: "1586551699", votes: 1450, title: "Kabza De Small" },
+            { id: "1743603708", votes: 1220, title: "Kelvin Momo" },
+            { id: "1144007629", votes: 1105, title: "Daliwonga" },
+            { id: "1243167190", votes: 980, title: "Mas Musiq" },
+            { id: "1623456789", votes: 850, title: "De Mthuda" },
+            { id: "1812345678", votes: 740, title: "Young Stunna" },
+            { id: "1912345678", votes: 620, title: "Mellow & Sleazy" },
+            { id: "2012345678", votes: 590, title: "DJ Maphorisa" },
+            { id: "2112345678", votes: 430, title: "Uncle Waffles" },
+            { id: "2212345678", votes: 310, title: "Major League DJz" }
+        ];
+
+        function initApp() {
+            renderGrid();
             initLightning();
+            initRadar();
             initIntel();
-            updateTime();
             setInterval(updateTime, 1000);
-
-            // AUTH CHECK
-            const { data: { session } } = await db.auth.getSession();
-            if (session) renderProfile(session.user);
-
-            // UI RELEASE
-            setTimeout(() => {
-                document.getElementById('preloader').classList.add('exit-protocol');
-                document.getElementById('app-content').style.opacity = '1';
-                setTimeout(() => document.getElementById('preloader').remove(), 1000);
-            }, 2500);
-
-            // OPERATIVE COUNT SIMULATION (OR FETCH)
-            document.getElementById('op-count').innerText = Math.floor(Math.random() * 50) + 320;
-        });
-
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('system-time').innerText = now.toISOString().replace('T', ' ').substring(0, 19) + " SAST";
+            document.getElementById('op-count').innerText = Math.floor(Math.random()*50)+450;
         }
 
-        // INTEL FEED SIMULATOR
-        function initIntel() {
-            const feed = document.getElementById('intel-scroll');
-            const lines = [
-                "SIGNAL_FOUND: Log Drum detected in Sector MP.",
-                "DECRYPTING: Kelvin Momo - Private School Lossless...",
-                "GRID_STATUS: Sovereign nodes established.",
-                "ALERT: Frequency spike in Pretoria Central.",
-                "AUTH: Biometric handshake successful."
-            ];
-            let i = 0;
-            setInterval(() => {
-                const p = document.createElement('p');
-                p.className = "mb-1 animate-pulse";
-                p.innerHTML = `[${new Date().toLocaleTimeString()}] > ${lines[i % lines.length]}`;
-                feed.prepend(p);
-                if(feed.children.length > 10) feed.lastChild.remove();
-                i++;
-            }, 4000);
-        }
-
-        // RADAR SYSTEM
-        function initRadar() {
-            const canvas = document.getElementById('radar-canvas');
-            const ctx = canvas.getContext('2d');
-            let w, h;
-            const resize = () => { w = canvas.width = canvas.offsetWidth; h = canvas.height = canvas.offsetHeight; };
-            window.addEventListener('resize', resize);
-            resize();
-
-            let radius = 0;
-            const pings = [];
-
-            function animate() {
-                ctx.clearRect(0, 0, w, h);
-                
-                // Draw Circles
-                radius += 1.5;
-                if (radius > w) radius = 0;
-                ctx.beginPath();
-                ctx.arc(w/2, h/2, radius, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(0, 212, 255, ${1 - radius/w})`;
-                ctx.stroke();
-
-                // Draw Pings
-                if(Math.random() > 0.98) pings.push({x: Math.random()*w, y: Math.random()*h, r: 0, a: 1});
-                pings.forEach((p, i) => {
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-                    ctx.strokeStyle = `rgba(212, 175, 55, ${p.a})`;
-                    ctx.stroke();
-                    p.r += 0.5; p.a -= 0.01;
-                    if(p.a <= 0) pings.splice(i, 1);
-                });
-
-                requestAnimationFrame(animate);
-            }
-            animate();
-        }
-
-        // SECURE CHAT
-        function sendPacket() {
-            const input = document.getElementById('chat-msg-in');
-            const stream = document.getElementById('chat-stream');
-            if(!input.value.trim()) return;
-
-            const msgDiv = document.createElement('div');
-            msgDiv.className = "chat-msg animate-slide-up";
-            msgDiv.innerHTML = `
-                <p class="text-[7px] text-zinc-500 font-bold mb-1 uppercase tracking-tighter">OPERATIVE_ID_SECURE</p>
-                <div class="msg-bubble">
-                    <p class="text-white">${input.value}</p>
+        function renderGrid() {
+            const container = document.getElementById('grid-container');
+            container.innerHTML = tracks.map((t, i) => `
+                <div class="mb-6 bg-white/5 border border-white/5 rounded-2xl overflow-hidden hover:border-gold/30 transition-all">
+                    <iframe width="100%" height="120" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${t.id}&color=%23D4AF37&auto_play=false&hide_related=true"></iframe>
+                    <div class="p-4 flex justify-between items-center bg-black/20">
+                        <span class="text-[10px] font-black text-white/40">NODE_0${i+1}</span>
+                        <div class="flex items-center gap-4">
+                            <span class="text-[11px] font-bold text-gold">${t.votes} VIBES</span>
+                            <button onclick="castVote(${i})" class="px-4 py-1 border border-gold text-[9px] uppercase font-black hover:bg-gold hover:text-black rounded-full transition-all">Boost</button>
+                        </div>
+                    </div>
                 </div>
-            `;
-            stream.appendChild(msgDiv);
-            input.value = '';
+            `).join('');
+        }
+
+        function castVote(i) {
+            tracks[i].votes += 1;
+            renderGrid();
+            addIntel(`VOTE_RECIEVED: Track Node 0${i+1} boosted.`);
+        }
+
+        function sendMsg() {
+            const input = document.getElementById('chat-msg');
+            if(!input.value) return;
+            const stream = document.getElementById('chat-stream');
+            const d = document.createElement('div');
+            d.className = "chat-bubble";
+            d.innerHTML = `<span class="text-blue-400 font-bold">OPERATIVE:</span> ${input.value}`;
+            stream.appendChild(d);
+            input.value = "";
             stream.scrollTop = stream.scrollHeight;
         }
 
         async function handleAuth() {
             const email = document.getElementById('email-in').value;
             const prov = document.getElementById('province-select').value;
-            if(!email || !prov) return alert("INPUT_REQUIRED");
-            
-            const { error } = await db.auth.signInWithOtp({ 
-                email, 
-                options: { data: { province_code: prov } } 
-            });
-            
-            if(error) alert("HANDSHAKE_ERROR: " + error.message);
-            else alert("SIGNAL_TRANSMITTED: Check your email to complete synchronization.");
+            const { error } = await db.auth.signInWithOtp({ email, options: { data: { province_code: prov } } });
+            alert(error ? "SYNC_FAILED" : "SIGNAL_SENT: Check Email");
         }
 
-        function renderProfile(user) {
-            document.getElementById('auth-ui').classList.add('hidden');
-            const profile = document.getElementById('op-profile');
-            profile.classList.remove('hidden');
-            document.getElementById('active-alias').innerText = user.email.split('@')[0].toUpperCase();
-            document.getElementById('active-sector').innerText = `SECTOR: ${user.user_metadata?.province_code || 'GP'}`;
-            new QRCode(document.getElementById("qrcode"), { text: user.id, width: 140, height: 140, colorDark: "#000", colorLight: "#fff" });
+        function updateTime() {
+            document.getElementById('system-time').innerText = new Date().toLocaleTimeString() + " SAST";
+        }
+
+        function addIntel(msg) {
+            const feed = document.getElementById('intel-feed');
+            const d = document.createElement('div');
+            d.innerHTML = `[${new Date().toLocaleTimeString()}] > ${msg}`;
+            feed.prepend(d);
+        }
+
+        function initIntel() {
+            setInterval(() => {
+                const logs = ["NODE_STABLE", "LOG_DRUM_SYNCED", "MP_SECTOR_ACTIVE", "SCANNING_FREQUENCIES"];
+                addIntel(logs[Math.floor(Math.random()*logs.length)]);
+            }, 5000);
+        }
+
+        // CANVAS SYSTEMS (RADAR & LIGHTNING RETAINED)
+        function initRadar() {
+            const c = document.getElementById('radar-canvas');
+            const ctx = c.getContext('2d');
+            let w = c.width = c.offsetWidth, h = c.height = c.offsetHeight;
+            let r = 0;
+            function draw() {
+                ctx.clearRect(0,0,w,h);
+                r += 2; if(r > w/2) r = 0;
+                ctx.beginPath(); ctx.arc(w/2, h/2, r, 0, Math.PI*2);
+                ctx.strokeStyle = `rgba(0, 212, 255, ${1 - r/(w/2)})`;
+                ctx.stroke();
+                requestAnimationFrame(draw);
+            }
+            draw();
         }
 
         function initLightning() {
             const c = document.getElementById('lightning-canvas');
             const ctx = c.getContext('2d');
-            let w, h;
-            const resize = () => { w = c.width = window.innerWidth; h = c.height = window.innerHeight; };
-            window.addEventListener('resize', resize);
-            resize();
-
+            let w = c.width = window.innerWidth, h = c.height = window.innerHeight;
             function draw() {
-                ctx.fillStyle = 'rgba(13, 13, 13, 0.1)';
-                ctx.fillRect(0, 0, w, h);
+                ctx.fillStyle = 'rgba(3,3,3,0.1)';
+                ctx.fillRect(0,0,w,h);
                 if(Math.random() > 0.95) {
                     ctx.strokeStyle = 'rgba(212, 175, 55, 0.2)';
-                    ctx.lineWidth = 1;
                     ctx.beginPath();
                     let x = Math.random()*w, y = 0;
-                    ctx.moveTo(x, y);
-                    while(y < h) {
-                        x += (Math.random() - 0.5) * 50;
-                        y += Math.random() * 50;
-                        ctx.lineTo(x, y);
-                    }
+                    ctx.moveTo(x,y);
+                    for(let i=0; i<8; i++) { x += (Math.random()-0.5)*80; y += h/8; ctx.lineTo(x,y); }
                     ctx.stroke();
                 }
                 requestAnimationFrame(draw);
             }
             draw();
         }
+
+        window.onload = initApp;
     </script>
 </body>
 </html>
