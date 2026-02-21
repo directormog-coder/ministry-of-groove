@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | COMMAND V33.0</title>
+    <title>M.O.G. | MULTI-SECTOR COMMAND V31.0</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
-    <meta name="theme-color" content="#050505">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -19,30 +18,27 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@300;400;600;800&display=swap');
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; }
-        
-        * { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--mog-black); color: var(--mog-gold); margin: 0; overflow-x: hidden; -webkit-user-select: none; }
+        * { transition: all 0.25s ease; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--mog-black); color: var(--mog-gold); margin: 0; overflow-x: hidden; }
         
         .command-tile { background: rgba(10, 10, 10, 0.98); border: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(40px); position: relative; overflow: hidden; height: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
         .tile-header { border-bottom: 1px solid rgba(212, 175, 55, 0.1); padding: 12px 18px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, transparent 100%); }
         .tile-title { font-family: 'Tenor Sans', sans-serif; letter-spacing: 5px; text-transform: uppercase; font-size: 9px; color: #fff; }
         
-        /* RADAR SYSTEM */
-        #radar-container { position: relative; height: 240px; width: 100%; background: #000; overflow: hidden; }
+        #radar-container { position: relative; height: 220px; width: 100%; background: #000; overflow: hidden; }
         #radar-canvas { position: absolute; inset: 0; z-index: 5; }
-        .map-underlay { position: absolute; inset: 0; background: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg') no-repeat center; background-size: contain; filter: invert(1) opacity(0.04) brightness(1.2); }
+        .map-underlay { position: absolute; inset: 0; background: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg') no-repeat center; background-size: contain; filter: invert(1) opacity(0.04); }
 
-        /* INTEL FEED SCROLL */
-        .intel-feed { height: 75px; overflow: hidden; font-family: 'Courier New', monospace; font-size: 8px; color: var(--mog-blue); opacity: 0.7; }
+        .intel-feed { height: 70px; overflow: hidden; font-family: monospace; font-size: 8px; color: var(--mog-blue); opacity: 0.6; }
         .feed-scroll { animation: feed-up 15s linear infinite; }
         @keyframes feed-up { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
 
-        .mog-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 14px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; cursor: pointer; background: transparent; letter-spacing: 3px; width: 100%; text-align: center; }
+        .mog-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 12px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; cursor: pointer; background: transparent; letter-spacing: 3px; width: 100%; text-align: center; }
         .mog-btn:hover { background: var(--mog-gold); color: #000; box-shadow: 0 0 25px rgba(212, 175, 55, 0.4); }
         
         #lightning-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.3; }
         #preloader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .locked-blur { filter: blur(14px); opacity: 0.2; pointer-events: none; }
+        .locked-blur { filter: blur(10px); opacity: 0.2; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -50,64 +46,67 @@
 
     <div id="preloader">
         <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-20 w-20 mb-6 animate-pulse">
-        <div class="text-[10px] text-blue-400 tracking-[0.8em] font-mono animate-pulse uppercase">SYST_INTEGRATION_V33.0</div>
+        <div class="text-[9px] text-blue-400 tracking-[0.8em] font-mono animate-pulse uppercase italic">Targeting_Lowveld_V31.0</div>
     </div>
 
-    <div id="app-content" class="opacity-0 p-4 lg:p-10 space-y-10 transition-opacity duration-1000">
+    <div id="app-content" class="opacity-0 p-4 lg:p-8 space-y-8 transition-opacity duration-1000">
         
         <header class="flex flex-col lg:flex-row justify-between items-center gap-6 relative z-50">
             <div class="flex items-center gap-6">
                 <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-14 w-14 border border-gold rounded-full">
                 <div>
                     <h1 class="text-2xl text-white italic tracking-[.3em] font-serif uppercase">Ministry of Groove</h1>
-                    <p class="text-[8px] text-blue-400 tracking-[.5em] uppercase">Sectors: GP // MP (Targeted)</p>
+                    <p class="text-[8px] text-blue-400 tracking-[.5em] uppercase">Sector Tracking: Mpumalanga (Targeted)</p>
                 </div>
             </div>
-            <div class="text-[10px] text-gold font-bold border border-gold/20 px-8 py-2 bg-gold/5 tracking-[.4em] uppercase shadow-[0_0_20px_rgba(212,175,55,0.1)]">
+            <div class="text-[10px] text-gold font-bold border border-gold/20 px-6 py-2 bg-gold/5 tracking-[.4em] uppercase">
                 Operatives: <span id="op-count">0</span> / 500
             </div>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-50">
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-50">
             
-            <div class="lg:col-span-4 space-y-8">
+            <div class="lg:col-span-4 space-y-6">
                 <section class="command-tile">
-                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Strategic Intel</span><i class="fa-solid fa-signal animate-pulse"></i></div>
-                    <div class="p-6 intel-feed">
+                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Regional Intel</span><i class="fa-solid fa-signal animate-pulse"></i></div>
+                    <div class="p-4 intel-feed">
                         <div class="feed-scroll">
-                            [INTEL] MBOMBELA SECTOR LINKED...<br>
-                            [INTEL] PRETORIA GRID STABLE...<br>
-                            [INTEL] MPUMALANGA RADIUS DETECTED...<br>
-                            [SYSTEM] HANDSHAKE V33.0 READY...<br>
-                            [VOICE] DIRECTOR: "THE SUN RISES."
+                            [INTEL] SCANNING MBOMBELA SECTOR...<br>
+                            [INTEL] WITBANK GRID HANDSHAKE SECURED...<br>
+                            [SYSTEM] MULTI-SECTOR RADAR SYNCED...<br>
+                            [GRID] FELO LE TEE SIGNAL DETECTED...<br>
+                            [VOICE] DIRECTOR: "RISE WITH THE SUN."
                         </div>
                     </div>
                 </section>
 
                 <section class="command-tile">
-                    <div class="tile-header"><span class="tile-title">Identity Registry</span></div>
-                    <div class="p-8 text-center">
+                    <div class="tile-header"><span class="tile-title">Operative Registry</span></div>
+                    <div class="p-6 text-center">
                         <div id="auth-ui">
-                            <input id="email-in" type="email" placeholder="ACCESS EMAIL" class="w-full bg-black border border-blue-900/40 p-4 text-blue-400 mb-5 outline-none text-[10px] tracking-widest uppercase">
+                            <input id="email-in" type="email" placeholder="ACCESS EMAIL" class="w-full bg-black border border-blue-900/40 p-3 text-blue-400 mb-4 outline-none text-[10px] tracking-widest uppercase">
                             <button onclick="handleAuth()" class="mog-btn">Initiate Handshake</button>
-                            <p id="error-log" class="text-[8px] text-red-500 mt-4 tracking-widest uppercase"></p>
+                            <p id="error-log" class="text-[8px] text-red-500 mt-2 tracking-widest uppercase"></p>
                         </div>
                         <div id="op-profile" class="hidden">
                             <p id="active-alias" class="text-xl font-black text-white uppercase mb-4 tracking-widest italic"></p>
-                            <div id="qrcode" class="bg-white p-2 inline-block rounded-sm mb-4"></div>
+                            <div id="qrcode" class="bg-white p-2 inline-block rounded-sm mb-2 shadow-2xl"></div>
                         </div>
                     </div>
                 </section>
 
-                <section class="command-tile !border-gold/40">
+                <section class="command-tile !border-gold">
                     <div class="tile-header flex justify-between"><span class="tile-title text-gold font-bold">Procurement</span><i class="fa-solid fa-lock text-[8px]"></i></div>
-                    <div class="p-8 text-center opacity-30 italic text-[10px]">LOCKED // PHASE 3 REVENUE</div>
+                    <div class="p-6 text-center opacity-40">
+                        <p class="text-[8px] tracking-widest uppercase italic mb-2">Phase 3: Revenue Node</p>
+                        <button disabled class="mog-btn !border-zinc-800 text-zinc-600">Locked</button>
+                    </div>
                 </section>
             </div>
 
-            <div class="lg:col-span-8 space-y-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <section class="command-tile !border-blue-500/30">
+            <div class="lg:col-span-8 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <section class="command-tile !border-blue-900/40">
                         <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Sector Radar</span><i class="fa-solid fa-radar animate-pulse"></i></div>
                         <div id="radar-container">
                             <div class="map-underlay"></div>
@@ -118,18 +117,18 @@
                     <section class="command-tile">
                         <div class="tile-header"><span class="tile-title">Sonic Archive</span></div>
                         <div class="p-4">
-                            <audio id="player" controls class="w-full h-8 mb-4 bg-black border border-white/5"></audio>
+                            <audio id="player" controls class="w-full h-8 mb-4 bg-black border border-white/10"></audio>
                             <div class="locked-blur space-y-2">
-                                <div class="p-2 border border-white/5 text-[8px] uppercase">Mpumalanga_Surveillance_Mix.mp3</div>
-                                <div class="p-2 border border-white/5 text-[8px] uppercase">GP_Peak_Frequency.mp3</div>
+                                <div class="p-2 border border-white/5 text-[8px] uppercase">Mpumalanga_Deep_Soul.mp3</div>
+                                <div class="p-2 border border-white/5 text-[8px] uppercase">Lowveld_Frequency_01.mp3</div>
                             </div>
                         </div>
                     </section>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <section class="command-tile !border-blue-400/20">
-                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Regional Selection</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <section class="command-tile !border-blue-500/30">
+                        <div class="tile-header"><span class="tile-title text-blue-400">Regional Vote</span></div>
                         <div class="p-4 space-y-4">
                             <iframe width="100%" height="80" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1053424684&color=%2300d4ff&auto_play=false&hide_related=true"></iframe>
                             <iframe width="100%" height="80" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1507747807&color=%23d4af37&auto_play=false&hide_related=true"></iframe>
@@ -141,8 +140,8 @@
                         <div class="tile-header flex justify-between"><span class="tile-title">Frequency Chat</span><span class="text-[7px] text-zinc-600">ENCRYPTED</span></div>
                         <div class="p-4">
                             <div id="chat-stream" class="h-24 overflow-y-auto font-mono text-[9px] text-blue-400/50 space-y-2 mb-2 scrollbar-hide">
-                                <p>[OP_MP]: Middelburg scanning.</p>
-                                <p>[OP_GP]: Pretoria Grid standing by.</p>
+                                <p>[OP_MP]: Witbank scanning.</p>
+                                <p>[OP_GP]: Standing by.</p>
                             </div>
                             <input type="text" placeholder="TRANSMIT..." class="w-full bg-black border border-white/10 p-2 text-[9px] outline-none text-blue-400 uppercase">
                         </div>
@@ -150,6 +149,10 @@
                 </div>
             </div>
         </main>
+
+        <footer class="p-8 text-center opacity-30">
+            <p class="text-[7px] text-zinc-600 tracking-[0.5em] uppercase">Ministry of Groove | Multi-Sector Command V31.0</p>
+        </footer>
     </div>
 
     <script>
@@ -177,11 +180,8 @@
             const email = document.getElementById('email-in').value;
             const errorLog = document.getElementById('error-log');
             if(!email) return alert("SIGNAL_ERROR");
-            errorLog.innerText = "INITIATING HANDSHAKE...";
-            const { error } = await db.auth.signInWithOtp({ 
-                email: email, 
-                options: { emailRedirectTo: window.location.origin } 
-            });
+            errorLog.innerText = "INITIATING...";
+            const { error } = await db.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin } });
             if(error) errorLog.innerText = "FAILED: " + error.message.toUpperCase();
             else errorLog.innerText = "SIGNAL_SENT: CHECK INBOX";
         }
@@ -208,15 +208,14 @@
                 ctx.clearRect(0, 0, w, h);
                 radius += 1.4; if (radius > w) radius = 0;
                 ctx.beginPath();
-                // DUAL SCAN: Origin point shifted to represent South Africa
-                ctx.arc(w/1.4, h/1.2, radius, 0, Math.PI * 2);
+                ctx.arc(w/1.3, h/1.2, radius, 0, Math.PI * 2);
                 ctx.strokeStyle = `rgba(0, 212, 255, ${1 - radius/w})`;
-                ctx.lineWidth = 1.5; ctx.stroke();
+                ctx.lineWidth = 1; ctx.stroke();
                 if (Math.random() > 0.985) pings.push({x: Math.random()*w, y: Math.random()*h, a: 1.0});
                 pings.forEach((p, i) => {
                     ctx.fillStyle = `rgba(0, 212, 255, ${p.a})`;
-                    ctx.beginPath(); ctx.arc(p.x, p.y, 2.5, 0, Math.PI*2); ctx.fill();
-                    p.a -= 0.008; if (p.a <= 0) pings.splice(i, 1);
+                    ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
+                    p.a -= 0.01; if (p.a <= 0) pings.splice(i, 1);
                 });
                 requestAnimationFrame(draw);
             }
@@ -229,9 +228,9 @@
         function lResize() { lw = lCanvas.width = window.innerWidth; lh = lCanvas.height = window.innerHeight; }
         window.addEventListener('resize', lResize); lResize();
         function lAnimate() {
-            lCtx.fillStyle = 'rgba(5, 5, 5, 0.12)'; lCtx.fillRect(0, 0, lw, lh);
-            if (Math.random() > 0.975) {
-                lCtx.strokeStyle = 'rgba(212, 175, 55, 0.22)'; lCtx.lineWidth = 1; lCtx.beginPath();
+            lCtx.fillStyle = 'rgba(5, 5, 5, 0.15)'; lCtx.fillRect(0, 0, lw, lh);
+            if (Math.random() > 0.98) {
+                lCtx.strokeStyle = 'rgba(212, 175, 55, 0.2)'; lCtx.lineWidth = 1; lCtx.beginPath();
                 let x = Math.random()*lw, y = Math.random()*lh; lCtx.moveTo(x,y);
                 for(let i=0; i<5; i++){ x+=(Math.random()-0.5)*180; y+=(Math.random()-0.5)*180; lCtx.lineTo(x,y); }
                 lCtx.stroke();
@@ -241,5 +240,4 @@
         lAnimate();
     </script>
 </body>
-                                </html>
-                                
+</html>
