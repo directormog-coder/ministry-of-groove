@@ -1,0 +1,35 @@
+{
+  "name": "Ministry of Groove: National Grid",
+  "short_name": "M.O.G.",
+  "description": "National Amapiano Sovereignty High-Fidelity Network V42.5 Absolute",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#D4AF37",
+  "orientation": "portrait",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["music", "entertainment", "social"],
+  "screenshots": [
+    {
+      "src": "https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "M.O.G. Command Center"
+    }
+  ]
+}
