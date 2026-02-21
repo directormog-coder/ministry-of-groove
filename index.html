@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V42.6 ZENITH</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V42.7</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,7 +25,7 @@
             --mog-gold: #D4AF37; 
             --mog-blue: #00d4ff; 
             --mog-bg: #1a1a1a; 
-            --mog-panel: rgba(38, 38, 38, 0.9); 
+            --mog-panel: #262626; 
             --mog-chat-bg: #1f1f1f;
         }
         
@@ -34,37 +34,37 @@
         
         body { background-color: var(--mog-bg); color: var(--mog-gold); margin: 0; overflow-x: hidden; -webkit-user-select: none; user-select: none; }
         
-        /* PRELOADER SYSTEM */
+        /* PRELOADER RETAINED */
         #preloader { position: fixed; inset: 0; background: var(--mog-bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 1.2s cubic-bezier(0.8, 0, 0.2, 1); }
         #preloader.exit-protocol { opacity: 0; visibility: hidden; transform: scale(1.5); filter: blur(20px); }
         .preloader-logo.pulse-fast { animation: pulse-fast 0.5s infinite alternate; }
         @keyframes pulse-fast { from { transform: scale(1); } to { transform: scale(1.05); filter: brightness(1.5); } }
 
-        /* UI COMPONENT TILES */
-        .command-tile { background: var(--mog-panel); border: 1px solid rgba(212, 175, 55, 0.25); backdrop-filter: blur(40px); position: relative; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border-radius: 24px; }
-        .tile-header { border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding: 14px 20px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%); }
+        /* UI COMPONENTS */
+        .command-tile { background: var(--mog-panel); border: 1px solid rgba(212, 175, 55, 0.25); backdrop-filter: blur(40px); position: relative; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border-radius: 12px; }
+        .tile-header { border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding: 12px 18px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%); }
         .tile-title { letter-spacing: 5px; text-transform: uppercase; font-size: 10px; color: #fff; }
         
-        /* TERRITORIAL RADAR & MAP LAYER */
-        #radar-container { position: relative; height: 350px; width: 100%; background: #000; overflow: hidden; }
-        .live-map-frame { width: 100%; height: 100%; border: none; filter: grayscale(1) contrast(1.2) invert(0.9); opacity: 0.4; }
+        /* RADAR & GOOGLE MAPS UPGRADED */
+        #radar-container { position: relative; height: 320px; width: 100%; background: #202020; overflow: hidden; }
+        .live-map-frame { width: 100%; height: 100%; border: none; filter: grayscale(1) contrast(1.2) invert(0.9); opacity: 0.3; }
         #radar-canvas { position: absolute; inset: 0; z-index: 10; pointer-events: none; }
 
-        /* SCROLLABLE FREQUENCY GRID (WITH CURSOR) */
-        .grid-scroll { overflow-y: auto; max-height: 650px; scrollbar-width: thin; scrollbar-color: var(--mog-gold) transparent; }
-        .grid-scroll::-webkit-scrollbar { width: 4px; }
-        .grid-scroll::-webkit-scrollbar-thumb { background: var(--mog-gold); border-radius: 10px; }
-
-        /* FREQUENCY CHAT UI */
-        #chat-stream { scroll-behavior: smooth; overflow-y: auto; height: 400px; }
+        /* CHAT UI RETAINED */
+        #chat-stream { scroll-behavior: smooth; }
         .chat-msg { margin-bottom: 12px; animation: msg-slide 0.4s ease-out; }
         .msg-bubble { padding: 10px 14px; border-radius: 16px; max-width: 85%; font-size: 11px; background: var(--mog-chat-bg); border: 1px solid rgba(0, 212, 255, 0.1); }
-        .chat-input-wrapper { background: var(--mog-chat-bg); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 24px; padding: 4px 16px; display: flex; align-items: center; gap: 10px; }
         
+        .chat-input-wrapper { background: var(--mog-chat-bg); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 24px; padding: 4px 6px 4px 16px; display: flex; align-items: center; gap: 10px; }
+        .chat-input { background: transparent; border: none; outline: none; width: 100%; color: #fff; font-size: 11px; padding: 10px 0; }
+        .send-btn { background: var(--mog-gold); color: #000; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+
         .mog-btn { border: 2px solid var(--mog-gold); color: var(--mog-gold); padding: 14px; font-size: 0.85rem; font-weight: 900; text-transform: uppercase; background: rgba(212, 175, 55, 0.05); letter-spacing: 4px; width: 100%; cursor: pointer; border-radius: 8px; }
         #lightning-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.2; pointer-events: none; }
         
-        .track-card { background: rgba(0,0,0,0.3); border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .grid-scroll { overflow-y: auto; max-height: 500px; padding-right: 5px; }
+        .grid-scroll::-webkit-scrollbar { width: 4px; }
+        .grid-scroll::-webkit-scrollbar-thumb { background: var(--mog-gold); border-radius: 10px; }
     </style>
 </head>
 <body class="scrollbar-hide">
@@ -72,7 +72,7 @@
 
     <div id="preloader">
         <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="preloader-logo h-24 w-24 mb-6">
-        <div class="text-[11px] text-blue-500 tracking-[1em] font-bold animate-pulse uppercase italic">Synchronizing_Zenith_V42.6</div>
+        <div class="text-[11px] text-blue-500 tracking-[1em] font-bold animate-pulse uppercase italic">Synchronizing_Zenith_V42.7</div>
     </div>
 
     <div id="app-content" class="opacity-0 p-4 lg:p-10 space-y-10 transition-opacity duration-1000">
@@ -82,11 +82,11 @@
                 <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold/50 rounded-full bg-white/5 shadow-2xl">
                 <div>
                     <h1 class="text-4xl text-white tracking-[.2em] uppercase">Ministry of Groove</h1>
-                    <p class="text-[10px] text-blue-500 tracking-[.6em] mt-2 uppercase font-black">National Amapiano Sovereignty // Zenith Playback</p>
+                    <p class="text-[10px] text-blue-500 tracking-[.6em] mt-2 uppercase font-black">National Amapiano Sovereignty // V42.7 Absolute</p>
                 </div>
             </div>
             <div class="flex flex-col items-end">
-                <div class="text-[12px] text-gold font-black border-2 border-gold/40 px-8 py-2 bg-gold/10 tracking-[.5em] uppercase rounded-lg shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                <div class="text-[12px] text-gold font-black border-2 border-gold/40 px-8 py-2 bg-gold/10 tracking-[.5em] uppercase rounded-lg">
                     Yanos Operatives: <span id="op-count">0</span> / 500
                 </div>
                 <p id="system-time" class="text-[9px] text-zinc-400 mt-2 font-black tracking-widest uppercase"></p>
@@ -98,24 +98,22 @@
             <div class="lg:col-span-4 space-y-8">
                 <section class="command-tile">
                     <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">Sector Intel Feed</span><i class="fa-solid fa-tower-broadcast animate-pulse"></i></div>
-                    <div class="p-6 h-40 overflow-hidden font-mono text-[9px] leading-relaxed text-zinc-500" id="intel-scroll">
+                    <div class="p-6 h-32 overflow-hidden font-mono text-[9px] text-zinc-500" id="intel-scroll">
                         [SYSTEM] READY FOR FREQUENCY SYNC...
                     </div>
                 </section>
 
                 <section class="command-tile">
-                    <div class="tile-header flex justify-between items-center"><span class="tile-title text-blue-400">Sovereign Registry Protocol</span><i class="fa-solid fa-fingerprint text-blue-500/50"></i></div>
+                    <div class="tile-header flex justify-between items-center"><span class="tile-title text-blue-500">Sovereign Registry Protocol</span><i class="fa-solid fa-shield-halved"></i></div>
                     <div class="p-8 text-center relative z-10">
                         <div id="auth-ui" class="space-y-6">
-                            <input id="email-in" type="email" placeholder="ACCESS EMAIL" class="w-full bg-zinc-800/30 border-b-2 border-blue-500/20 p-4 text-white outline-none text-[10px] tracking-widest uppercase">
+                            <input id="email-in" type="email" placeholder="ENTER ACCESS EMAIL" class="w-full bg-zinc-800/30 border-b-2 border-blue-500/20 p-4 text-white outline-none text-[10px] tracking-widest uppercase">
                             <select id="province-select" class="w-full bg-zinc-800/30 border-b-2 border-blue-500/20 p-4 text-zinc-200 outline-none text-[10px] tracking-widest uppercase">
                                 <option value="" disabled selected>SELECT SECTOR</option>
-                                <option value="MP">Mpumalanga (MP)</option>
-                                <option value="GP">Gauteng (GP)</option>
-                                <option value="KZN">KwaZulu-Natal (KZN)</option>
-                                <option value="WC">Western Cape (WC)</option>
+                                <option value="MP">Mpumalanga (MP)</option><option value="GP">Gauteng (GP)</option>
+                                <option value="KZN">KwaZulu-Natal (KZN)</option><option value="WC">Western Cape (WC)</option>
                             </select>
-                            <button onclick="handleAuth()" class="mog-btn">SYNCHRONIZE IDENTITY</button>
+                            <button onclick="handleAuth()" class="mog-btn">SYNCHRONIZE PASSKEY</button>
                         </div>
                         <div id="op-profile" class="hidden text-center">
                             <div id="qrcode" class="bg-white p-4 inline-block rounded-xl mb-4"></div>
@@ -130,25 +128,25 @@
                 <section class="command-tile !border-blue-500/40">
                     <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">Territorial Radar</span><i class="fa-solid fa-satellite"></i></div>
                     <div id="radar-container">
-                        <iframe class="live-map-frame" src="https://maps.google.com/maps/contrib/109047355067677955607" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe class="live-map-frame" src="http://googleusercontent.com/maps.google.com/5" allowfullscreen="" loading="lazy"></iframe>
                         <canvas id="radar-canvas"></canvas>
                     </div>
                 </section>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <section class="command-tile flex flex-col h-[750px]">
-                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Top 10 Amapiano Grid</span><i class="fa-solid fa-music text-gold"></i></div>
-                        <div class="grid-scroll p-6 space-y-6 scrollbar-hide" id="soundcloud-grid">
+                    <section class="command-tile flex flex-col h-[650px]">
+                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Frequency Grid: Top 10 Amapiano</span><i class="fa-brands fa-soundcloud"></i></div>
+                        <div class="grid-scroll p-6 space-y-4" id="soundcloud-grid">
                             </div>
                     </section>
 
-                    <section class="command-tile flex flex-col h-[750px]">
-                        <div class="tile-header flex justify-between"><span class="tile-title">Sovereign Chat</span><span class="text-[8px] text-zinc-400 uppercase font-black">E2E_ENCRYPTED</span></div>
+                    <section class="command-tile flex flex-col h-[650px]">
+                        <div class="tile-header flex justify-between"><span class="tile-title">Frequency Chat</span><span class="text-[8px] text-zinc-400 uppercase font-black">E2E_ENCRYPTED</span></div>
                         <div class="p-6 flex-grow flex flex-col justify-end overflow-hidden">
-                            <div id="chat-stream" class="space-y-4 mb-6 pr-2 scrollbar-hide"></div>
+                            <div id="chat-stream" class="overflow-y-auto mb-6 pr-2 scrollbar-hide"></div>
                             <div class="chat-input-wrapper">
                                 <input type="text" id="chat-msg-in" placeholder="TRANSMIT PACKET..." class="chat-input" onkeypress="if(event.key==='Enter')sendPacket()">
-                                <button onclick="sendPacket()" class="text-gold"><i class="fa-solid fa-paper-plane"></i></button>
+                                <button onclick="sendPacket()" class="send-btn text-gold"><i class="fa-solid fa-paper-plane"></i></button>
                             </div>
                         </div>
                     </section>
@@ -160,7 +158,7 @@
             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
                 <div>
                     <p class="text-[11px] text-white tracking-[.5em] font-black uppercase mb-2">Ministry of Groove</p>
-                    <p class="text-[8px] text-zinc-400 tracking-widest uppercase font-black">V42.6 Zenith Playback // Operative Network</p>
+                    <p class="text-[8px] text-zinc-400 tracking-widest uppercase font-black">Command V42.7 // RSA National Network</p>
                 </div>
                 <div class="flex gap-10">
                     <a href="#" class="text-[10px] text-gold uppercase font-black">Privacy</a>
@@ -178,6 +176,7 @@
         const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
         const db = window.supabase.createClient(CFG.U, CFG.K);
 
+        // AUTHENTIC AMAPIANO TRACKS 2026
         const tracks = [
             { id: "1586551699", title: "KABZA DE SMALL - KONKA LIVE" },
             { id: "1743603708", title: "KELVIN MOMO - PRIVATE SCHOOL" },
@@ -202,23 +201,20 @@
             }, 2000);
         });
 
-        // UPDATED: RENDER TRACKS WITH WIDGET API SUPPORT
         function renderTracks() {
             const grid = document.getElementById('soundcloud-grid');
             grid.innerHTML = tracks.map((t, i) => `
                 <div class="track-card">
-                    <iframe id="sc-widget-${i}" width="100%" height="160" scrolling="no" frameborder="no" allow="autoplay" 
-                        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${t.id}&color=%23D4AF37&auto_play=false&hide_related=true&show_comments=false&show_user=true&visual=true">
+                    <iframe width="100%" height="150" scrolling="no" frameborder="no" allow="autoplay" 
+                        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${t.id}&color=%23D4AF37&auto_play=false&hide_related=true&visual=true">
                     </iframe>
-                    <div class="p-3 bg-zinc-900/50 flex justify-between items-center">
-                        <span class="text-[9px] font-black uppercase">${t.title}</span>
-                        <button onclick="syncToPlayer('${t.id}')" class="text-gold text-[10px] border border-gold/20 px-3 py-1 rounded">SYNC</button>
+                    <div class="p-3 bg-zinc-900/50 flex justify-between items-center text-[10px] font-black">
+                        <span>${t.title}</span>
+                        <button class="text-gold"><i class="fa-solid fa-heart"></i></button>
                     </div>
                 </div>
             `).join('');
         }
-
-        function syncToPlayer(id) { addIntel(`STREAM_SYNC: ${id} engaged.`); }
 
         async function handleAuth() {
             const email = document.getElementById('email-in').value;
@@ -257,7 +253,7 @@
             let r = 0;
             function draw() {
                 ctx.clearRect(0,0,w,h);
-                r += 1.8; if(r > w/2) r = 0;
+                r += 1.5; if(r > w/2) r = 0;
                 ctx.beginPath(); ctx.arc(w/2, h/2, r, 0, Math.PI*2);
                 ctx.strokeStyle = `rgba(0, 212, 255, ${1 - r/(w/2)})`;
                 ctx.stroke();
@@ -286,7 +282,7 @@
         function initIntel() {
             const intel = document.getElementById('intel-scroll');
             setInterval(() => {
-                const logs = ["LOG_DRUM_SYNCED", "SECTOR_MP_STABLE", "V42.6_ZENITH_ONLINE"];
+                const logs = ["LOG_DRUM_SYNCED", "SECTOR_MP_STABLE", "V42.7_ABSOLUTE_READY"];
                 const l = document.createElement('div');
                 l.innerHTML = `[${new Date().toLocaleTimeString()}] ${logs[Math.floor(Math.random()*logs.length)]}`;
                 intel.prepend(l);
