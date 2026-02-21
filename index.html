@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V42.5 ABSOLUTE</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V42.6 ZENITH</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,6 +15,8 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://w.soundcloud.com/player/api.js"></script>
     
     <style>
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@200,400,700&f[]=satoshi@300,400,700,900&display=swap');
@@ -32,39 +34,37 @@
         
         body { background-color: var(--mog-bg); color: var(--mog-gold); margin: 0; overflow-x: hidden; -webkit-user-select: none; user-select: none; }
         
-        /* PRELOADER RETAINED & UPGRADED */
+        /* PRELOADER SYSTEM */
         #preloader { position: fixed; inset: 0; background: var(--mog-bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 1.2s cubic-bezier(0.8, 0, 0.2, 1); }
         #preloader.exit-protocol { opacity: 0; visibility: hidden; transform: scale(1.5); filter: blur(20px); }
         .preloader-logo.pulse-fast { animation: pulse-fast 0.5s infinite alternate; }
         @keyframes pulse-fast { from { transform: scale(1); } to { transform: scale(1.05); filter: brightness(1.5); } }
 
-        /* UI COMPONENTS */
-        .command-tile { background: var(--mog-panel); border: 1px solid rgba(212, 175, 55, 0.25); backdrop-filter: blur(40px); position: relative; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border-radius: 20px; }
-        .tile-header { border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding: 12px 18px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%); }
+        /* UI COMPONENT TILES */
+        .command-tile { background: var(--mog-panel); border: 1px solid rgba(212, 175, 55, 0.25); backdrop-filter: blur(40px); position: relative; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border-radius: 24px; }
+        .tile-header { border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding: 14px 20px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%); }
         .tile-title { letter-spacing: 5px; text-transform: uppercase; font-size: 10px; color: #fff; }
         
-        /* RADAR & MAP RETAINED */
+        /* TERRITORIAL RADAR & MAP LAYER */
         #radar-container { position: relative; height: 350px; width: 100%; background: #000; overflow: hidden; }
-        .live-map-frame { width: 100%; height: 100%; border: none; filter: grayscale(1) contrast(1.2) invert(0.9); opacity: 0.4; pointer-events: auto; }
+        .live-map-frame { width: 100%; height: 100%; border: none; filter: grayscale(1) contrast(1.2) invert(0.9); opacity: 0.4; }
         #radar-canvas { position: absolute; inset: 0; z-index: 10; pointer-events: none; }
 
-        /* CHAT SYSTEM RETAINED */
-        #chat-stream { scroll-behavior: smooth; }
-        .chat-msg { margin-bottom: 12px; animation: msg-slide 0.4s ease-out; }
-        @keyframes msg-slide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .msg-bubble { padding: 10px 14px; border-radius: 16px; max-width: 85%; font-size: 11px; background: var(--mog-chat-bg); border: 1px solid rgba(0, 212, 255, 0.1); }
-        .msg-dir { border-left: 2px solid var(--mog-gold); background: rgba(212, 175, 55, 0.05); }
-        
-        .chat-input-wrapper { background: var(--mog-chat-bg); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 24px; padding: 4px 16px; display: flex; align-items: center; gap: 10px; }
-        .chat-input { background: transparent; border: none; outline: none; width: 100%; color: #fff; font-size: 11px; padding: 10px 0; }
-        
-        /* SOUNDCLOUD GRID RETAINED & UPGRADED */
-        .grid-scroll { overflow-y: auto; max-height: 600px; padding-right: 10px; }
+        /* SCROLLABLE FREQUENCY GRID (WITH CURSOR) */
+        .grid-scroll { overflow-y: auto; max-height: 650px; scrollbar-width: thin; scrollbar-color: var(--mog-gold) transparent; }
         .grid-scroll::-webkit-scrollbar { width: 4px; }
         .grid-scroll::-webkit-scrollbar-thumb { background: var(--mog-gold); border-radius: 10px; }
 
+        /* FREQUENCY CHAT UI */
+        #chat-stream { scroll-behavior: smooth; overflow-y: auto; height: 400px; }
+        .chat-msg { margin-bottom: 12px; animation: msg-slide 0.4s ease-out; }
+        .msg-bubble { padding: 10px 14px; border-radius: 16px; max-width: 85%; font-size: 11px; background: var(--mog-chat-bg); border: 1px solid rgba(0, 212, 255, 0.1); }
+        .chat-input-wrapper { background: var(--mog-chat-bg); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 24px; padding: 4px 16px; display: flex; align-items: center; gap: 10px; }
+        
         .mog-btn { border: 2px solid var(--mog-gold); color: var(--mog-gold); padding: 14px; font-size: 0.85rem; font-weight: 900; text-transform: uppercase; background: rgba(212, 175, 55, 0.05); letter-spacing: 4px; width: 100%; cursor: pointer; border-radius: 8px; }
         #lightning-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.2; pointer-events: none; }
+        
+        .track-card { background: rgba(0,0,0,0.3); border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
 <body class="scrollbar-hide">
@@ -72,7 +72,7 @@
 
     <div id="preloader">
         <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="preloader-logo h-24 w-24 mb-6">
-        <div class="text-[11px] text-blue-500 tracking-[1em] font-bold animate-pulse uppercase italic">Synchronizing_Grid_V42.5_Absolute</div>
+        <div class="text-[11px] text-blue-500 tracking-[1em] font-bold animate-pulse uppercase italic">Synchronizing_Zenith_V42.6</div>
     </div>
 
     <div id="app-content" class="opacity-0 p-4 lg:p-10 space-y-10 transition-opacity duration-1000">
@@ -82,11 +82,11 @@
                 <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold/50 rounded-full bg-white/5 shadow-2xl">
                 <div>
                     <h1 class="text-4xl text-white tracking-[.2em] uppercase">Ministry of Groove</h1>
-                    <p class="text-[10px] text-blue-500 tracking-[.6em] mt-2 uppercase font-black">National Amapiano Sovereignty // High-Fidelity Network</p>
+                    <p class="text-[10px] text-blue-500 tracking-[.6em] mt-2 uppercase font-black">National Amapiano Sovereignty // Zenith Playback</p>
                 </div>
             </div>
             <div class="flex flex-col items-end">
-                <div class="text-[12px] text-gold font-black border-2 border-gold/40 px-8 py-2 bg-gold/10 tracking-[.5em] uppercase rounded-lg">
+                <div class="text-[12px] text-gold font-black border-2 border-gold/40 px-8 py-2 bg-gold/10 tracking-[.5em] uppercase rounded-lg shadow-[0_0_20px_rgba(212,175,55,0.2)]">
                     Yanos Operatives: <span id="op-count">0</span> / 500
                 </div>
                 <p id="system-time" class="text-[9px] text-zinc-400 mt-2 font-black tracking-widest uppercase"></p>
@@ -97,32 +97,25 @@
             
             <div class="lg:col-span-4 space-y-8">
                 <section class="command-tile">
-                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">Sector Intel Feed</span><i class="fa-solid fa-tower-broadcast text-[8px] animate-pulse"></i></div>
+                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">Sector Intel Feed</span><i class="fa-solid fa-tower-broadcast animate-pulse"></i></div>
                     <div class="p-6 h-40 overflow-hidden font-mono text-[9px] leading-relaxed text-zinc-500" id="intel-scroll">
-                        [22:15:01] GP-012 LOG DRUM DETECTED...<br>
-                        [22:15:08] ENCRYPTED PROFILE DETECTED IN MPUMALANGA...<br>
-                        [22:15:15] AWAITING LOSSLESS SYNC AUTHORIZATION...
+                        [SYSTEM] READY FOR FREQUENCY SYNC...
                     </div>
                 </section>
 
-                <section class="command-tile relative overflow-hidden">
-                    <div class="tile-header flex justify-between items-center"><span class="tile-title text-blue-500">Sovereign Registry Protocol</span><i class="fa-solid fa-shield-halved text-blue-500/50"></i></div>
+                <section class="command-tile">
+                    <div class="tile-header flex justify-between items-center"><span class="tile-title text-blue-400">Sovereign Registry Protocol</span><i class="fa-solid fa-fingerprint text-blue-500/50"></i></div>
                     <div class="p-8 text-center relative z-10">
                         <div id="auth-ui" class="space-y-6">
-                            <input id="email-in" type="email" placeholder="ENTER ACCESS EMAIL" class="w-full bg-zinc-800/30 border-b-2 border-blue-500/20 p-4 text-white outline-none text-[10px] tracking-widest uppercase">
+                            <input id="email-in" type="email" placeholder="ACCESS EMAIL" class="w-full bg-zinc-800/30 border-b-2 border-blue-500/20 p-4 text-white outline-none text-[10px] tracking-widest uppercase">
                             <select id="province-select" class="w-full bg-zinc-800/30 border-b-2 border-blue-500/20 p-4 text-zinc-200 outline-none text-[10px] tracking-widest uppercase">
-                                <option value="" disabled selected>SELECT SECTOR DEPLOYMENT</option>
+                                <option value="" disabled selected>SELECT SECTOR</option>
                                 <option value="MP">Mpumalanga (MP)</option>
                                 <option value="GP">Gauteng (GP)</option>
                                 <option value="KZN">KwaZulu-Natal (KZN)</option>
                                 <option value="WC">Western Cape (WC)</option>
-                                <option value="LP">Limpopo (LP)</option>
-                                <option value="NW">North West (NW)</option>
-                                <option value="FS">Free State (FS)</option>
-                                <option value="EC">Eastern Cape (EC)</option>
-                                <option value="NC">Northern Cape (NC)</option>
                             </select>
-                            <button onclick="handleAuth()" class="mog-btn group relative overflow-hidden !py-6"><span class="relative z-10 flex items-center justify-center gap-3"><i class="fa-solid fa-fingerprint text-lg"></i>SYNCHRONIZE PASSKEY</span></button>
+                            <button onclick="handleAuth()" class="mog-btn">SYNCHRONIZE IDENTITY</button>
                         </div>
                         <div id="op-profile" class="hidden text-center">
                             <div id="qrcode" class="bg-white p-4 inline-block rounded-xl mb-4"></div>
@@ -135,48 +128,45 @@
 
             <div class="lg:col-span-8 space-y-8">
                 <section class="command-tile !border-blue-500/40">
-                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">RSA Territorial Radar</span><i class="fa-solid fa-satellite"></i></div>
+                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">Territorial Radar</span><i class="fa-solid fa-satellite"></i></div>
                     <div id="radar-container">
-                        <iframe class="live-map-frame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115162.74811051512!2d29.382894563829033!3d-25.772091444733362!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e9d3004b3f81587%3A0x6e787e9102404746!2sMiddelburg!5e0!3m2!1sen!2sza!4v1710000000000!5m2!1sen!2sza" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe class="live-map-frame" src="https://maps.google.com/maps/contrib/109047355067677955607" allowfullscreen="" loading="lazy"></iframe>
                         <canvas id="radar-canvas"></canvas>
                     </div>
                 </section>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <section class="command-tile !border-blue-500/20 flex flex-col h-[700px]">
-                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Frequency Grid: Top 10 Amapiano</span><i class="fa-brands fa-soundcloud"></i></div>
-                        <div class="grid-scroll p-6 space-y-6" id="soundcloud-grid">
+                    <section class="command-tile flex flex-col h-[750px]">
+                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Top 10 Amapiano Grid</span><i class="fa-solid fa-music text-gold"></i></div>
+                        <div class="grid-scroll p-6 space-y-6 scrollbar-hide" id="soundcloud-grid">
                             </div>
-                        <div class="p-6 border-t border-white/5">
-                            <button class="mog-btn !text-[10px]">Cast Grid Selection</button>
-                        </div>
                     </section>
-                    
-                    <section class="command-tile flex flex-col h-[700px]">
-                        <div class="tile-header flex justify-between"><span class="tile-title">Frequency Chat</span><span class="text-[8px] text-zinc-400 uppercase font-black"><i class="fa-solid fa-lock mr-1"></i>E2E Encrypted</span></div>
+
+                    <section class="command-tile flex flex-col h-[750px]">
+                        <div class="tile-header flex justify-between"><span class="tile-title">Sovereign Chat</span><span class="text-[8px] text-zinc-400 uppercase font-black">E2E_ENCRYPTED</span></div>
                         <div class="p-6 flex-grow flex flex-col justify-end overflow-hidden">
-                            <div id="chat-stream" class="overflow-y-auto space-y-4 mb-6 pr-2 scrollbar-hide"></div>
+                            <div id="chat-stream" class="space-y-4 mb-6 pr-2 scrollbar-hide"></div>
                             <div class="chat-input-wrapper">
                                 <input type="text" id="chat-msg-in" placeholder="TRANSMIT PACKET..." class="chat-input" onkeypress="if(event.key==='Enter')sendPacket()">
-                                <button onclick="sendPacket()" class="send-btn text-gold"><i class="fa-solid fa-paper-plane"></i></button>
+                                <button onclick="sendPacket()" class="text-gold"><i class="fa-solid fa-paper-plane"></i></button>
                             </div>
                         </div>
                     </section>
                 </div>
             </div>
         </main>
-
-        <footer class="relative z-50 p-12 mt-20 border-t border-gold/20 bg-white/5 backdrop-blur-md rounded-t-[50px]">
-            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+        
+        <footer class="relative z-50 p-12 mt-20 border-t border-gold/20 bg-white/5 backdrop-blur-md rounded-t-[40px]">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
                 <div>
                     <p class="text-[11px] text-white tracking-[.5em] font-black uppercase mb-2">Ministry of Groove</p>
-                    <p class="text-[8px] text-zinc-400 tracking-widest uppercase font-black">Command V42.5 // National Amapiano Grid</p>
+                    <p class="text-[8px] text-zinc-400 tracking-widest uppercase font-black">V42.6 Zenith Playback // Operative Network</p>
                 </div>
                 <div class="flex gap-10">
-                    <a href="#" class="text-[10px] text-gold hover:text-white uppercase font-black transition-all">Privacy Protocol</a>
-                    <a href="#" class="text-[10px] text-gold hover:text-white uppercase font-black transition-all">Operative Terms</a>
+                    <a href="#" class="text-[10px] text-gold uppercase font-black">Privacy</a>
+                    <a href="#" class="text-[10px] text-gold uppercase font-black">Terms</a>
                 </div>
-                <div class="inline-flex items-center gap-2 px-3 py-1 border border-green-400 rounded-full bg-green-400/10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 border border-green-400/30 rounded-full bg-green-400/10">
                     <span class="h-1.5 w-1.5 bg-green-400 rounded-full animate-ping"></span>
                     <span class="text-[9px] text-green-400 font-black">GRID_STABLE_RSA</span>
                 </div>
@@ -189,7 +179,7 @@
         const db = window.supabase.createClient(CFG.U, CFG.K);
 
         const tracks = [
-            { id: "1586551699", title: "KABZA DE SMALL - KONKA 2026" },
+            { id: "1586551699", title: "KABZA DE SMALL - KONKA LIVE" },
             { id: "1743603708", title: "KELVIN MOMO - PRIVATE SCHOOL" },
             { id: "1144007629", title: "DALIWONGA - RE-UP" },
             { id: "1243167190", title: "MAS MUSIQ - MAMBISA" },
@@ -204,36 +194,36 @@
         window.addEventListener('load', async () => {
             initRadar(); initLightning(); updateTime(); initIntel(); renderTracks();
             setInterval(updateTime, 1000);
-            
             const { data: { session } } = await db.auth.getSession();
             if (session) renderProfile(session.user);
-            
             setTimeout(() => {
-                document.querySelector('.preloader-logo').classList.add('pulse-fast');
-                setTimeout(() => {
-                    document.getElementById('preloader').classList.add('exit-protocol');
-                    document.getElementById('app-content').classList.replace('opacity-0', 'opacity-100');
-                }, 1000);
+                document.getElementById('preloader').classList.add('exit-protocol');
+                document.getElementById('app-content').classList.replace('opacity-0', 'opacity-100');
             }, 2000);
         });
 
+        // UPDATED: RENDER TRACKS WITH WIDGET API SUPPORT
         function renderTracks() {
             const grid = document.getElementById('soundcloud-grid');
-            grid.innerHTML = tracks.map(t => `
-                <div class="track-card border border-white/5 rounded-xl overflow-hidden bg-black/20">
-                    <iframe width="100%" height="120" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${t.id}&color=%23D4AF37&auto_play=false&hide_related=true"></iframe>
-                    <div class="p-3 flex justify-between items-center">
+            grid.innerHTML = tracks.map((t, i) => `
+                <div class="track-card">
+                    <iframe id="sc-widget-${i}" width="100%" height="160" scrolling="no" frameborder="no" allow="autoplay" 
+                        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${t.id}&color=%23D4AF37&auto_play=false&hide_related=true&show_comments=false&show_user=true&visual=true">
+                    </iframe>
+                    <div class="p-3 bg-zinc-900/50 flex justify-between items-center">
                         <span class="text-[9px] font-black uppercase">${t.title}</span>
-                        <button class="text-gold text-[10px]"><i class="fa-solid fa-heart"></i></button>
+                        <button onclick="syncToPlayer('${t.id}')" class="text-gold text-[10px] border border-gold/20 px-3 py-1 rounded">SYNC</button>
                     </div>
                 </div>
             `).join('');
         }
 
+        function syncToPlayer(id) { addIntel(`STREAM_SYNC: ${id} engaged.`); }
+
         async function handleAuth() {
             const email = document.getElementById('email-in').value;
             const prov = document.getElementById('province-select').value;
-            if(!email || !prov) return alert("CREDENTIALS_REQUIRED");
+            if(!email || !prov) return alert("SIGNAL_ERROR: EMAIL_AND_SECTOR_REQUIRED");
             const { error } = await db.auth.signInWithOtp({ email, options: { data: { province_code: prov } } });
             alert(error ? "HANDSHAKE_FAILED" : "SIGNAL_SENT: CHECK_INBOX");
         }
@@ -251,7 +241,7 @@
             if(!input.value) return;
             const stream = document.getElementById('chat-stream');
             const d = document.createElement('div');
-            d.className = "chat-msg";
+            d.className = "chat-msg animate-slide-up";
             d.innerHTML = `<div class="msg-bubble"><p class="text-white">${input.value}</p></div>`;
             stream.appendChild(d);
             input.value = "";
@@ -264,12 +254,12 @@
             const canvas = document.getElementById('radar-canvas');
             const ctx = canvas.getContext('2d');
             let w = canvas.width = canvas.parentElement.offsetWidth, h = canvas.height = canvas.parentElement.offsetHeight;
-            let radius = 0;
+            let r = 0;
             function draw() {
                 ctx.clearRect(0,0,w,h);
-                radius += 1.5; if(radius > w/2) radius = 0;
-                ctx.beginPath(); ctx.arc(w/2, h/2, radius, 0, Math.PI*2);
-                ctx.strokeStyle = `rgba(0, 212, 255, ${1 - radius/(w/2)})`;
+                r += 1.8; if(r > w/2) r = 0;
+                ctx.beginPath(); ctx.arc(w/2, h/2, r, 0, Math.PI*2);
+                ctx.strokeStyle = `rgba(0, 212, 255, ${1 - r/(w/2)})`;
                 ctx.stroke();
                 requestAnimationFrame(draw);
             }
@@ -296,11 +286,11 @@
         function initIntel() {
             const intel = document.getElementById('intel-scroll');
             setInterval(() => {
-                const logs = ["LOG_DRUM_SYNCED", "SECTOR_MP_STABLE", "VOTING_OPEN", "HIGH_FIDELITY_ENABLED"];
+                const logs = ["LOG_DRUM_SYNCED", "SECTOR_MP_STABLE", "V42.6_ZENITH_ONLINE"];
                 const l = document.createElement('div');
                 l.innerHTML = `[${new Date().toLocaleTimeString()}] ${logs[Math.floor(Math.random()*logs.length)]}`;
                 intel.prepend(l);
-            }, 4000);
+            }, 5000);
         }
     </script>
 </body>
