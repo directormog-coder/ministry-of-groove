@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
-    <meta name="theme-color" content="#050505">
+    <meta name="theme-color" content="#1a1a1a">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -18,54 +18,60 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@300;400;600;800&display=swap');
-        :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; }
+        :root { 
+            --mog-gold: #D4AF37; 
+            --mog-blue: #00d4ff; 
+            --mog-bg: #1a1a1a; /* Brightened from #050505 */
+            --mog-panel: #262626; /* Brightened from #0a0a0a */
+        }
         
         * { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--mog-black); color: var(--mog-gold); margin: 0; overflow-x: hidden; -webkit-user-select: none; user-select: none; }
+        body { background-color: var(--mog-bg); color: var(--mog-gold); margin: 0; overflow-x: hidden; -webkit-user-select: none; user-select: none; }
         
         /* ENHANCED SPLASH TRANSITION */
         #preloader { 
-            position: fixed; inset: 0; background: #000; z-index: 9999; 
+            position: fixed; inset: 0; background: var(--mog-bg); z-index: 9999; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             transition: all 1.2s cubic-bezier(0.8, 0, 0.2, 1); opacity: 1; visibility: visible;
         }
         #preloader.exit-protocol { opacity: 0; visibility: hidden; transform: scale(1.5); filter: blur(20px); }
         .preloader-logo { transition: all 0.8s ease; }
         .preloader-logo.pulse-fast { animation: pulse-fast 0.5s infinite alternate; }
-        @keyframes pulse-fast { from { transform: scale(1); filter: brightness(1); } to { transform: scale(1.05); filter: brightness(1.5) drop-shadow(0 0 15px var(--mog-gold)); } }
+        @keyframes pulse-fast { from { transform: scale(1); filter: brightness(1.2); } to { transform: scale(1.05); filter: brightness(1.8) drop-shadow(0 0 15px var(--mog-gold)); } }
 
         /* COMMAND INTERFACE */
         .command-tile { 
-            background: rgba(10, 10, 10, 0.95); border: 1px solid rgba(212, 175, 55, 0.15); 
+            background: var(--mog-panel); 
+            border: 1px solid rgba(212, 175, 55, 0.25); /* Increased border visibility */
             backdrop-filter: blur(40px); position: relative; overflow: hidden; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
         .tile-header { 
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1); padding: 12px 18px; 
-            background: linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, transparent 100%); 
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding: 12px 18px; 
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%); 
         }
-        .tile-title { font-family: 'Tenor Sans', sans-serif; letter-spacing: 5px; text-transform: uppercase; font-size: 9px; color: #fff; opacity: 0.9; }
+        .tile-title { font-family: 'Tenor Sans', sans-serif; letter-spacing: 5px; text-transform: uppercase; font-size: 9px; color: #fff; opacity: 1; }
         
         /* RSA TERRITORIAL RADAR */
-        #radar-container { position: relative; height: 320px; width: 100%; background: #000; cursor: crosshair; overflow: hidden; }
+        #radar-container { position: relative; height: 320px; width: 100%; background: #202020; cursor: crosshair; overflow: hidden; }
         #radar-canvas { position: absolute; inset: 0; z-index: 5; }
         .map-underlay { 
             position: absolute; inset: 0; 
             background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_map_of_South_Africa.svg');
             background-repeat: no-repeat; background-position: center; background-size: contain; 
-            filter: invert(1) brightness(1.5); opacity: 0.08;
+            filter: invert(0.8) brightness(1.2); opacity: 0.15; /* Brightened map */
         }
 
-        .intel-feed { height: 75px; overflow: hidden; font-family: 'Courier New', monospace; font-size: 9px; color: var(--mog-blue); opacity: 0.6; }
+        .intel-feed { height: 75px; overflow: hidden; font-family: 'Courier New', monospace; font-size: 9px; color: var(--mog-blue); opacity: 0.8; }
         .feed-scroll { animation: feed-up 18s linear infinite; }
         @keyframes feed-up { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
 
         .mog-btn { 
-            border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 14px; 
+            border: 2px solid var(--mog-gold); color: var(--mog-gold); padding: 14px; 
             font-size: 0.75rem; font-weight: 800; text-transform: uppercase; 
-            background: transparent; letter-spacing: 3px; width: 100%; cursor: pointer;
+            background: rgba(212, 175, 55, 0.05); letter-spacing: 3px; width: 100%; cursor: pointer;
         }
-        .mog-btn:hover { background: var(--mog-gold); color: #000; box-shadow: 0 0 25px rgba(212, 175, 55, 0.4); }
+        .mog-btn:hover { background: var(--mog-gold); color: var(--mog-bg); box-shadow: 0 0 25px rgba(212, 175, 55, 0.4); }
         
         .province-select {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23D4AF37' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
@@ -75,12 +81,12 @@
         @keyframes scan { 0% { top: 0%; } 100% { top: 85%; } }
         .scanner-line { 
             position: absolute; inset: 0; height: 15%; 
-            background: linear-gradient(to bottom, rgba(0, 212, 255, 0.2), transparent);
-            border-top: 2px solid rgba(0, 212, 255, 0.5);
+            background: linear-gradient(to bottom, rgba(0, 212, 255, 0.3), transparent);
+            border-top: 2px solid rgba(0, 212, 255, 0.7);
             animation: scan 2s linear infinite; pointer-events: none;
         }
 
-        #lightning-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.3; }
+        #lightning-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.2; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -89,24 +95,24 @@
 
     <div id="preloader">
         <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="preloader-logo h-24 w-24 mb-6">
-        <div class="text-[10px] text-blue-400 tracking-[1em] font-mono animate-pulse uppercase italic">Synchronizing_National_Amapiano_Grid_V28.6</div>
+        <div class="text-[10px] text-blue-500 tracking-[1em] font-mono animate-pulse uppercase italic font-bold">Synchronizing_National_Amapiano_Grid_V28.6</div>
     </div>
 
     <div id="app-content" class="opacity-0 p-4 lg:p-10 space-y-10 transition-opacity duration-1000">
         
         <header class="flex flex-col lg:flex-row justify-between items-center gap-8 relative z-50">
             <div class="flex items-center gap-6">
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold/30 rounded-full shadow-2xl">
+                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold/50 rounded-full shadow-2xl bg-white/5">
                 <div>
                     <h1 class="text-3xl text-white italic tracking-[.4em] font-serif uppercase">Ministry of Groove</h1>
-                    <p class="text-[9px] text-blue-400 tracking-[.6em] mt-2 uppercase">Amapiano Sovereignty // Tactical Artist Network</p>
+                    <p class="text-[9px] text-blue-500 tracking-[.6em] mt-2 uppercase font-bold">Amapiano Sovereignty // Tactical Artist Network</p>
                 </div>
             </div>
             <div class="flex flex-col items-end">
-                <div class="text-[11px] text-gold font-bold border border-gold/20 px-8 py-2 bg-gold/5 tracking-[.5em] uppercase shadow-[0_0_20px_rgba(212,175,55,0.1)]">
+                <div class="text-[11px] text-gold font-bold border-2 border-gold/40 px-8 py-2 bg-gold/10 tracking-[.5em] uppercase shadow-[0_0_20px_rgba(212,175,55,0.2)]">
                     Yanos Operatives: <span id="op-count">0</span> / 500
                 </div>
-                <p id="system-time" class="text-[8px] text-zinc-600 mt-2 font-mono tracking-widest uppercase"></p>
+                <p id="system-time" class="text-[8px] text-zinc-400 mt-2 font-mono tracking-widest uppercase font-bold"></p>
             </div>
         </header>
 
@@ -114,7 +120,7 @@
             
             <div class="lg:col-span-4 space-y-8">
                 <section class="command-tile">
-                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-400 text-[8px]">Amapiano Sector Intel</span><i class="fa-solid fa-tower-broadcast text-[8px] animate-pulse"></i></div>
+                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">Amapiano Sector Intel</span><i class="fa-solid fa-tower-broadcast text-[8px] animate-pulse"></i></div>
                     <div class="p-6 intel-feed">
                         <div class="feed-scroll">
                             [08:15:01] LOG DRUM FREQUENCIES DETECTED IN GAUTENG...<br>
@@ -130,12 +136,12 @@
                 <section class="command-tile">
                     <div class="tile-header flex justify-between">
                         <span class="tile-title cursor-default" onclick="handleReviewerBypass()">Operative Registry</span>
-                        <i class="fa-solid fa-fingerprint text-[10px] text-blue-500/40"></i>
+                        <i class="fa-solid fa-fingerprint text-[10px] text-blue-500"></i>
                     </div>
                     <div class="p-8 text-center">
                         <div id="auth-ui">
-                            <input id="email-in" type="email" placeholder="ENTER ACCESS EMAIL" class="w-full bg-black border border-blue-900/30 p-4 text-blue-400 mb-4 outline-none text-[10px] tracking-widest uppercase focus:border-gold">
-                            <select id="province-select" class="w-full bg-black border border-blue-900/30 p-4 text-zinc-500 mb-6 outline-none text-[10px] tracking-widest uppercase focus:border-gold appearance-none">
+                            <input id="email-in" type="email" placeholder="ENTER ACCESS EMAIL" class="w-full bg-zinc-800/50 border border-blue-500/30 p-4 text-white mb-4 outline-none text-[10px] tracking-widest uppercase focus:border-gold">
+                            <select id="province-select" class="w-full bg-zinc-800/50 border border-blue-500/30 p-4 text-zinc-200 mb-6 outline-none text-[10px] tracking-widest uppercase focus:border-gold appearance-none">
                                 <option value="" disabled selected>SELECT SECTOR DEPLOYMENT</option>
                                 <option value="GP">Gauteng (GP)</option>
                                 <option value="WC">Western Cape (WC)</option>
@@ -151,12 +157,12 @@
                         </div>
                         <div id="op-profile" class="hidden">
                             <div class="relative inline-block mb-4">
-                                <div id="qrcode" class="bg-white p-3 rounded-sm"></div>
+                                <div id="qrcode" class="bg-white p-3 rounded-sm shadow-xl"></div>
                                 <div class="scanner-line"></div>
                             </div>
                             <p id="active-alias" class="text-2xl font-black text-white uppercase mb-2 tracking-[0.3em] italic"></p>
                             <p id="active-sector" class="text-[10px] text-gold tracking-[.5em] uppercase font-bold mb-6"></p>
-                            <div class="py-2 px-4 border border-gold/20 inline-block text-[8px] text-zinc-500 tracking-widest uppercase">Clearance: Amapiano_Operative_V1</div>
+                            <div class="py-2 px-4 border border-gold/40 bg-gold/5 inline-block text-[8px] text-zinc-300 tracking-widest uppercase">Clearance: Amapiano_Operative_V1</div>
                         </div>
                     </div>
                 </section>
@@ -164,8 +170,8 @@
 
             <div class="lg:col-span-8 space-y-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <section class="command-tile !border-blue-500/30">
-                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">RSA Territorial Radar</span><i class="fa-solid fa-satellite animate-bounce text-blue-400/50"></i></div>
+                    <section class="command-tile !border-blue-500/40">
+                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">RSA Territorial Radar</span><i class="fa-solid fa-satellite animate-bounce text-blue-500"></i></div>
                         <div id="radar-container">
                             <div class="map-underlay"></div>
                             <canvas id="radar-canvas"></canvas>
@@ -174,50 +180,50 @@
                     <section class="command-tile">
                         <div class="tile-header"><span class="tile-title">Amapiano Sonic Archive</span></div>
                         <div class="p-6">
-                            <audio id="player" controls class="w-full h-12 mb-6 bg-black border border-white/5"></audio>
-                            <div class="locked-blur space-y-3">
-                                <div class="p-4 border border-white/5 bg-white/5 text-[10px] tracking-widest uppercase">Kabza_Konka_Live_V28.MP3</div>
-                                <div class="p-4 border border-white/5 bg-white/5 text-[10px] tracking-widest uppercase">Kelvin_Momo_Private_Sector_2026.MP3</div>
-                                <div class="p-4 border border-white/5 bg-white/5 text-[10px] tracking-widest uppercase">Nontokozo_Esandleni_Amapiano_Vocal.MP3</div>
+                            <audio id="player" controls class="w-full h-12 mb-6 bg-zinc-800 border border-white/20"></audio>
+                            <div class="space-y-3">
+                                <div class="p-4 border border-gold/20 bg-gold/5 text-[10px] tracking-widest uppercase text-white font-bold">Kabza_Konka_Live_V28.MP3</div>
+                                <div class="p-4 border border-gold/20 bg-gold/5 text-[10px] tracking-widest uppercase text-white font-bold">Kelvin_Momo_Private_Sector_2026.MP3</div>
+                                <div class="p-4 border border-gold/20 bg-gold/5 text-[10px] tracking-widest uppercase text-white font-bold">Nontokozo_Esandleni_Amapiano_Vocal.MP3</div>
                             </div>
                         </div>
                     </section>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <section class="command-tile !border-blue-400/20">
-                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400 text-[8px]">Sector Leaderboard // Top 3</span></div>
+                    <section class="command-tile !border-blue-500/20">
+                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-500 text-[8px]">Sector Leaderboard // Top 3</span></div>
                         <div class="p-6 space-y-4" id="leaderboard-container">
-                            <p class="text-[8px] text-zinc-600 animate-pulse uppercase tracking-[.4em]">Analyzing provincial influence...</p>
+                            <p class="text-[8px] text-zinc-400 animate-pulse uppercase tracking-[.4em]">Analyzing provincial influence...</p>
                         </div>
                     </section>
                     <section class="command-tile">
-                        <div class="tile-header flex justify-between"><span class="tile-title">Amapiano Frequency Chat</span><span class="text-[7px] text-zinc-600 uppercase">Encrypted</span></div>
+                        <div class="tile-header flex justify-between"><span class="tile-title">Amapiano Frequency Chat</span><span class="text-[7px] text-zinc-400 uppercase">Encrypted</span></div>
                         <div class="p-6">
-                            <div id="chat-stream" class="h-32 overflow-y-auto font-mono text-[10px] text-blue-300/40 space-y-3 mb-4 scrollbar-hide"></div>
-                            <input type="text" placeholder="TRANSMIT PACKET..." class="w-full bg-black border border-white/10 p-4 text-[10px] outline-none text-blue-400 tracking-widest">
+                            <div id="chat-stream" class="h-32 overflow-y-auto font-mono text-[10px] text-blue-400 space-y-3 mb-4 scrollbar-hide"></div>
+                            <input type="text" placeholder="TRANSMIT PACKET..." class="w-full bg-zinc-800 border border-blue-500/20 p-4 text-[10px] outline-none text-white tracking-widest">
                         </div>
                     </section>
                 </div>
             </div>
-    </main>
-    
-        <footer class="relative z-50 p-12 mt-20 border-t border-gold/10 bg-black/50 backdrop-blur-md">
+        </main>
+
+        <footer class="relative z-50 p-12 mt-20 border-t border-gold/20 bg-white/5 backdrop-blur-md">
             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
                 <div>
                     <p class="text-[10px] text-white tracking-[.5em] font-black uppercase mb-2">Ministry of Groove</p>
-                    <p class="text-[8px] text-zinc-500 tracking-widest uppercase">Command V28.6 // Amapiano National Grid</p>
+                    <p class="text-[8px] text-zinc-400 tracking-widest uppercase">Command V28.6 // Amapiano National Grid</p>
                 </div>
                 <div class="flex gap-10">
-                    <a href="privacy.html" class="text-[9px] text-gold/60 hover:text-gold tracking-[0.4em] uppercase font-bold transition-all">Privacy Protocol</a>
-                    <a href="terms.html" class="text-[9px] text-gold/60 hover:text-gold tracking-[0.4em] uppercase font-bold transition-all">Operative Terms</a>
+                    <a href="privacy.html" class="text-[9px] text-gold hover:text-white tracking-[0.4em] uppercase font-bold transition-all underline decoration-gold/30">Privacy Protocol</a>
+                    <a href="terms.html" class="text-[9px] text-gold hover:text-white tracking-[0.4em] uppercase font-bold transition-all underline decoration-gold/30">Operative Terms</a>
                 </div>
-                <div class="inline-flex items-center gap-2 px-3 py-1 border border-green-500/30 rounded-full">
-                    <span class="h-1.5 w-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                    <span class="text-[8px] text-green-500 font-mono tracking-tighter uppercase">Grid_Stable_RSA</span>
+                <div class="inline-flex items-center gap-2 px-3 py-1 border border-green-400 rounded-full bg-green-400/10">
+                    <span class="h-1.5 w-1.5 bg-green-400 rounded-full animate-pulse"></span>
+                    <span class="text-[8px] text-green-400 font-mono tracking-tighter uppercase font-bold">Grid_Stable_RSA</span>
                 </div>
             </div>
-            <p class="text-[7px] text-zinc-700 tracking-[1em] uppercase mt-8 text-center">© 2026 Ministry of Groove. POPIA Compliant.</p>
+            <p class="text-[7px] text-zinc-500 tracking-[1em] uppercase mt-8 text-center">© 2026 Ministry of Groove. POPIA Compliant.</p>
         </footer>
     </div>
 
@@ -260,15 +266,15 @@
                 heatMapData = data;
                 const lb = document.getElementById('leaderboard-container');
                 lb.innerHTML = data.slice(0, 3).map((s, i) => `
-                    <div class="flex justify-between items-center text-[10px] border-b border-white/5 pb-2">
-                        <span class="text-zinc-500 font-mono">0${i+1}</span>
+                    <div class="flex justify-between items-center text-[10px] border-b border-white/10 pb-2">
+                        <span class="text-zinc-400 font-mono">0${i+1}</span>
                         <span class="text-white tracking-widest font-black uppercase italic">${pNames[s.province] || s.province}</span>
                         <span class="text-gold font-bold">${s.operative_count} OPS</span>
                     </div>
                 `).join('');
             }
         }
-
+        
         function updateTime() { document.getElementById('system-time').innerText = new Date().toLocaleTimeString('en-US', { hour12: false }) + " UTC+2"; }
 
         function initializeChat() {
@@ -278,7 +284,7 @@
                 { op: "SYSTEM", msg: "LOG DRUM FREQUENCY SYNCED.", time: "05:31" },
                 { op: "OP_GP_01", msg: "Sandton nodes active. Artist sessions encrypted.", time: "08:12" }
             ];
-            chatStream.innerHTML = packets.map(p => `<p class="mb-3 leading-relaxed"><span class="text-[7px] text-zinc-600 font-mono">[${p.time}]</span> <span class="${p.op.includes('DIR') ? 'text-gold' : 'text-green-500'} font-bold">[${p.op}]:</span> <span class="text-blue-100/70">${p.msg}</span></p>`).join('');
+            chatStream.innerHTML = packets.map(p => `<p class="mb-3 leading-relaxed"><span class="text-[7px] text-zinc-500 font-mono">[${p.time}]</span> <span class="${p.op.includes('DIR') ? 'text-gold' : 'text-blue-500'} font-bold">[${p.op}]:</span> <span class="text-white">${p.msg}</span></p>`).join('');
             chatStream.scrollTop = chatStream.scrollHeight;
         }
 
@@ -326,7 +332,7 @@
                         const sx = coord.x * w, sy = coord.y * h;
                         const glowSize = Math.min(sector.operative_count * 5, 50);
                         const grad = ctx.createRadialGradient(sx, sy, 0, sx, sy, glowSize);
-                        grad.addColorStop(0, 'rgba(212, 175, 55, 0.4)'); grad.addColorStop(1, 'rgba(212, 175, 55, 0)');
+                        grad.addColorStop(0, 'rgba(212, 175, 55, 0.6)'); grad.addColorStop(1, 'rgba(212, 175, 55, 0)');
                         ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(sx, sy, glowSize, 0, Math.PI * 2); ctx.fill();
                     }
                 });
@@ -351,9 +357,9 @@
         function lResize() { lw = lCanvas.width = window.innerWidth; lh = lCanvas.height = window.innerHeight; }
         window.addEventListener('resize', lResize); lResize();
         function lAnimate() {
-            lCtx.fillStyle = 'rgba(5, 5, 5, 0.12)'; lCtx.fillRect(0, 0, lw, lh);
+            lCtx.fillStyle = 'rgba(26, 26, 26, 0.15)'; lCtx.fillRect(0, 0, lw, lh);
             if (Math.random() > 0.975) {
-                lCtx.strokeStyle = 'rgba(212, 175, 55, 0.22)'; lCtx.beginPath();
+                lCtx.strokeStyle = 'rgba(212, 175, 55, 0.3)'; lCtx.beginPath();
                 let x = Math.random()*lw, y = Math.random()*lh; lCtx.moveTo(x,y);
                 for(let i=0; i<5; i++){ x+=(Math.random()-0.5)*180; y+=(Math.random()-0.5)*180; lCtx.lineTo(x,y); }
                 lCtx.stroke();
