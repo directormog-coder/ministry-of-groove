@@ -32,33 +32,28 @@
         
         body { background-color: var(--mog-bg); color: var(--mog-gold); margin: 0; overflow-x: hidden; -webkit-user-select: none; user-select: none; }
         
-        /* PRELOADER RETAINED & UPGRADED */
         #preloader { position: fixed; inset: 0; background: var(--mog-bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 1.2s cubic-bezier(0.8, 0, 0.2, 1); }
         #preloader.exit-protocol { opacity: 0; visibility: hidden; transform: scale(1.5); filter: blur(20px); }
         .preloader-logo.pulse-fast { animation: pulse-fast 0.5s infinite alternate; }
         @keyframes pulse-fast { from { transform: scale(1); } to { transform: scale(1.05); filter: brightness(1.5); } }
 
-        /* UI COMPONENTS */
         .command-tile { background: var(--mog-panel); border: 1px solid rgba(212, 175, 55, 0.25); backdrop-filter: blur(40px); position: relative; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border-radius: 20px; }
         .tile-header { border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding: 12px 18px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%); }
         .tile-title { letter-spacing: 5px; text-transform: uppercase; font-size: 10px; color: #fff; }
         
-        /* RADAR & MAP RETAINED */
         #radar-container { position: relative; height: 350px; width: 100%; background: #000; overflow: hidden; }
         .live-map-frame { width: 100%; height: 100%; border: none; filter: grayscale(1) contrast(1.2) invert(0.9); opacity: 0.4; pointer-events: auto; }
         #radar-canvas { position: absolute; inset: 0; z-index: 10; pointer-events: none; }
 
-        /* CHAT SYSTEM RETAINED */
         #chat-stream { scroll-behavior: smooth; }
         .chat-msg { margin-bottom: 12px; animation: msg-slide 0.4s ease-out; }
         @keyframes msg-slide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .msg-bubble { padding: 10px 14px; border-radius: 16px; max-width: 85%; font-size: 11px; background: var(--mog-chat-bg); border: 1px solid rgba(0, 212, 255, 0.1); }
-        .msg-dir { border-left: 2px solid var(--mog-gold); background: rgba(212, 175, 55, 0.05); }
+        .msg-dir { border-left: 2px solid var(--mog-gold); background: rgba(212, 175, 55, 0.05); align-self: flex-end; }
         
         .chat-input-wrapper { background: var(--mog-chat-bg); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 24px; padding: 4px 16px; display: flex; align-items: center; gap: 10px; }
         .chat-input { background: transparent; border: none; outline: none; width: 100%; color: #fff; font-size: 11px; padding: 10px 0; }
         
-        /* SOUNDCLOUD GRID RETAINED & UPGRADED */
         .grid-scroll { overflow-y: auto; max-height: 600px; padding-right: 10px; }
         .grid-scroll::-webkit-scrollbar { width: 4px; }
         .grid-scroll::-webkit-scrollbar-thumb { background: var(--mog-gold); border-radius: 10px; }
@@ -99,9 +94,7 @@
                 <section class="command-tile">
                     <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">Sector Intel Feed</span><i class="fa-solid fa-tower-broadcast text-[8px] animate-pulse"></i></div>
                     <div class="p-6 h-40 overflow-hidden font-mono text-[9px] leading-relaxed text-zinc-500" id="intel-scroll">
-                        [22:15:01] GP-012 LOG DRUM DETECTED...<br>
-                        [22:15:08] ENCRYPTED PROFILE DETECTED IN MPUMALANGA...<br>
-                        [22:15:15] AWAITING LOSSLESS SYNC AUTHORIZATION...
+                        [SYSTEM] STANDING BY FOR HANDSHAKE...<br>
                     </div>
                 </section>
 
@@ -137,7 +130,7 @@
                 <section class="command-tile !border-blue-500/40">
                     <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">RSA Territorial Radar</span><i class="fa-solid fa-satellite"></i></div>
                     <div id="radar-container">
-                        <iframe class="live-map-frame" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3592.5123456789!2d29.4677!3d-25.7711!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sza!4v1700000000000" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe class="live-map-frame" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7176437.942704043!2d24.6384236!3d-28.4792625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sza!4v1710000000000!5m2!1sen!2sza" allowfullscreen="" loading="lazy"></iframe>
                         <canvas id="radar-canvas"></canvas>
                     </div>
                 </section>
@@ -145,8 +138,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <section class="command-tile !border-blue-500/20 flex flex-col h-[700px]">
                         <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Frequency Grid: Top 10 Amapiano</span><i class="fa-brands fa-soundcloud"></i></div>
-                        <div class="grid-scroll p-6 space-y-6" id="soundcloud-grid">
-                            </div>
+                        <div class="grid-scroll p-6 space-y-6" id="soundcloud-grid"></div>
                         <div class="p-6 border-t border-white/5">
                             <button class="mog-btn !text-[10px]">Cast Grid Selection</button>
                         </div>
@@ -155,7 +147,7 @@
                     <section class="command-tile flex flex-col h-[700px]">
                         <div class="tile-header flex justify-between"><span class="tile-title">Frequency Chat</span><span class="text-[8px] text-zinc-400 uppercase font-black"><i class="fa-solid fa-lock mr-1"></i>E2E Encrypted</span></div>
                         <div class="p-6 flex-grow flex flex-col justify-end overflow-hidden">
-                            <div id="chat-stream" class="overflow-y-auto space-y-4 mb-6 pr-2 scrollbar-hide"></div>
+                            <div id="chat-stream" class="overflow-y-auto space-y-4 mb-6 pr-2 scrollbar-hide flex flex-col"></div>
                             <div class="chat-input-wrapper">
                                 <input type="text" id="chat-msg-in" placeholder="TRANSMIT PACKET..." class="chat-input" onkeypress="if(event.key==='Enter')sendPacket()">
                                 <button onclick="sendPacket()" class="send-btn text-gold"><i class="fa-solid fa-paper-plane"></i></button>
@@ -183,30 +175,62 @@
             </div>
         </footer>
     </div>
-
+    
     <script>
-        const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
+        // --- CONFIG & INITIALIZATION ---
+        const CFG = { 
+            U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
+            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" 
+        };
         const db = window.supabase.createClient(CFG.U, CFG.K);
+        let currentUser = null;
 
         const tracks = [
             { id: "1586551699", title: "KABZA DE SMALL - KONKA 2026" },
             { id: "1743603708", title: "KELVIN MOMO - PRIVATE SCHOOL" },
             { id: "1144007629", title: "DALIWONGA - RE-UP" },
-            { id: "1243167190", title: "MAS MUSIQ - MAMBISA" },
-            { id: "1623456789", title: "DE MTHUDA - JOHN WICK" },
-            { id: "1812345678", title: "YOUNG STUNNA - ADIWELE" },
-            { id: "1912345678", title: "MELLOW & SLEAZY - NKAO TEMPELA" },
-            { id: "2012345678", title: "DJ MAPHORISA - BA STRAATA" },
-            { id: "2112345678", title: "UNCLE WAFFLES - TANZANIA" },
-            { id: "2212345678", title: "MAJOR LEAGUE DJZ - BALCONY MIX" }
+            { id: "1243167190", title: "MAS MUSIQ - MAMBISA" }
         ];
 
+        // --- REAL-TIME: CHAT & PRESENCE ---
+        const channel = db.channel('mog_global', {
+            config: { presence: { key: 'operative' } }
+        });
+
+        channel
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+                displayMessage(payload.new);
+            })
+            .on('presence', { event: 'sync' }, () => {
+                const newState = channel.presenceState();
+                const totalOperatives = Object.keys(newState).length;
+                const counterEl = document.getElementById('op-count');
+                if (counterEl) {
+                    counterEl.innerText = totalOperatives;
+                    counterEl.classList.add('animate-pulse');
+                    setTimeout(() => counterEl.classList.remove('animate-pulse'), 500);
+                }
+            })
+            .subscribe(async (status) => {
+                if (status === 'SUBSCRIBED') {
+                    await channel.track({
+                        online_at: new Date().toISOString(),
+                        user: currentUser?.email || 'Anonymous'
+                    });
+                }
+            });
+
+        // --- CORE LOGIC ---
         window.addEventListener('load', async () => {
             initRadar(); initLightning(); updateTime(); initIntel(); renderTracks();
             setInterval(updateTime, 1000);
             
             const { data: { session } } = await db.auth.getSession();
-            if (session) renderProfile(session.user);
+            if (session) {
+                currentUser = session.user;
+                renderProfile(session.user);
+                fetchMessages();
+            }
             
             setTimeout(() => {
                 document.querySelector('.preloader-logo').classList.add('pulse-fast');
@@ -217,24 +241,14 @@
             }, 2000);
         });
 
-        function renderTracks() {
-            const grid = document.getElementById('soundcloud-grid');
-            grid.innerHTML = tracks.map(t => `
-                <div class="track-card border border-white/5 rounded-xl overflow-hidden bg-black/20">
-                    <iframe width="100%" height="120" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${t.id}&color=%23D4AF37&auto_play=false&hide_related=true"></iframe>
-                    <div class="p-3 flex justify-between items-center">
-                        <span class="text-[9px] font-black uppercase">${t.title}</span>
-                        <button class="text-gold text-[10px]"><i class="fa-solid fa-heart"></i></button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
         async function handleAuth() {
             const email = document.getElementById('email-in').value;
             const prov = document.getElementById('province-select').value;
             if(!email || !prov) return alert("CREDENTIALS_REQUIRED");
-            const { error } = await db.auth.signInWithOtp({ email, options: { data: { province_code: prov } } });
+            const { error } = await db.auth.signInWithOtp({ 
+                email, 
+                options: { data: { province_code: prov } } 
+            });
             alert(error ? "HANDSHAKE_FAILED" : "SIGNAL_SENT: CHECK_INBOX");
         }
 
@@ -246,19 +260,53 @@
             new QRCode(document.getElementById("qrcode"), { text: user.id, width: 120, height: 120 });
         }
 
-        function sendPacket() {
+        async function fetchMessages() {
+            const { data } = await db.from('messages').select('*').order('created_at', { ascending: true }).limit(20);
+            if (data) data.forEach(displayMessage);
+        }
+
+        async function sendPacket() {
             const input = document.getElementById('chat-msg-in');
-            if(!input.value) return;
+            if(!input.value || !currentUser) return;
+
+            const { error } = await db.from('messages').insert([{
+                content: input.value,
+                user_id: currentUser.id,
+                alias: currentUser.email.split('@')[0],
+                sector: currentUser.user_metadata?.province_code || 'UNK'
+            }]);
+
+            if (error) console.error("SIGNAL_LOST:", error.message);
+            input.value = "";
+        }
+
+        function displayMessage(msg) {
             const stream = document.getElementById('chat-stream');
             const d = document.createElement('div');
-            d.className = "chat-msg";
-            d.innerHTML = `<div class="msg-bubble"><p class="text-white">${input.value}</p></div>`;
+            const isMe = currentUser && msg.user_id === currentUser.id;
+            d.className = `chat-msg flex ${isMe ? 'justify-end' : 'justify-start'}`;
+            
+            d.innerHTML = `
+                <div class="msg-bubble ${isMe ? 'msg-dir' : ''}">
+                    <p class="text-[8px] text-blue-400 font-black mb-1 uppercase">${msg.alias} [${msg.sector}]</p>
+                    <p class="text-white">${msg.content}</p>
+                </div>`;
+            
             stream.appendChild(d);
-            input.value = "";
             stream.scrollTop = stream.scrollHeight;
         }
 
+        // --- SYSTEM UTILS ---
         function updateTime() { document.getElementById('system-time').innerText = new Date().toLocaleTimeString() + " SAST"; }
+
+        function renderTracks() {
+            const grid = document.getElementById('soundcloud-grid');
+            grid.innerHTML = tracks.map(t => `
+                <div class="track-card border border-white/5 rounded-xl overflow-hidden bg-black/20">
+                    <iframe width="100%" height="120" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${t.id}&color=%23D4AF37&auto_play=false&hide_related=true"></iframe>
+                </div>
+            `).join('');
+        }
 
         function initRadar() {
             const canvas = document.getElementById('radar-canvas');
@@ -295,12 +343,11 @@
 
         function initIntel() {
             const intel = document.getElementById('intel-scroll');
-            setInterval(() => {
-                const logs = ["LOG_DRUM_SYNCED", "SECTOR_MP_STABLE", "VOTING_OPEN", "HIGH_FIDELITY_ENABLED"];
+            db.channel('intel_feed').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
                 const l = document.createElement('div');
-                l.innerHTML = `[${new Date().toLocaleTimeString()}] ${logs[Math.floor(Math.random()*logs.length)]}`;
+                l.innerHTML = `[${new Date().toLocaleTimeString()}] INCOMING_TRANSMISSION: ${payload.new.sector}_${payload.new.alias}`;
                 intel.prepend(l);
-            }, 4000);
+            }).subscribe();
         }
     </script>
 </body>
