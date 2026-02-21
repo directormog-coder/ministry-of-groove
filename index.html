@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V28.6</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V42.0</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* GOOGLE-LEVEL TYPOGRAPHY & MOTION */
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@200,400,700&f[]=satoshi@300,400,700,900&display=swap');
         
         :root { 
@@ -27,11 +28,11 @@
         }
         
         * { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Satoshi', sans-serif; -webkit-tap-highlight-color: transparent; }
-        
         h1, .tile-title, .active-alias { font-family: 'Clash Display', sans-serif; font-weight: 700; }
         
         body { background-color: var(--mog-bg); color: var(--mog-gold); margin: 0; overflow-x: hidden; -webkit-user-select: none; user-select: none; }
         
+        /* PRELOADER */
         #preloader { 
             position: fixed; inset: 0; background: var(--mog-bg); z-index: 9999; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
@@ -41,6 +42,7 @@
         .preloader-logo.pulse-fast { animation: pulse-fast 0.5s infinite alternate; }
         @keyframes pulse-fast { from { transform: scale(1); } to { transform: scale(1.05); filter: brightness(1.5); } }
 
+        /* UI COMPONENTS */
         .command-tile { 
             background: var(--mog-panel); 
             border: 1px solid rgba(212, 175, 55, 0.25); 
@@ -54,16 +56,14 @@
         }
         .tile-title { letter-spacing: 5px; text-transform: uppercase; font-size: 10px; color: #fff; }
         
+        /* RADAR & LIVE MAP */
         #radar-container { position: relative; height: 320px; width: 100%; background: #202020; overflow: hidden; }
-        #radar-canvas { position: absolute; inset: 0; z-index: 5; }
-        
-        /* UPDATED RSA TERRITORIAL MAP - LATEST VERSION */
-        .map-underlay { 
-            position: absolute; inset: 0; 
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e0/Map_of_the_administrative_geography_of_South_Africa.svg');
-            background-repeat: no-repeat; background-position: center; background-size: contain; 
-            filter: invert(0.8) brightness(1.2); opacity: 0.18;
+        .live-map-frame { 
+            width: 100%; height: 100%; border: none; 
+            filter: grayscale(1) contrast(1.2) invert(0.9); 
+            opacity: 0.3; pointer-events: none;
         }
+        #radar-canvas { position: absolute; inset: 0; z-index: 10; }
 
         .intel-feed { height: 75px; overflow: hidden; font-family: 'Satoshi', monospace; font-size: 10px; color: var(--mog-blue); }
         .feed-scroll { animation: feed-up 18s linear infinite; }
@@ -76,7 +76,14 @@
             border-radius: 8px;
         }
         
-        .locked-blur { filter: blur(12px); opacity: 0.2; pointer-events: none; }
+        @keyframes scan { 0% { top: 0%; } 100% { top: 85%; } }
+        .scanner-line { 
+            position: absolute; inset: 0; height: 15%; 
+            background: linear-gradient(to bottom, rgba(0, 212, 255, 0.3), transparent);
+            border-top: 2px solid rgba(0, 212, 255, 0.7);
+            animation: scan 2s linear infinite; pointer-events: none;
+        }
+
         #lightning-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.2; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
     </style>
@@ -86,22 +93,22 @@
 
     <div id="preloader">
         <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="preloader-logo h-24 w-24 mb-6">
-        <div class="text-[11px] text-blue-500 tracking-[1em] font-bold animate-pulse uppercase italic">Synchronizing_Grid_V28.6</div>
+        <div class="text-[11px] text-blue-500 tracking-[1em] font-bold animate-pulse uppercase italic">Synchronizing_Grid_V42.0</div>
     </div>
 
     <div id="app-content" class="opacity-0 p-4 lg:p-10 space-y-10 transition-opacity duration-1000">
         
         <header class="flex flex-col lg:flex-row justify-between items-center gap-8 relative z-50">
             <div class="flex items-center gap-6">
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold/50 rounded-full bg-white/5">
+                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold/50 rounded-full bg-white/5 shadow-2xl">
                 <div>
                     <h1 class="text-4xl text-white tracking-[.2em] uppercase">Ministry of Groove</h1>
-                    <p class="text-[10px] text-blue-500 tracking-[.6em] mt-2 uppercase font-black">National Sovereignty // Tactical Amapiano Grid</p>
+                    <p class="text-[10px] text-blue-500 tracking-[.6em] mt-2 uppercase font-black">National Amapiano Sovereignty // High-Fidelity Artist Network</p>
                 </div>
             </div>
             <div class="flex flex-col items-end">
                 <div class="text-[12px] text-gold font-black border-2 border-gold/40 px-8 py-2 bg-gold/10 tracking-[.5em] uppercase shadow-[0_0_20px_rgba(212,175,55,0.2)] rounded-lg">
-                    Operatives: <span id="op-count">0</span> / 500
+                    Yanos Operatives: <span id="op-count">0</span> / 500
                 </div>
                 <p id="system-time" class="text-[9px] text-zinc-400 mt-2 font-black tracking-widest uppercase"></p>
             </div>
@@ -111,63 +118,83 @@
             
             <div class="lg:col-span-4 space-y-8">
                 <section class="command-tile">
-                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">National Intel Feed</span><i class="fa-solid fa-tower-broadcast text-[8px] animate-pulse"></i></div>
+                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">Sector Intel Feed</span><i class="fa-solid fa-tower-broadcast text-[8px] animate-pulse"></i></div>
                     <div class="p-6 intel-feed">
                         <div class="feed-scroll">
-                            [03:37:25] GP-012 SATELLITE HANDSHAKE SUCCESSFUL<br>
-                            [03:37:26] DECRYPTING AMAPIANO FREQUENCY SECTORS...<br>
-                            [03:37:28] ENCRYPTED PROFILE DETECTED IN GAUTENG...<br>
-                            [03:37:30] PRESTIGE COMMAND V27.0 STABLE...<br>
-                            [03:37:32] AWAITING PHASE 2 AUTHORIZATION...<br>
-                            [03:37:35] DIRECTORATE ALERT: THE CABINET IS WATCHING.
+                            [21:07:25] GP-012 LOG DRUM FREQUENCIES DETECTED...<br>
+                            [21:07:26] DECRYPTING AMAPIANO TOP 10 SOUTH AFRICA...<br>
+                            [21:07:28] ENCRYPTED PROFILE DETECTED IN MPUMALANGA SECTOR...<br>
+                            [21:07:30] PRESTIGE LOSSLESS ARCHIVE ONLINE...<br>
+                            [21:07:32] AWAITING LOSSLESS SYNC AUTHORIZATION...<br>
+                            [21:07:35] DIRECTORATE ALERT: THE LOG DRUM IS THE PULSE.
                         </div>
                     </div>
                 </section>
 
-                <section class="command-tile">
-                    <div class="tile-header"><span class="tile-title">Operative Registry</span></div>
-                    <div class="p-8 text-center">
-                        <div id="auth-ui">
-                            <input id="email-in" type="email" placeholder="ENTER ACCESS EMAIL" class="w-full bg-zinc-800/50 border border-blue-500/30 p-4 text-white mb-4 outline-none text-[10px] tracking-widest uppercase rounded-lg">
-                            <select id="province-select" class="w-full bg-zinc-800/50 border border-blue-500/30 p-4 text-zinc-200 mb-6 outline-none text-[10px] tracking-widest uppercase rounded-lg">
+                <section class="command-tile relative overflow-hidden">
+                    <div class="tile-header flex justify-between items-center">
+                        <span class="tile-title text-blue-500">Sovereign Registry Protocol</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[7px] text-green-500 font-black animate-pulse uppercase">Biometric_Ready</span>
+                            <i class="fa-solid fa-shield-halved text-[10px] text-blue-500/50"></i>
+                        </div>
+                    </div>
+                    <div class="p-8 text-center relative z-10">
+                        <div id="auth-ui" class="space-y-6">
+                            <div class="group relative">
+                                <input id="email-in" type="email" placeholder="ENTER ACCESS EMAIL" class="w-full bg-zinc-800/30 border-b-2 border-blue-500/20 p-4 text-white outline-none text-[10px] tracking-widest uppercase focus:border-gold transition-all duration-500 rounded-t-lg">
+                                <div class="absolute bottom-0 left-0 w-0 h-[2px] bg-gold transition-all duration-700 group-focus-within:w-full"></div>
+                            </div>
+                            <select id="province-select" class="w-full bg-zinc-800/30 border-b-2 border-blue-500/20 p-4 text-zinc-200 outline-none text-[10px] tracking-widest uppercase focus:border-gold appearance-none transition-all duration-500 rounded-t-lg">
                                 <option value="" disabled selected>SELECT SECTOR DEPLOYMENT</option>
-                                <option value="GP">Gauteng (GP)</option>
-                                <option value="WC">Western Cape (WC)</option>
-                                <option value="KZN">KwaZulu-Natal (KZN)</option>
-                                <option value="LP">Limpopo (LP)</option>
-                                <option value="MP">Mpumalanga (MP)</option>
-                                <option value="NW">North West (NW)</option>
-                                <option value="FS">Free State (FS)</option>
-                                <option value="EC">Eastern Cape (EC)</option>
+                                <option value="GP">Gauteng (GP)</option><option value="WC">Western Cape (WC)</option>
+                                <option value="KZN">KwaZulu-Natal (KZN)</option><option value="LP">Limpopo (LP)</option>
+                                <option value="MP">Mpumalanga (MP)</option><option value="NW">North West (NW)</option>
+                                <option value="FS">Free State (FS)</option><option value="EC">Eastern Cape (EC)</option>
                                 <option value="NC">Northern Cape (NC)</option>
                             </select>
-                            <button onclick="handleAuth()" class="mog-btn">Initiate Handshake</button>
+                            <button onclick="handleAuth()" class="mog-btn group relative overflow-hidden !py-6">
+                                <span class="relative z-10 flex items-center justify-center gap-3"><i class="fa-solid fa-fingerprint text-lg"></i>SYNCHRONIZE PASSKEY</span>
+                                <div class="absolute inset-0 bg-white/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                            </button>
+                            <p class="text-[7px] text-zinc-500 uppercase tracking-[0.4em] font-bold mt-4"><i class="fa-solid fa-lock mr-1"></i> FIDO2 / WebAuthn Compliant Environment</p>
                         </div>
                         <div id="op-profile" class="hidden text-center">
-                            <p id="active-alias" class="text-3xl font-black text-white uppercase mb-4 tracking-[0.3em] italic active-alias"></p>
-                            <div id="qrcode" class="bg-white p-3 inline-block rounded-sm mb-4"></div>
+                            <div class="relative inline-block mb-6">
+                                <div id="qrcode" class="bg-white p-4 inline-block rounded-xl shadow-[0_0_50px_rgba(255,255,255,0.1)]"></div>
+                                <div class="scanner-line !h-[2px] !bg-gold/50 !shadow-[0_0_15px_#D4AF37]"></div>
+                            </div>
+                            <p id="active-alias" class="text-3xl font-black text-white uppercase mb-2 tracking-[0.4em] italic active-alias"></p>
+                            <div class="inline-flex items-center gap-2 py-1 px-4 border border-gold/30 bg-gold/10 rounded-full mb-8">
+                                <span class="w-1.5 h-1.5 bg-gold rounded-full animate-ping"></span>
+                                <span id="active-sector" class="text-[9px] text-gold tracking-widest uppercase font-black"></span>
+                            </div>
                         </div>
                     </div>
                 </section>
-            </div>
-
+                                </div>
+                                
             <div class="lg:col-span-8 space-y-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <section class="command-tile !border-blue-500/40">
                         <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">RSA Territorial Radar</span><i class="fa-solid fa-satellite animate-bounce"></i></div>
                         <div id="radar-container">
-                            <div class="map-underlay"></div>
+                            <iframe class="live-map-frame" src="https://www.google.com/maps/contrib/116001524691310303782/reviews" allowfullscreen="" loading="lazy"></iframe>
                             <canvas id="radar-canvas"></canvas>
                         </div>
                     </section>
 
                     <section class="command-tile">
-                        <div class="tile-header"><span class="tile-title">Sonic Archive</span></div>
+                        <div class="tile-header flex justify-between">
+                            <span class="tile-title">Lossless Sonic Archive</span>
+                            <i class="fa-solid fa-wave-square text-[8px] animate-pulse text-gold"></i>
+                        </div>
                         <div class="p-6">
                             <audio id="player" controls class="w-full h-12 mb-6 bg-zinc-800 border border-white/20 rounded-full"></audio>
-                            <div class="locked-blur space-y-3">
-                                <div class="p-4 border border-gold/20 bg-gold/5 text-[11px] tracking-widest text-white uppercase font-black rounded-lg">UNRELEASED_SECTOR_MIX_01.MP3</div>
-                                <div class="p-4 border border-gold/20 bg-gold/5 text-[11px] tracking-widest text-white uppercase font-black rounded-lg">UNRELEASED_SECTOR_MIX_02.MP3</div>
+                            <div class="space-y-3">
+                                <div class="p-4 border border-gold/20 bg-gold/5 text-[11px] tracking-widest text-white uppercase font-black rounded-lg">KABZA DE SMALL - KONKA LIVE 2026.MP3</div>
+                                <div class="p-4 border border-gold/20 bg-gold/5 text-[11px] tracking-widest text-white uppercase font-black rounded-lg">KELVIN MOMO - PRIVATE SCHOOL 2026.MP3</div>
+                                <div class="p-4 border border-gold/20 bg-gold/5 text-[11px] tracking-widest text-white uppercase font-black rounded-lg">NONTOKOZO MKHIZE - ESANDLENI.MP3</div>
                             </div>
                         </div>
                     </section>
@@ -175,11 +202,14 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <section class="command-tile !border-blue-500/20">
-                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">Frequency Vote // SoundCloud</span></div>
-                        <div class="p-6 space-y-6">
-                            <iframe width="100%" height="100" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1144007629&color=%2300d4ff&auto_play=false&hide_related=true"></iframe>
-                            <iframe width="100%" height="100" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1243167190&color=%23d4af37&auto_play=false&hide_related=true"></iframe>
-                            <button class="mog-btn !text-[10px]">Cast Selection</button>
+                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">National Top 10 // Vote</span><i class="fa-solid fa-chart-line text-[8px] animate-pulse"></i></div>
+                        <div class="p-6 space-y-4 max-h-[300px] overflow-y-auto scrollbar-hide">
+                            <div class="flex justify-between items-center text-[10px] font-black italic border-b border-white/5 pb-2"><span class="text-zinc-500">01</span><span class="text-white">DLALA THUKZIN - AMA GEAR</span><span class="text-gold">GP</span></div>
+                            <div class="flex justify-between items-center text-[10px] font-black italic border-b border-white/5 pb-2"><span class="text-zinc-500">02</span><span class="text-white">ZEE NXUMALO - MALI</span><span class="text-gold">KZN</span></div>
+                            <div class="flex justify-between items-center text-[10px] font-black italic border-b border-white/5 pb-2"><span class="text-zinc-500">03</span><span class="text-white">NASTY C - NO TYPO</span><span class="text-gold">GP</span></div>
+                            <div class="flex justify-between items-center text-[10px] font-black italic border-b border-white/5 pb-2"><span class="text-zinc-500">04</span><span class="text-white">KIVUMBI KING - ITUZE</span><span class="text-gold">NAT</span></div>
+                            <div class="flex justify-between items-center text-[10px] font-black italic border-b border-white/5 pb-2"><span class="text-zinc-500">05</span><span class="text-white">NONTOKOZO FUNDAMA - SIYAPHAMBILI</span><span class="text-gold">GP</span></div>
+                            <button class="mog-btn !text-[10px] mt-4">Cast Grid Selection</button>
                         </div>
                     </section>
 
@@ -193,12 +223,12 @@
                 </div>
             </div>
         </main>
-        
+
         <footer class="relative z-50 p-12 mt-20 border-t border-gold/20 bg-white/5 backdrop-blur-md">
-            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-                <div class="text-left">
-                    <p class="text-[11px] text-white tracking-[.5em] font-black uppercase">Ministry of Groove</p>
-                    <p class="text-[9px] text-zinc-400 tracking-widest uppercase font-black">Command V28.6 // National Amapiano Grid</p>
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+                <div>
+                    <p class="text-[11px] text-white tracking-[.5em] font-black uppercase mb-2">Ministry of Groove</p>
+                    <p class="text-[8px] text-zinc-400 tracking-widest uppercase font-black">Command V42.0 // National Amapiano Grid</p>
                 </div>
                 <div class="flex gap-10">
                     <a href="privacy.html" class="text-[10px] text-gold hover:text-white tracking-[0.4em] uppercase font-black transition-all">Privacy Protocol</a>
@@ -222,13 +252,10 @@
         window.addEventListener('load', async () => {
             initRadar(); updateTime(); initializeChat();
             setInterval(updateTime, 1000);
-            
             const { data: { session } } = await db.auth.getSession();
             if (session) renderProfile(session.user);
-            
             const { count } = await db.from('profiles').select('*', { count: 'exact', head: true });
             document.getElementById('op-count').innerText = count || 0;
-
             setTimeout(() => {
                 const logo = document.querySelector('.preloader-logo');
                 const preloader = document.getElementById('preloader');
@@ -246,7 +273,7 @@
         function initializeChat() {
             const chatStream = document.getElementById('chat-stream');
             const packets = [
-                { op: "DIR_MOG", msg: "AMAPIANO GRID V28.6 ONLINE.", time: "04:00" },
+                { op: "DIR_MOG", msg: "AMAPIANO GRID V42.0 ONLINE.", time: "04:00" },
                 { op: "SYSTEM", msg: "LOG DRUM FREQUENCY SYNCED.", time: "05:31" }
             ];
             chatStream.innerHTML = packets.map(p => `<p class="mb-3 leading-relaxed"><span class="text-[8px] text-zinc-500 font-black">[${p.time}]</span> <span class="${p.op.includes('DIR') ? 'text-gold' : 'text-blue-500'} font-black">[${p.op}]:</span> <span class="text-white">${p.msg}</span></p>`).join('');
@@ -266,6 +293,7 @@
             document.getElementById('auth-ui').classList.add('hidden');
             document.getElementById('op-profile').classList.remove('hidden');
             document.getElementById('active-alias').innerText = user.email.split('@')[0].toUpperCase();
+            document.getElementById('active-sector').innerText = `SECTOR: ${pNames[pCode] || pCode}`;
             document.getElementById("qrcode").innerHTML = "";
             new QRCode(document.getElementById("qrcode"), { text: `MOG_ID:${user.id}`, width: 120, height: 120 });
         }
