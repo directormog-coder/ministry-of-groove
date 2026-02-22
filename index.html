@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V48.0.1</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V48.0.2</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -22,6 +22,12 @@
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; -webkit-tap-highlight-color: transparent; }
         h1, .tile-title { font-family: 'Clash Display', sans-serif; }
         
+        /* AUTO-FIT LOGIC FOR HEADER */
+        .brand-title { 
+            font-size: clamp(1.5rem, 8vw, 3rem); /* Auto-fits size based on viewport width */
+            line-height: 1.1;
+        }
+
         body { 
             background-color: var(--mog-bg); 
             background-image: 
@@ -32,7 +38,6 @@
             color: var(--mog-gold); margin: 0; overflow-x: hidden;
         }
 
-        /* 75% TICKER MASK */
         #ticker-wrap { position: fixed; top: 0; width: 100%; background: #000; border-bottom: 1px solid var(--mog-gold); z-index: 1000; height: 35px; display: flex; align-items: center; overflow: hidden; -webkit-mask-image: linear-gradient(to right, black 75%, transparent 100%); mask-image: linear-gradient(to right, black 75%, transparent 100%); }
         .ticker-move { display: inline-block; white-space: nowrap; animation: ticker 45s linear infinite; font-size: 9px; font-weight: 900; letter-spacing: 2.5px; color: var(--mog-gold); text-transform: uppercase; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
@@ -46,7 +51,6 @@
         .scroller-v::-webkit-scrollbar { width: 4px; }
         .scroller-v::-webkit-scrollbar-thumb { background: var(--mog-blue); border-radius: 10px; }
 
-        /* GALLERY 6-GRID + SCROLLER */
         .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-height: 480px; padding: 15px; }
         @media (min-width: 768px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
         .gallery-node { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid rgba(0, 212, 255, 0.15); height: 160px; background: #000; }
@@ -55,7 +59,6 @@
         .dl-overlay { position: absolute; bottom: 8px; right: 8px; z-index: 10; }
         .dl-btn { background: rgba(0, 212, 255, 0.2); border: 1px solid var(--mog-blue); color: var(--mog-blue); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
 
-        /* LISTS */
         .freq-row, .archive-row { display: flex; align-items: center; gap: 15px; background: rgba(0, 212, 255, 0.05); padding: 12px; border-radius: 18px; border: 1px solid rgba(0, 212, 255, 0.15); margin-bottom: 12px; }
         
         #side-menu { position: fixed; top: 0; left: -300px; width: 300px; height: 100%; background: #0a0e14; border-right: 1px solid var(--mog-blue); z-index: 2000; padding: 40px 20px; transition: 0.5s; box-shadow: 20px 0 50px rgba(0,0,0,0.9); }
@@ -78,15 +81,15 @@
         <button onclick="toggleMenu()" class="mt-10 text-zinc-500 text-[9px] uppercase tracking-widest">Close Handshake</button>
     </nav>
 
-    <div id="ticker-wrap"><div class="ticker-move">TOTALITY_BUILD_V48 // RSA_RADAR_ACTIVE // FREQUENCY_SCROLLER_SYNCED // SOVEREIGN_ARCHIVE_LIVE // DIRECTOR_MOG ONLINE...</div></div>
+    <div id="ticker-wrap"><div class="ticker-move">DISPLAY_AUTO_FIT_V48.2 // RSA_RADAR_ACTIVE // FREQUENCY_SCROLLER_SYNCED // SOVEREIGN_ARCHIVE_LIVE // DIRECTOR_MOG ONLINE...</div></div>
     <div id="preloader"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-32 w-32 mb-8 animate-pulse"><div class="text-[10px] text-blue-500 tracking-[1.5em] font-black uppercase italic">Handshaking_Totality</div></div>
 
     <div id="app-content" class="opacity-0 transition-opacity duration-1000">
         <header class="flex flex-col lg:flex-row justify-between items-center gap-10 relative z-50 mb-10 pl-12 lg:pl-0">
-            <div class="flex items-center gap-8">
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-[82px] w-[82px] border-2 border-blue-500/50 rounded-full shadow-2xl">
-                <div>
-                    <h1 class="text-5xl text-[#D4AF37] tracking-[.25em] uppercase font-black">Ministry of Groove</h1>
+            <div class="flex items-center gap-8 w-full">
+                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-[82px] w-[82px] border-2 border-blue-500/50 rounded-full shadow-2xl flex-shrink-0">
+                <div class="w-full">
+                    <h1 class="brand-title text-[#D4AF37] tracking-[.25em] uppercase font-black">Ministry of Groove</h1>
                     <p class="text-[10px] text-blue-400 tracking-[.6em] mt-3 uppercase font-black">Decrypting the Culture. Synchronizing the Grid.</p>
                 </div>
             </div>
@@ -147,7 +150,8 @@
                     </section>
                 </div>
             </div>
-            
+        </main>
+        
         <footer class="relative z-50 p-14 mt-20 border-t border-blue-500/20 bg-black/60 rounded-t-[50px]">
             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
                 <div class="space-y-6"><p class="text-[12px] text-white tracking-[.6em] font-black uppercase">Ministry of Groove</p>
@@ -155,7 +159,7 @@
                     <a href="https://wa.me/27813874921" target="_blank"><i class="fa-brands fa-whatsapp"></i></a><a href="https://www.facebook.com/share/1AiHq8N5FF/" target="_blank"><i class="fa-brands fa-facebook"></i></a>
                     <a href="https://tiktok.com/@ministryofgroove" target="_blank"><i class="fa-brands fa-tiktok"></i></a><a href="https://www.instagram.com/ministryofgroove_hq" target="_blank"><i class="fa-brands fa-instagram"></i></a>
                 </div></div>
-                <div class="text-right text-[9px] text-blue-400 font-black uppercase tracking-widest underline decoration-blue-500/30">BUILD V48.0.1 TOTALITY</div>
+                <div class="text-right text-[9px] text-blue-400 font-black uppercase tracking-widest">BUILD V48.0.2 AUTO_FIT</div>
             </div>
         </footer>
 
@@ -163,7 +167,7 @@
             <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-8"><h2 class="text-4xl text-white font-black uppercase tracking-widest">Director Command</h2><button onclick="toggleDirectorUI()" class="text-white text-4xl"><i class="fa-solid fa-xmark"></i></button></div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div class="command-tile p-6 space-y-4"><h3 class="tile-title text-gold">Gallery Upload</h3><input type="file" id="file-upload" class="w-full text-[10px]" onchange="uploadIntel(this)"></div>
-                <div class="command-tile p-6 space-y-4"><h3 class="tile-title text-gold">Archive Upload (MP3)</h3><input type="file" id="audio-upload" accept="audio/*" class="w-full text-[10px]" onchange="uploadArchive(this)"></div>
+                <div class="command-tile p-6 space-y-4"><h3 class="tile-title text-gold">Archive Upload</h3><input type="file" id="audio-upload" accept="audio/*" class="w-full text-[10px]" onchange="uploadArchive(this)"></div>
                 <div class="command-tile p-6 space-y-4"><h3 class="tile-title text-gold">Bulletin</h3><textarea id="bulletin-msg" class="w-full h-24 bg-black/40 border border-gold/20 p-2 text-gold text-[10px] outline-none"></textarea><button onclick="broadcastBulletin()" class="w-full border border-gold p-2 rounded text-[10px]">Broadcast</button></div>
                 <div class="command-tile p-6 space-y-4"><h3 class="tile-title text-gold">Inject Frequency</h3><input id="new-track-id" placeholder="SC ID" class="w-full bg-black p-2 text-white text-[10px]"><button onclick="adminAddTrack()" class="w-full border border-blue-400 p-2 rounded text-[10px]">Deploy</button></div>
             </div>
@@ -177,7 +181,7 @@
         const db = window.supabase.createClient(CFG.U, CFG.K);
         let currentUser = null;
 
-        const MASTER_PRESETS = [{track_id:"1829402511"},{track_id:"1759403422"},{track_id:"1842039411"},{track_id:"170000001"},{track_id:"170000002"},{track_id:"170000003"},{track_id:"170000004"},{track_id:"170000005"},{track_id:"170000006"},{track_id:"170000007"}];
+        const MASTER_PRESETS = [{track_id:"1829402511"},{track_id:"1759403422"},{track_id:"1842039411"},{track_id:"170000001"}];
 
         function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
         function showDirectorLogin() { document.getElementById('pass-in').classList.toggle('hidden'); }
@@ -236,7 +240,7 @@
         window.addEventListener('load', () => {
             initRadar(); fetchTracks(); fetchGallery(); fetchArchive();
             setInterval(() => {
-                const logs = ["RSA_RADAR_SCANNING", "PEAK_AMAPIANO_LEVELS", "DIRECTOR_MOG_SYNCED", "GRID_STABLE"];
+                const logs = ["RSA_RADAR_SCANNING", "PEAK_SIGNAL_MP", "DIRECTOR_MOG_SYNCED", "GRID_STABLE"];
                 const i = document.getElementById('intel-scroll');
                 const d = document.createElement('div'); d.className = "border-l border-blue-400 pl-2 mb-2";
                 d.innerHTML = `<span class="text-blue-500">[${new Date().toLocaleTimeString()}]</span> ${logs[Math.floor(Math.random()*logs.length)]}`;
@@ -254,5 +258,4 @@
         async function adminAddTrack() { const id = document.getElementById('new-track-id').value; db.from('hit_list').insert([{ track_id: id, title: "GRID_HIT" }]).then(() => fetchTracks()); }
     </script>
 </body>
-</html>                                                                                                                                                                                    </main>
-                                                                                                                                                                                                
+</html>
