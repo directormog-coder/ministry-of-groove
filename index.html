@@ -23,12 +23,10 @@
         h1, h2, h3, .tile-title, .active-alias { font-family: 'Clash Display', sans-serif; font-weight: 700; }
         body { background-color: var(--mog-bg); color: var(--mog-gold); margin: 0; overflow-x: hidden; -webkit-user-select: none; user-select: none; }
         
-        /* TICKER SYSTEM */
         #ticker-wrap { position: fixed; top: 0; width: 100%; background: #000; border-bottom: 1px solid var(--mog-gold); z-index: 1000; height: 30px; display: flex; align-items: center; overflow: hidden; }
         .ticker-move { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 30s linear infinite; font-size: 10px; font-weight: 900; letter-spacing: 2px; color: var(--mog-gold); text-transform: uppercase; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-        /* CORE UI */
         .command-tile { background: var(--mog-panel); border: 1px solid rgba(212, 175, 55, 0.25); backdrop-filter: blur(40px); border-radius: 20px; overflow: hidden; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
         .tile-header { border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding: 12px 18px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%); }
         .tile-title { letter-spacing: 5px; text-transform: uppercase; font-size: 10px; color: #fff; }
@@ -49,7 +47,7 @@
 <body class="scrollbar-hide">
     <div id="ticker-wrap">
         <div class="ticker-move" id="ticker-text">
-            NATIONAL AMAPIANO SOVEREIGNTY... COMMAND V42.5.6 LIVE... WHATSAPP UPLINK ACTIVE: 081 387 4921... DIRECTOR_MOG ONLINE...
+            COMMAND V42.5.7 LIVE... WHATSAPP UPLINK: 081 387 4921... DIRECTOR_MOG ONLINE... SECTOR MP STABLE... GRID_ABSOLUTE...
         </div>
     </div>
 
@@ -111,7 +109,7 @@
                 <section class="command-tile !border-blue-500/40">
                     <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">RSA Territorial Radar</span><i class="fa-solid fa-satellite"></i></div>
                     <div id="radar-container">
-                        <iframe class="live-map-frame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114741.0560879659!2d29.141708848839017!3d-25.875323207604618!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e9d1234731a59f9%3A0x6a1f09c1374971c0!2seMalahleni!5e0!3m2!1sen!2sza!4v1710000000000!5m2!1sen!2sza"></iframe>
+                        <iframe class="live-map-frame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114867.74780447372!2d29.1388832!3d-25.8727145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e9d1234567890ab%3A0x1234567890abcdef!2seMalahleni!5e0!3m2!1sen!2sza!4v1700000000000!5m2!1sen!2sza"></iframe>
                         <canvas id="radar-canvas"></canvas>
                     </div>
                 </section>
@@ -164,39 +162,37 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
                     <div class="space-y-4">
                         <p class="text-[11px] text-white tracking-[.5em] font-black uppercase">Ministry of Groove</p>
-                        <p class="text-[9px] text-zinc-400 leading-relaxed uppercase">The official sovereign grid for Amapiano culture and high-fidelity frequency transmission across South Africa.</p>
+                        <p class="text-[9px] text-zinc-400 leading-relaxed uppercase">The official sovereign grid for Amapiano culture and high-fidelity frequency transmission.</p>
                         <div class="flex justify-center md:justify-start gap-6 text-gold text-lg">
-                            <a href="https://wa.me/27813874921" target="_blank" title="MOG WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                            <a href="https://wa.me/27813874921?text=MOG%20Operative%20Reporting%20for%20Duty" target="_blank" title="MOG WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
                             <a href="https://soundcloud.com" target="_blank"><i class="fa-brands fa-soundcloud"></i></a>
                             <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="https://twitter.com" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
                             <a href="mailto:director.mog@gmail.com"><i class="fa-solid fa-envelope"></i></a>
                         </div>
                     </div>
                     <div class="space-y-4">
                         <p class="text-[10px] text-gold tracking-widest uppercase font-black">Legal Protocol</p>
                         <ul class="text-[8px] text-zinc-500 space-y-2 uppercase font-black">
-                            <li><a href="#" class="hover:text-white transition-all">POPIA Compliance Policy</a></li>
-                            <li><a href="#" class="hover:text-white transition-all">End User License Agreement</a></li>
-                            <li><a href="#" class="hover:text-white transition-all">Cookie Sovereignity</a></li>
+                            <li><a href="#" class="hover:text-white transition-all">POPIA Compliance</a></li>
+                            <li><a href="#" class="hover:text-white transition-all">EULA Protocol</a></li>
                         </ul>
                     </div>
                     <div class="space-y-4">
                         <p class="text-[10px] text-gold tracking-widest uppercase font-black">App Deployment</p>
                         <div class="flex flex-col gap-3">
-                            <a href="#" class="mog-btn !p-2 !text-[8px] !tracking-widest">App Store Requirements</a>
-                            <a href="#" class="mog-btn !p-2 !text-[8px] !tracking-widest !border-blue-500 !text-blue-500">Google PlayHandshake</a>
+                            <a href="#" class="mog-btn !p-2 !text-[8px] !tracking-widest">App Store</a>
+                            <a href="#" class="mog-btn !p-2 !text-[8px] !tracking-widest !border-blue-500 !text-blue-500">Play Store</a>
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/5 gap-4">
-                    <p class="text-[8px] text-zinc-600 uppercase font-black">© 2026 MINISTRY OF GROOVE. ALL RIGHTS RESERVED.</p>
+                    <p class="text-[8px] text-zinc-600 uppercase font-black">© 2026 MINISTRY OF GROOVE.</p>
                     <div class="flex gap-4">
                         <div class="inline-flex items-center gap-2 px-3 py-1 border border-blue-400/30 rounded-full bg-blue-400/5">
-                            <span class="text-[9px] text-blue-400 font-black uppercase tracking-widest">BUILD: <span id="grid-version">v42.5.6</span></span>
+                            <span class="text-[9px] text-blue-400 font-black uppercase tracking-widest">BUILD: <span id="grid-version">v42.5.7</span></span>
                         </div>
                         <div class="inline-flex items-center gap-2 px-3 py-1 border border-green-400 rounded-full bg-green-400/10">
-                            <span class="h-1.5 w-1.5 bg-green-400 rounded-full animate-ping"></span><span class="text-[9px] text-green-400 font-black uppercase tracking-widest">GRID_STABLE_RSA</span>
+                            <span class="h-1.5 w-1.5 bg-green-400 rounded-full animate-ping"></span><span class="text-[9px] text-green-400 font-black uppercase tracking-widest">GRID_STABLE</span>
                         </div>
                     </div>
                 </div>
@@ -213,7 +209,7 @@
 
         const alertChannel = db.channel('grid_alerts').on('broadcast', { event: 'director_upload' }, (payload) => {
             const audio = document.getElementById('logdrum-audio');
-            if (audio) { audio.currentTime = 0; audio.play().catch(e => {}); }
+            if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
             if (payload.payload.ticker) { document.getElementById('ticker-text').innerText = payload.payload.ticker; }
             const intel = document.getElementById('intel-scroll');
             const l = document.createElement('div'); l.className = "text-red-500 font-bold animate-pulse";
@@ -253,11 +249,11 @@
                     <iframe width="100%" height="120" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${t.track_id}&color=%23D4AF37&auto_play=false&hide_related=true"></iframe>
                 </div>`).join('');
         }
-        
+
         async function castVote(trackId) {
             if (!currentUser) return alert("AUTH_REQUIRED");
-            const { error } = await db.from('track_votes').upsert({ user_id: currentUser.id, track_id: trackId });
-            if (!error) fetchVotingResults();
+            await db.from('track_votes').upsert({ user_id: currentUser.id, track_id: trackId });
+            fetchVotingResults();
         }
 
         async function fetchVotingResults() {
@@ -271,7 +267,7 @@
                 return `<div class="space-y-2"><div class="flex justify-between text-[10px] uppercase font-bold"><span>${t.title}</span><span class="text-gold">${percent}%</span></div><div class="vote-bar"><div class="vote-fill" style="width: ${percent}%"></div></div><button onclick="castVote('${t.track_id}')" class="text-[8px] text-zinc-500 hover:text-gold uppercase tracking-[.3em]">Transmit Support</button></div>`;
             }).join('');
         }
-
+        
         async function sendPacket() {
             const input = document.getElementById('chat-msg-in');
             if(!input.value || !currentUser) return;
@@ -298,7 +294,7 @@
         function initIntel() {
             const intel = document.getElementById('intel-scroll');
             setInterval(() => {
-                const logs = ["LOG_DRUM_SYNCED", "SECTOR_RSA_STABLE", "VOTING_GRID_ACTIVE", "HIGH_FIDELITY_ENABLED", "ENCRYPTING_TRAFFIC..."];
+                const logs = ["LOG_DRUM_SYNCED", "SECTOR_RSA_STABLE", "VOTING_GRID_ACTIVE", "HIGH_FIDELITY_ENABLED"];
                 const l = document.createElement('div');
                 l.innerHTML = `[${new Date().toLocaleTimeString()}] ${logs[Math.floor(Math.random()*logs.length)]}`;
                 intel.prepend(l);
@@ -329,6 +325,7 @@
             setTimeout(() => { document.getElementById('preloader').classList.add('exit-protocol'); document.getElementById('app-content').classList.replace('opacity-0', 'opacity-100'); }, 2000);
         });
 
+        // RE-INTEGRATED UTILS
         function handleAuth() { const email = document.getElementById('email-in').value; const prov = document.getElementById('province-select').value; db.auth.signInWithOtp({ email, options: { data: { province_code: prov } } }); }
         async function fetchGallery() { const { data } = await db.storage.from('gallery').list('public', { limit: 12, sortBy: { column: 'created_at', order: 'desc' } }); if (data) document.getElementById('gallery-grid').innerHTML = data.map(f => { const { data: { publicUrl } } = db.storage.from('gallery').getPublicUrl(`public/${f.name}`); return `<div class="group relative overflow-hidden rounded-lg border border-white/10 hover:border-gold"><img src="${publicUrl}" class="h-32 w-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all cursor-zoom-in"></div>`; }).join(''); }
         async function fetchMessages() { const { data } = await db.from('messages').select('*').order('created_at', { ascending: true }).limit(20); if (data) data.forEach(displayMessage); }
@@ -336,6 +333,7 @@
         function generateCommandLog() { db.from('messages').select('*').gt('created_at', new Date(Date.now() - 86400000).toISOString()).then(({data}) => { const blob = new Blob([data.map(l => `[${l.created_at}] ${l.alias}: ${l.content}`).join('\n')], {type: 'text/plain'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'MOG_LOG.txt'; a.click(); }); }
         function checkWeeklyReset() { const now = new Date(); if (now.getDay() === 0 && now.getHours() >= 22) { const intel = document.getElementById('intel-scroll'); const l = document.createElement('div'); l.className = "text-gold animate-pulse"; l.innerHTML = `[SYSTEM] CONSENSUS_RESET_IN_PROGRESS...`; intel.prepend(l); } }
         function toggleDirectorUI() { document.getElementById('director-dashboard').classList.toggle('hidden'); }
+        function requestNotifyPermission() { if(Notification.permission!=='granted') Notification.requestPermission(); }
         if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('/service-worker.js'); }); }
     </script>
 </body>
