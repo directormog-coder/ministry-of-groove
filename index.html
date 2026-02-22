@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V42.5.18 ABSOLUTE</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V43.0 ABSOLUTE</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -38,7 +38,7 @@
         .mog-btn { border: 2px solid var(--mog-gold); color: var(--mog-gold); padding: 14px; font-size: 0.85rem; font-weight: 900; text-transform: uppercase; background: rgba(212, 175, 55, 0.05); letter-spacing: 4px; cursor: pointer; border-radius: 8px; text-align: center; display: block; width: 100%; }
         
         #radar-container { position: relative; height: 350px; background: #000; overflow: hidden; }
-        .live-map-frame { width: 100%; height: 100%; border: none; filter: grayscale(1) invert(0.9); opacity: 0.4; }
+        .live-map-frame { width: 100%; height: 100%; border: none; filter: grayscale(1) invert(0.9) contrast(1.2); opacity: 0.4; }
         
         #app-content { margin-top: 40px; }
         #preloader { position: fixed; inset: 0; background: var(--mog-bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s ease-in-out; }
@@ -52,7 +52,11 @@
     </style>
 </head>
 <body class="scrollbar-hide">
-    <div id="ticker-wrap"><div class="ticker-move" id="ticker-text">RESTORING ORIGINAL GRID PROTOCOLS... DIRECTOR_MOG ONLINE... SOUNDCLOUD SYNCED... RSA SECTOR STABLE...</div></div>
+    <div id="ticker-wrap">
+        <div class="ticker-move" id="ticker-text">
+            INTEGRATION_ABSOLUTE_V43.0.0 // WELCOME DIRECTOR_MOG // TOP 10 FREQUENCY GRID ACTIVE // RSA SECTOR MP STABLE // LOG DRUM SYNCED...
+        </div>
+    </div>
     
     <audio id="logdrum-audio" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logdrum.mp3" preload="auto"></audio>
     <canvas id="lightning-canvas" style="position: fixed; z-index: -1;"></canvas>
@@ -66,10 +70,15 @@
         <header class="flex flex-col lg:flex-row justify-between items-center gap-8 relative z-50">
             <div class="flex items-center gap-6">
                 <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 border border-gold/50 rounded-full">
-                <div><h1 class="text-4xl text-white tracking-[.2em] uppercase">Ministry of Groove</h1><p class="text-[10px] text-blue-500 tracking-[.6em] mt-2 uppercase font-black">National Amapiano Sovereignty</p></div>
+                <div>
+                    <h1 class="text-4xl text-white tracking-[.2em] uppercase">Ministry of Groove</h1>
+                    <p class="text-[10px] text-blue-500 tracking-[.6em] mt-2 uppercase font-black">National Amapiano Sovereignty</p>
+                </div>
             </div>
             <div class="flex flex-col items-end text-right">
-                <div class="text-[12px] text-gold font-black border-2 border-gold/40 px-8 py-2 bg-gold/10 tracking-[.5em] rounded-lg">OPERATIVES: <span id="op-count">0</span></div>
+                <div class="text-[12px] text-gold font-black border-2 border-gold/40 px-8 py-2 bg-gold/10 tracking-[.5em] rounded-lg">
+                    OPERATIVES: <span id="op-count">0</span>
+                </div>
                 <p id="system-time" class="text-[9px] text-zinc-400 mt-2 font-black tracking-widest uppercase"></p>
             </div>
         </header>
@@ -95,8 +104,9 @@
                         <button id="auth-btn" onclick="handleAuth()" class="mog-btn">Synchronize Passkey</button>
                     </div>
                     <div id="op-profile" class="hidden">
-                        <div id="qrcode" class="bg-white p-3 inline-block rounded-xl mb-4"></div>
+                        <div id="qrcode" class="bg-white p-3 inline-block rounded-xl mb-4 shadow-xl"></div>
                         <p id="active-alias" class="text-3xl font-black text-white uppercase mb-1"></p>
+                        <div id="active-sector" class="text-[9px] text-gold tracking-widest uppercase font-black">SECTOR: MP_WITBANK</div>
                     </div>
                 </section>
             </div>
@@ -104,7 +114,10 @@
             <div class="lg:col-span-8 space-y-8">
                 <section class="command-tile !border-blue-500/40">
                     <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">RSA Territorial Radar</span><i class="fa-solid fa-satellite"></i></div>
-                    <div id="radar-container"><iframe class="live-map-frame" src="about:blank"></iframe><canvas id="radar-canvas"></canvas></div>
+                    <div id="radar-container">
+                        <iframe class="live-map-frame" src="http://googleusercontent.com/maps.google.com/4"></iframe>
+                        <canvas id="radar-canvas"></canvas>
+                    </div>
                 </section>
 
                 <section class="command-tile !border-blue-500/20">
@@ -114,7 +127,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <section class="command-tile h-[600px] flex flex-col">
-                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Frequency Grid</span><i class="fa-brands fa-soundcloud ml-2"></i></div>
+                        <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Frequency Grid: Top 10 Hits</span><i class="fa-brands fa-soundcloud ml-2"></i></div>
                         <div class="flex-grow overflow-y-auto p-4 space-y-4 grid-scroll" id="soundcloud-grid"></div>
                     </section>
 
@@ -136,21 +149,21 @@
                     <div class="space-y-6">
                         <p class="text-[11px] text-white tracking-[.5em] font-black uppercase">Ministry of Groove</p>
                         <div class="grid grid-cols-5 gap-6 text-gold text-xl max-w-[300px] mx-auto md:mx-0">
-                            <a href="https://wa.me/27813874921?text=MOG%20Operative%20Reporting%20for%20Duty" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
-                            <a href="https://www.facebook.com/share/1AiHq8N5FF/" target="_blank"><i class="fa-brands fa-facebook"></i></a>
-                            <a href="https://tiktok.com/@ministryofgroove" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-                            <a href="https://instagram.com/ministryofgroove" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="https://youtube.com/@ministryofgroove-m1q?si=Hy--JZUa8FhWhm1B" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                            <a href="https://wa.me/27813874921?text=MOG%20Operative%20Reporting%20for%20Duty" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                            <a href="https://www.facebook.com/share/1AiHq8N5FF/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                            <a href="https://tiktok.com/@ministryofgroove" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                            <a href="https://instagram.com/ministryofgroove" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="https://youtube.com/@ministryofgroove-m1q?si=Hy--JZUa8FhWhm1B" target="_blank" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
                         </div>
                         <p class="text-[9px] text-zinc-400 mt-4 uppercase">director.mog@gmail.com</p>
                     </div>
                     <div class="space-y-4">
                         <p class="text-[10px] text-gold tracking-widest uppercase font-black">Legal Protocol</p>
-                        <ul class="text-[8px] text-zinc-500 space-y-2 uppercase font-black"><li>POPIA Compliance</li><li>EULA Protocol</li></ul>
+                        <ul class="text-[8px] text-zinc-500 space-y-2 uppercase font-black"><li>POPIA Compliance Policy</li><li>EULA Protocol</li></ul>
                     </div>
-                    <div class="space-y-4 text-center">
-                        <p class="text-[10px] text-gold tracking-widest uppercase font-black">System Status</p>
-                        <span class="text-[9px] text-blue-400 font-black uppercase tracking-widest">BUILD V42.5.18 FINAL</span>
+                    <div class="space-y-4 text-center md:text-right">
+                        <p class="text-[10px] text-gold tracking-widest uppercase font-black">System Version</p>
+                        <span class="text-[9px] text-blue-400 font-black uppercase tracking-widest">BUILD V43.0.0 ABSOLUTE INTEGRATION</span>
                     </div>
                 </div>
             </div>
@@ -159,14 +172,19 @@
         <section id="director-dashboard" class="hidden fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl p-6 lg:p-20 overflow-y-auto">
             <div class="flex justify-between items-center mb-10 border-b border-gold/20 pb-6">
                 <div><h2 class="text-4xl text-white font-black uppercase">Director Command</h2></div>
-                <button onclick="toggleDirectorUI()" class="text-white text-3xl"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="toggleDirectorUI()" class="text-white text-3xl hover:text-gold"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div class="command-tile p-8 space-y-6">
                     <h3 class="tile-title text-gold">Update Hit List</h3>
-                    <input id="new-track-id" placeholder="SoundCloud ID" class="w-full bg-zinc-900 border border-gold/30 p-4 text-white text-xs">
+                    <input id="new-track-id" placeholder="SoundCloud Track ID" class="w-full bg-zinc-900 border border-gold/30 p-4 text-white text-xs">
                     <input id="new-track-title" placeholder="Track Title" class="w-full bg-zinc-900 border border-gold/30 p-4 text-white text-xs">
                     <button onclick="adminAddTrack()" class="mog-btn w-full">Deploy Frequency</button>
+                </div>
+                <div class="command-tile p-8 space-y-6">
+                    <h3 class="tile-title text-gold">Global Broadcast</h3>
+                    <input id="ticker-input" placeholder="Update Ticker Message..." class="w-full bg-zinc-900 border border-gold/30 p-4 text-white text-xs">
+                    <button onclick="adminSetTicker()" class="mog-btn w-full">Sync Ticker</button>
                 </div>
             </div>
         </section>
@@ -179,12 +197,7 @@
         const db = window.supabase.createClient(CFG.U, CFG.K);
         let currentUser = null;
 
-        const alertChannel = db.channel('grid_alerts').on('broadcast', { event: 'director_upload' }, (payload) => {
-            const audio = document.getElementById('logdrum-audio');
-            if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
-            fetchTracks();
-        }).subscribe();
-
+        // DIRECTOR EMAIL WATCHER
         document.getElementById('email-in').addEventListener('input', (e) => {
             if(e.target.value.toLowerCase() === 'director.mog@gmail.com') {
                 document.getElementById('pass-in').classList.remove('hidden');
@@ -194,8 +207,9 @@
         async function handleAuth() {
             const email = document.getElementById('email-in').value.toLowerCase();
             const pass = document.getElementById('pass-in').value;
+            // BYPASS LOGIC
             if (email === 'director.mog@gmail.com' && (pass === '7486' || pass === '@MOGProtocol2026')) {
-                currentUser = { id: 'ADMIN_DIRECTOR', email: email, user_metadata: { role: 'director' } };
+                currentUser = { id: 'DIRECTOR_ADMIN', email: email, user_metadata: { role: 'director' } };
                 initSovereignty();
                 return;
             }
@@ -217,7 +231,7 @@
             const { data } = await db.from('hit_list').select('*').order('created_at', { ascending: false }).limit(10);
             if (data) {
                 document.getElementById('soundcloud-grid').innerHTML = data.map(t => `
-                    <div class="track-card border border-white/5 rounded-xl overflow-hidden bg-black/20 p-2">
+                    <div class="track-card border border-white/5 rounded-xl overflow-hidden bg-black/20 p-2 mb-4">
                         <iframe width="100%" height="120" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${t.track_id}&color=%23D4AF37&auto_play=false&hide_related=true"></iframe>
                     </div>`).join('');
             }
@@ -244,6 +258,7 @@
             setTimeout(() => { document.getElementById('preloader').classList.add('exit-protocol'); document.getElementById('app-content').classList.replace('opacity-0', 'opacity-100'); }, 2500);
         });
 
+        // SYSTEM ENGINES
         function initRadar() { const canvas = document.getElementById('radar-canvas'); const ctx = canvas.getContext('2d'); let w = canvas.width = canvas.parentElement.offsetWidth, h = canvas.height = canvas.parentElement.offsetHeight; let radius = 0; function draw() { ctx.clearRect(0,0,w,h); radius += 1.5; if(radius > w/2) radius = 0; ctx.beginPath(); ctx.arc(w/2, h/2, radius, 0, Math.PI*2); ctx.strokeStyle = `rgba(0, 212, 255, ${1 - radius/(w/2)})`; ctx.stroke(); requestAnimationFrame(draw); } draw(); }
         function initLightning() { const c = document.getElementById('lightning-canvas'); const ctx = c.getContext('2d'); let w = c.width = window.innerWidth, h = c.height = window.innerHeight; function draw() { ctx.fillStyle = 'rgba(26,26,26,0.1)'; ctx.fillRect(0,0,w,h); if(Math.random() > 0.96) { ctx.strokeStyle = 'rgba(212,175,55,0.3)'; ctx.lineWidth = 2; ctx.beginPath(); let x = Math.random()*w, y=0; ctx.moveTo(x,y); for(let i=0; i<8; i++) { x+=(Math.random()-0.5)*100; y+=h/8; ctx.lineTo(x,y); } ctx.stroke(); } requestAnimationFrame(draw); } draw(); }
         function initIntel() { const intel = document.getElementById('intel-scroll'); setInterval(() => { const l = document.createElement('div'); l.innerHTML = `[${new Date().toLocaleTimeString()}] GRID_SECURE_RSA`; intel.prepend(l); }, 6000); }
@@ -252,6 +267,8 @@
         async function sendPacket() { const input = document.getElementById('chat-msg-in'); if(!input.value || !currentUser) return; await db.from('messages').insert([{ content: input.value, user_id: currentUser.id, alias: currentUser.email.split('@')[0] }]); input.value = ""; }
         async function fetchGallery() { const { data } = await db.storage.from('gallery').list('public', { limit: 12 }); if (data) document.getElementById('gallery-grid').innerHTML = data.map(f => `<div class="bg-zinc-800 h-32 rounded"></div>`).join(''); }
         function toggleDirectorUI() { document.getElementById('director-dashboard').classList.toggle('hidden'); }
+        function adminSetTicker() { const msg = document.getElementById('ticker-input').value; document.getElementById('ticker-text').innerText = msg; }
+        async function adminAddTrack() { const id = document.getElementById('new-track-id').value; const title = document.getElementById('new-track-title').value; db.from('hit_list').insert([{ track_id: id, title: title }]).then(() => fetchTracks()); }
     </script>
 </body>
 </html>
