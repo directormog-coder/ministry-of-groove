@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V59.0.0</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V60.0.0</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,165 +21,165 @@
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         h1, .tile-title { font-family: 'Clash Display', sans-serif; }
         
-        /* FLUID RESPONSIVE TYPOGRAPHY */
-        .brand-title { font-size: clamp(1.2rem, 6vw, 2.8rem); line-height: 1.1; word-wrap: break-word; }
-        .grid-subtext { font-size: clamp(0.6rem, 2vw, 0.75rem); letter-spacing: 0.3em; }
+        /* FLUID SCALING PREVENTS TEXT CUTS */
+        .brand-title { font-size: clamp(1.3rem, 5.5vw, 3rem); line-height: 1; word-wrap: break-word; }
+        .grid-subtext { font-size: clamp(0.55rem, 1.8vw, 0.8rem); letter-spacing: 0.35em; }
 
-        /* MOTHERBOARD CIRCUIT PATTERN */
+        /* MOTHERBOARD CIRCUIT PATTERN BACKGROUND */
         body { 
             background-color: var(--mog-bg); 
             background-image: 
                 radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 85%),
-                url("data:image/svg+xml,%3Csvg id='circuit' width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 L30 10 L30 30 M70 10 L90 10 L90 30 M10 90 L10 70 L30 70 M90 90 L90 70 L70 70 M30 30 L50 30 L50 50 L70 50 L70 70' stroke='%2300d4ff' stroke-width='0.5' fill='none' opacity='0.2'/%3E%3C/svg%3E");
+                url("data:image/svg+xml,%3Csvg id='circuit' width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 L30 10 L30 30 M70 10 L90 10 L90 30 M10 90 L10 70 L30 70 M90 90 L90 70 L70 70 M30 30 L50 30 L50 50 L70 50 L70 70' stroke='%2300d4ff' stroke-width='0.5' fill='none' opacity='0.2'/%3E%3Ccircle cx='30' cy='30' r='1' fill='%2300d4ff' opacity='0.3'/%3E%3C/svg%3E");
             background-attachment: fixed;
             color: var(--mog-gold); margin: 0; overflow-x: hidden;
-            width: 100vw; height: 100vh;
         }
 
+        /* DIRECTOR GOLD PULSE MODE */
         .director-active body {
             background-image: 
                 radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.2) 0%, transparent 85%),
                 url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 L30 10 L30 30 M70 10 L90 10 L90 30 M10 90 L10 70 L30 70 M90 90 L90 70 L70 70 M30 30 L50 30 L50 50 L70 50 L70 70' stroke='%23D4AF37' stroke-width='0.5' fill='none' opacity='0.3'/%3E%3C/svg%3E");
             animation: goldPulse 4s infinite alternate ease-in-out;
         }
+        @keyframes goldPulse { from { filter: brightness(1); } to { filter: brightness(1.25); } }
 
-        @keyframes goldPulse { from { filter: brightness(1); } to { filter: brightness(1.2); } }
+        /* NEURAL AUTH INPUTS */
+        .auth-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; width: 100%; color: white; outline: none; font-size: 14px; }
+        .auth-input:focus { border-color: var(--mog-blue); box-shadow: 0 0 15px rgba(0, 212, 255, 0.1); }
+        .auth-btn { background: white; color: black; font-weight: 900; border-radius: 30px; padding: 14px; width: 100%; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* AUTH & MOBILE INPUTS */
-        .auth-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px; width: 100%; color: white; outline: none; font-size: 14px; }
-        .auth-btn { background: white; color: black; font-weight: 900; border-radius: 30px; padding: 14px; width: 100%; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; }
-
-        /* M.O.G. CHAT UNIQUE */
-        .mog-chat-row { display: flex; gap: 8px; margin-bottom: 12px; align-items: flex-end; width: 100%; }
-        .mog-chat-logo { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--mog-blue); flex-shrink: 0; }
-        .mog-bubble { padding: 10px 14px; border-radius: 18px; font-size: 12px; color: #fff; background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.15); max-width: 85%; overflow-wrap: break-word; }
+        /* UNIQUE M.O.G. CHAT LAYOUT */
+        .mog-chat-row { display: flex; gap: 10px; margin-bottom: 15px; align-items: flex-end; width: 100%; }
+        .mog-chat-logo { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--mog-blue); background: #000; padding: 2px; flex-shrink: 0; }
+        .mog-bubble { padding: 10px 15px; border-radius: 18px; font-size: 13px; color: #fff; background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.15); max-width: 85%; overflow-wrap: break-word; }
 
         .scroller-v { overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--mog-blue) transparent; -webkit-overflow-scrolling: touch; }
         .scroller-v::-webkit-scrollbar { width: 4px; }
         .scroller-v::-webkit-scrollbar-thumb { background: var(--mog-blue); border-radius: 10px; }
         
         #app-content { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); margin-top: 50px; }
-        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.2); backdrop-filter: blur(20px); border-radius: 24px; overflow: hidden; height: 100%; }
+        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.2); backdrop-filter: blur(25px); border-radius: 28px; overflow: hidden; height: 100%; }
 
-        /* ROTATION FLEXIBILITY */
-        @media (orientation: landscape) and (max-height: 500px) {
-            header { margin-bottom: 15px; }
-            .command-tile { border-radius: 12px; }
-        }
-
+        /* DIRECTOR WEALTH ENCRYPTION */
         .director-only { display: none; }
-        .director-active .director-only { display: block; }
+        .director-active .director-only { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body class="scrollbar-hide" id="main-body-wrap">
 
     <div id="ticker-wrap" class="fixed top-0 w-full bg-black z-[1000] h-[35px] border-b border-gold flex items-center overflow-hidden">
-        <div class="ticker-move text-[9px] font-black uppercase text-gold">MASTER_V59 // FLUID_ROTATION_SYNC // GMAIL_AUTH_ACTIVE // MOTHERBOARD_GRID // DIRECTOR_STEALTH...</div>
+        <div class="ticker-move text-[9px] font-black uppercase text-gold">MASTER_V60 // TOTALITY_RECOVERY // FLUID_SYNC // STEALTH_DIRECTOR_GATEWAY // RSA_RADAR_ACTIVE...</div>
     </div>
 
-    <button onclick="toggleMenu()" class="fixed top-12 left-4 z-[2500] text-blue-400 text-2xl p-2 bg-black/40 rounded-full border border-white/5 backdrop-blur-md">
+    <button onclick="toggleMenu()" class="fixed top-12 left-5 z-[2500] text-blue-400 text-2xl p-2 bg-black/40 rounded-full border border-white/5 backdrop-blur-md">
         <i class="fa-solid fa-bars-staggered"></i>
     </button>
-    <nav id="side-menu" class="fixed top-0 left-[-320px] w-[280px] h-full bg-[#080c10] border-r border-white/5 p-6 z-[3000] transition-all duration-500 shadow-2xl">
-        <div class="mb-8 flex items-center gap-4"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-10 w-10 rounded-full border border-blue-500/30"></div>
+    <nav id="side-menu" class="fixed top-0 left-[-320px] w-[280px] h-full bg-[#080c10] border-r border-white/5 p-8 z-[3000] transition-all duration-500 shadow-2xl">
+        <div class="mb-10"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-10 w-10 border border-blue-500/30 rounded-full"></div>
         <div class="space-y-4">
-            <div class="flex justify-between items-center p-3 bg-white/5 rounded-xl"><span class="text-[10px] uppercase font-black">Silent Mode</span><input type="checkbox" id="silent-toggle"></div>
-            <a class="block p-3 text-white uppercase text-[10px] border-b border-white/5 font-black">Recruitment Protocol</a>
-            <a class="block p-3 text-white uppercase text-[10px] border-b border-white/5 font-black">Privacy Protocol</a>
-            <button onclick="toggleMenu()" class="mt-8 text-zinc-600 text-[10px] font-black uppercase">Close Folders</button>
+            <div class="flex justify-between items-center p-3 bg-white/5 rounded-xl"><span class="text-[10px] uppercase font-black text-zinc-400">Silent Mode</span><input type="checkbox" id="silent-toggle"></div>
+            <a class="block p-4 text-white uppercase text-[11px] border-b border-white/5 font-black hover:text-blue-400">Grid Directives</a>
+            <a class="block p-4 text-white uppercase text-[11px] border-b border-white/5 font-black hover:text-blue-400">Security Terms</a>
+            <button onclick="toggleMenu()" class="mt-10 text-zinc-600 text-[10px] font-black uppercase">Close Interface</button>
         </div>
     </nav>
 
     <div id="app-content" class="container mx-auto px-4">
-        <header class="flex flex-col md:flex-row justify-between items-center gap-6 mb-8 pt-4">
-            <div class="flex items-center gap-5 w-full">
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-master-logo" onclick="handleLogoSequence()" class="h-16 w-16 md:h-20 md:w-20 border-2 border-blue-500/50 rounded-full cursor-pointer shadow-2xl">
-                <div class="flex-grow min-w-0">
+        <header class="flex flex-col md:flex-row justify-between items-center gap-6 mb-10 pt-4">
+            <div class="flex items-center gap-6 w-full">
+                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" 
+                     id="mog-master-logo" 
+                     onclick="handleLogoSequence()" 
+                     class="h-16 w-16 md:h-20 md:w-20 border-2 border-blue-500/50 rounded-full cursor-pointer shadow-2xl active:scale-90">
+                <div class="min-w-0 flex-grow">
                     <h1 class="brand-title text-[#D4AF37] uppercase font-black truncate">Ministry of Groove</h1>
                     <div class="flex flex-wrap items-center gap-3 mt-1">
-                        <p class="grid-subtext text-blue-400 uppercase font-black truncate">Decrypting the Culture.</p>
-                        <div class="bg-black/40 px-2 py-0.5 rounded-full border border-white/5 text-[8px] text-zinc-500 font-black italic whitespace-nowrap" id="lat-val">LATENCY: 18ms</div>
+                        <p class="grid-subtext text-blue-400 uppercase font-black">Decrypting the Culture.</p>
+                        <div class="bg-black/40 px-3 py-0.5 rounded-full border border-white/5 text-[8px] text-zinc-500 font-black italic">LATENCY: <span id="lat-val">18ms</span></div>
                     </div>
                 </div>
             </div>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-12 gap-6 pb-10">
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-12">
             
-            <div class="lg:col-span-4 space-y-6">
-                <section class="command-tile p-6 md:p-8 bg-black/60 shadow-2xl">
-                    <div id="auth-ui" class="space-y-5">
-                        <div class="text-center"><h2 class="text-white font-black uppercase tracking-widest text-base" id="auth-title">Grid Registry</h2></div>
+            <div class="lg:col-span-4 space-y-8">
+                <section class="command-tile p-8 bg-black/60 shadow-2xl">
+                    <div id="auth-ui" class="space-y-6">
+                        <div class="text-center"><h2 class="text-white font-black uppercase tracking-widest text-base" id="auth-title">Grid Handshake</h2></div>
                         
-                        <div id="signup-fields" class="hidden space-y-3">
-                            <input id="new-user" type="text" placeholder="USERNAME OR GMAIL" class="auth-input">
+                        <div id="signup-fields" class="hidden space-y-4">
+                            <input id="new-user" type="text" placeholder="GMAIL OR USERNAME" class="auth-input">
                             <input id="new-pass" type="password" placeholder="PASSWORD" class="auth-input">
-                            <button onclick="registerOperative()" class="auth-btn">Join Grid</button>
-                            <p class="text-[10px] text-center text-zinc-500 uppercase">Member? <span class="text-blue-400 cursor-pointer" onclick="toggleAuth()">Sign In</span></p>
+                            <button onclick="registerOperative()" class="auth-btn">Establish Profile</button>
+                            <p class="text-[10px] text-center text-zinc-500 uppercase">Existing? <span class="text-blue-400 cursor-pointer font-black" onclick="toggleAuth()">Sign In</span></p>
                         </div>
 
-                        <div id="signin-fields" class="space-y-3">
-                            <input id="login-user" type="text" placeholder="USERNAME OR GMAIL" class="auth-input">
+                        <div id="signin-fields" class="space-y-4">
+                            <input id="login-user" type="text" placeholder="GMAIL OR USERNAME" class="auth-input">
                             <input id="login-pass" type="password" placeholder="PASSCODE" class="auth-input">
                             <button onclick="loginOperative()" class="auth-btn">Authorize</button>
-                            <p class="text-[10px] text-center text-zinc-500 uppercase">New Operative? <span class="text-blue-400 cursor-pointer" onclick="toggleAuth()">Sign Up</span></p>
+                            <p class="text-[10px] text-center text-zinc-500 uppercase">New Operative? <span class="text-blue-400 cursor-pointer font-black" onclick="toggleAuth()">Sign Up</span></p>
                         </div>
                     </div>
 
-                    <div id="director-login-portal" class="hidden space-y-4 pt-6 border-t border-gold/20">
-                        <input id="dir-email" type="email" placeholder="DIRECTOR_ID" class="auth-input border-gold/40 text-gold">
-                        <input id="dir-pass" type="password" placeholder="BYPASS_CODE" class="auth-input border-gold/40 text-gold">
-                        <button onclick="executeDirectorBypass()" class="w-full bg-gold text-black font-black p-3 rounded-full text-[10px] uppercase">Execute Bypass</button>
+                    <div id="director-login-portal" class="hidden space-y-6 pt-10 border-t border-gold/20">
+                        <input id="dir-email" type="email" placeholder="DIRECTOR_ID" class="auth-input border-gold/40 text-gold font-bold">
+                        <input id="dir-pass" type="password" placeholder="BYPASS_KEY" class="auth-input border-gold/40 text-gold font-bold">
+                        <button onclick="executeDirectorBypass()" class="w-full bg-gold text-black font-black p-4 rounded-full text-[10px] uppercase shadow-[0_0_15px_rgba(212,175,55,0.4)]">Access Totality</button>
                     </div>
                 </section>
 
-                <section class="command-tile h-48 border-blue-500/20">
-                    <iframe class="w-full h-full grayscale invert opacity-30 border-none scale-125" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7000000!2d24!3d-29!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sza!4v17100000000000"></iframe>
+                <section class="command-tile h-64 border-blue-500/20">
+                    <iframe class="w-full h-full grayscale invert opacity-40 border-none scale-125" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7000000!2d24!3d-29!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sza!4v17100000000000"></iframe>
                 </section>
 
-                <section class="command-tile p-6 border-gold/30">
-                    <span class="tile-title text-gold block mb-4 text-[10px] uppercase">Growth Protocol</span>
+                <section class="command-tile p-8 border-gold/30">
+                    <span class="tile-title text-gold block mb-6 uppercase text-[10px] tracking-widest">Growth Protocol</span>
                     <div class="space-y-4">
-                        <div class="p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-xl">
-                            <div class="flex justify-between text-[9px] font-black text-white uppercase"><span>Phase 1: Recruitment</span><span>142 / 500</span></div>
-                            <div class="w-full bg-white/5 h-1 rounded-full mt-2"><div class="bg-emerald-500 h-full w-[28%] shadow-[0_0_8px_#10b981]"></div></div>
+                        <div class="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl">
+                            <div class="flex justify-between text-[10px] font-black text-white uppercase"><span>Phase 1: Recruitment</span><span>142 / 500</span></div>
+                            <div class="w-full bg-white/5 h-1.5 rounded-full mt-2"><div class="bg-emerald-500 h-full w-[28%] rounded-full shadow-[0_0_10px_#10b981]"></div></div>
                         </div>
-                        <div class="director-only pt-2">
-                            <p class="text-[10px] text-gold font-black uppercase italic">Wealth Index: R73,827</p>
+                        <div class="director-only pt-6 border-t border-white/10">
+                            <div class="flex justify-between text-[11px] font-black"><span class="text-gold">WEALTH INDEX:</span><span class="text-white">R73,827.00</span></div>
+                            <div class="flex justify-between text-[11px] font-black mt-2"><span class="text-gold">BOND YIELD:</span><span class="text-white">R13,827.19</span></div>
                         </div>
                     </div>
                 </section>
             </div>
 
-            <div class="lg:col-span-8 space-y-6">
-                <section class="command-tile h-[500px] flex flex-col">
-                    <div class="tile-header py-3 px-6 border-b border-white/5 flex items-center justify-between">
-                        <span class="text-white font-black text-[10px] uppercase tracking-widest">Frequency Comms</span>
-                        <i class="fa-solid fa-shield-halved text-emerald-500 text-[10px]"></i>
+            <div class="lg:col-span-8 space-y-8">
+                <section class="command-tile h-[600px] flex flex-col bg-black/40">
+                    <div class="tile-header py-4 px-8 border-b border-white/5 flex items-center justify-between">
+                        <span class="text-white font-black text-xs uppercase tracking-widest">Neural Frequency Comms</span>
+                        <i class="fa-solid fa-shield-halved text-emerald-500 text-xs animate-pulse"></i>
                     </div>
-                    <div id="chat-stream" class="flex-grow p-4 md:p-6 scroller-v flex flex-col"></div>
-                    <div class="p-4 bg-black/60 flex gap-3 items-center border-t border-white/5">
-                        <input type="text" id="chat-msg-in" placeholder="Message..." class="flex-grow bg-[#111] border border-white/10 rounded-full px-5 py-3 text-white text-xs outline-none">
-                        <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg"><i class="fa-solid fa-paper-plane text-sm"></i></button>
+                    <div id="chat-stream" class="flex-grow p-6 scroller-v flex flex-col"></div>
+                    <div class="p-6 bg-black/80 flex gap-4 items-center border-t border-white/5">
+                        <input type="text" id="chat-msg-in" placeholder="Message..." class="flex-grow bg-[#111] border border-white/10 rounded-full px-6 py-4 text-white text-sm outline-none">
+                        <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-xl active:scale-90"><i class="fa-solid fa-paper-plane"></i></button>
                     </div>
                 </section>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <section class="command-tile h-[400px] flex flex-col">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <section class="command-tile h-[450px] flex flex-col">
                         <div class="tile-header flex justify-between items-center p-4 border-b border-white/5">
-                            <span class="tile-title text-[#1DB954] text-[10px] uppercase">Spotify Top 10</span>
-                            <i class="fa-brands fa-spotify text-xl text-[#1DB954]"></i>
+                            <span class="tile-title text-[#1DB954] text-[10px] uppercase">Spotify Amapiano Hitlist</span>
+                            <i class="fa-brands fa-spotify text-2xl text-[#1DB954]"></i>
                         </div>
-                        <iframe class="flex-grow scroller-v" src="http://googleusercontent.com/spotify.com/20" width="100%" height="100%" frameBorder="0"></iframe>
+                        <iframe class="flex-grow scroller-v" src="http://googleusercontent.com/spotify.com/20" width="100%" height="800" frameBorder="0"></iframe>
                     </section>
-                    <section class="command-tile h-[400px] flex flex-col">
+                    <section class="command-tile h-[450px] flex flex-col">
                         <div class="tile-header flex justify-between p-4 border-b border-white/5">
-                            <span class="tile-title text-gold text-[10px] uppercase">MP3 Archive</span>
+                            <span class="tile-title text-gold text-[10px] uppercase">Sovereign MP3 Archive</span>
                             <i class="fa-solid fa-compact-disc text-gold"></i>
                         </div>
-                        <div class="flex-grow p-3 scroller-v space-y-2" id="archive-grid">
-                            <div class="p-3 bg-white/5 rounded-xl flex items-center gap-3 border border-white/5">
-                                <span class="text-[8px] text-white font-black uppercase truncate">MOG_Handshake_V1</span>
+                        <div class="flex-grow p-4 scroller-v space-y-3" id="archive-grid">
+                            <div class="p-4 bg-white/5 rounded-2xl flex items-center gap-4 border border-white/5">
+                                <span class="text-[9px] text-white font-black uppercase italic truncate">MOG_Handshake_V1</span>
                                 <audio src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/music.mp3" controls class="h-6 flex-grow"></audio>
                             </div>
                         </div>
@@ -189,17 +189,18 @@
         </main>
     </div>
     
-    <div id="director-totality" class="hidden fixed inset-0 z-[5000] bg-black/98 p-6 md:p-12 overflow-y-auto scroller-v">
-        <div class="flex justify-between items-center mb-8 border-b border-gold/20 pb-4">
-            <h2 class="text-2xl text-white font-black uppercase italic tracking-tighter">Master Totality</h2>
-            <button onclick="closeDirector()" class="text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
+    <div id="director-totality" class="hidden fixed inset-0 z-[5000] bg-black/98 p-8 md:p-12 overflow-y-auto scroller-v backdrop-blur-3xl">
+        <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-4">
+            <h2 class="text-3xl text-white font-black uppercase italic tracking-tighter">Master Totality Console</h2>
+            <button onclick="closeDirector()" class="text-white text-3xl hover:text-gold transition-colors"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="command-tile p-6"><h3 class="tile-title text-gold italic mb-4">Inject Intel</h3><input type="file" onchange="uploadArchive(this)" class="text-[10px]"></div>
-            <div class="command-tile p-6 flex flex-col justify-center items-center gap-2">
-                <span class="text-gold font-black uppercase text-[10px]">Sovereign Authorized</span>
-                <p class="text-zinc-500 text-[8px] font-mono">CODE_SOURCE_SYNC_V59</p>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="command-tile p-10 text-center border-gold/40"><span class="text-gold uppercase font-black text-xs">Operatives</span><p class="text-4xl text-white font-black mt-4">142</p></div>
+            <div class="command-tile p-10 text-center border-gold/40"><span class="text-gold uppercase font-black text-xs">Wealth Signal</span><p class="text-4xl text-white font-black mt-4">R73,827</p></div>
+        </div>
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="command-tile p-10"><h3 class="tile-title text-gold italic mb-6">Archive Injection</h3><input type="file" onchange="uploadArchive(this)" class="text-[10px]"></div>
+            <div class="command-tile p-10 flex items-center justify-center"><p class="text-gold uppercase font-black text-[10px] border border-gold/30 px-10 py-5 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.2)]">Level: Sovereign Director Authorized</p></div>
         </div>
     </div>
 
@@ -245,7 +246,10 @@
             }
         }
 
-        window.addEventListener('load', () => { fetchMessages(); fetchArchive(); setInterval(() => { document.getElementById('lat-val').innerText = `LATENCY: ${Math.floor(Math.random()*10)+10}ms`; }, 5000); });
+        window.addEventListener('load', () => { 
+            fetchMessages(); fetchArchive(); 
+            setInterval(() => { document.getElementById('lat-val').innerText = `${Math.floor(Math.random()*15)+10}ms`; }, 5000);
+        });
     </script>
 </body>
 </html>
