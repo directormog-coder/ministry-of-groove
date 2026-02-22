@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V56.1.0</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V56.3.0</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,7 +22,7 @@
         h1, .tile-title { font-family: 'Clash Display', sans-serif; }
         .brand-title { font-size: clamp(1.5rem, 8vw, 3rem); line-height: 1.1; }
 
-        /* MOTHERBOARD BACKGROUND */
+        /* MOTHERBOARD CIRCUIT PATTERN */
         body { 
             background-color: var(--mog-bg); 
             background-image: 
@@ -37,42 +36,37 @@
         .ticker-move { display: inline-block; white-space: nowrap; animation: ticker 45s linear infinite; font-size: 9px; font-weight: 900; letter-spacing: 2.5px; color: var(--mog-gold); text-transform: uppercase; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-        #app-content { margin-top: 80px; padding: 20px; }
-        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.3); backdrop-filter: blur(40px); border-radius: 28px; overflow: hidden; position: relative; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8); }
-        .tile-header { border-bottom: 1px solid rgba(0, 212, 255, 0.2); padding: 18px 24px; background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, transparent 100%); }
-        
-        /* SCROLLER */
+        /* INCENTIVE CARDS */
+        .incentive-card { background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.1); padding: 12px; border-radius: 12px; margin-bottom: 8px; }
+        .phase-row { padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(0, 212, 255, 0.1); margin-bottom: 10px; }
+        .phase-active { border-color: var(--mog-gold); background: rgba(212, 175, 55, 0.05); }
+
         .scroller-v { overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--mog-blue) transparent; }
         .scroller-v::-webkit-scrollbar { width: 6px; }
         .scroller-v::-webkit-scrollbar-thumb { background: linear-gradient(var(--mog-blue), #005c4b); border-radius: 10px; }
 
-        /* MONETIZATION ELEMENTS */
-        .tier-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(212, 175, 55, 0.2); padding: 20px; border-radius: 20px; transition: 0.3s; }
-        .tier-card:hover { border-color: var(--mog-gold); background: rgba(212, 175, 55, 0.05); }
-        .buy-btn { background: var(--mog-gold); color: #000; font-weight: 900; width: 100%; padding: 10px; border-radius: 10px; font-size: 11px; text-transform: uppercase; margin-top: 15px; }
-
-        /* DIRECTOR WEALTH HIDDEN */
         .director-only { display: none; }
         .director-active .director-only { display: block; }
-
-        #side-menu { position: fixed; top: 0; left: -320px; width: 320px; height: 100%; background: #080c10; border-right: 1px solid rgba(0,212,255,0.2); z-index: 2000; transition: 0.4s; }
-        #side-menu.active { left: 0; }
+        
+        #app-content { margin-top: 80px; padding: 20px; }
+        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.3); backdrop-filter: blur(40px); border-radius: 28px; overflow: hidden; position: relative; }
+        .tile-header { border-bottom: 1px solid rgba(0, 212, 255, 0.2); padding: 18px 24px; background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, transparent 100%); }
     </style>
 </head>
 <body class="scrollbar-hide" id="main-body">
 
     <button onclick="toggleMenu()" class="fixed top-10 left-6 z-[2500] text-blue-400 text-2xl"><i class="fa-solid fa-bars-staggered"></i></button>
     
-    <nav id="side-menu" class="p-8">
-        <div class="mb-10 flex items-center gap-4"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-12 w-12"><span class="text-gold font-black text-xs uppercase italic">Sovereign Folders</span></div>
+    <nav id="side-menu" class="fixed top-0 left-[-320px] w-[320px] h-full bg-[#080c10] border-right border-white/5 p-8 z-[3000] transition-all">
+        <div class="mb-10 flex items-center gap-4"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-12 w-12"><span class="text-gold font-black text-xs uppercase italic">Folders</span></div>
         <div class="space-y-4">
             <div class="flex justify-between items-center bg-white/5 p-4 rounded-xl"><span class="text-[10px] uppercase font-black text-zinc-400">Silent Mode</span><input type="checkbox" id="silent-toggle" class="accent-emerald-500"></div>
-            <a class="block p-4 text-white uppercase text-[11px] border-b border-white/5">Premium Support</a>
-            <a class="block p-4 text-white uppercase text-[11px] border-b border-white/5">Privacy Policy</a>
+            <a class="block p-4 text-white uppercase text-[11px] border-b border-white/5">Grid Architecture</a>
+            <a class="block p-4 text-white uppercase text-[11px] border-b border-white/5">Privacy Protocol</a>
         </div>
     </nav>
 
-    <div id="ticker-wrap"><div class="ticker-move">REVENUE_SYNC_V56.1 // SUBSCRIPTION_GRID_ACTIVE // RSA_BOND_TRACKER_LIVE // MOTHERBOARD_PATTERN // DIRECTOR_ONLINE...</div></div>
+    <div id="ticker-wrap"><div class="ticker-move">INCENTIVE_PROTOCOLS_V56.3 // RECRUIT_AND_EARN // PHASE_2_FAST_TRACK // TARGET_500_OPERATIVES // DIRECTOR_ONLINE...</div></div>
 
     <div id="app-content" class="opacity-1">
         <header class="flex flex-col lg:flex-row justify-between items-center gap-10 relative z-50 mb-10 pl-16 lg:pl-0">
@@ -84,10 +78,13 @@
                         <p class="text-[10px] text-blue-400 tracking-[.6em] uppercase font-black">Decrypting the Culture. Synchronizing the Grid.</p>
                         <div class="flex items-center gap-2 bg-black/40 px-3 py-1 rounded-full border border-white/5">
                             <span id="lat-dot" class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]"></span>
-                            <span id="lat-val" class="text-[9px] text-zinc-500 font-black uppercase tracking-widest">LATENCY: 24ms</span>
+                            <span id="lat-val" class="text-[9px] text-zinc-500 font-black uppercase">LATENCY: 24ms</span>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="flex flex-col items-end text-right">
+                <div class="text-[11px] text-white font-black bg-emerald-500/20 px-6 py-2 rounded-full border border-emerald-500/30 uppercase italic">Phase 1: Recruitment</div>
             </div>
         </header>
 
@@ -100,44 +97,51 @@
                         <input id="pass-in" type="password" placeholder="DIRECTOR CODE" class="w-full bg-black/40 border border-gold/20 rounded-xl p-4 text-gold text-[10px] outline-none hidden">
                         <div class="grid grid-cols-2 gap-4"><button onclick="handleAuth()" class="border border-blue-400/30 p-3 rounded-xl text-[10px] font-bold">Login</button><button onclick="handleAuth()" class="border border-gold/30 p-3 rounded-xl text-[10px] font-bold">Signup</button></div>
                     </div>
-                    <div id="op-profile" class="hidden text-center mt-6"><div id="qrcode-container" class="bg-white p-2 inline-block rounded-xl mb-4 shadow-2xl"></div></div>
                 </section>
 
                 <section class="command-tile p-8 space-y-6 border-gold/40">
-                    <div class="tile-header flex justify-between px-0"><span class="tile-title text-gold">Revenue Terminal</span><i class="fa-solid fa-credit-card text-gold"></i></div>
-                    <div class="space-y-4">
-                        <div class="tier-card">
-                            <div class="flex justify-between"><span class="text-[10px] font-black uppercase text-white">Grid Operative</span><span class="text-gold font-black">R49/mo</span></div>
-                            <p class="text-[9px] text-zinc-500 mt-2">Unlock HD Downloads & Private Chat Access.</p>
-                            <button class="buy-btn">Upgrade Frequency</button>
+                    <div class="tile-header flex justify-between px-0"><span class="tile-title text-gold uppercase">Phase 2 Fast-Track</span><i class="fa-solid fa-bolt-lightning text-gold animate-pulse"></i></div>
+                    
+                    <div class="scroller-v max-h-[400px] pr-2">
+                        <p class="text-[10px] text-zinc-400 mb-4 uppercase font-black tracking-widest">How to earn early access:</p>
+                        
+                        <div class="incentive-card">
+                            <div class="flex justify-between items-center"><span class="text-[10px] text-blue-400 font-black uppercase">Recruitment Link</span><span class="text-[9px] text-gold">+5 Points</span></div>
+                            <p class="text-[9px] text-zinc-300 mt-2 italic">Share your unique grid link. Every 10 operatives recruited = Immediate Phase 2 Handshake.</p>
+                            <button class="w-full bg-blue-500/20 border border-blue-400 text-[9px] py-2 rounded-lg mt-3 uppercase font-black">Copy Signal Link</button>
                         </div>
-                        <div class="tier-card border-blue-500/30">
-                            <div class="flex justify-between"><span class="text-[10px] font-black uppercase text-white">Origin 54 Merch</span><span class="text-blue-400 font-black">SHOP</span></div>
-                            <p class="text-[9px] text-zinc-500 mt-2">Exclusive Asili Collective Apparel.</p>
-                            <button class="buy-btn" style="background:var(--mog-blue)">Browse Collective</button>
+
+                        <div class="incentive-card">
+                            <div class="flex justify-between items-center"><span class="text-[10px] text-blue-400 font-black uppercase">Content Curator</span><span class="text-[9px] text-gold">+3 Points</span></div>
+                            <p class="text-[9px] text-zinc-300 mt-2 italic">Submit verified Amapiano hits to the Frequency Grid. Most voted tracks earn Early-Access tokens.</p>
+                        </div>
+
+                        <div class="incentive-card">
+                            <div class="flex justify-between items-center"><span class="text-[10px] text-blue-400 font-black uppercase">Grid Sentinel</span><span class="text-[9px] text-gold">+2 Points</span></div>
+                            <p class="text-[9px] text-zinc-300 mt-2 italic">Daily login and Frequency Chat engagement keeps your signal high for the Phase 2 queue.</p>
                         </div>
                     </div>
-                    <div class="director-only pt-6 border-t border-white/10">
-                        <span class="text-[10px] text-gold font-black uppercase italic">Wealth Index: RSA Bonds</span>
-                        <div class="flex justify-between items-end mt-2"><span class="text-xs text-white">Projected Yield:</span><span class="text-xl text-gold font-black tracking-widest">R13,827.19</span></div>
-                        <div class="w-full bg-white/5 h-2 rounded-full mt-3"><div class="bg-gold h-full rounded-full shadow-lg" style="width: 45%"></div></div>
+
+                    <div class="phase-row phase-active">
+                        <div class="flex justify-between text-[10px] font-black"><span class="text-white">GRID PROGRESS: 142 / 500</span><span class="text-gold">28%</span></div>
+                        <div class="w-full bg-white/5 h-1.5 rounded-full mt-2"><div class="bg-gold h-full rounded-full shadow-[0_0_10px_#D4AF37]" style="width: 28%"></div></div>
                     </div>
                 </section>
 
                 <section class="command-tile border-blue-500/40">
-                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">RSA Territorial Radar</span><i class="fa-solid fa-satellite-dish animate-pulse"></i></div>
+                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">National Territorial Radar</span><i class="fa-solid fa-satellite-dish animate-pulse"></i></div>
                     <div class="h-64"><iframe class="w-full h-full grayscale invert opacity-50 contrast-150 border-none scale-110" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14348.66779083556!2d29.2014842!3d-25.872715!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e9d123456789abc%3A0x1234567890abcdef!2seMalahleni!5e0!3m2!1sen!2sza!4v1620000000000!5m2!1sen!2sza6"></iframe></div>
                 </section>
             </div>
 
             <div class="lg:col-span-8 space-y-10">
-                <section class="command-tile border-blue-500/20">
+                <section class="command-tile border-blue-500/20 h-[500px] flex flex-col">
                     <div class="tile-header flex justify-between px-6 py-5"><span class="tile-title text-blue-400 font-black">Visual Intel Archive</span><i class="fa-solid fa-shield-halved text-blue-400"></i></div>
-                    <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 gap-6 p-6 max-h-[500px] scroller-v"></div>
+                    <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 gap-6 p-6 flex-grow scroller-v"></div>
                 </section>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <section class="command-tile h-[650px] flex flex-col border-emerald-500/20">
+                    <section class="command-tile h-[650px] flex flex-col">
                         <div class="tile-header flex justify-between items-center"><span class="tile-title text-[#1DB954]">Spotify Hitlist</span><i class="fa-brands fa-spotify text-2xl text-[#1DB954]"></i></div>
                         <div class="flex-grow scroller-v p-2">
                             <iframe style="border-radius:18px" src="https://open.spotify.com/embed/playlist/37i9dQZEVXbO789QXCHY7F?utm_source=generator&theme=0" width="100%" height="900" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
@@ -149,28 +153,18 @@
                         <div id="chat-stream" class="flex-grow p-6 scroller-v flex flex-col" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay;"></div>
                         <div class="p-4 bg-[#202c33] flex items-center gap-4">
                             <input type="text" id="chat-msg-in" placeholder="Message..." class="flex-grow bg-[#2a3942] rounded-full px-6 py-3 text-white text-sm outline-none">
-                            <button onclick="sendPacket()" class="bg-[#00a884] text-white rounded-full w-12 h-12 flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
+                            <button onclick="sendPacket()" class="bg-[#00a884] text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg"><i class="fa-solid fa-paper-plane"></i></button>
                         </div>
                     </section>
                 </div>
-
-                <section class="command-tile h-[380px] flex flex-col">
-                    <div class="tile-header flex justify-between"><span class="tile-title text-gold uppercase italic">Sovereign MP3 Archive</span><i class="fa-solid fa-compact-disc"></i></div>
-                    <div class="flex-grow p-4 scroller-v space-y-2" id="archive-grid">
-                        <div class="p-3 bg-white/5 rounded-xl flex items-center gap-4 border border-white/5">
-                            <span class="text-[9px] font-black text-white uppercase italic truncate">MOG_Handshake_V1.mp3</span>
-                            <audio src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/music.mp3" controls class="flex-grow h-6"></audio>
-                        </div>
-                    </div>
-                </section>
             </div>
         </main>
     </div>
     
     <section id="director-dashboard" class="hidden fixed inset-0 z-[3000] bg-black/98 p-10 overflow-y-auto scroller-v">
         <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-4"><h2 class="text-3xl text-white font-black uppercase">Director Command</h2><button onclick="toggleDirectorUI()" class="text-white text-2xl"><i class="fa-solid fa-xmark"></i></button></div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <div class="command-tile p-8 space-y-4"><h3 class="tile-title text-gold italic">Intel Upload</h3><input type="file" id="file-upload" onchange="uploadIntel(this)"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto director-only">
+            <div class="command-tile p-8 space-y-4"><h3 class="tile-title text-gold italic">Intel Upload</h3><input type="file" onchange="uploadIntel(this)"></div>
             <div class="command-tile p-8 space-y-4"><h3 class="tile-title text-gold italic">MP3 Inject</h3><input type="file" onchange="uploadArchive(this)"></div>
         </div>
     </section>
@@ -184,7 +178,7 @@
         let lastArchiveCount = 0;
         const notifySound = new Audio("https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/notification.mp3");
 
-        function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
+        function toggleMenu() { document.getElementById('side-menu').style.left = document.getElementById('side-menu').style.left === '0px' ? '-320px' : '0px'; }
         function showDirectorLogin() { document.getElementById('pass-in').classList.toggle('hidden'); }
         function toggleDirectorUI() { document.getElementById('director-dashboard').classList.toggle('hidden'); }
         
@@ -197,7 +191,6 @@
                 document.getElementById('auth-ui').classList.add('hidden');
                 document.getElementById('admin-trigger').classList.remove('hidden');
                 fetchGallery(); fetchArchive(); fetchMessages();
-                new QRCode(document.getElementById("qrcode-container"), { text: "https://wa.me/27813874921", width: 100, height: 100 });
             }
         }
 
@@ -207,18 +200,14 @@
                 const isSilent = document.getElementById('silent-toggle').checked;
                 if (lastArchiveCount > 0 && data.length > lastArchiveCount && !isSilent) notifySound.play().catch(() => {});
                 lastArchiveCount = data.length;
-                document.getElementById('archive-grid').innerHTML = data.map(f => {
-                    const { data: { publicUrl } } = db.storage.from('archive').getPublicUrl(`public/${f.name}`);
-                    return `<div class="bg-white/5 p-4 rounded-2xl flex items-center gap-4 border border-white/5"><span class="text-[9px] font-black text-white uppercase italic truncate">${f.name}</span><audio src="${publicUrl}" controls class="flex-grow h-6 opacity-80 hover:opacity-100 transition-opacity"></audio></div>`;
-                }).join('');
             }
         }
 
         async function fetchGallery() {
-            const { data } = await db.storage.from('gallery').list('public', { limit: 50, sortBy: { column: 'name', order: 'desc' } });
+            const { data } = await db.storage.from('gallery').list('public');
             if (data) document.getElementById('gallery-grid').innerHTML = data.map(f => {
                 const { data: { publicUrl } } = db.storage.from('gallery').getPublicUrl(`public/${f.name}`);
-                return `<div class="h-48 overflow-hidden rounded-2xl border border-white/10 group relative"><img src="${publicUrl}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all"><div class="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100"><a href="${publicUrl}" download class="bg-blue-500/20 p-2 rounded-full border border-blue-400 text-blue-400 shadow-xl"><i class="fa-solid fa-download"></i></a></div></div>`;
+                return `<div class="h-48 overflow-hidden rounded-2xl border border-white/10 relative"><img src="${publicUrl}" class="w-full h-full object-cover opacity-80"></div>`;
             }).join('');
         }
 
