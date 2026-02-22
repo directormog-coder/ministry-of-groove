@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | FREQUENCY GRID V44.1.0</title>
+    <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V45.0.6</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -17,27 +17,18 @@
     
     <style>
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
-        
-        :root { 
-            --mog-gold: #D4AF37; 
-            --mog-blue: #00d4ff; 
-            --mog-bg: #060a0f; 
-            --mog-panel: rgba(10, 20, 30, 0.85); 
-        }
-        
-        * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: Satoshi, sans-serif; -webkit-tap-highlight-color: transparent; }
+        :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; --mog-panel: rgba(10, 20, 30, 0.85); }
+        * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; -webkit-tap-highlight-color: transparent; }
         h1, .tile-title { font-family: 'Clash Display', sans-serif; }
         
         body { 
             background-color: var(--mog-bg); 
             background-image: 
-                radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 80%),
+                radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 80%),
                 linear-gradient(rgba(0, 212, 255, 0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px);
-            background-size: 100% 100%, 40px 40px, 40px 40px;
-            color: var(--mog-gold); 
-            margin: 0; 
-            overflow-x: hidden;
+            background-size: 100% 100%, 45px 45px, 45px 45px;
+            color: var(--mog-gold); margin: 0; overflow-x: hidden;
         }
 
         #ticker-wrap { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--mog-gold); z-index: 1000; height: 35px; display: flex; align-items: center; overflow: hidden; mask-image: linear-gradient(to right, black 75%, transparent 100%); -webkit-mask-image: linear-gradient(to right, black 75%, transparent 100%); }
@@ -45,160 +36,125 @@
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
         #app-content { margin-top: 80px; }
-        
-        .command-tile { 
-            background: var(--mog-panel); 
-            border: 1px solid rgba(0, 212, 255, 0.25); 
-            backdrop-filter: blur(30px); 
-            border-radius: 28px; 
-            overflow: hidden; 
-            position: relative; 
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
-        }
-        
-        .tile-header { border-bottom: 1px solid rgba(0, 212, 255, 0.2); padding: 16px 24px; background: linear-gradient(90deg, rgba(0, 212, 255, 0.08) 0%, transparent 100%); }
+        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.25); backdrop-filter: blur(35px); border-radius: 28px; overflow: hidden; position: relative; box-shadow: 0 12px 45px rgba(0, 0, 0, 0.75); }
+        .tile-header { border-bottom: 1px solid rgba(0, 212, 255, 0.2); padding: 18px 24px; background: linear-gradient(90deg, rgba(0, 212, 255, 0.08) 0%, transparent 100%); }
         .tile-title { letter-spacing: 4px; text-transform: uppercase; font-size: 10px; color: var(--mog-blue); font-weight: 700; }
 
-        /* TECH UPGRADE: FREQUENCY GRID */
-        .frequency-viewport { 
-            display: flex; flex-direction: column; gap: 14px; 
-            max-height: 440px; overflow-y: auto; 
-            padding-right: 8px; scroll-snap-type: y mandatory;
-        }
-        .frequency-viewport::-webkit-scrollbar { width: 4px; }
-        .frequency-viewport::-webkit-scrollbar-thumb { background: var(--mog-blue); border-radius: 10px; box-shadow: 0 0 10px var(--mog-blue); }
-        
-        .frequency-node { 
-            scroll-snap-align: start;
-            display: flex; align-items: center; gap: 15px; 
-            background: rgba(0, 212, 255, 0.04); 
-            padding: 14px; border-radius: 22px; 
-            border: 1px solid rgba(0, 212, 255, 0.15); 
-            position: relative; z-index: 2;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .frequency-node:hover { transform: scale(1.02); border-color: var(--mog-blue); background: rgba(0, 212, 255, 0.08); }
-        .freq-rank { font-family: 'Clash Display'; font-size: 28px; color: var(--mog-blue); min-width: 50px; text-align: center; font-style: italic; text-shadow: 0 0 15px rgba(0, 212, 255, 0.4); }
-        .freq-player { flex-grow: 1; border-radius: 12px; overflow: hidden; height: 100px; background: #000; border: 1px solid rgba(255,255,255,0.05); }
+        .gallery-scroller { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-height: 400px; overflow-y: auto; padding: 15px; scrollbar-width: thin; scrollbar-color: var(--mog-blue) transparent; }
+        @media (min-width: 768px) { .gallery-scroller { grid-template-columns: repeat(3, 1fr); } }
+        .gallery-scroller::-webkit-scrollbar { width: 4px; }
+        .gallery-scroller::-webkit-scrollbar-thumb { background: var(--mog-blue); border-radius: 10px; }
 
-        .faded-logo-bg::before { 
-            content: ""; position: absolute; inset: 0; 
-            background-image: url('https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png'); 
-            background-position: center; background-repeat: no-repeat; background-size: 75%; opacity: 0.03; pointer-events: none; z-index: 1; 
-        }
+        .gallery-node { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid rgba(0, 212, 255, 0.15); background: #000; height: 160px; }
+        .gallery-media { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.5s; }
+        .gallery-node:hover .gallery-media { opacity: 1; transform: scale(1.05); }
+        .download-overlay { position: absolute; bottom: 8px; right: 8px; z-index: 10; }
+        .dl-btn { background: rgba(0, 212, 255, 0.2); border: 1px solid var(--mog-blue); color: var(--mog-blue); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+
+        .hit-scroller { display: flex; flex-direction: column; gap: 14px; max-height: 440px; overflow-y: auto; padding-right: 8px; }
+        .hit-scroller::-webkit-scrollbar { width: 4px; }
+        .hit-scroller::-webkit-scrollbar-thumb { background: var(--mog-blue); border-radius: 10px; }
 
         .mog-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 14px; font-size: 10px; font-weight: 900; text-transform: uppercase; background: rgba(212, 175, 55, 0.05); letter-spacing: 2.5px; width: 100%; border-radius: 16px; cursor: pointer; }
         .mog-btn-blue { border: 1px solid var(--mog-blue); color: var(--mog-blue); padding: 14px; font-size: 10px; font-weight: 900; text-transform: uppercase; background: rgba(0, 212, 255, 0.05); letter-spacing: 2.5px; width: 100%; border-radius: 16px; cursor: pointer; }
-
+        
         #preloader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .upload-zone { border: 2px dashed rgba(212, 175, 55, 0.3); border-radius: 20px; padding: 30px; text-align: center; cursor: pointer; transition: 0.3s; }
+        
+        /* Bulletin Highlight */
+        .bulletin-node { border-left: 3px solid var(--mog-gold); padding: 10px; background: rgba(212, 175, 55, 0.05); margin-bottom: 12px; animation: glow 2s infinite alternate; }
+        @keyframes glow { from { border-color: var(--mog-gold); } to { border-color: #fff; } }
     </style>
 </head>
-<body>
-    <div id="ticker-wrap"><div class="ticker-move" id="ticker-text">FREQUENCY_ASCENSION_V44.1 // NEURAL_GRID_UPGRADE // DIRECTOR_MOG ONLINE // SECTOR_WITBANK_SYNCED // WA: 081 387 4921...</div></div>
-    
-    <div id="preloader"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-32 w-32 mb-8 animate-pulse"><div class="text-[10px] text-blue-500 tracking-[1.5em] font-black uppercase italic">Upgrading_Frequency_Nodes</div></div>
+<body class="scrollbar-hide">
+    <div id="ticker-wrap"><div class="ticker-move" id="ticker-text">BULLETIN_SYSTEM_ONLINE // DECRYPTING_THE_CULTURE // SYNCHRONIZING_THE_GRID // DIRECTOR_MOG ONLINE // SECTOR_WITBANK...</div></div>
+    <div id="preloader"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-32 w-32 mb-8 animate-pulse"><div class="text-[10px] text-blue-500 tracking-[1.5em] font-black uppercase italic">Handshaking_Director_Bulletin</div></div>
 
     <div id="app-content" class="opacity-0 p-4 lg:p-12 space-y-12 transition-opacity duration-1000">
         <header class="flex flex-col lg:flex-row justify-between items-center gap-10 relative z-50">
             <div class="flex items-center gap-8">
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-[82px] w-[82px] border-2 border-blue-500/50 rounded-full shadow-[0_0_35px_rgba(0,212,255,0.4)] bg-black/60">
+                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-[82px] w-[82px] border-2 border-blue-500/50 rounded-full shadow-2xl bg-black/60">
                 <div>
                     <h1 class="text-5xl text-[#D4AF37] tracking-[.25em] uppercase font-black">Ministry of Groove</h1>
-                    <p class="text-[10px] text-blue-400 tracking-[.7em] mt-3 uppercase font-black">National Amapiano Sovereignty</p>
+                    <p class="text-[10px] text-blue-400 tracking-[.6em] mt-3 uppercase font-black">Decrypting the Culture. Synchronizing the Grid.</p>
                 </div>
             </div>
-            <div class="flex flex-col items-end text-right">
-                <div class="text-[12px] text-gold font-black border border-gold/50 px-8 py-3 bg-gold/5 tracking-[.6em] rounded-full">OPERATIVES: <span id="op-count">0</span></div>
-                <p id="system-time" class="text-[9px] text-zinc-500 mt-3 font-black tracking-widest uppercase"></p>
-            </div>
+            <div class="flex flex-col items-end text-right"><div class="text-[12px] text-gold font-black border border-gold/50 px-8 py-3 bg-gold/5 tracking-[.6em] rounded-full">OPERATIVES: <span id="op-count">0</span></div><p id="system-time" class="text-[9px] text-zinc-500 mt-3 font-black tracking-widest uppercase"></p></div>
         </header>
 
         <main class="grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-50">
-            <section class="command-tile col-span-full border-gold/40">
-                <div class="tile-header flex justify-between"><span class="tile-title text-gold">Consensus: Track of the Month</span><i class="fa-solid fa-atom animate-spin text-gold/40"></i></div>
-                <div id="voting-results" class="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"></div>
-            </section>
+            <section class="command-tile col-span-full border-gold/40"><div class="tile-header flex justify-between"><span class="tile-title text-gold">Consensus: Track of the Month</span><i class="fa-solid fa-atom animate-spin text-gold/40"></i></div><div id="voting-results" class="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"></div></section>
             
             <div class="lg:col-span-4 space-y-10">
-                <section class="command-tile h-72">
-                    <div class="tile-header flex justify-between"><span class="tile-title">Live Intel Stream</span><i class="fa-solid fa-satellite animate-pulse text-blue-500"></i></div>
-                    <div class="p-8 h-full overflow-y-auto font-mono text-[10px] text-blue-300/60 leading-loose" id="intel-scroll"></div>
-                </section>
-
+                <section class="command-tile h-72"><div class="tile-header flex justify-between"><span class="tile-title">Social Intelligence Feed</span><i class="fa-solid fa-satellite animate-pulse text-blue-500"></i></div><div class="p-8 h-full overflow-y-auto font-mono text-[10px] text-blue-300/60 leading-loose" id="intel-scroll"></div></section>
                 <section class="command-tile p-10">
                     <div id="auth-ui" class="space-y-6">
-                        <div class="text-center mb-8"><span class="text-[11px] text-blue-400 font-black tracking-[.4em] uppercase">Grid Authentication</span></div>
+                        <div class="text-center mb-8"><span class="text-[11px] text-blue-400 font-black tracking-[.4em] uppercase">Sovereign Registry</span></div>
                         <input id="email-in" type="email" placeholder="ACCESS EMAIL" class="w-full bg-black/40 border border-blue-500/20 rounded-xl p-4 text-white text-[10px] outline-none">
                         <input id="pass-in" type="password" placeholder="DIRECTOR CODE" class="w-full bg-black/40 border border-gold/20 rounded-xl p-4 text-gold text-[10px] outline-none hidden">
-                        <div class="grid grid-cols-2 gap-4">
-                            <button onclick="handleAuth()" class="mog-btn-blue">Login</button>
-                            <button onclick="handleAuth()" class="mog-btn">Signup</button>
-                        </div>
-                        <div class="pt-6 border-t border-white/5 text-center">
-                            <button onclick="showDirectorLogin()" class="text-[10px] text-zinc-600 uppercase tracking-widest hover:text-gold font-bold">Director Access handshake</button>
-                        </div>
+                        <div class="grid grid-cols-2 gap-4"><button onclick="handleAuth()" class="mog-btn-blue">Login</button><button onclick="handleAuth()" class="mog-btn">Signup</button></div>
+                        <div class="pt-6 border-t border-white/5 text-center"><button onclick="showDirectorLogin()" class="text-[10px] text-zinc-600 uppercase tracking-widest hover:text-gold font-bold">Director Access handshake</button></div>
                     </div>
                     <div id="op-profile" class="hidden text-center"><div id="qrcode" class="bg-white p-3 inline-block rounded-2xl mb-6 shadow-xl"></div><p id="active-alias" class="text-3xl font-black text-white uppercase"></p></div>
                 </section>
             </div>
 
             <div class="lg:col-span-8 space-y-10">
-                <section class="command-tile border-blue-500/40">
-                    <div class="tile-header flex justify-between"><span class="tile-title">Territorial Radar</span><i class="fa-solid fa-crosshairs animate-pulse text-blue-500"></i></div>
-                    <div id="radar-container"><iframe class="live-map-frame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114867.74780447372!2d29.1388832!3d-25.8727145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e9d1234567890ab%3A0x1234567890abcdef!2seMalahleni!5e0!3m2!1sen!2sza!4v1700000000000!5m2!1sen!2sza0"></iframe><canvas id="radar-canvas" class="absolute inset-0 z-10 pointer-events-none"></canvas></div>
-                </section>
+                <section class="command-tile border-blue-500/40"><div class="tile-header flex justify-between"><span class="tile-title text-blue-500">Territorial Radar</span><i class="fa-solid fa-crosshairs animate-pulse text-blue-500"></i></div><div id="radar-container"><iframe class="live-map-frame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114867.74780447372!2d29.1388832!3d-25.8727145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e9d1234567890ab%3A0x1234567890abcdef!2seMalahleni!5e0!3m2!1sen!2sza!4v1700000000000!5m2!1sen!2sza0"></iframe><canvas id="radar-canvas" class="absolute inset-0 z-10 pointer-events-none"></canvas></div></section>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <section class="command-tile h-[550px] flex flex-col faded-logo-bg">
-                        <div class="tile-header flex justify-between items-center"><span class="tile-title">Frequency Grid: Top 10</span><i class="fa-brands fa-soundcloud text-2xl text-blue-500"></i></div>
-                        <div class="flex-grow p-6 frequency-viewport" id="soundcloud-grid"></div>
-                    </section>
+                <section class="command-tile border-blue-500/20">
+                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Visual Intelligence Gallery</span><i class="fa-solid fa-layer-group text-blue-500"></i></div>
+                    <div id="gallery-grid" class="gallery-scroller"></div>
+                </section>
 
-                    <section class="command-tile h-[550px] flex flex-col faded-logo-bg">
-                        <div class="tile-header flex justify-between"><span class="tile-title">Frequency Chat</span><i class="fa-solid fa-bolt text-blue-500 animate-pulse"></i></div>
-                        <div id="chat-stream" class="flex-grow overflow-y-auto p-6 space-y-4"></div>
-                        <div class="p-6 bg-black/60 border-t border-blue-500/20 flex gap-4">
-                            <input type="text" id="chat-msg-in" placeholder="TRANSMIT..." class="bg-transparent outline-none text-white text-xs w-full font-black">
-                            <button onclick="sendPacket()" class="text-blue-400 text-lg"><i class="fa-solid fa-paper-plane"></i></button>
-                        </div>
-                    </section>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <section class="command-tile h-[550px] flex flex-col"><div class="tile-header flex justify-between items-center"><span class="tile-title">Frequency Grid (3-Song)</span><i class="fa-brands fa-soundcloud text-2xl text-blue-500"></i></div><div class="flex-grow p-6 hit-scroller" id="soundcloud-grid"></div></section>
+                    <section class="command-tile h-[550px] flex flex-col"><div class="tile-header flex justify-between"><span class="tile-title">Frequency Chat</span><i class="fa-solid fa-bolt text-blue-500"></i></div><div id="chat-stream" class="flex-grow overflow-y-auto p-6 space-y-4"></div><div class="p-6 bg-black/60 border-t border-blue-500/20 flex gap-4"><input type="text" id="chat-msg-in" placeholder="TRANSMIT..." class="bg-transparent outline-none text-white text-xs w-full"><button onclick="sendPacket()" class="text-blue-400 text-lg"><i class="fa-solid fa-paper-plane"></i></button></div></section>
                 </div>
             </div>
-        </main>
-        
+    </main>
+    
         <footer class="relative z-50 p-14 mt-20 border-t border-blue-500/20 bg-black/60 backdrop-blur-3xl rounded-t-[50px]">
             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-                <div class="space-y-6">
-                    <p class="text-[12px] text-white tracking-[.6em] font-black uppercase">Ministry of Groove</p>
-                    <div class="flex gap-10 text-gold text-2xl">
-                        <a href="https://wa.me/27813874921" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
-                        <a href="https://www.facebook.com/share/1AiHq8N5FF/" target="_blank"><i class="fa-brands fa-facebook"></i></a>
-                        <a href="https://tiktok.com/@ministryofgroove" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-                        <a href="https://www.instagram.com/ministryofgroove_hq?igsh=Y3Rwc24zcmtsY2xj" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://youtube.com/@ministryofgroove-m1q" target="_blank"><i class="fa-brands fa-youtube"></i></a>
-                    </div>
-                </div>
-                <div class="text-right">
-                    <p class="text-[10px] text-blue-400 tracking-widest uppercase font-black">Sovereign Grid 2026</p>
-                    <p class="text-[9px] text-zinc-500 uppercase font-black">director.mog@gmail.com</p>
-                    <div class="inline-block mt-4 px-4 py-1 border border-blue-400 rounded-full text-[9px] text-blue-400 font-bold uppercase tracking-widest">V44.1.0 ASCENSION</div>
-                </div>
+                <div class="space-y-6"><p class="text-[12px] text-white tracking-[.6em] font-black uppercase">Ministry of Groove</p>
+                <div class="flex gap-10 text-gold text-2xl">
+                    <a href="https://wa.me/27813874921" target="_blank"><i class="fa-brands fa-whatsapp"></i></a><a href="https://www.facebook.com/share/1AiHq8N5FF/" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://tiktok.com/@ministryofgroove" target="_blank"><i class="fa-brands fa-tiktok"></i></a><a href="https://www.instagram.com/ministryofgroove_hq?igsh=Y3Rwc24zcmtsY2xj" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://youtube.com/@ministryofgroove-m1q" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                </div></div>
+                <div class="text-right"><p class="text-[10px] text-blue-400 tracking-widest uppercase font-black">Sovereign Grid © 2026</p><div class="inline-block mt-4 px-4 py-1 border border-blue-400 rounded-full text-[9px] text-blue-400 font-bold uppercase tracking-widest">BUILD V45.0.6 BULLETIN_SYNC</div></div>
             </div>
         </footer>
 
         <section id="director-dashboard" class="hidden fixed inset-0 z-[100] bg-black/98 backdrop-blur-3xl p-10 lg:p-24 overflow-y-auto">
             <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-8">
-                <h2 class="text-5xl text-white font-black uppercase tracking-widest">Director Command</h2>
+                <h2 class="text-4xl text-white font-black uppercase tracking-widest">Director Command</h2>
                 <button onclick="toggleDirectorUI()" class="text-white text-4xl hover:text-gold"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="command-tile p-10 space-y-6 max-w-2xl mx-auto">
-                <input id="new-track-id" placeholder="SC TRACK ID" class="w-full bg-black/40 border border-blue-500/20 rounded-xl p-4 text-white">
-                <input id="new-track-title" placeholder="TRACK TITLE" class="w-full bg-black/40 border border-blue-500/20 rounded-xl p-4 text-white">
-                <button onclick="adminAddTrack()" class="mog-btn w-full">Deploy to Frequency Grid</button>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-7xl mx-auto">
+                <div class="command-tile p-8 space-y-6">
+                    <h3 class="tile-title text-gold">Gallery Intelligence</h3>
+                    <div class="upload-zone" onclick="document.getElementById('file-upload').click()">
+                        <i class="fa-solid fa-cloud-arrow-up text-4xl text-gold mb-4 block"></i>
+                        <span class="text-[10px] text-zinc-400 uppercase font-bold">Upload Intel</span>
+                        <input type="file" id="file-upload" class="hidden" accept="image/*,video/*" onchange="uploadIntel(this)">
+                    </div>
+                </div>
+                <div class="command-tile p-8 space-y-6">
+                    <h3 class="tile-title text-gold">Handshake Bulletin</h3>
+                    <textarea id="bulletin-msg" placeholder="TRANSMIT OFFICIAL DIRECTIVE..." class="w-full h-32 bg-black/40 border border-gold/20 rounded-xl p-4 text-gold text-[10px] outline-none"></textarea>
+                    <button onclick="broadcastBulletin()" class="mog-btn w-full">Broadcast Bulletin</button>
+                </div>
+                <div class="command-tile p-8 space-y-6">
+                    <h3 class="tile-title text-gold">Inject Frequency</h3>
+                    <input id="new-track-id" placeholder="SC ID" class="w-full bg-black/40 border border-blue-500/20 rounded-xl p-4 text-white text-[10px]">
+                    <input id="new-track-title" placeholder="TITLE" class="w-full bg-black/40 border border-blue-500/20 rounded-xl p-4 text-white text-[10px]">
+                    <button onclick="adminAddTrack()" class="mog-btn w-full">Deploy</button>
+                </div>
             </div>
         </section>
 
-        <button id="admin-trigger" class="hidden fixed bottom-12 right-12 z-[60] bg-gold text-black w-16 h-16 rounded-full shadow-[0_0_35px_rgba(212,175,55,0.6)] flex items-center justify-center animate-bounce" onclick="toggleDirectorUI()"><i class="fa-solid fa-crown text-xl"></i></button>
+        <button id="admin-trigger" class="hidden fixed bottom-12 right-12 z-[60] bg-gold text-black w-16 h-16 rounded-full shadow-2xl flex items-center justify-center animate-bounce" onclick="toggleDirectorUI()"><i class="fa-solid fa-crown text-xl"></i></button>
     </div>
 
     <script>
@@ -206,21 +162,15 @@
         const db = window.supabase.createClient(CFG.U, CFG.K);
         let currentUser = null;
 
-        const MASTER_PRESETS = [
-            { track_id: "1829402511", title: "Amalanga" }, { track_id: "1759403422", title: "Utshwala" }, { track_id: "1842039411", title: "Zase England" },
-            { track_id: "1793204921", title: "Mama" }, { track_id: "1803940212", title: "Gilikidi" }, { track_id: "1812930411", title: "Khuphuka" }
-        ];
-
         function showDirectorLogin() { document.getElementById('pass-in').classList.toggle('hidden'); }
-
         async function handleAuth() {
             const email = document.getElementById('email-in').value.toLowerCase();
             const pass = document.getElementById('pass-in').value;
             if (email === 'director.mog@gmail.com' && (pass === '7486' || pass === '@MOGProtocol2026')) {
-                currentUser = { id: 'ADMIN_MASTER', email, user_metadata: { role: 'director' } };
+                currentUser = { id: 'DIRECTOR_ADMIN', email, user_metadata: { role: 'director' } };
                 initSovereignty(); return;
             }
-            alert("Signal Requested via OTP Link.");
+            alert("Signal Requested.");
         }
 
         function initSovereignty() {
@@ -228,46 +178,64 @@
             document.getElementById('op-profile').classList.remove('hidden');
             document.getElementById('active-alias').innerText = "DIRECTOR_MOG";
             document.getElementById('admin-trigger').classList.remove('hidden');
-            fetchTracks(); fetchVotingResults(); fetchMessages();
+            fetchTracks(); fetchMessages(); fetchGallery();
+        }
+
+        async function broadcastBulletin() {
+            const msg = document.getElementById('bulletin-msg').value;
+            if(!msg) return;
+            const intel = document.getElementById('intel-scroll');
+            const node = document.createElement('div');
+            node.className = "bulletin-node";
+            node.innerHTML = `<span class="text-gold font-black">[DIRECTOR_HANDSHAKE]</span><br><span class="text-white text-[11px]">${msg}</span>`;
+            intel.prepend(node);
+            document.getElementById('bulletin-msg').value = "";
+            toggleDirectorUI();
+        }
+
+        async function uploadIntel(input) {
+            if (!input.files || input.files.length === 0) return;
+            const file = input.files[0];
+            const fileName = `${Date.now()}_${file.name}`;
+            await db.storage.from('gallery').upload(`public/${fileName}`, file);
+            fetchGallery();
+        }
+
+        async function fetchGallery() {
+            const { data } = await db.storage.from('gallery').list('public', { limit: 50, sortBy: { column: 'name', order: 'desc' } });
+            if (data) {
+                document.getElementById('gallery-grid').innerHTML = data.map(f => {
+                    const { data: { publicUrl } } = db.storage.from('gallery').getPublicUrl(`public/${f.name}`);
+                    const isVideo = f.name.match(/\.(mp4|webm|ogg|mov)$/i);
+                    return `<div class="gallery-node">
+                        ${isVideo ? `<video src="${publicUrl}" class="gallery-media" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>` : `<img src="${publicUrl}" class="gallery-media" loading="lazy">`}
+                        <div class="download-overlay"><a href="${publicUrl}" download="${f.name}" class="dl-btn"><i class="fa-solid fa-download text-xs"></i></a></div>
+                    </div>`;
+                }).join('');
+            }
         }
 
         async function fetchTracks() {
             const { data } = await db.from('hit_list').select('*').order('created_at', { ascending: false }).limit(10);
-            const finalData = (data && data.length > 0) ? data : MASTER_PRESETS;
-            document.getElementById('soundcloud-grid').innerHTML = finalData.map((t, i) => `
-                <div class="frequency-node"><div class="freq-rank">${i + 1}</div><div class="freq-player">
-                <iframe width="100%" height="100" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${t.track_id}&color=%2300d4ff&visual=false&hide_related=true"></iframe>
-                </div></div>`).join('');
-        }
-
-        function initIntel() {
-            const i = document.getElementById('intel-scroll');
-            const logs = ["NODE_WITBANK_SYNC", "QUANTUM_GRID_LOCKED", "DIRECTOR_HANDSHAKE_OK", "MPUMALANGA_SAT_ACTIVE"];
-            setInterval(() => {
-                const l = document.createElement('div'); l.className = "intel-line";
-                l.innerHTML = `<span class="text-blue-400">[${new Date().toLocaleTimeString()}]</span> ${logs[Math.floor(Math.random()*logs.length)]}`;
-                i.prepend(l);
-                if(i.children.length > 12) i.removeChild(i.lastChild);
-            }, 3500);
+            if (data) document.getElementById('soundcloud-grid').innerHTML = data.map((t, i) => `
+                <div class="flex items-center gap-4 bg-black/40 border border-blue-500/10 p-3 rounded-2xl mb-4">
+                    <span class="text-blue-400 font-bold italic text-xl">${i + 1}</span>
+                    <iframe width="100%" height="100" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${t.track_id}&color=%2300d4ff&visual=false"></iframe>
+                </div>`).join('');
         }
 
         window.addEventListener('load', () => {
-            initRadar(); initIntel(); fetchTracks();
+            initRadar(); fetchTracks(); fetchGallery();
             setInterval(() => { document.getElementById('system-time').innerText = new Date().toLocaleTimeString() + " SAST"; }, 1000);
             setTimeout(() => { document.getElementById('preloader').style.display = 'none'; document.getElementById('app-content').classList.replace('opacity-0', 'opacity-100'); }, 2000);
         });
 
         function initRadar() { const c = document.getElementById('radar-canvas'); const ctx = c.getContext('2d'); let w = c.width = c.parentElement.offsetWidth, h = c.height = c.parentElement.offsetHeight; let r = 0; function draw() { ctx.clearRect(0,0,w,h); r += 1.8; if(r > w/2) r = 0; ctx.beginPath(); ctx.arc(w/2, h/2, r, 0, Math.PI*2); ctx.strokeStyle = `rgba(0, 212, 255, ${1 - r/(w/2)})`; ctx.lineWidth = 2; ctx.stroke(); requestAnimationFrame(draw); } draw(); }
-        async function fetchMessages() { const { data } = await db.from('messages').select('*').order('created_at', { ascending: true }).limit(10); if (data) data.forEach(displayMessage); }
-        function displayMessage(m) { const s = document.getElementById('chat-stream'); const d = document.createElement('div'); d.className = `msg-bubble ${m.alias === 'DIRECTOR_MOG' ? 'border-gold/40' : ''}`; d.innerHTML = `<p class="text-[8px] text-blue-400 font-black uppercase mb-1">${m.alias || 'OPERATIVE'}</p><p class="text-white font-bold">${m.content}</p>`; s.appendChild(d); s.scrollTop = s.scrollHeight; }
+        async function fetchMessages() { const { data } = await db.from('messages').select('*').order('created_at', { ascending: true }).limit(10); if (data) data.forEach(m => displayMessage(m)); }
+        function displayMessage(m) { const s = document.getElementById('chat-stream'); const d = document.createElement('div'); d.className = `p-3 rounded-2xl bg-black/40 border border-blue-500/10 mb-2`; d.innerHTML = `<p class="text-[8px] text-blue-400 font-black mb-1">${m.alias || 'OPERATIVE'}</p><p class="text-white text-[11px] font-bold">${m.content}</p>`; s.appendChild(d); s.scrollTop = s.scrollHeight; }
         async function sendPacket() { const i = document.getElementById('chat-msg-in'); if(!i.value || !currentUser) return; await db.from('messages').insert([{ content: i.value, user_id: currentUser.id, alias: currentUser.email.split('@')[0] }]); i.value = ""; }
-        async function fetchVotingResults() { const { data: tracks } = await db.from('hit_list').select('*').limit(4); if (tracks) document.getElementById('voting-results').innerHTML = tracks.map(t => `<div class="space-y-3"><p class="text-[10px] text-white uppercase font-black">${t.title}</p><div class="h-1.5 bg-white/5 rounded-full border border-white/5"><div class="h-full bg-gold shadow-[0_0_10px_#D4AF37]" style="width: 55%"></div></div></div>`).join(''); }
         function toggleDirectorUI() { document.getElementById('director-dashboard').classList.toggle('hidden'); }
-        async function adminAddTrack() { 
-            const id = document.getElementById('new-track-id').value; 
-            const t = document.getElementById('new-track-title').value;
-            db.from('hit_list').insert([{ track_id: id, title: t }]).then(() => fetchTracks()); 
-        }
+        async function adminAddTrack() { const id = document.getElementById('new-track-id').value; const t = document.getElementById('new-track-title').value; db.from('hit_list').insert([{ track_id: id, title: t }]).then(() => fetchTracks()); }
     </script>
 </body>
 </html>
