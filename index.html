@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V63.0.0</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V63.1.0</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,11 +21,9 @@
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         h1, .tile-title { font-family: 'Clash Display', sans-serif; }
         
-        /* RESTORED SLOGAN SCALING */
         .brand-title { font-size: clamp(1.3rem, 5.5vw, 3rem); line-height: 1; word-wrap: break-word; }
         .grid-subtext { font-size: clamp(0.55rem, 1.8vw, 0.8rem); letter-spacing: 0.35em; }
 
-        /* MOTHERBOARD CIRCUIT PATTERN BACKGROUND */
         body { 
             background-color: var(--mog-bg); 
             background-image: 
@@ -36,7 +34,6 @@
             width: 100vw; min-height: 100vh;
         }
 
-        /* DIRECTOR GOLD PULSE MODE */
         .director-active body {
             background-image: 
                 radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.2) 0%, transparent 85%),
@@ -45,29 +42,10 @@
         }
         @keyframes goldPulse { from { filter: brightness(1); } to { filter: brightness(1.25); } }
 
-        /* TIER-1 MODULE UPGRADE */
-        .command-tile { 
-            background: var(--mog-panel); 
-            border: 1px solid rgba(0, 212, 255, 0.2); 
-            backdrop-filter: blur(25px); 
-            border-radius: 28px; 
-            overflow: hidden;
-            will-change: transform;
-        }
-        .command-tile:hover { border-color: var(--mog-blue); }
+        .auth-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; width: 100%; color: white; outline: none; font-size: 14px; }
+        .auth-input:focus { border-color: var(--mog-blue); box-shadow: 0 0 15px rgba(0, 212, 255, 0.1); }
+        .auth-btn { background: white; color: black; font-weight: 900; border-radius: 30px; padding: 14px; width: 100%; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* SIDEBAR (MOVED TO TOP RIGHT) */
-        #side-menu { 
-            position: fixed; top: 0; right: -320px; 
-            width: 300px; height: 100%; 
-            background: #080c10; border-left: 1px solid rgba(0,212,255,0.2); 
-            z-index: 3000; padding: 2rem; 
-            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); 
-            box-shadow: -15px 0 50px rgba(0,0,0,0.8);
-        }
-        #side-menu.active { right: 0; }
-
-        /* UNIQUE M.O.G. CHAT LOGO BUBBLES */
         .mog-chat-row { display: flex; gap: 10px; margin-bottom: 15px; align-items: flex-end; width: 100%; }
         .mog-chat-logo { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--mog-blue); background: #000; padding: 2px; flex-shrink: 0; }
         .mog-bubble { padding: 10px 15px; border-radius: 18px; font-size: 13px; color: #fff; background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.15); max-width: 85%; overflow-wrap: break-word; }
@@ -77,23 +55,23 @@
         .scroller-v::-webkit-scrollbar-thumb { background: var(--mog-blue); border-radius: 10px; }
         
         #app-content { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); margin-top: 50px; }
+        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.2); backdrop-filter: blur(25px); border-radius: 28px; overflow: hidden; }
 
         .director-only { display: none; }
         .director-active .director-only { display: block; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body class="scrollbar-hide" id="main-body-wrap">
 
     <div id="ticker-wrap" class="fixed top-0 w-full bg-black z-[1000] h-[35px] border-b border-gold flex items-center overflow-hidden">
-        <div class="ticker-move text-[9px] font-black uppercase text-gold">MASTER_V63 // SLOGAN_RESTORED // MODULE_PEAK_SYNC // GMAIL_AUTH // STEALTH_BYPASS // RSA_RADAR...</div>
+        <div class="ticker-move text-[9px] font-black uppercase text-gold">MASTER_V63.1 // AUTH_SYNC_COMPLETE // GMAIL_HANDSHAKE_LIVE // STEALTH_BYPASS // SLOGAN_RESTORED...</div>
     </div>
 
     <button onclick="toggleMenu()" class="fixed top-12 right-5 z-[2500] text-blue-400 text-2xl p-2 bg-black/40 rounded-full border border-white/5 backdrop-blur-md hover:text-gold shadow-xl">
         <i class="fa-solid fa-bars-staggered"></i>
     </button>
     
-    <nav id="side-menu">
+    <nav id="side-menu" class="fixed top-0 right-[-320px] w-[300px] h-full bg-[#080c10] border-l border-white/5 p-8 z-[3000] transition-all duration-500 shadow-2xl">
         <div class="mb-10 flex items-center justify-between">
             <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-10 w-10 border border-blue-500/30 rounded-full">
             <button onclick="toggleMenu()" class="text-zinc-500 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
@@ -104,20 +82,16 @@
                 <input type="checkbox" id="silent-toggle">
             </div>
             <a class="block p-4 text-white uppercase text-[11px] font-black border-b border-white/5">Grid Architecture</a>
-            <a class="block p-4 text-white uppercase text-[11px] font-black border-b border-white/5">Privacy Protocol</a>
         </div>
     </nav>
 
     <div id="app-content" class="container mx-auto px-4">
         <header class="flex flex-col md:flex-row justify-between items-center gap-6 mb-12 pt-4">
             <div class="flex items-center gap-6 w-full">
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" 
-                     id="mog-master-logo" 
-                     onclick="handleLogoSequence()" 
-                     class="h-16 w-16 md:h-24 md:w-24 border-2 border-blue-500/50 rounded-full cursor-pointer shadow-2xl active:scale-90 transition-all">
+                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-master-logo" onclick="handleLogoSequence()" class="h-16 w-16 md:h-24 md:w-24 border-2 border-blue-500/50 rounded-full cursor-pointer shadow-2xl active:scale-90">
                 <div class="min-w-0 flex-grow">
-                    <h1 class="brand-title text-[#D4AF37] uppercase font-black truncate">Ministry of Groove</h1>
-                    <div class="flex flex-wrap items-center gap-4 mt-1">
+                    <h1 class="brand-title text-[#D4AF37] uppercase font-black">Ministry of Groove</h1>
+                    <div class="flex flex-wrap items-center gap-3 mt-1">
                         <p class="grid-subtext text-blue-400 uppercase font-black">Decrypting the Culture. Synchronizing the Grid.</p>
                         <div class="bg-black/40 px-3 py-0.5 rounded-full border border-white/5 text-[8px] text-zinc-500 font-black italic">SIGNAL: <span id="lat-val">12ms</span></div>
                     </div>
@@ -131,18 +105,26 @@
                 <section class="command-tile p-8 bg-black/60 shadow-2xl">
                     <div id="auth-ui" class="space-y-6">
                         <div class="text-center mb-6"><h2 class="text-white font-black uppercase tracking-widest text-base" id="auth-title">Grid Handshake</h2></div>
+                        
+                        <div id="signup-fields" class="hidden space-y-4">
+                            <input id="new-user" type="text" placeholder="GMAIL OR USERNAME" class="auth-input">
+                            <input id="new-pass" type="password" placeholder="NEW PASSWORD" class="auth-input">
+                            <button onclick="registerOperative()" class="auth-btn">Register operative</button>
+                            <p class="text-[10px] text-center text-zinc-500 uppercase">Existing? <span class="text-blue-400 cursor-pointer font-black" onclick="toggleAuth()">Sign In</span></p>
+                        </div>
+
                         <div id="signin-fields" class="space-y-4">
-                            <input id="login-user" type="text" placeholder="GMAIL OR USERNAME" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white text-xs outline-none focus:border-blue-400">
-                            <input id="login-pass" type="password" placeholder="PASSCODE" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white text-xs outline-none focus:border-blue-400">
-                            <button onclick="loginOperative()" class="w-full bg-white text-black font-black p-4 rounded-full text-[10px] uppercase shadow-lg">Authorize</button>
-                            <p class="text-[10px] text-center text-zinc-500 uppercase">New Operative? <span class="text-blue-400 cursor-pointer font-black" onclick="toggleAuth()">Sign Up</span></p>
+                            <input id="login-user" type="text" placeholder="GMAIL OR USERNAME" class="auth-input">
+                            <input id="login-pass" type="password" placeholder="PASSCODE" class="auth-input">
+                            <button onclick="loginOperative()" class="auth-btn">Authorize</button>
+                            <p class="text-[10px] text-center text-zinc-500 uppercase">New? <span class="text-blue-400 cursor-pointer font-black" onclick="toggleAuth()">Sign Up</span></p>
                         </div>
                     </div>
 
                     <div id="director-login-portal" class="hidden space-y-4 pt-8 border-t border-gold/20 mt-6">
-                        <input id="dir-email" type="email" placeholder="DIRECTOR_ID" class="w-full bg-gold/5 border border-gold/40 rounded-xl p-4 text-gold text-xs outline-none">
-                        <input id="dir-pass" type="password" placeholder="BYPASS_KEY" class="w-full bg-gold/5 border border-gold/40 rounded-xl p-4 text-gold text-xs outline-none">
-                        <button onclick="executeDirectorBypass()" class="w-full bg-gold text-black font-black p-4 rounded-full text-[10px] uppercase shadow-[0_0_15px_rgba(212,175,55,0.4)]">Access Totality</button>
+                        <input id="dir-email" type="email" placeholder="DIRECTOR_ID" class="auth-input border-gold/40 text-gold">
+                        <input id="dir-pass" type="password" placeholder="BYPASS_KEY" class="auth-input border-gold/40 text-gold">
+                        <button onclick="executeDirectorBypass()" class="w-full bg-gold text-black font-black p-4 rounded-full text-[10px] uppercase">Access Totality</button>
                     </div>
                 </section>
 
@@ -159,7 +141,6 @@
                         </div>
                         <div class="director-only pt-6 border-t border-white/10">
                             <div class="flex justify-between text-[11px] font-black"><span class="text-gold uppercase">Wealth Index:</span><span class="text-white">R73,827.00</span></div>
-                            <div class="flex justify-between text-[11px] font-black mt-2"><span class="text-gold uppercase">Bond Yield:</span><span class="text-white">R13,827.19</span></div>
                         </div>
                     </div>
                 </section>
@@ -177,34 +158,56 @@
                         <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-xl active:scale-90"><i class="fa-solid fa-paper-plane"></i></button>
                     </div>
                 </section>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <section class="command-tile h-[450px] flex flex-col">
-                        <div class="tile-header flex justify-between items-center p-4 border-b border-white/5"><span class="text-[9px] font-black text-[#1DB954] uppercase">Spotify Hits</span><i class="fa-brands fa-spotify text-2xl text-[#1DB954]"></i></div>
-                        <iframe class="flex-grow scroller-v" src="http://googleusercontent.com/spotify.com/20" width="100%" height="800" frameBorder="0"></iframe>
-                    </section>
-                    <section class="command-tile h-[450px] flex flex-col">
-                        <div class="tile-header flex justify-between p-4 border-b border-white/5"><span class="text-[9px] font-black text-gold uppercase">Sovereign Archive</span><i class="fa-solid fa-compact-disc text-gold"></i></div>
-                        <div class="flex-grow p-4 scroller-v space-y-3" id="archive-grid">
-                            <div class="p-4 bg-white/5 rounded-2xl flex items-center gap-4 border border-white/5 shadow-inner">
-                                <span class="text-[9px] text-white font-black uppercase italic truncate">MOG_Handshake_V1</span>
-                                <audio src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/music.mp3" controls class="h-6 flex-grow"></audio>
-                            </div>
-                        </div>
-                    </section>
-                </div>
             </div>
         </main>
-       
+    </div>
+    
     <script>
         const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
         const db = window.supabase.createClient(CFG.U, CFG.K);
         let logoClicks = 0;
-        let lastArchiveCount = 0;
-        const notifySound = new Audio("https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/notification.mp3");
 
-        function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
+        function toggleMenu() { const s = document.getElementById('side-menu'); s.style.right = s.style.right === '0px' ? '-320px' : '0px'; }
+        function toggleAuth() { document.getElementById('signin-fields').classList.toggle('hidden'); document.getElementById('signup-fields').classList.toggle('hidden'); }
         
+        // SIGNUP LOGIC (GMAIL OR USERNAME)
+        async function registerOperative() {
+            const user = document.getElementById('new-user').value;
+            const pass = document.getElementById('new-pass').value;
+            if(!user || !pass) return alert("Credentials Missing");
+            
+            // Format for Supabase: ensures Gmail or mock email for custom usernames
+            const emailFormat = user.includes('@') ? user : `${user}@mog.internal`;
+            
+            const { data, error } = await db.auth.signUp({
+                email: emailFormat,
+                password: pass,
+                options: { data: { display_name: user } }
+            });
+
+            if(error) {
+                alert("Protocol Failed: " + error.message);
+            } else {
+                alert("Registration Successful. Operative added to Grid.");
+                toggleAuth();
+            }
+        }
+
+        // LOGIN LOGIC
+        async function loginOperative() {
+            const user = document.getElementById('login-user').value;
+            const pass = document.getElementById('login-pass').value;
+            const emailFormat = user.includes('@') ? user : `${user}@mog.internal`;
+            
+            const { data, error } = await db.auth.signInWithPassword({
+                email: emailFormat,
+                password: pass
+            });
+
+            if(error) alert("Authorization Denied.");
+            else alert("Signal Synchronized. Welcome Operative.");
+        }
+
         function handleLogoSequence() {
             logoClicks++;
             if (logoClicks === 5) { document.getElementById('director-login-portal').classList.remove('hidden'); logoClicks = 0; }
@@ -215,7 +218,7 @@
             const e = document.getElementById('dir-email').value, p = document.getElementById('dir-pass').value;
             if (e === 'director.mog@gmail.com' && (p === '7486' || p === '@MOGProtocol2026')) {
                 document.documentElement.classList.add('director-active');
-                alert("Director Handshake Established. Wealth Index Decrypted.");
+                alert("Sovereign Director Handshake Verified.");
             }
         }
 
@@ -227,20 +230,7 @@
         }
 
         async function fetchMessages() { const { data } = await db.from('messages').select('*').order('created_at', { ascending: true }); if (data) { document.getElementById('chat-stream').innerHTML = ""; data.forEach(displayMessage); } }
-        async function fetchArchive() {
-            const { data } = await db.storage.from('archive').list('public');
-            if (data) {
-                const isSilent = document.getElementById('silent-toggle').checked;
-                if (lastArchiveCount > 0 && data.length > lastArchiveCount && !isSilent) notifySound.play().catch(() => {});
-                lastArchiveCount = data.length;
-            }
-        }
-
-        window.addEventListener('load', () => { 
-            fetchMessages(); fetchArchive(); 
-            setInterval(() => { document.getElementById('lat-val').innerText = `${Math.floor(Math.random()*10)+8}ms`; }, 4000);
-        });
+        window.addEventListener('load', () => { fetchMessages(); setInterval(() => { document.getElementById('lat-val').innerText = `${Math.floor(Math.random()*10)+8}ms`; }, 4000); });
     </script>
 </body>
-</html>                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                               
+</html>
