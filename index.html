@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V52.0.0 TOTALITY</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V53.0.0</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,18 +23,18 @@
         h1, .tile-title { font-family: 'Clash Display', sans-serif; }
         .brand-title { font-size: clamp(1.5rem, 8vw, 3rem); line-height: 1.1; }
 
-        /* LOGO-PATTERN NEURAL BACKGROUND */
+        /* ZIG-ZAG LOGO PATTERN BACKGROUND */
         body { 
             background-color: var(--mog-bg); 
             background-image: 
                 radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.15) 0%, transparent 85%),
-                url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 L40 40 M80 0 L40 40 M0 80 L40 40 M80 80 L40 40' stroke='%2300d4ff' stroke-width='0.5' fill='none' opacity='0.15'/%3E%3C/svg%3E");
+                url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 L25 0 L50 10 L75 20 L100 10' stroke='%2300d4ff' stroke-width='0.5' fill='none' opacity='0.2'/%3E%3C/svg%3E");
             background-attachment: fixed;
             color: var(--mog-gold); margin: 0; overflow-x: hidden;
-            animation: patternPulse 12s infinite alternate ease-in-out;
+            animation: zigZagMove 20s infinite linear;
         }
 
-        @keyframes patternPulse { from { background-size: auto, 80px 80px; } to { background-size: auto, 90px 90px; } }
+        @keyframes zigZagMove { from { background-position: 0 0; } to { background-position: 100px 100px; } }
 
         #ticker-wrap { position: fixed; top: 0; width: 100%; background: #000; border-bottom: 1px solid var(--mog-gold); z-index: 1000; height: 35px; display: flex; align-items: center; overflow: hidden; -webkit-mask-image: linear-gradient(to right, black 75%, transparent 100%); mask-image: linear-gradient(to right, black 75%, transparent 100%); }
         .ticker-move { display: inline-block; white-space: nowrap; animation: ticker 45s linear infinite; font-size: 9px; font-weight: 900; letter-spacing: 2.5px; color: var(--mog-gold); text-transform: uppercase; }
@@ -46,16 +46,15 @@
         .tile-title { letter-spacing: 4px; text-transform: uppercase; font-size: 10px; color: var(--mog-blue); font-weight: 700; }
 
         .scroller-v { overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--mog-blue) transparent; }
-        .scroller-v::-webkit-scrollbar { width: 4px; }
-        .scroller-v::-webkit-scrollbar-thumb { background: var(--mog-blue); border-radius: 10px; }
+        .scroller-v::-webkit-scrollbar { width: 6px; }
+        .scroller-v::-webkit-scrollbar-thumb { background: var(--mog-blue); border-radius: 10px; border: 1px solid var(--mog-bg); }
 
-        /* WHATSAPP CHAT */
-        .wa-bubble { position: relative; max-width: 85%; padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; font-size: 13px; color: #e9edef; line-height: 1.4; }
-        .wa-in { background: #202c33; align-self: flex-start; border-bottom-left-radius: 2px; }
-        .wa-out { background: #005c4b; align-self: flex-end; border-bottom-right-radius: 2px; }
+        /* DIRECTOR ONLY ELEMENTS */
+        .director-only { display: none; }
+        .director-active .director-only { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* MONETIZATION BUTTONS */
-        .revenue-btn { background: linear-gradient(135deg, #D4AF37 0%, #8A6D3B 100%); color: #000; font-weight: 900; text-transform: uppercase; padding: 12px; border-radius: 12px; width: 100%; font-size: 11px; letter-spacing: 1px; }
+        .revenue-btn { background: linear-gradient(135deg, #D4AF37 0%, #8A6D3B 100%); color: #000; font-weight: 900; text-transform: uppercase; padding: 12px; border-radius: 12px; width: 100%; font-size: 11px; }
 
         #side-menu { position: fixed; top: 0; left: -300px; width: 300px; height: 100%; background: #0a0e14; border-right: 1px solid var(--mog-blue); z-index: 2000; padding: 40px 20px; transition: 0.5s; }
         #side-menu.active { left: 0; }
@@ -63,19 +62,18 @@
         #preloader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     </style>
 </head>
-<body class="scrollbar-hide">
+<body class="scrollbar-hide" id="main-body">
 
     <button onclick="toggleMenu()" class="fixed top-10 left-6 z-[2500] text-blue-400 text-2xl hover:text-gold"><i class="fa-solid fa-bars-staggered"></i></button>
     
     <nav id="side-menu">
         <div class="mb-10 flex items-center gap-4"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-10 w-10"><span class="text-gold font-black text-xs">M.O.G. FOLDERS</span></div>
-        <a class="block p-4 text-white uppercase text-[11px] border-b border-white/5">Revenue Strategy</a>
-        <a class="block p-4 text-white uppercase text-[11px] border-b border-white/5">RSA Bond Tracker</a>
-        <a class="block p-4 text-white uppercase text-[11px] border-b border-white/5">App Store Protocol</a>
-        <a class="block p-4 text-white uppercase text-[11px] border-b border-white/5">Privacy Policy</a>
+        <a class="block p-4 text-white uppercase text-[11px] border-b border-white/5">Contact Protocol</a>
+        <a class="block p-4 text-white uppercase text-[11px] border-b border-white/5">RSA Bond Strategy</a>
+        <a class="block p-4 text-white uppercase text-[11px] border-b border-white/5">Terms of Sovereignty</a>
     </nav>
 
-    <div id="ticker-wrap"><div class="ticker-move">MASTER_V52 // REVENUE_PORTAL_RESTORED // RSA_BOND_SYNC // ORIGIN_54_MERCH_ONLINE // DIRECTOR_MOG ONLINE...</div></div>
+    <div id="ticker-wrap"><div class="ticker-move">ZIGZAG_PATTERN_SYNC_V53 // RSA_NATIONAL_RADAR_PREVIEW // SPOTIFY_HITLIST_PEAK // DIRECTOR_HIDDEN_WEALTH...</div></div>
 
     <div id="app-content" class="opacity-1 transition-opacity duration-1000">
         <header class="flex flex-col lg:flex-row justify-between items-center gap-10 relative z-50 mb-10 pl-12 lg:pl-0">
@@ -86,7 +84,9 @@
                     <p class="text-[10px] text-blue-400 tracking-[.6em] mt-3 uppercase font-black">Decrypting the Culture. Synchronizing the Grid.</p>
                 </div>
             </div>
-            <div class="flex flex-col items-end text-right"><div class="text-[12px] text-gold font-black border border-gold/50 px-8 py-3 bg-gold/5 tracking-[.6em] rounded-full">WEALTH INDEX: R73,827</div></div>
+            <div class="director-only flex flex-col items-end text-right">
+                <div class="text-[12px] text-gold font-black border border-gold/50 px-8 py-3 bg-gold/5 tracking-[.6em] rounded-full">WEALTH INDEX: R73,827</div>
+            </div>
         </header>
 
         <main class="grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-50">
@@ -98,39 +98,47 @@
                         <input id="email-in" type="email" placeholder="ACCESS EMAIL" class="w-full bg-black/40 border border-blue-500/20 rounded-xl p-4 text-white text-[10px] outline-none">
                         <input id="pass-in" type="password" placeholder="DIRECTOR CODE" class="w-full bg-black/40 border border-gold/20 rounded-xl p-4 text-gold text-[10px] outline-none hidden">
                         <div class="grid grid-cols-2 gap-4"><button onclick="handleAuth()" class="mog-btn-blue border border-blue-400 p-3 rounded-xl text-[10px] font-bold">Login</button><button onclick="handleAuth()" class="mog-btn border border-gold p-3 rounded-xl text-[10px] font-bold">Signup</button></div>
+                        <button onclick="showDirectorLogin()" class="text-[9px] text-zinc-600 uppercase w-full">Director Bypass handshake</button>
                     </div>
+                    <div id="op-profile" class="hidden text-center"><div id="qrcode-container" class="bg-white p-2 inline-block rounded-xl mb-4"></div><p id="active-alias" class="text-2xl font-black text-white uppercase"></p></div>
                 </section>
 
                 <section class="command-tile border-blue-500/40">
-                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">National Territorial Radar</span><i class="fa-solid fa-satellite-dish"></i></div>
-                    <div class="h-64"><iframe class="w-full h-full grayscale invert opacity-50 contrast-125 border-none" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14343132.894379366!2d24.876405!3d-28.847551!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1c34a689d9ee1251%3A0x8c247b78f3531606!2sSouth%20Africa!5e0!3m2!1sen!2sza!4v1640000000000"></iframe></div>
+                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-500">National Territorial Radar</span><i class="fa-solid fa-satellite-dish animate-pulse"></i></div>
+                    <div class="h-64 relative overflow-hidden">
+                        <iframe class="w-full h-full grayscale invert opacity-50 contrast-150 border-none scale-110" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14343160.83547913!2d22.937505999999998!3d-28.8166236!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1c34a689d9ee1251%3A0x8c247197f1b747db!2sSouth%20Africa!5e0!3m2!1sen!2sza!4v1700000000000!5m2!1sen!2sza"></iframe>
+                        <canvas id="radar-canvas" class="absolute inset-0 pointer-events-none z-10"></canvas>
+                    </div>
                 </section>
 
-                <section class="command-tile p-8 space-y-6">
-                    <div class="tile-header flex justify-between px-0"><span class="tile-title text-gold">Wealth Grid & Monetization</span><i class="fa-solid fa-coins text-gold"></i></div>
+                <section class="director-only command-tile p-8 space-y-6">
+                    <div class="tile-header flex justify-between px-0"><span class="tile-title text-gold">Wealth Grid Projection</span><i class="fa-solid fa-coins text-gold"></i></div>
                     <div class="space-y-3">
-                        <button class="revenue-btn">M.O.G. Premium Subscription</button>
+                        <button class="revenue-btn">M.O.G. Premium Subscriptions</button>
                         <button class="revenue-btn" style="background: #111; color: var(--mog-gold); border: 1px solid var(--mog-gold);">Shop: ORIGIN 54 Collective</button>
                     </div>
                     <div class="pt-4 border-t border-white/10">
-                        <p class="text-[9px] text-zinc-400 uppercase font-black mb-2">RSA Retail Savings Bond Tracker</p>
-                        <div class="flex justify-between items-end"><span class="text-xs text-white font-bold">Projected Yield:</span><span class="text-lg text-gold font-black">R13,827.19</span></div>
-                        <div class="w-full bg-white/5 h-1.5 rounded-full mt-2"><div class="bg-gold h-full rounded-full" style="width: 45%"></div></div>
+                        <div class="flex justify-between items-end"><span class="text-xs text-white font-bold">RSA Bond Projection:</span><span class="text-lg text-gold font-black">R13,827.19</span></div>
+                        <div class="w-full bg-white/5 h-1.5 rounded-full mt-2"><div class="bg-gold h-full rounded-full shadow-[0_0_10px_#D4AF37]" style="width: 45%"></div></div>
                     </div>
                 </section>
             </div>
 
             <div class="lg:col-span-8 space-y-10">
                 <section class="command-tile border-blue-500/20">
-                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-400">Visual Intelligence Gallery</span><i class="fa-solid fa-layer-group"></i></div>
-                    <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 gap-3 p-4 max-h-96 scroller-v"></div>
+                    <div class="tile-header flex justify-between"><span class="tile-title text-blue-400 font-black tracking-widest">Visual Intel Archive</span><i class="fa-solid fa-shield-halved text-blue-400"></i></div>
+                    <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4 p-5 max-h-[500px] scroller-v">
+                        <div class="gallery-node bg-zinc-900 flex items-center justify-center border-dashed border border-blue-500/30">
+                            <i class="fa-solid fa-plus text-blue-500/20 text-3xl"></i>
+                        </div>
+                    </div>
                 </section>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                     <section class="command-tile h-[600px] flex flex-col">
-                        <div class="tile-header flex justify-between items-center"><span class="tile-title">Frequency Grid (Spotify Sync)</span><i class="fa-brands fa-spotify text-2xl text-[#1DB954]"></i></div>
-                        <div class="flex-grow p-4 scroller-v" id="spotify-grid">
-                            <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX6ThpU68Anwa" width="100%" height="450" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+                        <div class="tile-header flex justify-between items-center"><span class="tile-title">Frequency Grid (Amapiano Top 10)</span><i class="fa-brands fa-spotify text-2xl text-[#1DB954] animate-pulse"></i></div>
+                        <div class="flex-grow p-4 scroller-v">
+                            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX5mSIn7vYvOT?utm_source=generator&theme=0" width="100%" height="520" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                         </div>
                     </section>
 
@@ -144,12 +152,9 @@
                     </section>
                 </div>
 
-                <section class="command-tile h-48">
-                    <div class="tile-header flex justify-between"><span class="tile-title text-gold">Sovereign Archive (MP3)</span><i class="fa-solid fa-record-vinyl text-gold"></i></div>
-                    <div class="p-4 flex items-center gap-4 bg-white/5 m-4 rounded-2xl">
-                        <span class="text-[10px] font-black text-white">MOG_Handshake_V1.mp3</span>
-                        <audio src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/music.mp3" controls class="flex-grow h-8"></audio>
-                    </div>
+                <section class="command-tile p-4 flex items-center gap-4 border-gold/20">
+                    <span class="text-[10px] font-black text-white uppercase italic">MOG_Handshake_V1.mp3</span>
+                    <audio src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/music.mp3" controls class="flex-grow h-8"></audio>
                 </section>
             </div>
         </main>
@@ -158,8 +163,8 @@
     <section id="director-dashboard" class="hidden fixed inset-0 z-[3000] bg-black/98 p-10 overflow-y-auto">
         <div class="flex justify-between items-center mb-8 border-b border-gold/30 pb-4"><h2 class="text-3xl text-white font-black uppercase">Director Command</h2><button onclick="toggleDirectorUI()" class="text-white text-2xl"><i class="fa-solid fa-xmark"></i></button></div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <div class="command-tile p-6 space-y-4"><h3 class="tile-title text-gold">Intel Upload</h3><input type="file" onchange="uploadIntel(this)"></div>
-            <div class="command-tile p-6 space-y-4"><h3 class="tile-title text-gold">Archive Upload</h3><input type="file" onchange="uploadArchive(this)"></div>
+            <div class="command-tile p-6 space-y-4"><h3 class="tile-title text-gold">Upload Intel</h3><input type="file" onchange="uploadIntel(this)"></div>
+            <div class="command-tile p-6 space-y-4"><h3 class="tile-title text-gold">Directive Bulletin</h3><textarea id="bulletin-msg" class="w-full h-24 bg-black p-2 text-gold text-xs outline-none" placeholder="Enter transmission..."></textarea><button onclick="broadcastBulletin()" class="w-full border border-gold p-2 mt-2 text-gold uppercase text-xs">Broadcast</button></div>
         </div>
     </section>
 
@@ -179,22 +184,25 @@
             const pass = document.getElementById('pass-in').value;
             if (email === 'director.mog@gmail.com' && (pass === '7486' || pass === '@MOGProtocol2026')) {
                 currentUser = { id: 'DIRECTOR', email };
+                document.getElementById('main-body').classList.add('director-active');
                 document.getElementById('auth-ui').classList.add('hidden');
                 document.getElementById('admin-trigger').classList.remove('hidden');
                 document.getElementById('active-alias').innerText = "DIRECTOR_MOG";
                 fetchGallery(); fetchArchive();
+                new QRCode(document.getElementById("qrcode-container"), { text: "https://wa.me/27813874921", width: 80, height: 80 });
             }
         }
 
         async function fetchGallery() {
-            const { data } = await db.storage.from('gallery').list('public');
+            const { data } = await db.storage.from('gallery').list('public', { limit: 50, sortBy: { column: 'name', order: 'desc' } });
             if (data) document.getElementById('gallery-grid').innerHTML = data.map(f => {
                 const { data: { publicUrl } } = db.storage.from('gallery').getPublicUrl(`public/${f.name}`);
-                return `<div class="gallery-node"><img src="${publicUrl}" class="gallery-media"></div>`;
+                return `<div class="gallery-node"><img src="${publicUrl}" class="gallery-media"><div class="dl-overlay"><a href="${publicUrl}" download class="dl-btn"><i class="fa-solid fa-download text-xs"></i></a></div></div>`;
             }).join('');
         }
 
-        async function uploadIntel(input) { if (input.files[0]) await db.storage.from('gallery').upload(`public/${Date.now()}_${input.files[0].name}`, input.files[0]); fetchGallery(); }
+        function initRadar() { const c = document.getElementById('radar-canvas'); const ctx = c.getContext('2d'); let w = c.width = c.parentElement.offsetWidth, h = c.height = c.parentElement.offsetHeight; let r = 0; function draw() { ctx.clearRect(0,0,w,h); r += 1.8; if(r > w/2) r = 0; ctx.beginPath(); ctx.arc(w/2, h/2, r, 0, Math.PI*2); ctx.strokeStyle = `rgba(0, 212, 255, ${1 - r/(w/2)})`; ctx.lineWidth = 2; ctx.stroke(); requestAnimationFrame(draw); } draw(); }
+        window.addEventListener('load', () => { initRadar(); fetchGallery(); });
     </script>
 </body>
 </html>
