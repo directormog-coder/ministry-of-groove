@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V71.1.8</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V71.2.5</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,6 +15,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
+
     <style>
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; --mog-panel: rgba(10, 20, 30, 0.95); }
@@ -62,8 +65,14 @@
 
     <div id="ticker-wrap" class="fixed top-0 w-full bg-black z-[1000] h-[35px] border-b border-blue-400/30 flex items-center overflow-hidden">
         <div class="ticker-move text-[9px] font-black uppercase text-blue-400 whitespace-nowrap animate-marquee">
-            MASTER_V71.1.8 // UNIVERSAL_LOGIN_ACTIVE // DIRECTOR_TOTALITY_BYPASS // SESSION_001_ACTIVE // GRID_SENTINEL_10M_ENABLED...
+            MASTER_V71.2.5 // MOBILE_CONSOLE_ACTIVE // RUN_DIAGNOSTIC_TRIGGER_READY // UNIVERSAL_LOGIN_SYNC // 10M_SENTINEL...
         </div>
+    </div>
+
+    <div class="fixed bottom-5 left-5 z-[6000]">
+        <button onclick="runGridDiagnostic()" class="bg-red-600 text-white p-3 rounded-full shadow-lg text-[10px] font-black uppercase flex items-center gap-2">
+            <i class="fa-solid fa-microscope"></i> Run Diagnostic
+        </button>
     </div>
 
     <button onclick="toggleMenu()" class="fixed top-12 right-5 z-[2500] text-blue-400 text-2xl p-2 bg-black/40 rounded-full border border-white/5 backdrop-blur-md">
@@ -77,7 +86,7 @@
         </div>
 
         <span class="text-[8px] text-blue-400 font-black uppercase tracking-widest block mb-4">Grid Sessions</span>
-        <button id="s1-btn" onclick="viewSession('001')" class="w-full text-left p-3 text-[10px] text-white bg-white/5 rounded-lg border border-white/10 hover:border-gold mb-2">SESSION 001: THE UNVEILING</button>
+        <button onclick="viewSession('001')" class="w-full text-left p-3 text-[10px] text-white bg-white/5 rounded-lg border border-white/10 hover:border-gold mb-2">SESSION 001: THE UNVEILING</button>
 
         <span class="text-[8px] text-blue-400 font-black uppercase tracking-widest block mb-4">Network Growth</span>
         <div class="p-4 bg-white/5 rounded-xl border border-white/10 mb-8 text-center">
@@ -86,7 +95,7 @@
         </div>
 
         <button onclick="generateEntryTicket()" id="ticket-btn" class="hidden w-full bg-emerald-600 text-white text-[9px] font-black py-4 rounded-full uppercase mb-4 shadow-lg shadow-emerald-900/20">Download Entry Pass</button>
-        <button onclick="logoutOperative()" id="logout-btn" class="hidden w-full bg-red-900/20 border border-red-500/50 text-red-500 text-[9px] font-black py-4 rounded-full uppercase transition-all">Terminate Session</button>
+        <button onclick="logoutOperative()" id="logout-btn" class="hidden w-full bg-red-900/20 border border-red-500/50 text-red-500 text-[9px] font-black py-4 rounded-full uppercase">Terminate Session</button>
     </nav>
 
     <div id="app-content" class="container mx-auto px-4 mt-20">
@@ -107,7 +116,7 @@
                             <input id="login-user" type="text" placeholder="PHONE / GMAIL / USERNAME" class="auth-input">
                             <input id="login-pass" type="password" placeholder="PASSCODE" class="auth-input">
                             <button id="main-auth-btn" onclick="handleMainAuth()" class="auth-btn">Authorize</button>
-                            <button id="toggle-auth-btn" onclick="toggleAuthMode()" class="w-full mt-4 text-[9px] text-blue-400 font-black uppercase">Register Profile</button>
+                            <button id="toggle-auth-btn" onclick="toggleAuthMode()" class="w-full mt-4 text-[9px] text-blue-400 font-black uppercase">Create Operative Profile</button>
                         </div>
                         <div id="active-op-badge" class="hidden p-4 border border-emerald-500/30 bg-emerald-500/5 rounded-xl text-center">
                             <span class="text-[10px] text-emerald-500 font-black uppercase tracking-widest">Operative Online</span>
@@ -140,14 +149,13 @@
                 </section>
             </div>
         </main>
-    </div>
-    
+                        </div>
+                        
     <div id="director-totality" class="hidden fixed inset-0 z-[5000] bg-black/98 p-8 overflow-y-auto backdrop-blur-3xl">
         <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-4">
             <h2 class="text-3xl text-white font-black uppercase italic">Master Totality Console</h2>
             <button onclick="closeDirector()" class="text-white text-2xl hover:text-gold"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             <div class="command-tile p-8 border-blue-400/40 text-center">
                 <span class="text-[10px] font-black uppercase text-blue-400 block mb-6">Asset Injection Suite</span>
@@ -155,7 +163,6 @@
                 <input type="file" id="intel-inject" class="hidden" onchange="uploadAsset('gallery', this)">
                 <button onclick="exportAttendeeList()" class="w-full bg-emerald-600/20 border border-emerald-500 text-emerald-500 text-[9px] font-black py-3 rounded-full uppercase">Export S001 Attendee List</button>
             </div>
-
             <div class="command-tile p-8 border-gold/40 text-center">
                 <span class="text-[10px] font-black uppercase text-gold">Sovereign Wealth Logic</span>
                 <div class="mt-4 space-y-4">
@@ -169,7 +176,7 @@
     <div id="ticket-portal" class="hidden fixed inset-0 z-[4000] bg-black/95 flex items-center justify-center p-4">
         <div class="secure-ticket">
             <button onclick="document.getElementById('ticket-portal').classList.add('hidden')" class="absolute top-4 right-4 text-zinc-500"><i class="fa-solid fa-xmark"></i></button>
-            <span class="text-[10px] text-gold font-black uppercase">Official Entry Pass</span>
+            <span class="text-[10px] text-gold font-black uppercase tracking-widest">Official Entry Pass</span>
             <div class="qr-wrapper my-4"><div id="ticket-qrcode"></div><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="qr-logo-overlay"></div>
             <p id="ticket-alias" class="text-blue-400 text-[10px] font-black uppercase"></p>
         </div>
@@ -184,6 +191,25 @@
         function closeDirector() { document.getElementById('director-totality').classList.add('hidden'); }
         function handleLogoSequence() { logoClicks++; if (logoClicks === 5) { document.getElementById('director-totality').classList.remove('hidden'); logoClicks = 0; } setTimeout(() => logoClicks = 0, 5000); }
 
+        async function runGridDiagnostic() {
+            alert("📡 Initiating M.O.G. Neural Diagnostic...");
+            const { data, error: connError } = await db.from('messages').select('count');
+            if (connError) {
+                alert("❌ DATABASE ERROR: Could not reach tables. Ensure you ran the SQL script to create 'messages' and 'registrations'.");
+                console.error(connError);
+            } else {
+                alert("✅ DATABASE LINK: Operational.");
+            }
+            const { data: sessionData } = await db.auth.getSession();
+            alert("✅ AUTH SYSTEM: Operational. Handshake is ready.");
+            const { error: regError } = await db.from('registrations').select('*').limit(1);
+            if (regError) {
+                alert("❌ TABLE ERROR: 'registrations' missing or RLS blocked. Check SQL Editor.");
+            } else {
+                alert("✅ ALL SYSTEMS GO. Handshake stable.");
+            }
+        }
+
         function toggleAuthMode() {
             isSignup = !isSignup;
             document.getElementById('auth-header').innerText = isSignup ? "Operative Registry" : "Neural Handshake";
@@ -194,25 +220,22 @@
         async function handleMainAuth() {
             const u = document.getElementById('login-user').value.trim(), p = document.getElementById('login-pass').value;
             if(!u || !p) return alert("Credentials Required.");
-            
             if (u === 'director.mog@gmail.com' && p === '@MOGProtocol2026') {
                 currentOp = { email: u, id: 'MASTER_DIRECTOR_NODE' };
                 syncClearance(true);
                 return;
             }
-
             let mappedEmail = u.includes('@') ? u : (/^\d+$/.test(u) ? `${u}@phone.mog.internal` : `${u}@user.mog.internal`);
-
             try {
                 const { data, error } = isSignup ? await db.auth.signUp({ email: mappedEmail, password: p }) : await db.auth.signInWithPassword({ email: mappedEmail, password: p });
                 if(!error) {
                     currentOp = data.user;
                     syncClearance(false);
                 } else {
-                    alert("Grid Access Denied: " + error.message);
+                    alert("Grid Access Denied: " + error.message + "\n\nTip: Director must toggle 'Confirm Email' to OFF in Supabase.");
                 }
             } catch (e) {
-                alert("Network Fault. Please re-authorize.");
+                alert("Network Fault. Check diagnostic logs.");
             }
         }
 
@@ -238,8 +261,9 @@
 
         async function submitDelegate() {
             const alias = document.getElementById('delegate-alias').value;
+            if(!alias) return alert("Alias Required.");
             const { error } = await db.from('registrations').insert([{ user_id: currentOp.id, alias: alias, session: '001' }]);
-            if(!error) alert("Registry Confirmed.");
+            if(!error) alert("Registry Confirmed."); else alert("Registry Error: Check SQL tables.");
         }
 
         function generateEntryTicket() {
@@ -258,7 +282,7 @@
 
         async function exportAttendeeList() {
             const { data, error } = await db.from('registrations').select('*').eq('session', '001');
-            if (!data || data.length === 0) return alert("Registry empty.");
+            if (error || !data.length) return alert("Registry empty.");
             const headers = "Alias,Session,Date\n";
             const rows = data.map(r => `${r.alias},${r.session},${r.created_at}`).join("\n");
             const blob = new Blob([headers + rows], { type: 'text/csv' });
@@ -273,7 +297,7 @@
             const file = input.files[0];
             if (!file) return;
             const { error } = await db.storage.from(bucket).upload(`public/${Date.now()}_${file.name}`, file);
-            if (!error) alert("Asset Injected.");
+            if (!error) alert("Asset Injected Successfully.");
         }
 
         async function sendPacket() {
