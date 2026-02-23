@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V71.3.5</title>
+    <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V001</title>
+    
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -15,33 +20,74 @@
     <style>
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; --mog-panel: rgba(10, 20, 30, 0.95); }
-        * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
+        
+        * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         h1, h2 { font-family: 'Clash Display', sans-serif; }
-        body { background-color: var(--mog-bg); color: var(--mog-gold); min-height: 100vh; overflow-x: hidden; }
-        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.2); backdrop-filter: blur(30px); border-radius: 28px; overflow: hidden; }
-        .auth-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; width: 100%; color: white; margin-bottom: 10px; outline: none; }
-        .auth-btn { background: white; color: black; font-weight: 900; border-radius: 30px; padding: 14px; width: 100%; text-transform: uppercase; cursor: pointer; }
-        #side-menu { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background: #080c10; z-index: 3000; padding: 2.5rem; transition: 0.6s; }
+        
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+        body { 
+            background-color: var(--mog-bg); 
+            background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 85%),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 L30 10 L30 30 M70 10 L90 10 L90 30 M10 90 L10 70 L30 70 M90 90 L90 70 L70 70 M30 30 L50 30 L50 50 L70 50 L70 70' stroke='%2300d4ff' stroke-width='0.5' fill='none' opacity='0.2'/%3E%3C/svg%3E");
+            background-attachment: fixed; color: var(--mog-gold); margin: 0; overflow-x: hidden; width: 100vw; min-height: 100vh;
+        }
+
+        .director-active body {
+            background-image: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.2) 0%, transparent 85%),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 L30 10 L30 30 M70 10 L90 10 L90 30 M10 90 L10 70 L30 70 M90 90 L90 70 L70 70 M30 30 L50 30 L50 50 L70 50 L70 70' stroke='%23D4AF37' stroke-width='0.5' fill='none' opacity='0.3'/%3E%3C/svg%3E");
+            animation: goldPulse 4s infinite alternate ease-in-out;
+        }
+
+        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.2); backdrop-filter: blur(30px); border-radius: 28px; overflow: hidden; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8); position: relative; }
+        #side-menu { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background: #080c10; border-left: 1px solid rgba(0,212,255,0.2); z-index: 3000; padding: 2.5rem; transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1); }
         #side-menu.active { right: 0; }
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
-        .gallery-item { aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.3); }
+
+        .auth-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; width: 100%; color: white; outline: none; font-size: 14px; margin-bottom: 10px; }
+        .auth-btn { background: white; color: black; font-weight: 900; border-radius: 30px; padding: 14px; width: 100%; text-transform: uppercase; cursor: pointer; }
+        
+        .delegate-form-locked { opacity: 0.4; pointer-events: none; filter: blur(2px); }
+        .director-only { display: none !important; }
+        .director-active .director-only { display: block !important; }
+
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
+        .gallery-item { aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.3); background: #000; }
+        
         .mog-bubble { padding: 10px 15px; border-radius: 18px; font-size: 13px; color: #fff; background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.15); margin-bottom: 10px; }
+        
+        #ticket-portal { display: none; position: fixed; inset: 0; z-index: 4000; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); align-items: center; justify-content: center; padding: 20px; }
+        .secure-ticket { background: #111; border: 2px solid var(--mog-gold); border-radius: 20px; width: 100%; max-width: 350px; padding: 30px; text-align: center; position: relative; box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); }
+        .qr-wrapper { position: relative; display: inline-block; background: white; padding: 15px; border-radius: 15px; margin: 20px 0; }
+        .qr-logo-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 35px; height: 35px; background: white; border-radius: 50%; padding: 2px; }
+
+        @keyframes goldPulse { from { filter: brightness(1); } to { filter: brightness(1.25); } }
     </style>
 </head>
 <body class="scrollbar-hide">
 
     <div id="ticker-wrap" class="fixed top-0 w-full bg-black z-[1000] h-[35px] border-b border-blue-400/30 flex items-center overflow-hidden">
         <div class="ticker-move text-[9px] font-black uppercase text-blue-400 whitespace-nowrap animate-marquee">
-            MASTER_V71.3.5 // ASSET_GALLERY_ACTIVE // NEURAL_HANDSHAKE_STABILIZED // SQL_REBUILD_V4...
+            MASTER_V001 // TOTAL_HANDSHAKE_READY // UNIVERSAL_IDENTITY_MAPPING // DIRECTOR_BYPASS_ACTIVE // 10M_SENTINEL_READY...
         </div>
     </div>
 
-    <button onclick="toggleMenu()" class="fixed top-12 right-5 z-[2500] text-blue-400 text-2xl p-2 bg-black/40 rounded-full border border-white/5 backdrop-blur-md"><i class="fa-solid fa-bars-staggered"></i></button>
+    <button onclick="toggleMenu()" class="fixed top-12 right-5 z-[2500] text-blue-400 text-2xl p-2 bg-black/40 rounded-full border border-white/5 backdrop-blur-md">
+        <i class="fa-solid fa-bars-staggered"></i>
+    </button>
     
-    <nav id="side-menu">
-        <div class="flex justify-between items-center mb-6"><span class="text-gold font-black uppercase text-xs italic">Sovereign Folders</span><button onclick="toggleMenu()"><i class="fa-solid fa-xmark text-xl text-zinc-500"></i></button></div>
-        <button onclick="generateEntryTicket()" id="ticket-btn" class="hidden w-full bg-emerald-600 text-white text-[9px] font-black py-4 rounded-full uppercase mt-8 tracking-widest">Entry Pass</button>
-        <button onclick="logoutOperative()" id="logout-btn" class="hidden w-full bg-red-900/20 border border-red-500/50 text-red-500 text-[9px] font-black py-4 rounded-full uppercase mt-4">Terminate Session</button>
+    <nav id="side-menu" class="scroller-v">
+        <div class="flex justify-between items-center mb-6">
+            <span class="text-gold font-black uppercase text-xs tracking-widest italic">Sovereign Folders</span>
+            <button onclick="toggleMenu()"><i class="fa-solid fa-xmark text-xl text-zinc-500"></i></button>
+        </div>
+        <button onclick="viewSession('001')" class="w-full text-left p-3 text-[10px] text-white bg-white/5 rounded-lg border border-white/10 hover:border-gold mb-2">SESSION 001: THE UNVEILING</button>
+        <div class="p-4 bg-white/5 rounded-xl border border-white/10 mb-8 text-center">
+            <button id="recruit-gen-btn" onclick="generateRecruitmentQR()" class="w-full bg-blue-600 text-white text-[9px] font-black py-2 rounded-full uppercase hidden">Generate QR Recruitment</button>
+            <div id="recruitment-qr" class="mt-4 hidden justify-center bg-white p-2 rounded"></div>
+        </div>
+        <button onclick="generateEntryTicket()" id="ticket-btn" class="hidden w-full bg-emerald-600 text-white text-[9px] font-black py-4 rounded-full uppercase mb-4">Download Entry Pass</button>
+        <button onclick="logoutOperative()" id="logout-btn" class="hidden w-full bg-red-900/20 border border-red-500/50 text-red-500 text-[9px] font-black py-4 rounded-full uppercase">Terminate Session</button>
     </nav>
 
     <div id="app-content" class="container mx-auto px-4 mt-20">
@@ -62,7 +108,7 @@
                             <input id="login-user" type="text" placeholder="PHONE / GMAIL / USERNAME" class="auth-input">
                             <input id="login-pass" type="password" placeholder="PASSCODE" class="auth-input">
                             <button id="main-auth-btn" onclick="handleMainAuth()" class="auth-btn">Authorize</button>
-                            <button id="toggle-auth-btn" onclick="toggleAuthMode()" class="w-full mt-4 text-[9px] text-blue-400 font-black uppercase tracking-widest">Register Profile</button>
+                            <button id="toggle-auth-btn" onclick="toggleAuthMode()" class="w-full mt-4 text-[9px] text-blue-400 font-black uppercase">Create Profile</button>
                         </div>
                         <div id="active-op-badge" class="hidden p-4 border border-emerald-500/30 bg-emerald-500/5 rounded-xl text-center">
                             <span class="text-[10px] text-emerald-500 font-black uppercase tracking-widest">Operative Online</span>
@@ -100,17 +146,20 @@
     <div id="director-totality" class="hidden fixed inset-0 z-[5000] bg-black/98 p-8 overflow-y-auto backdrop-blur-3xl">
         <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-4">
             <h2 class="text-3xl text-white font-black uppercase italic">Master Console</h2>
-            <button onclick="closeDirector()" class="text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="closeDirector()" class="text-white text-2xl hover:text-gold"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="command-tile p-8 border-blue-400/40 text-center">
-                <button onclick="runGridDiagnostic()" class="w-full bg-red-600 text-white p-3 rounded-full text-[10px] font-black uppercase mb-4">Run Grid Diagnostic</button>
-                <button onclick="document.getElementById('gallery-upload').click()" class="w-full bg-blue-600 text-white p-3 rounded-full text-[10px] font-black uppercase">Inject Gallery Image</button>
+                <button onclick="runGridDiagnostic()" class="w-full bg-red-600 text-white p-3 rounded-full text-[10px] font-black uppercase mb-4 tracking-widest">Run Grid Diagnostic</button>
+                <button onclick="document.getElementById('gallery-upload').click()" class="w-full bg-blue-600 text-white p-3 rounded-full text-[10px] font-black uppercase tracking-widest">Inject Gallery Image</button>
                 <input type="file" id="gallery-upload" class="hidden" onchange="uploadToGallery(this)">
+                <button onclick="exportAttendeeList()" class="w-full bg-emerald-600/20 border border-emerald-500 text-emerald-500 text-[9px] font-black py-3 rounded-full uppercase mt-4">Export S001 List</button>
             </div>
             <div class="command-tile p-8 border-gold/40 text-center">
-                <div class="flex justify-between text-xs"><span>Gross Revenue:</span><input type="number" id="tax-gross" oninput="calcTax()" class="bg-transparent text-right w-24 border-b border-white/10" value="0"></div>
-                <div class="flex justify-between text-xs text-emerald-500 font-black mt-2"><span>Net Profit:</span><span id="tax-net">R0.00</span></div>
+                <div class="flex justify-between text-xs font-black uppercase"><span>Gross Revenue:</span><input type="number" id="tax-gross" oninput="calcTax()" class="bg-transparent text-right w-24 border-b border-white/10 outline-none" value="0"></div>
+                <div class="flex justify-between text-xs text-emerald-500 font-black mt-4 uppercase"><span>Net Profit:</span><span id="tax-net">R0.00</span></div>
+                <hr class="border-white/5 my-6">
+                <span class="text-[8px] text-zinc-500 font-black uppercase tracking-widest">Wealth Sentinel v2.0 Active</span>
             </div>
         </div>
     </div>
@@ -118,44 +167,53 @@
     <div id="ticket-portal" class="hidden fixed inset-0 z-[4000] bg-black/95 flex items-center justify-center p-4">
         <div class="secure-ticket text-center">
             <div class="qr-wrapper my-4"><div id="ticket-qrcode"></div><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="qr-logo-overlay"></div>
-            <p id="ticket-alias" class="text-blue-400 text-[10px] font-black uppercase tracking-tighter"></p>
-            <button onclick="document.getElementById('ticket-portal').classList.add('hidden')" class="mt-4 text-[8px] text-zinc-500 uppercase">Close Pass</button>
+            <p id="ticket-alias" class="text-blue-400 text-[10px] font-black uppercase"></p>
+            <button onclick="document.getElementById('ticket-portal').style.display='none'" class="mt-4 text-[8px] text-zinc-500 uppercase">Close Pass</button>
         </div>
     </div>
 
     <script>
         const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
         const db = window.supabase.createClient(CFG.U, CFG.K);
-        let currentOp = null, isSignup = false, logoClicks = 0;
+        let currentOp = null, isSignup = false, logoClicks = 0, idleTimer;
 
         function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
         function closeDirector() { document.getElementById('director-totality').classList.add('hidden'); }
         function handleLogoSequence() { logoClicks++; if (logoClicks === 5) { document.getElementById('director-totality').classList.remove('hidden'); logoClicks = 0; } setTimeout(() => logoClicks = 0, 5000); }
 
         async function runGridDiagnostic() {
+            alert("📡 Initiating M.O.G. Neural Diagnostic...");
             try {
                 const { error: mErr } = await db.from('messages').select('count');
                 const { error: rErr } = await db.from('registrations').select('count');
                 if (mErr || rErr) throw new Error();
-                alert("✅ GRID ONLINE");
-            } catch (e) { alert("❌ OFFLINE: Run SQL Editor script."); }
+                alert("✅ GRID ONLINE: All master tables verified.");
+            } catch (e) { alert("❌ SYSTEM OFFLINE: Tables not found. Run SQL Editor script."); }
         }
 
         function toggleAuthMode() {
             isSignup = !isSignup;
             document.getElementById('auth-header').innerText = isSignup ? "Operative Registry" : "Neural Handshake";
             document.getElementById('main-auth-btn').innerText = isSignup ? "Register Profile" : "Authorize";
+            document.getElementById('toggle-auth-btn').innerText = isSignup ? "Existing? Login" : "New? Register";
         }
 
         async function handleMainAuth() {
             const u = document.getElementById('login-user').value.trim(), p = document.getElementById('login-pass').value;
-            if (u === 'director.mog@gmail.com' && p === '@MOGProtocol2026') { currentOp = { email: u, id: 'MASTER' }; syncClearance(true); return; }
+            if(!u || !p) return alert("Credentials Required.");
+            
+            if (u === 'director.mog@gmail.com' && p === '@MOGProtocol2026') {
+                currentOp = { email: u, id: 'MASTER' };
+                syncClearance(true);
+                return;
+            }
+
             let email = u.includes('@') ? u : (/^\d+$/.test(u) ? `${u}@phone.mog.internal` : `${u}@user.mog.internal`);
             try {
                 const { data, error } = isSignup ? await db.auth.signUp({ email, password: p }) : await db.auth.signInWithPassword({ email, password: p });
                 if(!error) { currentOp = data.user; syncClearance(false); }
-                else alert("Handshake Denied: " + error.message);
-            } catch (e) { alert("Fetch Error: Check SQL tables."); }
+                else alert("Access Denied: " + error.message);
+            } catch (e) { alert("Fetch Failure: Ensure SQL Script was run."); }
         }
 
         function syncClearance(isDirector) {
@@ -164,11 +222,19 @@
             document.getElementById('display-op-id').innerText = currentOp.email.split('@')[0];
             document.getElementById('registration-tile').classList.remove('opacity-40', 'pointer-events-none');
             document.getElementById('logout-btn').classList.remove('hidden');
-            if(isDirector) { document.documentElement.classList.add('director-active'); document.getElementById('director-totality').classList.remove('hidden'); }
-            else { document.getElementById('ticket-btn').classList.remove('hidden'); }
+            document.getElementById('recruit-gen-btn').classList.remove('hidden');
+            if(isDirector) {
+                document.documentElement.classList.add('director-active');
+                document.getElementById('director-totality').classList.remove('hidden');
+            } else {
+                document.getElementById('ticket-btn').classList.remove('hidden');
+                resetIdleTimer();
+            }
         }
 
         async function logoutOperative() { await db.auth.signOut(); location.reload(); }
+        function resetIdleTimer() { if (currentOp) { clearTimeout(idleTimer); idleTimer = setTimeout(logoutOperative, 600000); } }
+        window.onmousedown = resetIdleTimer; window.onkeypress = resetIdleTimer;
 
         async function submitDelegate() {
             const alias = document.getElementById('delegate-alias').value;
@@ -180,7 +246,7 @@
             const qrDiv = document.getElementById('ticket-qrcode'); qrDiv.innerHTML = '';
             new QRCode(qrDiv, { text: `MOG-S001-${currentOp.id.substring(0,8)}`, width: 180, height: 180 });
             document.getElementById('ticket-alias').innerText = `DELEGATE: ${currentOp.email.split('@')[0]}`;
-            document.getElementById('ticket-portal').classList.remove('hidden');
+            document.getElementById('ticket-portal').style.display = 'flex';
         }
 
         async function uploadToGallery(input) {
@@ -196,7 +262,7 @@
 
         async function fetchGallery() {
             const { data } = await db.from('gallery').select('*').order('injected_at', { ascending: false });
-            if(data) document.getElementById('gallery-container').innerHTML = data.map(i => `<div class="gallery-item"><img src="${i.url}" class="w-full h-full object-cover"></div>`).join('');
+            if(data && data.length > 0) document.getElementById('gallery-container').innerHTML = data.map(i => `<div class="gallery-item"><img src="${i.url}" class="w-full h-full object-cover"></div>`).join('');
         }
 
         function calcTax() { const g = parseFloat(document.getElementById('tax-gross').value) || 0; document.getElementById('tax-net').innerText = `R${(g * 0.85).toFixed(2)}`; }
@@ -210,6 +276,11 @@
         async function fetchMessages() {
             const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
             if (data) document.getElementById('chat-stream').innerHTML = data.map(m => `<div class="mog-bubble"><p class="text-[8px] text-blue-400 font-black">${m.alias}</p><p>${m.content}</p></div>`).join('');
+        }
+
+        function generateRecruitmentQR() {
+            const div = document.getElementById('recruitment-qr'); div.innerHTML = ''; div.classList.remove('hidden');
+            new QRCode(div, { text: `https://mog-grid.app/recruit?id=${currentOp.id.substring(0,8)}`, width: 120, height: 120 });
         }
 
         window.onload = () => { 
