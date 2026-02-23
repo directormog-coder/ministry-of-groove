@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V67.0.0</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V70.0.0</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,12 +17,12 @@
     
     <style>
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
-        :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; --mog-panel: rgba(10, 20, 30, 0.95); }
+        :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; --mog-panel: rgba(10, 20, 30, 0.95); --wa-bg: #0b141a; }
         
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         h1, .tile-title { font-family: 'Clash Display', sans-serif; }
         
-        /* RESPONSIVE FLUID TYPOGRAPHY */
+        /* FLUID RESPONSIVE LOGIC */
         .brand-title { font-size: clamp(1.3rem, 5.5vw, 3rem); line-height: 1.1; word-wrap: break-word; }
         .grid-subtext { font-size: clamp(0.55rem, 1.8vw, 0.8rem); letter-spacing: 0.35em; }
 
@@ -62,7 +62,7 @@
         }
         .command-tile:hover { border-color: var(--mog-blue); }
 
-        /* SIDE NAV - TOP RIGHT */
+        /* UPGRADED SIDE MENU - TOP RIGHT */
         #side-menu { 
             position: fixed; top: 0; right: -320px; 
             width: 320px; height: 100%; 
@@ -72,18 +72,22 @@
             box-shadow: -20px 0 60px rgba(0,0,0,0.9);
         }
         #side-menu.active { right: 0; }
-        .menu-phase-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 1rem; border-radius: 18px; margin-bottom: 1.2rem; }
+        .menu-section-label { font-size: 8px; font-weight: 900; color: var(--mog-blue); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 1rem; margin-top: 1.5rem; display: block; opacity: 0.6; }
+        .menu-phase-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 0.8rem; border-radius: 12px; margin-bottom: 0.8rem; }
+        .nav-link { display: block; padding: 12px 16px; background: rgba(255,255,255,0.02); border-radius: 10px; font-size: 10px; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; color: white; border-left: 2px solid transparent; }
+        .nav-link:hover { background: rgba(255,255,255,0.05); border-left-color: var(--mog-blue); color: var(--mog-blue); }
 
-        /* MP3 ARCHIVE UI */
-        .track-row { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 15px; padding: 14px; display: flex; align-items: center; gap: 12px; }
-        .track-lock { background: rgba(212, 175, 55, 0.1); color: var(--mog-gold); font-size: 8px; font-weight: 900; padding: 3px 7px; border-radius: 5px; }
+        /* UNIQUE M.O.G. CHAT LOGO BUBBLES */
+        .mog-chat-row { display: flex; gap: 10px; margin-bottom: 15px; align-items: flex-end; width: 100%; }
+        .mog-chat-logo { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--mog-blue); background: #000; padding: 2px; flex-shrink: 0; }
+        .mog-bubble { padding: 10px 15px; border-radius: 18px; font-size: 13px; color: #fff; background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.15); max-width: 85%; overflow-wrap: break-word; }
 
         /* SCROLLERS */
         .scroller-v { overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--mog-blue) transparent; -webkit-overflow-scrolling: touch; }
         .scroller-v::-webkit-scrollbar { width: 4px; }
         .scroller-v::-webkit-scrollbar-thumb { background: var(--mog-blue); border-radius: 10px; }
         
-        #app-content { margin-top: 60px; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+        #app-content { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); margin-top: 50px; }
 
         /* DIRECTOR VISIBILITY */
         .director-only { display: none; }
@@ -96,56 +100,59 @@
         /* PLATFORM INPUTS */
         .auth-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; width: 100%; color: white; outline: none; font-size: 14px; }
         .auth-btn { background: white; color: black; font-weight: 900; border-radius: 30px; padding: 14px; width: 100%; text-transform: uppercase; letter-spacing: 1px; }
+
+        .track-row { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 15px; padding: 14px; display: flex; align-items: center; gap: 12px; }
     </style>
 </head>
 <body class="scrollbar-hide" id="main-body-wrap">
 
     <div id="ticker-wrap" class="fixed top-0 w-full bg-black z-[1000] h-[35px] border-b border-gold flex items-center overflow-hidden transition-all duration-1000">
-        <div class="ticker-move text-[9px] font-black uppercase text-gold">MASTER_V67 // TOTALITY_STABLE // DIRECTOR_CMD_SYNC // RSA_RADAR_LIVE // PHASE_ROADMAP // NEURAL_GRID...</div>
+        <div class="ticker-move text-[9px] font-black uppercase text-gold">MASTER_V70 // TOTALITY_RECOVERY_COMPLETE // DIRECTOR_TOTAL_ACCESS // RSA_RADAR // AUTH_SYNC...</div>
     </div>
 
-    <button onclick="toggleMenu()" class="fixed top-12 right-5 z-[2500] text-blue-400 text-2xl p-2 bg-black/40 rounded-full border border-white/5 backdrop-blur-md shadow-2xl hover:text-gold">
+    <button onclick="toggleMenu()" class="fixed top-12 right-5 z-[2500] text-blue-400 text-2xl p-2 bg-black/40 rounded-full border border-white/5 backdrop-blur-md shadow-2xl">
         <i class="fa-solid fa-bars-staggered"></i>
     </button>
     
     <nav id="side-menu" class="scroller-v">
-        <div class="flex justify-between items-center mb-8">
-            <span class="text-gold font-black uppercase text-xs tracking-[.4em]">Roadmap</span>
+        <div class="flex justify-between items-center mb-6">
+            <span class="text-gold font-black uppercase text-xs tracking-widest italic">Sovereign Folders</span>
             <button onclick="toggleMenu()"><i class="fa-solid fa-xmark text-xl text-zinc-500"></i></button>
         </div>
 
-        <div class="menu-phase-card border-emerald-500/30">
-            <div class="flex justify-between items-center mb-2"><span class="text-white font-black text-[10px] uppercase">Phase 1: Grid Enlistment</span><span class="bg-emerald-500 text-black px-2 py-0.5 rounded text-[7px] font-black">ACTIVE</span></div>
-            <p class="text-[9px] text-zinc-500">Recruiting the core 500 operatives. Open access to all primary grid signals.</p>
+        <span class="menu-section-label">Grid Controls</span>
+        <div class="flex justify-between items-center p-4 bg-white/5 rounded-xl border border-white/10 mb-4">
+            <span class="text-[10px] uppercase font-black text-zinc-400">Silent Browsing</span>
+            <input type="checkbox" id="silent-toggle" class="accent-gold">
         </div>
+        <a href="#" class="nav-link"><i class="fa-solid fa-link mr-2"></i> Recruitment Link</a>
+        <a href="#" class="nav-link"><i class="fa-solid fa-shield-halved mr-2"></i> Privacy Protocol</a>
+        <a href="#" class="nav-link"><i class="fa-solid fa-scroll mr-2"></i> Grid Directives</a>
 
-        <div class="menu-phase-card border-gold/30 opacity-60">
-            <div class="flex justify-between items-center mb-2"><span class="text-white font-black text-[10px] uppercase">Phase 2: Elite Frequency</span><span class="bg-zinc-800 text-gold px-2 py-0.5 rounded text-[7px] font-black">LOCKED</span></div>
-            <p class="text-[9px] text-zinc-500">Premium High-Fidelity MP3 Archive access & Director Exclusive broadcasts.</p>
+        <span class="menu-section-label">Evolution Roadmap</span>
+        <div class="menu-phase-card border-emerald-500/20">
+            <div class="flex justify-between"><span class="text-white font-black text-[9px] uppercase">Phase 1</span><span class="text-emerald-500 text-[8px] font-black">ACTIVE</span></div>
+            <p class="text-[8px] text-zinc-500 mt-1">Free access to Frequency signals.</p>
         </div>
-
-        <div class="menu-phase-card border-blue-500/30 opacity-40">
-            <div class="flex justify-between items-center mb-2"><span class="text-white font-black text-[10px] uppercase">Phase 3: Sovereign Control</span><span class="bg-zinc-800 text-blue-400 px-2 py-0.5 rounded text-[7px] font-black">LOCKED</span></div>
-            <p class="text-[9px] text-zinc-500">Final sector handshake. Private chat protocols and Grid governance active.</p>
+        <div class="menu-phase-card border-gold/20 opacity-60">
+            <div class="flex justify-between"><span class="text-white font-black text-[9px] uppercase">Phase 2</span><span class="text-gold text-[8px] font-black">LOCKED</span></div>
+            <p class="text-[8px] text-zinc-500 mt-1">High-Fidelity Archive access (500 required).</p>
         </div>
-
-        <div class="mt-8 pt-6 border-t border-white/5">
-            <div class="flex justify-between items-center p-3 bg-white/5 rounded-xl"><span class="text-[10px] uppercase font-black text-zinc-400">Silent Mode</span><input type="checkbox" id="silent-toggle" class="accent-gold"></div>
+        <div class="menu-phase-card border-blue-500/20 opacity-40">
+            <div class="flex justify-between"><span class="text-white font-black text-[9px] uppercase">Phase 3</span><span class="text-blue-400 text-[8px] font-black">LOCKED</span></div>
+            <p class="text-[8px] text-zinc-500 mt-1">Final Control Handshake.</p>
         </div>
     </nav>
 
     <div id="app-content" class="container mx-auto px-4">
         <header class="flex flex-col md:flex-row justify-between items-center gap-6 mb-12 pt-4">
             <div class="flex items-center gap-6 w-full">
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" 
-                     id="mog-master-logo" 
-                     onclick="handleLogoSequence()" 
-                     class="h-16 w-16 md:h-24 md:w-24 mog-logo-pure cursor-pointer active:scale-95 transition-all">
+                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-master-logo" onclick="handleLogoSequence()" class="h-16 w-16 md:h-24 md:w-24 mog-logo-pure cursor-pointer active:scale-95 transition-all">
                 <div class="min-w-0 flex-grow">
                     <h1 class="brand-title text-[#D4AF37] uppercase font-black truncate">Ministry of Groove</h1>
                     <div class="flex flex-wrap items-center gap-3 mt-1">
                         <p class="grid-subtext text-blue-400 uppercase font-black">Decrypting the Culture. Synchronizing the Grid.</p>
-                        <div class="bg-black/40 px-3 py-0.5 rounded-full border border-white/5 text-[8px] text-zinc-500 font-black italic whitespace-nowrap">LATENCY: <span id="lat-val">12ms</span></div>
+                        <div class="bg-black/40 px-3 py-0.5 rounded-full border border-white/5 text-[8px] text-zinc-500 font-black italic">LATENCY: <span id="lat-val">8ms</span></div>
                     </div>
                 </div>
             </div>
@@ -158,7 +165,7 @@
                     <div id="auth-ui" class="space-y-6">
                         <div class="text-center mb-4"><span class="text-white font-black uppercase tracking-[.4em] text-[10px]">Neural Handshake</span></div>
                         <div id="signin-fields" class="space-y-4">
-                            <input id="login-user" type="text" placeholder="GMAIL OR UNIQUE USERNAME" class="auth-input">
+                            <input id="login-user" type="text" placeholder="GMAIL OR USERNAME" class="auth-input">
                             <input id="login-pass" type="password" placeholder="PASSCODE" class="auth-input">
                             <button onclick="loginOperative()" class="auth-btn">Authorize</button>
                             <div class="flex justify-between px-2 text-[9px] text-zinc-500 uppercase font-black">
@@ -180,7 +187,7 @@
                 </section>
 
                 <section class="command-tile h-64 border-blue-500/20">
-                    <div class="tile-header py-2 px-6 bg-black/40 border-b border-white/5 flex justify-between"><span class="text-[8px] text-blue-400 font-black uppercase">National Radar</span><i class="fa-solid fa-satellite animate-pulse"></i></div>
+                    <div class="tile-header py-2 px-6 bg-black/40 border-b border-white/5 flex justify-between"><span class="text-[8px] text-blue-400 font-black uppercase">RSA National Radar</span></div>
                     <iframe class="w-full h-full grayscale invert opacity-40 border-none scale-125" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7000000!2d24!3d-29!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sza!4v17100000000000"></iframe>
                 </section>
 
@@ -212,9 +219,9 @@
                 <section class="command-tile h-[600px] flex flex-col bg-black/40">
                     <div class="tile-header py-4 px-8 border-b border-white/5 flex items-center justify-between bg-black/20">
                         <span class="text-white font-black text-xs uppercase tracking-widest">Frequency Comms</span>
-                        <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div><span class="text-[9px] text-emerald-500 font-black uppercase">Live Signal</span></div>
+                        <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]"></div><span class="text-[9px] text-emerald-500 font-black uppercase">Live Signal</span></div>
                     </div>
-                    <div id="chat-stream" class="flex-grow p-6 scroller-v flex flex-col"></div>
+                    <div id="chat-stream" class="flex-grow p-6 scroller-v flex flex-col" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay;"></div>
                     <div class="p-6 bg-black/80 flex gap-4 items-center border-t border-white/5">
                         <input type="text" id="chat-msg-in" placeholder="Transmit thought..." class="flex-grow bg-[#111] border border-white/10 rounded-full px-6 py-4 text-white text-sm outline-none focus:border-blue-400">
                         <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-xl active:scale-90"><i class="fa-solid fa-paper-plane"></i></button>
@@ -243,12 +250,12 @@
 
     <div id="director-totality" class="hidden fixed inset-0 z-[5000] bg-black/98 p-8 md:p-12 overflow-y-auto scroller-v backdrop-blur-3xl">
         <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-4">
-            <h2 class="text-3xl text-white font-black uppercase italic tracking-tighter">Master Totality</h2>
-            <button onclick="closeDirector()" class="text-white text-3xl"><i class="fa-solid fa-xmark"></i></button>
+            <h2 class="text-3xl text-white font-black uppercase italic tracking-tighter">Master Totality Console</h2>
+            <button onclick="closeDirector()" class="text-white text-2xl hover:text-gold transition-colors"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             <div class="command-tile p-10 text-center border-gold/40 text-gold"><span class="text-xs font-black uppercase">Wealth Status</span><p class="text-3xl text-white font-black mt-3">R73,827.00</p></div>
-            <div class="command-tile p-10 flex flex-col justify-center items-center"><span class="text-gold font-black uppercase text-[10px] border border-gold/30 px-10 py-5 rounded-full">Sovereign Authorized</span></div>
+            <div class="command-tile p-10 flex flex-col justify-center items-center"><span class="text-gold font-black uppercase text-[10px] border border-gold/30 px-10 py-5 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.2)]">Sovereign Authorized</span></div>
         </div>
     </div>
 
@@ -260,91 +267,36 @@
         let lastArchiveCount = 0;
         const notifySound = new Audio("https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/notification.mp3");
 
-        function toggleMenu() { const s = document.getElementById('side-menu'); s.style.right = s.style.right === '0px' ? '-320px' : '0px'; }
+        function toggleMenu() { const s = document.getElementById('side-menu'); s.classList.toggle('active'); }
         function toggleAuth() { document.getElementById('signin-fields').classList.toggle('hidden'); document.getElementById('signup-fields').classList.toggle('hidden'); }
-        
-        function handleLogoSequence() {
-            logoClicks++;
-            if (logoClicks === 5) { document.getElementById('director-login-portal').classList.remove('hidden'); logoClicks = 0; }
-            setTimeout(() => { logoClicks = 0; }, 5000);
-        }
-
-        async function registerOperative() {
-            const user = document.getElementById('new-user').value;
-            const pass = document.getElementById('new-pass').value;
-            if(!user || !pass) return alert("Credentials Required.");
-            const emailFormat = user.includes('@') ? user : `${user}@mog.internal`;
-            const { error } = await db.auth.signUp({ email: emailFormat, password: pass });
-            if(error) alert(error.message); else { alert("Handshake Complete."); toggleAuth(); }
-        }
-
-        async function loginOperative() {
-            const user = document.getElementById('login-user').value;
-            const pass = document.getElementById('login-pass').value;
-            const emailFormat = user.includes('@') ? user : `${user}@mog.internal`;
-            const { error } = await db.auth.signInWithPassword({ email: emailFormat, password: pass });
-            if(error) alert("Bypass Denied."); else alert("Signal Authorized.");
-        }
-
-        async function executeDirectorBypass() {
-            const p = document.getElementById('dir-pass').value;
-            if (p === '7486' || p === '@MOGProtocol2026') {
-                isDirector = true;
-                document.documentElement.classList.add('director-active');
-                alert("Director Totality Command Verified.");
-                fetchArchive(); fetchGallery();
-            }
-        }
+        function handleLogoSequence() { logoClicks++; if (logoClicks === 5) { document.getElementById('director-login-portal').classList.remove('hidden'); logoClicks = 0; } setTimeout(() => { logoClicks = 0; }, 5000); }
+        async function registerOperative() { const u = document.getElementById('new-user').value, p = document.getElementById('new-pass').value; if(!u || !p) return alert("Credentials Required"); const { error } = await db.auth.signUp({ email: u.includes('@') ? u : `${u}@mog.internal`, password: p }); if(error) alert(error.message); else { alert("Handshake Complete."); toggleAuth(); } }
+        async function loginOperative() { const u = document.getElementById('login-user').value, p = document.getElementById('login-pass').value; const { error } = await db.auth.signInWithPassword({ email: u.includes('@') ? u : `${u}@mog.internal`, password: p }); if(error) alert("Denied."); else alert("Signal Authorized."); }
+        async function executeDirectorBypass() { const p = document.getElementById('dir-pass').value; if (p === '7486' || p === '@MOGProtocol2026') { isDirector = true; document.documentElement.classList.add('director-active'); alert("Director Totality Command Verified."); fetchArchive(); fetchGallery(); } }
         function closeDirector() { document.getElementById('director-totality').classList.add('hidden'); }
-
-        function displayMessage(m) {
-            const s = document.getElementById('chat-stream'), d = document.createElement('div');
-            d.className = `mog-chat-row`;
-            d.innerHTML = `<img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="mog-chat-logo mog-logo-pure"><div class="mog-bubble"><p class="text-[8px] font-black uppercase text-blue-400 mb-0.5">${m.alias || 'Operative'}</p><p>${m.content}</p></div>`;
-            s.appendChild(d); s.scrollTop = s.scrollHeight;
-        }
-
+        function displayMessage(m) { const s = document.getElementById('chat-stream'), d = document.createElement('div'); d.className = `mog-chat-row`; d.innerHTML = `<img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="mog-chat-logo mog-logo-pure"><div class="mog-bubble"><p class="text-[8px] font-black uppercase text-blue-400 mb-0.5">${m.alias || 'Operative'}</p><p>${m.content}</p></div>`; s.appendChild(d); s.scrollTop = s.scrollHeight; }
         async function fetchMessages() { const { data } = await db.from('messages').select('*').order('created_at', { ascending: true }); if (data) { document.getElementById('chat-stream').innerHTML = ""; data.forEach(displayMessage); } }
-        
         async function fetchArchive() {
             const { data } = await db.storage.from('archive').list('public');
             if (data) {
                 const isSilent = document.getElementById('silent-toggle').checked;
                 if (lastArchiveCount > 0 && data.length > lastArchiveCount && !isSilent) notifySound.play().catch(() => {});
                 lastArchiveCount = data.length;
-                document.getElementById('archive-grid').innerHTML = data.map((f, index) => {
+                document.getElementById('archive-grid').innerHTML = data.map((f, i) => {
                     const { data: { publicUrl } } = db.storage.from('archive').getPublicUrl(`public/${f.name}`);
                     const isLocked = f.name.toUpperCase().includes('LOCKED') && !isDirector;
-                    return `
-                        <div class="track-row">
-                            <i class="fa-solid fa-compact-disc text-[10px] text-zinc-600"></i>
-                            <div class="flex-grow overflow-hidden"><p class="text-[9px] text-white font-black truncate uppercase">${f.name}</p></div>
-                            <audio id="audio-${index}" src="${publicUrl}"></audio>
-                            <div class="flex gap-2">
-                                ${isLocked ? '<span class="track-lock">PHASE 2</span>' : `
-                                    <button onclick="document.getElementById('audio-${index}').play()" class="text-emerald-500"><i class="fa-solid fa-play"></i></button>
-                                    <a href="${publicUrl}" download class="text-blue-400"><i class="fa-solid fa-cloud-arrow-down"></i></a>
-                                `}
-                            </div>
-                        </div>
-                    `;
+                    return `<div class="track-row"><i class="fa-solid fa-compact-disc text-[10px] text-zinc-600"></i><div class="flex-grow overflow-hidden"><p class="text-[9px] text-white font-black truncate uppercase">${f.name}</p></div><audio id="audio-${i}" src="${publicUrl}"></audio><div class="flex gap-2">${isLocked ? '<span class="text-gold text-[8px] font-black">PHASE 2</span>' : `<button onclick="document.getElementById('audio-${i}').play()" class="text-emerald-500"><i class="fa-solid fa-play"></i></button><a href="${publicUrl}" download class="text-blue-400"><i class="fa-solid fa-cloud-arrow-down"></i></a>`}</div></div>`;
                 }).join('');
             }
         }
-
         async function fetchGallery() {
             const { data } = await db.storage.from('gallery').list('public');
             if (data) document.getElementById('gallery-grid').innerHTML = data.map(f => {
                 const { data: { publicUrl } } = db.storage.from('gallery').getPublicUrl(`public/${f.name}`);
-                return `<div class="h-40 overflow-hidden rounded-2xl border border-white/10 relative"><img src="${publicUrl}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all"></div>`;
+                return `<div class="h-40 overflow-hidden rounded-2xl border border-white/10 group relative"><img src="${publicUrl}" class="w-full h-full object-cover"></div>`;
             }).join('');
         }
-
-        window.addEventListener('load', () => { 
-            fetchMessages(); fetchArchive(); fetchGallery();
-            setInterval(() => { document.getElementById('lat-val').innerText = `${Math.floor(Math.random()*10)+5}ms`; }, 5000);
-            setInterval(fetchArchive, 15000);
-        });
+        window.addEventListener('load', () => { fetchMessages(); fetchArchive(); fetchGallery(); setInterval(() => { document.getElementById('lat-val').innerText = `${Math.floor(Math.random()*10)+5}ms`; }, 5000); });
     </script>
 </body>
 </html>
