@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V70.8.0</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V70.8.2</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -62,7 +62,7 @@
 
     <div id="ticker-wrap" class="fixed top-0 w-full bg-black z-[1000] h-[35px] border-b border-blue-400/30 flex items-center overflow-hidden">
         <div class="ticker-move text-[9px] font-black uppercase text-blue-400 whitespace-nowrap animate-marquee">
-            MASTER_V70.8.0 // 10_MIN_SENTINEL_TIMEOUT_ACTIVE // LOGOUT_PROTOCOL_SYNCED // SECURE_TICKET_GEN_V2 // DIRECTOR_TAX_LOGIC...
+            MASTER_V70.8.2 // OPERATIVE_EXECUTION_TRIGGER_ONLINE // GRID_FEATURE_SYNC // 10_MIN_SENTINEL_ACTIVE...
         </div>
     </div>
 
@@ -86,7 +86,6 @@
         </div>
 
         <button onclick="generateEntryTicket()" id="ticket-btn" class="hidden w-full bg-emerald-600 text-white text-[9px] font-black py-4 rounded-full uppercase mb-4 shadow-lg shadow-emerald-900/20">Download Entry Pass</button>
-        
         <button onclick="logoutOperative()" id="logout-btn" class="hidden w-full bg-red-900/20 border border-red-500/50 text-red-500 text-[9px] font-black py-4 rounded-full uppercase hover:bg-red-500 hover:text-white transition-all">Terminate Session</button>
     </nav>
 
@@ -110,8 +109,8 @@
                     </div>
                     <div id="director-login-portal" class="hidden pt-6 mt-6 border-t border-gold/20">
                         <div class="text-center mb-2"><span class="text-gold font-black uppercase text-[8px]">Director Bypass Protocol</span></div>
-                        <input id="dir-pass" type="password" placeholder="BYPASS_KEY" class="auth-input border-gold/40 text-gold text-center font-black">
-                        <button onclick="executeDirectorBypass()" class="w-full bg-gold text-black font-black p-4 rounded-full text-[10px] uppercase">Access Totality</button>
+                        <input id="dir-pass" type="password" placeholder="BYPASS_KEY" class="auth-input border-gold/40 text-gold text-center font-black" onkeydown="if(event.key==='Enter')executeDirectorBypass()">
+                        <button onclick="executeDirectorBypass()" class="w-full bg-gold text-black font-black p-4 rounded-full text-[10px] uppercase shadow-[0_0_15px_rgba(212,175,55,0.3)]">Initiate Totality</button>
                     </div>
                 </section>
 
@@ -205,48 +204,53 @@
         function resetIdleTimer() {
             if (currentOp) {
                 clearTimeout(idleTimer);
-                idleTimer = setTimeout(logoutOperative, 600000); // 10 Minutes (600,000 ms)
+                idleTimer = setTimeout(logoutOperative, 600000); 
             }
         }
 
-        // Event listeners for activity
         window.onmousedown = resetIdleTimer;
         window.onmousemove = resetIdleTimer;
         window.onkeypress = resetIdleTimer;
         window.ontouchstart = resetIdleTimer;
+
+        // OPERATIVE EXECUTION TRIGGER
+        function executeOperativeClearance() {
+            if (currentOp) {
+                document.getElementById('registration-tile').classList.remove('delegate-form-locked');
+                document.getElementById('ticket-btn').classList.remove('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
+                resetIdleTimer();
+            }
+        }
 
         async function loginOperative() {
             const u = document.getElementById('login-user').value, p = document.getElementById('login-pass').value;
             if(u === 'director.mog@gmail.com' || p === '@MOGProtocol2026') {
                 alert("Director Credentials Detected. Use Stealth Handshake (Logo 5x) or Bypass Portal.");
                 document.getElementById('director-login-portal').classList.remove('hidden');
+                document.getElementById('director-login-portal').scrollIntoView({ behavior: 'smooth' });
                 return;
             }
             const { data, error } = await db.auth.signInWithPassword({ email: u.includes('@') ? u : `${u}@mog.internal`, password: p });
             if(!error) { 
                 currentOp = data.user; 
-                document.getElementById('registration-tile').classList.remove('delegate-form-locked');
-                document.getElementById('ticket-btn').classList.remove('hidden');
-                document.getElementById('logout-btn').classList.remove('hidden');
-                resetIdleTimer();
-                alert("Handshake Complete. Grid Sentinel Engaged (10m Timeout)."); 
+                executeOperativeClearance(); // TRIGGER EXECUTION
+                alert("Handshake Complete. Grid Sentinel Engaged."); 
             } else alert("Access Denied.");
         }
 
         async function logoutOperative() {
             const { error } = await db.auth.signOut();
-            if(!error || error) { // Sign out anyway locally
-                currentOp = null;
-                clearTimeout(idleTimer);
-                document.getElementById('registration-tile').classList.add('delegate-form-locked');
-                document.getElementById('ticket-btn').classList.add('hidden');
-                document.getElementById('logout-btn').classList.add('hidden');
-                document.getElementById('recruitment-qr').classList.add('hidden');
-                document.getElementById('login-user').value = "";
-                document.getElementById('login-pass').value = "";
-                alert("Session Terminated for Safety. Grid Re-Locked.");
-                if(document.getElementById('side-menu').classList.contains('active')) toggleMenu();
-            }
+            currentOp = null;
+            clearTimeout(idleTimer);
+            document.getElementById('registration-tile').classList.add('delegate-form-locked');
+            document.getElementById('ticket-btn').classList.add('hidden');
+            document.getElementById('logout-btn').classList.add('hidden');
+            document.getElementById('recruitment-qr').classList.add('hidden');
+            document.getElementById('login-user').value = "";
+            document.getElementById('login-pass').value = "";
+            alert("Session Terminated. Grid Locked.");
+            if(document.getElementById('side-menu').classList.contains('active')) toggleMenu();
         }
 
         async function executeDirectorBypass() {
@@ -261,7 +265,7 @@
             const alias = document.getElementById('delegate-alias').value;
             if(!alias) return alert("Alias Required.");
             const { error } = await db.from('registrations').insert([{ user_id: currentOp.id, alias: alias, session: '001' }]);
-            if(!error) alert("Registry Confirmed. Download Entry Pass via menu.");
+            if(!error) alert("Registry Confirmed.");
         }
 
         function generateEntryTicket() {
