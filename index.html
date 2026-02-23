@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V001.2</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V003.0</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -17,109 +17,136 @@
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; --mog-panel: rgba(10, 20, 30, 0.95); }
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
         h1, h2, .tile-header { font-family: 'Clash Display', sans-serif; }
-        body { background-color: var(--mog-bg); background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 85%); color: var(--mog-gold); min-height: 100vh; overflow-x: hidden; }
-        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.2); backdrop-filter: blur(30px); border-radius: 28px; overflow: hidden; height: 100%; display: flex; flex-direction: column; }
-        .auth-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px; width: 100%; color: white; outline: none; margin-bottom: 10px; }
-        .auth-btn { background: white; color: black; font-weight: 900; border-radius: 30px; padding: 14px; width: 100%; text-transform: uppercase; cursor: pointer; }
-        .track-item { background: rgba(255,255,255,0.03); border-left: 2px solid var(--mog-blue); padding: 8px 12px; border-radius: 4px; font-size: 11px; margin-bottom: 6px; }
+        body { background-color: var(--mog-bg); background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 85%); color: var(--mog-gold); min-height: 100vh; overflow-x: hidden; padding-bottom: env(safe-area-inset-bottom); }
+        
+        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.1); backdrop-filter: blur(40px); border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; height: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); position: relative; }
+        @media (min-width: 1024px) { .command-tile { border-radius: 32px; } }
+
+        .deep-link-label { position: absolute; top: 12px; right: 12px; font-[900] text-[7px] uppercase tracking-widest text-blue-400/40 bg-blue-400/5 px-2 py-1 rounded-full border border-blue-400/10; pointer-events: none; }
+        .auth-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 16px; width: 100%; color: white; outline: none; margin-bottom: 12px; font-size: 14px; }
+        .auth-btn { background: white; color: black; font-weight: 900; border-radius: 40px; padding: 16px; width: 100%; text-transform: uppercase; cursor: pointer; }
+        
+        #pinned-comms { background: rgba(0, 212, 255, 0.15); border-bottom: 1px solid var(--mog-blue); padding: 12px; font-size: 11px; font-weight: 900; color: white; display: none; }
+        .system-notif { background: rgba(212, 175, 55, 0.1); border-left: 3px solid var(--mog-gold); padding: 8px 12px; font-size: 10px; color: #fff; margin-bottom: 12px; border-radius: 0 12px 12px 0; }
+        .wealth-milestone { background: linear-gradient(90deg, rgba(212, 175, 55, 0.2), transparent); border-left: 4px solid var(--mog-gold); animation: flash 2s infinite; }
+
+        @keyframes flash { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 16px; background: #000; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .spotify-container { border-radius: 16px; overflow: hidden; background: #222; border: 1px solid #1DB954; min-height: 80px; }
+
         #s2-lock { display: none; position: fixed; inset: 0; background: black; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .mog-bubble { padding: 12px 16px; border-radius: 20px; font-size: 13px; color: #fff; background: rgba(0, 212, 255, 0.07); border: 1px solid rgba(0, 212, 255, 0.15); margin-bottom: 12px; position: relative; max-width: 85%; }
     </style>
 </head>
 <body class="overflow-x-hidden">
 
     <div id="s2-lock" class="p-8">
-        <h2 class="text-5xl text-white font-black uppercase italic mb-4">Frequency Maxed</h2>
-        <p class="text-blue-400 text-xs font-black tracking-[.5em] uppercase mb-12">Session 001 Registry Closed</p>
-        <div class="w-full max-w-md p-8 border border-white/10 rounded-3xl bg-white/5 backdrop-blur-3xl">
-            <span class="text-[10px] text-gold font-black uppercase tracking-widest">Incoming Transmission</span>
-            <h3 class="text-2xl text-white font-black mt-2">SESSION 002: NOIR ELEGANCE</h3>
-            <p class="text-zinc-500 text-[10px] mt-4 uppercase">Prepare your attire. The grid is expanding.</p>
-        </div>
+        <h2 class="text-4xl md:text-6xl text-white font-black uppercase italic mb-4">Frequency Maxed</h2>
+        <p class="text-blue-400 text-xs font-black tracking-[.5em] uppercase">S002 Loading...</p>
+        <button onclick="toggleS2Manual(false)" class="hidden s2-override-btn mt-8 text-red-500 font-black text-[10px] uppercase border-b border-red-500">Restore Grid</button>
     </div>
 
     <div class="fixed top-0 w-full bg-black z-[1000] h-[35px] border-b border-blue-400/30 flex items-center overflow-hidden">
         <div class="ticker-move text-[9px] font-black uppercase text-blue-400 whitespace-nowrap animate-marquee px-4">
-            MASTER_V001.2 // S001_CAP_SENTINEL_ACTIVE // AMAPIANO_TRACKLIST_LOGIC_ON // DIRECTOR_TOTALITY_READY...
+            MASTER_V003.0 // ALL_SYSTEMS_GO // WEALTH_MILESTONE_SENTINEL_ACTIVE // AUTO_RESPONSIVE_ADAPTATION // DIRECTOR_MASTER_MONITOR...
         </div>
     </div>
 
     <div id="app-content" class="container mx-auto px-4 mt-20">
-        <header class="flex items-center gap-6 mb-12">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-20 w-20 cursor-pointer active:scale-95">
-            <div>
+        <header class="flex flex-col md:flex-row items-center gap-6 mb-12">
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-20 w-20 cursor-pointer">
+            <div class="text-center md:text-left">
                 <h1 class="text-3xl md:text-5xl text-gold font-black uppercase italic leading-none">Ministry of Groove</h1>
-                <p class="text-[10px] text-blue-400 font-black tracking-widest uppercase mt-2">Decrypting the Culture. Synchronizing the Grid.</p>
+                <p class="text-[10px] text-blue-400 font-black tracking-widest uppercase mt-2 italic">National Digital Amapiano Grid.</p>
             </div>
         </header>
 
-        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
-            <section class="command-tile p-8">
-                <span class="text-white font-black uppercase tracking-widest text-[10px] block mb-6">Neural Handshake</span>
+        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-10 pb-24">
+            
+            <section class="command-tile p-6 md:p-8">
+                <span class="deep-link-label">ID.MOG.APP</span>
+                <span class="text-white font-black uppercase tracking-widest text-[10px] block mb-8">Identity Portal</span>
                 <div id="auth-fields">
-                    <input id="login-user" type="text" placeholder="PHONE / GMAIL / USERNAME" class="auth-input">
+                    <input id="login-user" type="text" placeholder="GMAIL / PHONE / USERNAME" class="auth-input">
                     <input id="login-pass" type="password" placeholder="PASSCODE" class="auth-input">
                     <button onclick="handleMainAuth()" class="auth-btn">Authorize</button>
-                    <button onclick="toggleAuthMode()" id="toggle-auth-btn" class="w-full mt-4 text-[9px] text-blue-400 font-black uppercase italic">New? Register</button>
+                    <button onclick="toggleAuthMode()" id="toggle-auth-btn" class="w-full mt-4 text-[9px] text-zinc-500 font-black uppercase tracking-widest">Register Profile</button>
                 </div>
-                <div id="active-op-badge" class="hidden p-4 border border-emerald-500/30 bg-emerald-500/5 rounded-xl text-center">
-                    <p id="display-op-id" class="text-[12px] text-white font-black uppercase"></p>
-                    <button onclick="logoutOperative()" class="text-[8px] text-red-500 font-black uppercase mt-2">Terminate</button>
-                </div>
-            </section>
-
-            <section class="command-tile p-6">
-                <span class="text-[10px] font-black uppercase text-blue-400 block mb-4">Amapiano Frequency</span>
-                <div id="track-list" class="flex-grow overflow-y-auto space-y-2 max-h-[250px] pr-2">
-                    <p class="text-[9px] text-zinc-600 italic">Syncing tracklist...</p>
+                <div id="active-op-badge" class="hidden p-6 border border-emerald-500/20 bg-emerald-500/5 rounded-3xl text-center">
+                    <div class="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-3"><i class="fa-solid fa-user-shield text-emerald-500"></i></div>
+                    <p id="display-op-id" class="text-[16px] text-white font-black uppercase"></p>
+                    <button onclick="logoutOperative()" class="text-[9px] text-red-500 font-black uppercase mt-6 border-b border-red-500/20">Terminate Session</button>
                 </div>
             </section>
 
-            <section class="command-tile flex flex-col h-[400px]">
-                <div class="p-6 border-b border-white/5"><span class="text-[10px] font-black uppercase text-blue-400">Frequency Comms</span></div>
-                <div id="chat-stream" class="flex-grow p-6 overflow-y-auto"></div>
-                <div class="p-4 bg-black/40 flex gap-2">
-                    <input type="text" id="chat-msg-in" placeholder="..." class="flex-grow bg-[#111] border border-white/10 rounded-full px-4 text-xs text-white outline-none">
-                    <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
+            <section class="command-tile p-5 md:p-6">
+                <span class="deep-link-label">BROADCAST.MOG.APP</span>
+                <span class="text-[10px] font-black uppercase text-red-500 block mb-4">Grid Broadcast</span>
+                <div id="live-broadcast-ui" class="video-container mb-4">
+                    <div class="absolute inset-0 flex items-center justify-center text-[10px] text-zinc-600 uppercase font-black">Syncing visuals...</div>
+                </div>
+                <div id="spotify-broadcast-ui" class="spotify-container">
+                    <div class="p-4 text-center text-[8px] text-zinc-700 uppercase italic">Syncing sonic feed...</div>
                 </div>
             </section>
 
-            <section id="registration-tile" class="command-tile p-8 border-gold/30 opacity-40 pointer-events-none">
-                <span class="text-[10px] text-gold font-black uppercase block mb-6">S001 Registry</span>
-                <input type="text" id="delegate-alias" placeholder="CONFIRM ALIAS" class="auth-input">
+            <section class="command-tile flex flex-col h-[450px] md:h-[500px]">
+                <span class="deep-link-label">MESSENGER.MOG.APP</span>
+                <div id="pinned-comms"><i class="fa-solid fa-bullhorn mr-2"></i> <span id="pinned-text">SYSTEM UPDATE ACTIVE</span></div>
+                <div id="chat-stream" class="flex-grow p-5 md:p-6 overflow-y-auto scrollbar-hide space-y-4"></div>
+                <div class="p-4 bg-black/60 flex gap-2">
+                    <input type="text" id="chat-msg-in" placeholder="Message..." class="flex-grow bg-[#111] border border-white/5 rounded-full px-5 py-3 text-xs text-white outline-none">
+                    <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-12 h-12 flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </section>
+
+            <section id="registration-tile" class="command-tile p-6 md:p-8 border-gold/20 opacity-40 pointer-events-none">
+                <span class="deep-link-label">JOBS.MOG.APP</span>
+                <span class="text-[10px] text-gold font-black uppercase block mb-8">Deployment</span>
+                <input type="text" id="delegate-alias" placeholder="ALIAS" class="auth-input">
                 <button onclick="submitDelegate()" class="auth-btn" style="background:var(--mog-gold)">Finalize</button>
             </section>
 
-            <section class="command-tile p-6">
-                <span class="text-[10px] text-blue-400 font-black uppercase block mb-4">Intel Gallery</span>
-                <div id="gallery-container" class="grid grid-cols-3 gap-2">
-                    <div class="aspect-square bg-white/5 rounded-lg"></div>
-                </div>
+            <section class="command-tile p-5 md:p-6">
+                <span class="deep-link-label">FEED.MOG.APP</span>
+                <span class="text-[10px] text-blue-400 font-black uppercase block mb-4">Intel Feed</span>
+                <div id="gallery-container" class="space-y-4 overflow-y-auto scrollbar-hide flex-grow"></div>
             </section>
 
-            <section id="pass-tile" class="command-tile p-8 opacity-40 pointer-events-none flex flex-col items-center justify-center">
-                <div id="ticket-qrcode"></div>
-                <p id="ticket-alias" class="text-blue-400 text-[9px] font-black uppercase mt-4"></p>
-                <button onclick="generateEntryTicket()" id="ticket-btn" class="hidden auth-btn bg-emerald-600 text-white mt-4">Generate Pass</button>
+            <section class="command-tile p-5 md:p-6">
+                <span class="deep-link-label">CHARTS.MOG.APP</span>
+                <span class="text-[10px] text-gold font-black uppercase block mb-4">Amapiano Top 10</span>
+                <div id="track-list" class="space-y-2 overflow-y-auto pr-2 scrollbar-hide flex-grow"></div>
             </section>
         </main>
     </div>
-
-    <div id="director-totality" class="hidden fixed inset-0 z-[5000] bg-black/98 p-8 overflow-y-auto">
-        <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-4">
-            <h2 class="text-3xl text-white font-black uppercase italic">Master Console</h2>
+    
+    <div id="director-totality" class="hidden fixed inset-0 z-[5000] bg-black/98 p-6 md:p-12 overflow-y-auto backdrop-blur-3xl">
+        <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-6">
+            <h2 class="text-3xl text-white font-black uppercase italic">Master Monitor</h2>
             <button onclick="closeDirector()" class="text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="command-tile p-8 border-blue-400/40">
-                <span class="text-[10px] font-black uppercase text-blue-400 block mb-4">Tracklist Management</span>
-                <input type="text" id="track-name" placeholder="Artist - Track Name" class="auth-input">
-                <button onclick="addTrack()" class="auth-btn bg-blue-600 text-white mb-8">Inject Track</button>
-                <button onclick="runGridDiagnostic()" class="w-full bg-red-600 text-white p-3 rounded-full text-[10px] font-black uppercase mb-4">Run Diagnostic</button>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="command-tile p-6 border-red-500/20 text-center flex flex-col justify-center">
+                <span class="text-[10px] font-black uppercase text-red-500 mb-4">Live Monitor View</span>
+                <div id="director-monitor-ui" class="video-container rounded-xl overflow-hidden grayscale opacity-30"></div>
+            </div>
+            <div class="command-tile p-8 border-blue-400/20">
+                <input type="text" id="stream-url" placeholder="YouTube ID" class="auth-input">
+                <input type="text" id="spotify-url" placeholder="Spotify ID" class="auth-input">
+                <button onclick="injectBroadcast()" class="auth-btn bg-red-600 text-white mb-4">Global Sync</button>
+                <input type="text" id="pin-input" placeholder="Pin Message" class="auth-input">
+                <button onclick="pinMessage()" class="w-full bg-blue-600 text-white p-4 rounded-full text-[10px] font-black uppercase">Pin Alert</button>
             </div>
             <div class="command-tile p-8 border-gold/40">
-                <span class="text-[10px] font-black uppercase text-gold block mb-4">Wealth Logic</span>
-                <div class="flex justify-between text-xs mb-4"><span>Gross:</span><input type="number" id="tax-gross" oninput="calcTax()" class="bg-transparent text-right w-24 border-b border-white/10" value="0"></div>
-                <div class="flex justify-between text-xs text-emerald-500 font-black"><span>Net Profit:</span><span id="tax-net">R0.00</span></div>
+                <span class="text-[10px] font-black uppercase text-gold block mb-4">Wealth Sentinel</span>
+                <div class="flex justify-between text-xs font-black uppercase mb-4"><span>GROSS:</span><input type="number" id="tax-gross" oninput="calcTax()" class="bg-transparent text-right w-24 border-b border-white/10 outline-none" value="0"></div>
+                <div class="flex justify-between text-xs text-emerald-500 font-black uppercase"><span>NET (15%):</span><span id="tax-net">R0.00</span></div>
+                <div class="mt-8 p-4 bg-gold/5 border border-gold/20 rounded-xl">
+                    <p id="milestone-label" class="text-xl text-white font-black text-center">R0.00 / R1000</p>
+                </div>
             </div>
         </div>
     </div>
@@ -127,15 +154,36 @@
     <script>
         const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
         const db = window.supabase.createClient(CFG.U, CFG.K);
-        let currentOp = null, isSignup = false, logoClicks = 0, S001_CAP = 150;
+        let currentOp = null, isSignup = false, logoClicks = 0, lastMilestone = 0;
 
-        function toggleMenu() { document.getElementById('side-menu')?.classList.toggle('active'); }
         function closeDirector() { document.getElementById('director-totality').classList.add('hidden'); }
         function handleLogoSequence() { logoClicks++; if (logoClicks === 5) { document.getElementById('director-totality').classList.remove('hidden'); logoClicks = 0; } setTimeout(() => logoClicks = 0, 5000); }
 
-        async function checkRegistryCap() {
-            const { count } = await db.from('registrations').select('*', { count: 'exact', head: true });
-            if (count >= S001_CAP) document.getElementById('s2-lock').style.display = 'flex';
+        async function calcTax() {
+            const gross = parseFloat(document.getElementById('tax-gross').value) || 0;
+            const net = gross * 0.85;
+            document.getElementById('tax-net').innerText = `R${net.toFixed(2)}`;
+            const currentLevel = Math.floor(net / 1000);
+            document.getElementById('milestone-label').innerText = `R${net.toFixed(2)} / R${(currentLevel + 1) * 1000}`;
+            if (currentLevel > lastMilestone) {
+                lastMilestone = currentLevel;
+                await db.from('messages').insert([{ content: `👑 WEALTH MILESTONE: PROFIT SURPASSED R${currentLevel * 1000}!`, alias: 'M.O.G SENTINEL' }]);
+                fetchMessages();
+            }
+        }
+
+        async function injectBroadcast() {
+            const yId = document.getElementById('stream-url').value;
+            const sId = document.getElementById('spotify-url').value;
+            await db.from('broadcast').update({ youtube_id: yId, spotify_id: sId, updated_at: new Date() }).eq('id', 1);
+            syncBroadcastUI(yId, sId);
+        }
+
+        function syncBroadcastUI(yId, sId) {
+            const html = yId ? `<iframe src="https://www.youtube.com/embed/${yId}?autoplay=1&mute=1" frameborder="0" allowfullscreen></iframe>` : "";
+            document.getElementById('live-broadcast-ui').innerHTML = html;
+            document.getElementById('director-monitor-ui').innerHTML = html;
+            if(sId) document.getElementById('spotify-broadcast-ui').innerHTML = `<iframe src="https://open.spotify.com/embed/track/${sId}" width="100%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`;
         }
 
         async function handleMainAuth() {
@@ -143,7 +191,7 @@
             if (u === 'director.mog@gmail.com' && p === '@MOGProtocol2026') { currentOp = { email: u, id: 'MASTER' }; syncClearance(true); return; }
             let email = u.includes('@') ? u : (/^\d+$/.test(u) ? `${u}@phone.mog.internal` : `${u}@user.mog.internal`);
             const { data, error } = isSignup ? await db.auth.signUp({ email, password: p }) : await db.auth.signInWithPassword({ email, password: p });
-            if(!error) { currentOp = data.user; syncClearance(false); } else { alert(error.message); }
+            if(!error) { currentOp = data.user; syncClearance(false); } else alert(error.message);
         }
 
         function syncClearance(isDirector) {
@@ -151,31 +199,21 @@
             document.getElementById('active-op-badge').classList.remove('hidden');
             document.getElementById('display-op-id').innerText = currentOp.email.split('@')[0];
             document.getElementById('registration-tile').classList.remove('opacity-40', 'pointer-events-none');
-            document.getElementById('pass-tile').classList.remove('opacity-40', 'pointer-events-none');
-            document.getElementById('ticket-btn').classList.remove('hidden');
             if(isDirector) { document.documentElement.classList.add('director-active'); document.getElementById('director-totality').classList.remove('hidden'); }
         }
 
-        async function addTrack() {
-            const name = document.getElementById('track-name').value;
-            if(name) { await db.from('tracks').insert([{ name }]); document.getElementById('track-name').value = ''; fetchTracks(); }
-        }
-
-        async function fetchTracks() {
-            const { data } = await db.from('tracks').select('*').order('created_at', { ascending: false });
-            if(data) document.getElementById('track-list').innerHTML = data.map(t => `<div class="track-item">${t.name}</div>`).join('');
-        }
-
-        async function submitDelegate() {
-            const alias = document.getElementById('delegate-alias').value;
-            await db.from('registrations').insert([{ user_id: currentOp.id, alias }]);
-            alert("Registry Confirmed.");
-        }
-
-        function generateEntryTicket() {
-            const qrDiv = document.getElementById('ticket-qrcode'); qrDiv.innerHTML = '';
-            new QRCode(qrDiv, { text: `MOG-S001-${currentOp.id.substring(0,8)}`, width: 120, height: 120 });
-            document.getElementById('ticket-alias').innerText = currentOp.email.split('@')[0];
+        async function fetchMessages() {
+            const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
+            if (data) document.getElementById('chat-stream').innerHTML = data.map(m => `
+                <div class="${m.alias === 'M.O.G SENTINEL' ? 'system-notif' : 'mog-bubble'}">
+                    <div class="flex justify-between text-[8px] font-black uppercase text-blue-400 mb-1">
+                        <span>${m.alias}</span>
+                        <span>${new Date(m.created_at).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</span>
+                    </div>
+                    <p class="text-white">${m.content}</p>
+                </div>
+            `).join('');
+            const s = document.getElementById('chat-stream'); s.scrollTop = s.scrollHeight;
         }
 
         async function sendPacket() {
@@ -184,19 +222,16 @@
             document.getElementById('chat-msg-in').value = ''; fetchMessages();
         }
 
-        async function fetchMessages() {
-            const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
-            if (data) document.getElementById('chat-stream').innerHTML = data.map(m => `<div class="mog-bubble"><p class="text-[8px] text-blue-400 font-black">${m.alias}</p><p>${m.content}</p></div>`).join('');
-        }
-
-        function calcTax() { const g = parseFloat(document.getElementById('tax-gross').value) || 0; document.getElementById('tax-net').innerText = `R${(g * 0.85).toFixed(2)}`; }
+        function toggleS2Manual(s) { document.getElementById('s2-lock').style.display = s ? 'flex' : 'none'; }
+        function pinMessage() { const m = document.getElementById('pin-input').value; if(m) { document.getElementById('pinned-text').innerText = m.toUpperCase(); document.getElementById('pinned-comms').style.display = 'block'; } }
         async function logoutOperative() { await db.auth.signOut(); location.reload(); }
+        function toggleAuthMode() { isSignup = !isSignup; document.getElementById('auth-header').innerText = isSignup ? "Operative Registry" : "Neural Handshake"; }
 
         window.onload = () => { 
-            fetchMessages(); fetchTracks(); checkRegistryCap();
-            setInterval(fetchMessages, 10000);
+            fetchMessages();
             db.auth.getUser().then(({data}) => { if(data.user) { currentOp = data.user; syncClearance(currentOp.email === 'director.mog@gmail.com'); } });
+            setInterval(fetchMessages, 10000);
         };
     </script>
 </body>
-                    </html>
+</html>
