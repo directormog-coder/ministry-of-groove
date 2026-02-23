@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V71.3.0</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V71.3.5</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
 
@@ -17,15 +16,15 @@
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; --mog-panel: rgba(10, 20, 30, 0.95); }
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
-        h1 { font-family: 'Clash Display', sans-serif; }
+        h1, h2 { font-family: 'Clash Display', sans-serif; }
         body { background-color: var(--mog-bg); color: var(--mog-gold); min-height: 100vh; overflow-x: hidden; }
         .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.2); backdrop-filter: blur(30px); border-radius: 28px; overflow: hidden; }
         .auth-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; width: 100%; color: white; margin-bottom: 10px; outline: none; }
         .auth-btn { background: white; color: black; font-weight: 900; border-radius: 30px; padding: 14px; width: 100%; text-transform: uppercase; cursor: pointer; }
         #side-menu { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background: #080c10; z-index: 3000; padding: 2.5rem; transition: 0.6s; }
         #side-menu.active { right: 0; }
-        .qr-wrapper { position: relative; display: inline-block; background: white; padding: 15px; border-radius: 15px; }
-        .qr-logo-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 35px; height: 35px; border-radius: 50%; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+        .gallery-item { aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.3); }
         .mog-bubble { padding: 10px 15px; border-radius: 18px; font-size: 13px; color: #fff; background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.15); margin-bottom: 10px; }
     </style>
 </head>
@@ -33,7 +32,7 @@
 
     <div id="ticker-wrap" class="fixed top-0 w-full bg-black z-[1000] h-[35px] border-b border-blue-400/30 flex items-center overflow-hidden">
         <div class="ticker-move text-[9px] font-black uppercase text-blue-400 whitespace-nowrap animate-marquee">
-            MASTER_V71.3.0 // DIAGNOSTIC_HIDDEN // DIRECTOR_TOTALITY_ACTIVE // UNIVERSAL_LOGIN_MAPPING // SQL_V3_SYNCED...
+            MASTER_V71.3.5 // ASSET_GALLERY_ACTIVE // NEURAL_HANDSHAKE_STABILIZED // SQL_REBUILD_V4...
         </div>
     </div>
 
@@ -41,17 +40,16 @@
     
     <nav id="side-menu">
         <div class="flex justify-between items-center mb-6"><span class="text-gold font-black uppercase text-xs italic">Sovereign Folders</span><button onclick="toggleMenu()"><i class="fa-solid fa-xmark text-xl text-zinc-500"></i></button></div>
-        <button onclick="viewSession('001')" class="w-full text-left p-3 text-[10px] text-white bg-white/5 rounded-lg border border-white/10 mb-2">SESSION 001</button>
-        <button onclick="generateEntryTicket()" id="ticket-btn" class="hidden w-full bg-emerald-600 text-white text-[9px] font-black py-4 rounded-full uppercase mt-8">Download Entry Pass</button>
+        <button onclick="generateEntryTicket()" id="ticket-btn" class="hidden w-full bg-emerald-600 text-white text-[9px] font-black py-4 rounded-full uppercase mt-8 tracking-widest">Entry Pass</button>
         <button onclick="logoutOperative()" id="logout-btn" class="hidden w-full bg-red-900/20 border border-red-500/50 text-red-500 text-[9px] font-black py-4 rounded-full uppercase mt-4">Terminate Session</button>
     </nav>
 
     <div id="app-content" class="container mx-auto px-4 mt-20">
         <header class="flex items-center gap-6 mb-12">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-20 w-20 cursor-pointer">
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-20 w-20 cursor-pointer active:scale-90">
             <div>
-                <h1 class="text-3xl md:text-5xl text-gold font-black uppercase italic">Ministry of Groove</h1>
-                <p class="text-[10px] text-blue-400 font-black tracking-widest uppercase italic">Decrypting the Culture. Synchronizing the Grid.</p>
+                <h1 class="text-3xl md:text-5xl text-gold font-black uppercase italic leading-none">Ministry of Groove</h1>
+                <p class="text-[10px] text-blue-400 font-black tracking-widest uppercase italic mt-2">Decrypting the Culture. Synchronizing the Grid.</p>
             </div>
         </header>
 
@@ -64,7 +62,7 @@
                             <input id="login-user" type="text" placeholder="PHONE / GMAIL / USERNAME" class="auth-input">
                             <input id="login-pass" type="password" placeholder="PASSCODE" class="auth-input">
                             <button id="main-auth-btn" onclick="handleMainAuth()" class="auth-btn">Authorize</button>
-                            <button id="toggle-auth-btn" onclick="toggleAuthMode()" class="w-full mt-4 text-[9px] text-blue-400 font-black uppercase">Create Profile</button>
+                            <button id="toggle-auth-btn" onclick="toggleAuthMode()" class="w-full mt-4 text-[9px] text-blue-400 font-black uppercase tracking-widest">Register Profile</button>
                         </div>
                         <div id="active-op-badge" class="hidden p-4 border border-emerald-500/30 bg-emerald-500/5 rounded-xl text-center">
                             <span class="text-[10px] text-emerald-500 font-black uppercase tracking-widest">Operative Online</span>
@@ -72,14 +70,23 @@
                         </div>
                     </div>
                 </section>
+
                 <section id="registration-tile" class="command-tile p-8 border-gold/30 opacity-40 pointer-events-none">
-                    <span class="text-[10px] text-gold font-black uppercase block mb-4">Registry</span>
+                    <h2 class="text-[12px] text-gold font-black uppercase mb-4 tracking-widest">S001 Registry</h2>
                     <input type="text" id="delegate-alias" placeholder="ALIAS" class="auth-input">
                     <button onclick="submitDelegate()" class="auth-btn" style="background:var(--mog-gold)">Finalize</button>
                 </section>
             </div>
-            <div class="lg:col-span-8">
-                <section class="command-tile h-[500px] flex flex-col">
+
+            <div class="lg:col-span-8 space-y-8">
+                <section class="command-tile p-6">
+                    <h2 class="text-[12px] text-blue-400 font-black uppercase mb-4 tracking-widest">Intel Gallery</h2>
+                    <div id="gallery-container" class="gallery-grid">
+                        <div class="gallery-item bg-white/5 flex items-center justify-center text-[8px] text-zinc-600 uppercase">Awaiting Injection...</div>
+                    </div>
+                </section>
+
+                <section class="command-tile h-[400px] flex flex-col">
                     <div id="chat-stream" class="flex-grow p-6 scroller-v overflow-y-auto"></div>
                     <div class="p-4 bg-black/80 flex gap-2">
                         <input type="text" id="chat-msg-in" placeholder="..." class="flex-grow bg-[#111] border border-white/10 rounded-full px-4 text-xs text-white outline-none">
@@ -95,10 +102,11 @@
             <h2 class="text-3xl text-white font-black uppercase italic">Master Console</h2>
             <button onclick="closeDirector()" class="text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="command-tile p-8 border-blue-400/40 text-center">
-                <button onclick="runGridDiagnostic()" class="w-full bg-red-600 text-white p-3 rounded-full shadow-lg text-[10px] font-black uppercase mb-4">Run Grid Diagnostic</button>
-                <button onclick="exportAttendeeList()" class="w-full bg-emerald-600/20 border border-emerald-500 text-emerald-500 text-[9px] font-black py-3 rounded-full uppercase">Export S001 List</button>
+                <button onclick="runGridDiagnostic()" class="w-full bg-red-600 text-white p-3 rounded-full text-[10px] font-black uppercase mb-4">Run Grid Diagnostic</button>
+                <button onclick="document.getElementById('gallery-upload').click()" class="w-full bg-blue-600 text-white p-3 rounded-full text-[10px] font-black uppercase">Inject Gallery Image</button>
+                <input type="file" id="gallery-upload" class="hidden" onchange="uploadToGallery(this)">
             </div>
             <div class="command-tile p-8 border-gold/40 text-center">
                 <div class="flex justify-between text-xs"><span>Gross Revenue:</span><input type="number" id="tax-gross" oninput="calcTax()" class="bg-transparent text-right w-24 border-b border-white/10" value="0"></div>
@@ -108,16 +116,17 @@
     </div>
 
     <div id="ticket-portal" class="hidden fixed inset-0 z-[4000] bg-black/95 flex items-center justify-center p-4">
-        <div class="secure-ticket">
+        <div class="secure-ticket text-center">
             <div class="qr-wrapper my-4"><div id="ticket-qrcode"></div><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="qr-logo-overlay"></div>
-            <p id="ticket-alias" class="text-blue-400 text-[10px] font-black uppercase"></p>
+            <p id="ticket-alias" class="text-blue-400 text-[10px] font-black uppercase tracking-tighter"></p>
+            <button onclick="document.getElementById('ticket-portal').classList.add('hidden')" class="mt-4 text-[8px] text-zinc-500 uppercase">Close Pass</button>
         </div>
     </div>
 
     <script>
         const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
         const db = window.supabase.createClient(CFG.U, CFG.K);
-        let currentOp = null, isSignup = false, idleTimer, logoClicks = 0;
+        let currentOp = null, isSignup = false, logoClicks = 0;
 
         function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
         function closeDirector() { document.getElementById('director-totality').classList.add('hidden'); }
@@ -127,9 +136,9 @@
             try {
                 const { error: mErr } = await db.from('messages').select('count');
                 const { error: rErr } = await db.from('registrations').select('count');
-                if (mErr || rErr) throw new Error("Tables Missing");
-                alert("✅ GRID ONLINE: All master tables verified.");
-            } catch (e) { alert("❌ SYSTEM OFFLINE: Tables not found. Run the latest SQL script."); }
+                if (mErr || rErr) throw new Error();
+                alert("✅ GRID ONLINE");
+            } catch (e) { alert("❌ OFFLINE: Run SQL Editor script."); }
         }
 
         function toggleAuthMode() {
@@ -146,7 +155,7 @@
                 const { data, error } = isSignup ? await db.auth.signUp({ email, password: p }) : await db.auth.signInWithPassword({ email, password: p });
                 if(!error) { currentOp = data.user; syncClearance(false); }
                 else alert("Handshake Denied: " + error.message);
-            } catch (e) { alert("Network Error. Ensure SQL script was run."); }
+            } catch (e) { alert("Fetch Error: Check SQL tables."); }
         }
 
         function syncClearance(isDirector) {
@@ -160,10 +169,11 @@
         }
 
         async function logoutOperative() { await db.auth.signOut(); location.reload(); }
+
         async function submitDelegate() {
             const alias = document.getElementById('delegate-alias').value;
             const { error } = await db.from('registrations').insert([{ user_id: currentOp.id, alias: alias }]);
-            if(!error) alert("Registry Confirmed."); else alert("DB Error: Verify SQL tables.");
+            if(!error) alert("Registry Confirmed.");
         }
 
         function generateEntryTicket() {
@@ -173,7 +183,29 @@
             document.getElementById('ticket-portal').classList.remove('hidden');
         }
 
+        async function uploadToGallery(input) {
+            const file = input.files[0]; if(!file) return;
+            const path = `public/${Date.now()}_${file.name}`;
+            const { error: upErr } = await db.storage.from('gallery').upload(path, file);
+            if(!upErr) {
+                const { data: { publicUrl } } = db.storage.from('gallery').getPublicUrl(path);
+                await db.from('gallery').insert([{ url: publicUrl }]);
+                alert("Intel Injected."); fetchGallery();
+            }
+        }
+
+        async function fetchGallery() {
+            const { data } = await db.from('gallery').select('*').order('injected_at', { ascending: false });
+            if(data) document.getElementById('gallery-container').innerHTML = data.map(i => `<div class="gallery-item"><img src="${i.url}" class="w-full h-full object-cover"></div>`).join('');
+        }
+
         function calcTax() { const g = parseFloat(document.getElementById('tax-gross').value) || 0; document.getElementById('tax-net').innerText = `R${(g * 0.85).toFixed(2)}`; }
+
+        async function sendPacket() {
+            const m = document.getElementById('chat-msg-in').value; if(!m || !currentOp) return;
+            await db.from('messages').insert([{ content: m, alias: currentOp.email.split('@')[0] }]);
+            document.getElementById('chat-msg-in').value = ''; fetchMessages();
+        }
 
         async function fetchMessages() {
             const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
@@ -181,7 +213,8 @@
         }
 
         window.onload = () => { 
-            fetchMessages(); setInterval(fetchMessages, 10000);
+            fetchMessages(); fetchGallery();
+            setInterval(fetchMessages, 10000);
             db.auth.getUser().then(({data}) => { if(data.user) { currentOp = data.user; syncClearance(currentOp.email === 'director.mog@gmail.com'); } });
         };
     </script>
