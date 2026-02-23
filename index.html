@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V70.9.8</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V71.1.0</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -49,7 +49,6 @@
         .director-only { display: none !important; }
         .director-active .director-only { display: block !important; }
 
-        /* TICKET STYLING */
         #ticket-portal { display: none; position: fixed; inset: 0; z-index: 4000; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); align-items: center; justify-content: center; padding: 20px; }
         .secure-ticket { background: #111; border: 2px solid var(--mog-gold); border-radius: 20px; width: 100%; max-width: 350px; padding: 30px; text-align: center; position: relative; box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); }
         .qr-wrapper { position: relative; display: inline-block; background: white; padding: 15px; border-radius: 15px; margin: 20px 0; }
@@ -57,16 +56,13 @@
 
         @keyframes goldPulse { from { filter: brightness(1); } to { filter: brightness(1.25); } }
         .mog-bubble { padding: 10px 15px; border-radius: 18px; font-size: 13px; color: #fff; background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.15); margin-bottom: 10px; }
-
-        /* SESSION 002 HYPER-LINKING */
-        .s2-hype { background: linear-gradient(45deg, #000, #080c10); border: 1px dashed var(--mog-blue); }
     </style>
 </head>
 <body class="scrollbar-hide">
 
     <div id="ticker-wrap" class="fixed top-0 w-full bg-black z-[1000] h-[35px] border-b border-blue-400/30 flex items-center overflow-hidden">
         <div class="ticker-move text-[9px] font-black uppercase text-blue-400 whitespace-nowrap animate-marquee">
-            MASTER_V70.9.8 // SESSION_001_ACTIVE // LOGOUT_SYNC_V4 // GOOGLE_APP_FLOW_OPTIMIZED // DIRECTOR_CONSOLE_READY...
+            MASTER_V71.1.0 // UNIVERSAL_LOGIN_ACTIVE // DIRECTOR_TOTALITY_BYPASS // SESSION_001_ACTIVE // GRID_SENTINEL_10M_ENABLED...
         </div>
     </div>
 
@@ -82,10 +78,6 @@
 
         <span class="text-[8px] text-blue-400 font-black uppercase tracking-widest block mb-4">Grid Sessions</span>
         <button id="s1-btn" onclick="viewSession('001')" class="w-full text-left p-3 text-[10px] text-white bg-white/5 rounded-lg border border-white/10 hover:border-gold mb-2">SESSION 001: THE UNVEILING</button>
-        <div id="s2-hype-card" class="hidden w-full p-3 s2-hype rounded-lg mb-8">
-            <span class="text-[7px] text-blue-400 font-black uppercase">Next Frequency</span>
-            <p class="text-[10px] text-white font-black">SESSION 002: COMING SOON</p>
-        </div>
 
         <span class="text-[8px] text-blue-400 font-black uppercase tracking-widest block mb-4">Network Growth</span>
         <div class="p-4 bg-white/5 rounded-xl border border-white/10 mb-8 text-center">
@@ -94,8 +86,7 @@
         </div>
 
         <button onclick="generateEntryTicket()" id="ticket-btn" class="hidden w-full bg-emerald-600 text-white text-[9px] font-black py-4 rounded-full uppercase mb-4 shadow-lg shadow-emerald-900/20">Download Entry Pass</button>
-        
-        <button onclick="logoutOperative()" id="logout-btn" class="hidden w-full bg-red-900/20 border border-red-500/50 text-red-500 text-[9px] font-black py-4 rounded-full uppercase">Terminate Session</button>
+        <button onclick="logoutOperative()" id="logout-btn" class="hidden w-full bg-red-900/20 border border-red-500/50 text-red-500 text-[9px] font-black py-4 rounded-full uppercase transition-all">Terminate Session</button>
     </nav>
 
     <div id="app-content" class="container mx-auto px-4 mt-20">
@@ -113,14 +104,14 @@
                     <div id="auth-ui" class="space-y-4">
                         <div id="auth-header" class="text-center mb-4"><span class="text-white font-black uppercase tracking-[.4em] text-[10px]">Neural Handshake</span></div>
                         <div id="auth-fields">
-                            <input id="login-user" type="text" placeholder="GMAIL OR USERNAME" class="auth-input">
+                            <input id="login-user" type="text" placeholder="PHONE / GMAIL / USERNAME" class="auth-input">
                             <input id="login-pass" type="password" placeholder="PASSCODE" class="auth-input">
                             <button id="main-auth-btn" onclick="handleMainAuth()" class="auth-btn">Authorize</button>
-                            <button id="toggle-auth-btn" onclick="toggleAuthMode()" class="w-full mt-4 text-[9px] text-blue-400 font-black uppercase">Create New Operative Profile</button>
+                            <button id="toggle-auth-btn" onclick="toggleAuthMode()" class="w-full mt-4 text-[9px] text-blue-400 font-black uppercase">Create Operative Profile</button>
                         </div>
                         <div id="active-op-badge" class="hidden p-4 border border-emerald-500/30 bg-emerald-500/5 rounded-xl text-center">
                             <span class="text-[10px] text-emerald-500 font-black uppercase tracking-widest">Operative Online</span>
-                            <p id="display-op-id" class="text-[12px] text-white font-black mt-1"></p>
+                            <p id="display-op-id" class="text-[12px] text-white font-black mt-1 uppercase"></p>
                         </div>
                     </div>
                 </section>
@@ -154,20 +145,22 @@
     <div id="director-totality" class="hidden fixed inset-0 z-[5000] bg-black/98 p-8 overflow-y-auto backdrop-blur-3xl">
         <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-4">
             <h2 class="text-3xl text-white font-black uppercase italic">Master Totality Console</h2>
-            <button onclick="closeDirector()" class="text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="closeDirector()" class="text-white text-2xl hover:text-gold"><i class="fa-solid fa-xmark"></i></button>
         </div>
+        
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <div class="command-tile p-8 border-blue-400/40">
+            <div class="command-tile p-8 border-blue-400/40 text-center">
                 <span class="text-[10px] font-black uppercase text-blue-400 block mb-6">Asset Injection Suite</span>
                 <button onclick="document.getElementById('intel-inject').click()" class="w-full bg-blue-600/10 border border-blue-400 text-blue-400 text-[10px] font-black py-3 rounded-full uppercase mb-4">Inject Image Asset</button>
                 <input type="file" id="intel-inject" class="hidden" onchange="uploadAsset('gallery', this)">
-                <button onclick="exportAttendeeList()" class="w-full bg-emerald-600/20 border border-emerald-500 text-emerald-500 text-[9px] font-black py-3 rounded-full uppercase">Export S001 Attendees</button>
+                <button onclick="exportAttendeeList()" class="w-full bg-emerald-600/20 border border-emerald-500 text-emerald-500 text-[9px] font-black py-3 rounded-full uppercase">Export S001 Attendee List</button>
             </div>
-            <div class="command-tile p-8 border-gold/40">
-                <span class="text-[10px] font-black uppercase text-gold">M.O.G Tax & Profit Logic</span>
+
+            <div class="command-tile p-8 border-gold/40 text-center">
+                <span class="text-[10px] font-black uppercase text-gold">Sovereign Wealth Logic</span>
                 <div class="mt-4 space-y-4">
-                    <div class="flex justify-between text-xs"><span>Revenue:</span><input type="number" id="tax-gross" oninput="calcTax()" class="bg-transparent text-right w-24 border-b border-white/10" value="0"></div>
-                    <div class="flex justify-between text-xs text-emerald-500 font-black uppercase"><span>Net Profit:</span><span id="tax-net">R0.00</span></div>
+                    <div class="flex justify-between text-xs"><span>Gross Revenue:</span><input type="number" id="tax-gross" oninput="calcTax()" class="bg-transparent text-right w-24 border-b border-white/10" value="0"></div>
+                    <div class="flex justify-between text-xs text-emerald-500 font-black"><span>Net Profit (M.O.G):</span><span id="tax-net">R0.00</span></div>
                 </div>
             </div>
         </div>
@@ -195,39 +188,50 @@
             isSignup = !isSignup;
             document.getElementById('auth-header').innerText = isSignup ? "Operative Registry" : "Neural Handshake";
             document.getElementById('main-auth-btn').innerText = isSignup ? "Register Profile" : "Authorize";
-            document.getElementById('toggle-auth-btn').innerText = isSignup ? "Already an Operative? Login" : "Create New Operative Profile";
+            document.getElementById('toggle-auth-btn').innerText = isSignup ? "Existing Operative? Login" : "Create Operative Profile";
         }
 
         async function handleMainAuth() {
-            const u = document.getElementById('login-user').value, p = document.getElementById('login-pass').value;
+            const u = document.getElementById('login-user').value.trim(), p = document.getElementById('login-pass').value;
             if(!u || !p) return alert("Credentials Required.");
             
-            // Director Bypass
+            // DIRECTOR UNIVERSAL OVERRIDE
             if (u === 'director.mog@gmail.com' && p === '@MOGProtocol2026') {
-                currentOp = { email: u, id: 'MASTER_DIRECTOR' };
+                currentOp = { email: u, id: 'MASTER_DIRECTOR_NODE' };
                 syncClearance(true);
                 return;
             }
 
-            const email = u.includes('@') ? u : `${u}@mog.internal`;
-            const { data, error } = isSignup ? await db.auth.signUp({ email, password: p }) : await db.auth.signInWithPassword({ email, password: p });
-            
-            if(!error) {
-                currentOp = data.user;
-                syncClearance(false);
-                if(isSignup) alert("Registry Complete. Profile Initialized.");
-            } else alert("Neural Error: " + error.message);
+            // UNIVERSAL MAPPING: PHONE / GMAIL / USERNAME
+            let mappedEmail;
+            if (u.includes('@')) {
+                mappedEmail = u; 
+            } else if (/^\d+$/.test(u)) {
+                mappedEmail = `${u}@phone.mog.internal`;
+            } else {
+                mappedEmail = `${u}@user.mog.internal`;
+            }
+
+            try {
+                const { data, error } = isSignup ? await db.auth.signUp({ email: mappedEmail, password: p }) : await db.auth.signInWithPassword({ email: mappedEmail, password: p });
+                if(!error) {
+                    currentOp = data.user;
+                    syncClearance(false);
+                } else {
+                    alert("Grid Access Denied: " + error.message);
+                }
+            } catch (e) {
+                alert("Network Fault: Please re-authorize.");
+            }
         }
 
         function syncClearance(isDirector) {
             document.getElementById('auth-fields').classList.add('hidden');
             document.getElementById('active-op-badge').classList.remove('hidden');
             document.getElementById('display-op-id').innerText = currentOp.email.split('@')[0].toUpperCase();
-            
             document.getElementById('registration-tile').classList.remove('delegate-form-locked');
             document.getElementById('logout-btn').classList.remove('hidden');
             document.getElementById('recruit-gen-btn').classList.remove('hidden');
-            
             if(isDirector) {
                 document.documentElement.classList.add('director-active');
                 document.getElementById('director-totality').classList.remove('hidden');
@@ -237,12 +241,7 @@
             }
         }
 
-        async function logoutOperative() {
-            await db.auth.signOut();
-            currentOp = null;
-            location.reload(); // Hard reset for highest security flow
-        }
-
+        async function logoutOperative() { await db.auth.signOut(); location.reload(); }
         function resetIdleTimer() { if (currentOp) { clearTimeout(idleTimer); idleTimer = setTimeout(logoutOperative, 600000); } }
         window.onmousedown = resetIdleTimer; window.onkeypress = resetIdleTimer;
 
@@ -269,8 +268,27 @@
 
         function calcTax() {
             const g = parseFloat(document.getElementById('tax-gross').value) || 0;
-            const net = (g * 0.85); // Auto tax 15% logic
-            document.getElementById('tax-net').innerText = `R${net.toFixed(2)}`;
+            document.getElementById('tax-net').innerText = `R${(g * 0.85).toFixed(2)}`;
+        }
+
+        async function exportAttendeeList() {
+            const { data, error } = await db.from('registrations').select('*').eq('session', '001');
+            if (!data || data.length === 0) return alert("Registry is currently empty.");
+            const headers = "Alias,Session,Date\n";
+            const rows = data.map(r => `${r.alias},${r.session},${r.created_at}`).join("\n");
+            const blob = new Blob([headers + rows], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', `MOG_SESSION_001_ATTENDEES.csv`);
+            a.click();
+        }
+
+        async function uploadAsset(bucket, input) {
+            const file = input.files[0];
+            if (!file) return;
+            const { error } = await db.storage.from(bucket).upload(`public/${Date.now()}_${file.name}`, file);
+            if (!error) alert("Asset Injected Successfully."); else alert("Upload Failed.");
         }
 
         async function sendPacket() {
@@ -286,8 +304,7 @@
         }
 
         window.onload = () => { 
-            fetchMessages(); 
-            setInterval(fetchMessages, 10000);
+            fetchMessages(); setInterval(fetchMessages, 10000);
             db.auth.getUser().then(({data}) => { if(data.user) { currentOp = data.user; syncClearance(currentOp.email === 'director.mog@gmail.com'); } });
         };
     </script>
