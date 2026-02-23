@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V71.1.0</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V71.1.8</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -62,7 +62,7 @@
 
     <div id="ticker-wrap" class="fixed top-0 w-full bg-black z-[1000] h-[35px] border-b border-blue-400/30 flex items-center overflow-hidden">
         <div class="ticker-move text-[9px] font-black uppercase text-blue-400 whitespace-nowrap animate-marquee">
-            MASTER_V71.1.0 // UNIVERSAL_LOGIN_ACTIVE // DIRECTOR_TOTALITY_BYPASS // SESSION_001_ACTIVE // GRID_SENTINEL_10M_ENABLED...
+            MASTER_V71.1.8 // UNIVERSAL_LOGIN_ACTIVE // DIRECTOR_TOTALITY_BYPASS // SESSION_001_ACTIVE // GRID_SENTINEL_10M_ENABLED...
         </div>
     </div>
 
@@ -107,7 +107,7 @@
                             <input id="login-user" type="text" placeholder="PHONE / GMAIL / USERNAME" class="auth-input">
                             <input id="login-pass" type="password" placeholder="PASSCODE" class="auth-input">
                             <button id="main-auth-btn" onclick="handleMainAuth()" class="auth-btn">Authorize</button>
-                            <button id="toggle-auth-btn" onclick="toggleAuthMode()" class="w-full mt-4 text-[9px] text-blue-400 font-black uppercase">Create Operative Profile</button>
+                            <button id="toggle-auth-btn" onclick="toggleAuthMode()" class="w-full mt-4 text-[9px] text-blue-400 font-black uppercase">Register Profile</button>
                         </div>
                         <div id="active-op-badge" class="hidden p-4 border border-emerald-500/30 bg-emerald-500/5 rounded-xl text-center">
                             <span class="text-[10px] text-emerald-500 font-black uppercase tracking-widest">Operative Online</span>
@@ -132,7 +132,7 @@
                     <div class="p-4 border-b border-white/5 flex justify-between bg-black/20">
                         <span class="text-[10px] font-black uppercase text-blue-400">Frequency Comms</span>
                     </div>
-                    <div id="chat-stream" class="flex-grow p-6 scroller-v"></div>
+                    <div id="chat-stream" class="flex-grow p-6 scroller-v overflow-y-auto"></div>
                     <div class="p-4 bg-black/80 flex gap-2">
                         <input type="text" id="chat-msg-in" placeholder="..." class="flex-grow bg-[#111] border border-white/10 rounded-full px-4 text-xs text-white outline-none">
                         <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
@@ -166,11 +166,11 @@
         </div>
     </div>
 
-    <div id="ticket-portal">
+    <div id="ticket-portal" class="hidden fixed inset-0 z-[4000] bg-black/95 flex items-center justify-center p-4">
         <div class="secure-ticket">
-            <button onclick="document.getElementById('ticket-portal').style.display='none'" class="absolute top-4 right-4 text-zinc-500"><i class="fa-solid fa-xmark"></i></button>
-            <span class="text-[10px] text-gold font-black uppercase tracking-widest">Official Entry Pass</span>
-            <div class="qr-wrapper"><div id="ticket-qrcode"></div><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="qr-logo-overlay"></div>
+            <button onclick="document.getElementById('ticket-portal').classList.add('hidden')" class="absolute top-4 right-4 text-zinc-500"><i class="fa-solid fa-xmark"></i></button>
+            <span class="text-[10px] text-gold font-black uppercase">Official Entry Pass</span>
+            <div class="qr-wrapper my-4"><div id="ticket-qrcode"></div><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="qr-logo-overlay"></div>
             <p id="ticket-alias" class="text-blue-400 text-[10px] font-black uppercase"></p>
         </div>
     </div>
@@ -178,7 +178,7 @@
     <script>
         const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
         const db = window.supabase.createClient(CFG.U, CFG.K);
-        let currentOp = null; let isSignup = false; let idleTimer; let logoClicks = 0;
+        let currentOp = null, isSignup = false, idleTimer, logoClicks = 0;
 
         function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
         function closeDirector() { document.getElementById('director-totality').classList.add('hidden'); }
@@ -188,29 +188,20 @@
             isSignup = !isSignup;
             document.getElementById('auth-header').innerText = isSignup ? "Operative Registry" : "Neural Handshake";
             document.getElementById('main-auth-btn').innerText = isSignup ? "Register Profile" : "Authorize";
-            document.getElementById('toggle-auth-btn').innerText = isSignup ? "Existing Operative? Login" : "Create Operative Profile";
+            document.getElementById('toggle-auth-btn').innerText = isSignup ? "Existing Operative? Login" : "Register Profile";
         }
 
         async function handleMainAuth() {
             const u = document.getElementById('login-user').value.trim(), p = document.getElementById('login-pass').value;
             if(!u || !p) return alert("Credentials Required.");
             
-            // DIRECTOR UNIVERSAL OVERRIDE
             if (u === 'director.mog@gmail.com' && p === '@MOGProtocol2026') {
                 currentOp = { email: u, id: 'MASTER_DIRECTOR_NODE' };
                 syncClearance(true);
                 return;
             }
 
-            // UNIVERSAL MAPPING: PHONE / GMAIL / USERNAME
-            let mappedEmail;
-            if (u.includes('@')) {
-                mappedEmail = u; 
-            } else if (/^\d+$/.test(u)) {
-                mappedEmail = `${u}@phone.mog.internal`;
-            } else {
-                mappedEmail = `${u}@user.mog.internal`;
-            }
+            let mappedEmail = u.includes('@') ? u : (/^\d+$/.test(u) ? `${u}@phone.mog.internal` : `${u}@user.mog.internal`);
 
             try {
                 const { data, error } = isSignup ? await db.auth.signUp({ email: mappedEmail, password: p }) : await db.auth.signInWithPassword({ email: mappedEmail, password: p });
@@ -221,7 +212,7 @@
                     alert("Grid Access Denied: " + error.message);
                 }
             } catch (e) {
-                alert("Network Fault: Please re-authorize.");
+                alert("Network Fault. Please re-authorize.");
             }
         }
 
@@ -247,33 +238,27 @@
 
         async function submitDelegate() {
             const alias = document.getElementById('delegate-alias').value;
-            if(!alias) return alert("Alias Required.");
             const { error } = await db.from('registrations').insert([{ user_id: currentOp.id, alias: alias, session: '001' }]);
             if(!error) alert("Registry Confirmed.");
         }
 
         function generateEntryTicket() {
-            const qrDiv = document.getElementById('ticket-qrcode');
-            qrDiv.innerHTML = '';
+            const qrDiv = document.getElementById('ticket-qrcode'); qrDiv.innerHTML = '';
             new QRCode(qrDiv, { text: `MOG-S001-${currentOp.id.substring(0,8)}`, width: 180, height: 180 });
             document.getElementById('ticket-alias').innerText = `DELEGATE: ${currentOp.email.split('@')[0]}`;
-            document.getElementById('ticket-portal').style.display = 'flex';
+            document.getElementById('ticket-portal').classList.remove('hidden');
         }
 
         function generateRecruitmentQR() {
-            const div = document.getElementById('recruitment-qr');
-            div.innerHTML = ''; div.classList.replace('hidden', 'flex');
+            const div = document.getElementById('recruitment-qr'); div.innerHTML = ''; div.classList.remove('hidden');
             new QRCode(div, { text: `https://mog-grid.app/recruit?id=${currentOp.id.substring(0,8)}`, width: 120, height: 120 });
         }
 
-        function calcTax() {
-            const g = parseFloat(document.getElementById('tax-gross').value) || 0;
-            document.getElementById('tax-net').innerText = `R${(g * 0.85).toFixed(2)}`;
-        }
+        function calcTax() { const g = parseFloat(document.getElementById('tax-gross').value) || 0; document.getElementById('tax-net').innerText = `R${(g * 0.85).toFixed(2)}`; }
 
         async function exportAttendeeList() {
             const { data, error } = await db.from('registrations').select('*').eq('session', '001');
-            if (!data || data.length === 0) return alert("Registry is currently empty.");
+            if (!data || data.length === 0) return alert("Registry empty.");
             const headers = "Alias,Session,Date\n";
             const rows = data.map(r => `${r.alias},${r.session},${r.created_at}`).join("\n");
             const blob = new Blob([headers + rows], { type: 'text/csv' });
@@ -288,12 +273,11 @@
             const file = input.files[0];
             if (!file) return;
             const { error } = await db.storage.from(bucket).upload(`public/${Date.now()}_${file.name}`, file);
-            if (!error) alert("Asset Injected Successfully."); else alert("Upload Failed.");
+            if (!error) alert("Asset Injected.");
         }
 
         async function sendPacket() {
-            const m = document.getElementById('chat-msg-in').value;
-            if(!m || !currentOp) return;
+            const m = document.getElementById('chat-msg-in').value; if(!m || !currentOp) return;
             await db.from('messages').insert([{ content: m, alias: currentOp.email.split('@')[0] }]);
             document.getElementById('chat-msg-in').value = ''; fetchMessages();
         }
