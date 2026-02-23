@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V70.8.2</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V70.9.8</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -49,6 +49,7 @@
         .director-only { display: none !important; }
         .director-active .director-only { display: block !important; }
 
+        /* TICKET STYLING */
         #ticket-portal { display: none; position: fixed; inset: 0; z-index: 4000; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); align-items: center; justify-content: center; padding: 20px; }
         .secure-ticket { background: #111; border: 2px solid var(--mog-gold); border-radius: 20px; width: 100%; max-width: 350px; padding: 30px; text-align: center; position: relative; box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); }
         .qr-wrapper { position: relative; display: inline-block; background: white; padding: 15px; border-radius: 15px; margin: 20px 0; }
@@ -56,13 +57,16 @@
 
         @keyframes goldPulse { from { filter: brightness(1); } to { filter: brightness(1.25); } }
         .mog-bubble { padding: 10px 15px; border-radius: 18px; font-size: 13px; color: #fff; background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.15); margin-bottom: 10px; }
+
+        /* SESSION 002 HYPER-LINKING */
+        .s2-hype { background: linear-gradient(45deg, #000, #080c10); border: 1px dashed var(--mog-blue); }
     </style>
 </head>
 <body class="scrollbar-hide">
 
     <div id="ticker-wrap" class="fixed top-0 w-full bg-black z-[1000] h-[35px] border-b border-blue-400/30 flex items-center overflow-hidden">
         <div class="ticker-move text-[9px] font-black uppercase text-blue-400 whitespace-nowrap animate-marquee">
-            MASTER_V70.8.2 // OPERATIVE_EXECUTION_TRIGGER_ONLINE // GRID_FEATURE_SYNC // 10_MIN_SENTINEL_ACTIVE...
+            MASTER_V70.9.8 // SESSION_001_ACTIVE // LOGOUT_SYNC_V4 // GOOGLE_APP_FLOW_OPTIMIZED // DIRECTOR_CONSOLE_READY...
         </div>
     </div>
 
@@ -77,16 +81,21 @@
         </div>
 
         <span class="text-[8px] text-blue-400 font-black uppercase tracking-widest block mb-4">Grid Sessions</span>
-        <button onclick="viewSession('001')" class="w-full text-left p-3 text-[10px] text-white bg-white/5 rounded-lg border border-white/10 hover:border-gold mb-8">SESSION 001: THE UNVEILING</button>
+        <button id="s1-btn" onclick="viewSession('001')" class="w-full text-left p-3 text-[10px] text-white bg-white/5 rounded-lg border border-white/10 hover:border-gold mb-2">SESSION 001: THE UNVEILING</button>
+        <div id="s2-hype-card" class="hidden w-full p-3 s2-hype rounded-lg mb-8">
+            <span class="text-[7px] text-blue-400 font-black uppercase">Next Frequency</span>
+            <p class="text-[10px] text-white font-black">SESSION 002: COMING SOON</p>
+        </div>
 
         <span class="text-[8px] text-blue-400 font-black uppercase tracking-widest block mb-4">Network Growth</span>
-        <div class="p-4 bg-white/5 rounded-xl border border-white/10 mb-8">
-            <button onclick="generateRecruitmentQR()" class="w-full bg-blue-600 text-white text-[9px] font-black py-2 rounded-full uppercase">Generate QR Recruitment</button>
+        <div class="p-4 bg-white/5 rounded-xl border border-white/10 mb-8 text-center">
+            <button id="recruit-gen-btn" onclick="generateRecruitmentQR()" class="w-full bg-blue-600 text-white text-[9px] font-black py-2 rounded-full uppercase hidden">Generate QR Recruitment</button>
             <div id="recruitment-qr" class="mt-4 hidden justify-center bg-white p-2 rounded"></div>
         </div>
 
         <button onclick="generateEntryTicket()" id="ticket-btn" class="hidden w-full bg-emerald-600 text-white text-[9px] font-black py-4 rounded-full uppercase mb-4 shadow-lg shadow-emerald-900/20">Download Entry Pass</button>
-        <button onclick="logoutOperative()" id="logout-btn" class="hidden w-full bg-red-900/20 border border-red-500/50 text-red-500 text-[9px] font-black py-4 rounded-full uppercase hover:bg-red-500 hover:text-white transition-all">Terminate Session</button>
+        
+        <button onclick="logoutOperative()" id="logout-btn" class="hidden w-full bg-red-900/20 border border-red-500/50 text-red-500 text-[9px] font-black py-4 rounded-full uppercase">Terminate Session</button>
     </nav>
 
     <div id="app-content" class="container mx-auto px-4 mt-20">
@@ -102,15 +111,17 @@
             <div class="lg:col-span-4 space-y-8">
                 <section class="command-tile p-8 bg-black/60 shadow-2xl">
                     <div id="auth-ui" class="space-y-4">
-                        <div class="text-center mb-4"><span class="text-white font-black uppercase tracking-[.4em] text-[10px]">Neural Handshake</span></div>
-                        <input id="login-user" type="text" placeholder="GMAIL OR USERNAME" class="auth-input">
-                        <input id="login-pass" type="password" placeholder="PASSCODE" class="auth-input">
-                        <button onclick="loginOperative()" class="auth-btn">Authorize</button>
-                    </div>
-                    <div id="director-login-portal" class="hidden pt-6 mt-6 border-t border-gold/20">
-                        <div class="text-center mb-2"><span class="text-gold font-black uppercase text-[8px]">Director Bypass Protocol</span></div>
-                        <input id="dir-pass" type="password" placeholder="BYPASS_KEY" class="auth-input border-gold/40 text-gold text-center font-black" onkeydown="if(event.key==='Enter')executeDirectorBypass()">
-                        <button onclick="executeDirectorBypass()" class="w-full bg-gold text-black font-black p-4 rounded-full text-[10px] uppercase shadow-[0_0_15px_rgba(212,175,55,0.3)]">Initiate Totality</button>
+                        <div id="auth-header" class="text-center mb-4"><span class="text-white font-black uppercase tracking-[.4em] text-[10px]">Neural Handshake</span></div>
+                        <div id="auth-fields">
+                            <input id="login-user" type="text" placeholder="GMAIL OR USERNAME" class="auth-input">
+                            <input id="login-pass" type="password" placeholder="PASSCODE" class="auth-input">
+                            <button id="main-auth-btn" onclick="handleMainAuth()" class="auth-btn">Authorize</button>
+                            <button id="toggle-auth-btn" onclick="toggleAuthMode()" class="w-full mt-4 text-[9px] text-blue-400 font-black uppercase">Create New Operative Profile</button>
+                        </div>
+                        <div id="active-op-badge" class="hidden p-4 border border-emerald-500/30 bg-emerald-500/5 rounded-xl text-center">
+                            <span class="text-[10px] text-emerald-500 font-black uppercase tracking-widest">Operative Online</span>
+                            <p id="display-op-id" class="text-[12px] text-white font-black mt-1"></p>
+                        </div>
                     </div>
                 </section>
 
@@ -140,126 +151,100 @@
         </main>
     </div>
     
-    <div id="ticket-portal">
-        <div class="secure-ticket">
-            <button onclick="document.getElementById('ticket-portal').style.display='none'" class="absolute top-4 right-4 text-zinc-500"><i class="fa-solid fa-xmark"></i></button>
-            <span class="text-[10px] text-gold font-black uppercase tracking-widest">Official Entry Pass</span>
-            <h2 class="text-white font-black text-xl mt-2 uppercase italic">Session 001</h2>
-            <p id="ticket-alias" class="text-blue-400 text-[10px] font-black mt-1 uppercase"></p>
-            <div class="qr-wrapper">
-                <div id="ticket-qrcode"></div>
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="qr-logo-overlay">
-            </div>
-            <div class="text-left mt-4 border-t border-white/10 pt-4 space-y-1">
-                <p class="text-[8px] text-zinc-500 font-black uppercase">Dress Code: Noir Elegance</p>
-                <p class="text-[8px] text-zinc-500 font-black uppercase">Status: Verified Delegate</p>
-            </div>
-        </div>
-    </div>
-
     <div id="director-totality" class="hidden fixed inset-0 z-[5000] bg-black/98 p-8 overflow-y-auto backdrop-blur-3xl">
         <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-4">
             <h2 class="text-3xl text-white font-black uppercase italic">Master Totality Console</h2>
             <button onclick="closeDirector()" class="text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div class="command-tile p-8 border-blue-400/40">
+                <span class="text-[10px] font-black uppercase text-blue-400 block mb-6">Asset Injection Suite</span>
+                <button onclick="document.getElementById('intel-inject').click()" class="w-full bg-blue-600/10 border border-blue-400 text-blue-400 text-[10px] font-black py-3 rounded-full uppercase mb-4">Inject Image Asset</button>
+                <input type="file" id="intel-inject" class="hidden" onchange="uploadAsset('gallery', this)">
+                <button onclick="exportAttendeeList()" class="w-full bg-emerald-600/20 border border-emerald-500 text-emerald-500 text-[9px] font-black py-3 rounded-full uppercase">Export S001 Attendees</button>
+            </div>
             <div class="command-tile p-8 border-gold/40">
                 <span class="text-[10px] font-black uppercase text-gold">M.O.G Tax & Profit Logic</span>
-                <div class="mt-6 space-y-4">
-                    <div class="flex justify-between text-xs"><span class="text-zinc-500">Gross Revenue:</span><input type="number" id="tax-gross" oninput="calcTax()" class="bg-transparent text-right border-b border-white/10 w-24 outline-none" value="0"></div>
-                    <div class="flex justify-between text-xs"><span class="text-zinc-500">Expenses:</span><input type="number" id="tax-exp" oninput="calcTax()" class="bg-transparent text-right border-b border-white/10 w-24 outline-none" value="0"></div>
-                    <div class="flex justify-between text-xs text-red-400 font-black"><span>Tax (15%):</span><span id="tax-result">R0.00</span></div>
-                    <div class="flex justify-between text-sm text-emerald-500 font-black"><span>Net Profit:</span><span id="tax-net">R0.00</span></div>
+                <div class="mt-4 space-y-4">
+                    <div class="flex justify-between text-xs"><span>Revenue:</span><input type="number" id="tax-gross" oninput="calcTax()" class="bg-transparent text-right w-24 border-b border-white/10" value="0"></div>
+                    <div class="flex justify-between text-xs text-emerald-500 font-black uppercase"><span>Net Profit:</span><span id="tax-net">R0.00</span></div>
                 </div>
             </div>
-            <div class="command-tile p-8 text-center flex flex-col justify-center">
-                <span class="text-[10px] font-black text-blue-400 uppercase">Registry Status</span>
-                <p class="text-4xl text-white font-black mt-2">142</p>
-                <p class="text-[8px] text-zinc-500 uppercase mt-2">Verified Operatives</p>
-            </div>
+        </div>
+    </div>
+
+    <div id="ticket-portal">
+        <div class="secure-ticket">
+            <button onclick="document.getElementById('ticket-portal').style.display='none'" class="absolute top-4 right-4 text-zinc-500"><i class="fa-solid fa-xmark"></i></button>
+            <span class="text-[10px] text-gold font-black uppercase tracking-widest">Official Entry Pass</span>
+            <div class="qr-wrapper"><div id="ticket-qrcode"></div><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="qr-logo-overlay"></div>
+            <p id="ticket-alias" class="text-blue-400 text-[10px] font-black uppercase"></p>
         </div>
     </div>
 
     <script>
         const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
         const db = window.supabase.createClient(CFG.U, CFG.K);
-        let currentOp = null; let logoClicks = 0;
-        let idleTimer;
+        let currentOp = null; let isSignup = false; let idleTimer; let logoClicks = 0;
 
         function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
-        
-        function handleLogoSequence() { 
-            logoClicks++; 
-            if (logoClicks === 5) { 
-                document.getElementById('director-login-portal').classList.remove('hidden'); 
-                document.getElementById('director-login-portal').scrollIntoView({ behavior: 'smooth' });
-                logoClicks = 0; 
-            } 
-            setTimeout(() => logoClicks = 0, 5000); 
-        }
-
         function closeDirector() { document.getElementById('director-totality').classList.add('hidden'); }
+        function handleLogoSequence() { logoClicks++; if (logoClicks === 5) { document.getElementById('director-totality').classList.remove('hidden'); logoClicks = 0; } setTimeout(() => logoClicks = 0, 5000); }
 
-        // SENTINEL TIMEOUT LOGIC
-        function resetIdleTimer() {
-            if (currentOp) {
-                clearTimeout(idleTimer);
-                idleTimer = setTimeout(logoutOperative, 600000); 
-            }
+        function toggleAuthMode() {
+            isSignup = !isSignup;
+            document.getElementById('auth-header').innerText = isSignup ? "Operative Registry" : "Neural Handshake";
+            document.getElementById('main-auth-btn').innerText = isSignup ? "Register Profile" : "Authorize";
+            document.getElementById('toggle-auth-btn').innerText = isSignup ? "Already an Operative? Login" : "Create New Operative Profile";
         }
 
-        window.onmousedown = resetIdleTimer;
-        window.onmousemove = resetIdleTimer;
-        window.onkeypress = resetIdleTimer;
-        window.ontouchstart = resetIdleTimer;
+        async function handleMainAuth() {
+            const u = document.getElementById('login-user').value, p = document.getElementById('login-pass').value;
+            if(!u || !p) return alert("Credentials Required.");
+            
+            // Director Bypass
+            if (u === 'director.mog@gmail.com' && p === '@MOGProtocol2026') {
+                currentOp = { email: u, id: 'MASTER_DIRECTOR' };
+                syncClearance(true);
+                return;
+            }
 
-        // OPERATIVE EXECUTION TRIGGER
-        function executeOperativeClearance() {
-            if (currentOp) {
-                document.getElementById('registration-tile').classList.remove('delegate-form-locked');
+            const email = u.includes('@') ? u : `${u}@mog.internal`;
+            const { data, error } = isSignup ? await db.auth.signUp({ email, password: p }) : await db.auth.signInWithPassword({ email, password: p });
+            
+            if(!error) {
+                currentOp = data.user;
+                syncClearance(false);
+                if(isSignup) alert("Registry Complete. Profile Initialized.");
+            } else alert("Neural Error: " + error.message);
+        }
+
+        function syncClearance(isDirector) {
+            document.getElementById('auth-fields').classList.add('hidden');
+            document.getElementById('active-op-badge').classList.remove('hidden');
+            document.getElementById('display-op-id').innerText = currentOp.email.split('@')[0].toUpperCase();
+            
+            document.getElementById('registration-tile').classList.remove('delegate-form-locked');
+            document.getElementById('logout-btn').classList.remove('hidden');
+            document.getElementById('recruit-gen-btn').classList.remove('hidden');
+            
+            if(isDirector) {
+                document.documentElement.classList.add('director-active');
+                document.getElementById('director-totality').classList.remove('hidden');
+            } else {
                 document.getElementById('ticket-btn').classList.remove('hidden');
-                document.getElementById('logout-btn').classList.remove('hidden');
                 resetIdleTimer();
             }
         }
 
-        async function loginOperative() {
-            const u = document.getElementById('login-user').value, p = document.getElementById('login-pass').value;
-            if(u === 'director.mog@gmail.com' || p === '@MOGProtocol2026') {
-                alert("Director Credentials Detected. Use Stealth Handshake (Logo 5x) or Bypass Portal.");
-                document.getElementById('director-login-portal').classList.remove('hidden');
-                document.getElementById('director-login-portal').scrollIntoView({ behavior: 'smooth' });
-                return;
-            }
-            const { data, error } = await db.auth.signInWithPassword({ email: u.includes('@') ? u : `${u}@mog.internal`, password: p });
-            if(!error) { 
-                currentOp = data.user; 
-                executeOperativeClearance(); // TRIGGER EXECUTION
-                alert("Handshake Complete. Grid Sentinel Engaged."); 
-            } else alert("Access Denied.");
-        }
-
         async function logoutOperative() {
-            const { error } = await db.auth.signOut();
+            await db.auth.signOut();
             currentOp = null;
-            clearTimeout(idleTimer);
-            document.getElementById('registration-tile').classList.add('delegate-form-locked');
-            document.getElementById('ticket-btn').classList.add('hidden');
-            document.getElementById('logout-btn').classList.add('hidden');
-            document.getElementById('recruitment-qr').classList.add('hidden');
-            document.getElementById('login-user').value = "";
-            document.getElementById('login-pass').value = "";
-            alert("Session Terminated. Grid Locked.");
-            if(document.getElementById('side-menu').classList.contains('active')) toggleMenu();
+            location.reload(); // Hard reset for highest security flow
         }
 
-        async function executeDirectorBypass() {
-            const p = document.getElementById('dir-pass').value;
-            if (p === '7486' || p === '@MOGProtocol2026') { 
-                document.documentElement.classList.add('director-active'); 
-                document.getElementById('director-totality').classList.remove('hidden');
-            } else { alert("Invalid Bypass Key."); }
-        }
+        function resetIdleTimer() { if (currentOp) { clearTimeout(idleTimer); idleTimer = setTimeout(logoutOperative, 600000); } }
+        window.onmousedown = resetIdleTimer; window.onkeypress = resetIdleTimer;
 
         async function submitDelegate() {
             const alias = document.getElementById('delegate-alias').value;
@@ -269,18 +254,14 @@
         }
 
         function generateEntryTicket() {
-            if(!currentOp) return;
-            const portal = document.getElementById('ticket-portal');
             const qrDiv = document.getElementById('ticket-qrcode');
             qrDiv.innerHTML = '';
-            const secureData = `MOG-S001-${currentOp.id.substring(0,8)}-VERIFIED`;
-            new QRCode(qrDiv, { text: secureData, width: 180, height: 180 });
-            document.getElementById('ticket-alias').innerText = `ID: ${currentOp.email.split('@')[0]}`;
-            portal.style.display = 'flex';
+            new QRCode(qrDiv, { text: `MOG-S001-${currentOp.id.substring(0,8)}`, width: 180, height: 180 });
+            document.getElementById('ticket-alias').innerText = `DELEGATE: ${currentOp.email.split('@')[0]}`;
+            document.getElementById('ticket-portal').style.display = 'flex';
         }
 
         function generateRecruitmentQR() {
-            if(!currentOp) return alert("Authorize Profile First.");
             const div = document.getElementById('recruitment-qr');
             div.innerHTML = ''; div.classList.replace('hidden', 'flex');
             new QRCode(div, { text: `https://mog-grid.app/recruit?id=${currentOp.id.substring(0,8)}`, width: 120, height: 120 });
@@ -288,10 +269,8 @@
 
         function calcTax() {
             const g = parseFloat(document.getElementById('tax-gross').value) || 0;
-            const e = parseFloat(document.getElementById('tax-exp').value) || 0;
-            const t = (g - e) * 0.15;
-            document.getElementById('tax-result').innerText = `R${t.toFixed(2)}`;
-            document.getElementById('tax-net').innerText = `R${(g - e - t).toFixed(2)}`;
+            const net = (g * 0.85); // Auto tax 15% logic
+            document.getElementById('tax-net').innerText = `R${net.toFixed(2)}`;
         }
 
         async function sendPacket() {
@@ -306,7 +285,11 @@
             if (data) document.getElementById('chat-stream').innerHTML = data.map(m => `<div class="mog-bubble"><p class="text-[8px] text-blue-400 font-black">${m.alias}</p><p>${m.content}</p></div>`).join('');
         }
 
-        window.onload = () => { fetchMessages(); setInterval(fetchMessages, 10000); };
+        window.onload = () => { 
+            fetchMessages(); 
+            setInterval(fetchMessages, 10000);
+            db.auth.getUser().then(({data}) => { if(data.user) { currentOp = data.user; syncClearance(currentOp.email === 'director.mog@gmail.com'); } });
+        };
     </script>
 </body>
 </html>
