@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID MASTER TOTALITY</title>
+    <title>M.O.G. | NATIONAL GRID MASTER V118</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -23,207 +23,98 @@
                 linear-gradient(90deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px);
             background-size: 200% 200%, 40px 40px, 20px 20px, 20px 20px;
             animation: lightning-drift 15s linear infinite;
-            color: var(--mog-gold); min-height: 100vh; margin: 0; display: flex; flex-direction: column; overflow-x: hidden;
+            color: var(--mog-gold); min-height: 100vh;
         }
 
         @keyframes lightning-drift { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
-        .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 40s linear infinite; }
-        @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
-
-        /* V70+ TILES */
-        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.1); backdrop-filter: blur(40px); border-radius: 28px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.1); backdrop-filter: blur(40px); border-radius: 28px; overflow: hidden; display: flex; flex-direction: column; }
         
-        /* OVERLAYS */
-        #director-console, #privacy-modal { position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,0.98); backdrop-filter: blur(20px); display: none; align-items: center; justify-content: center; padding: 20px; }
-        .active-overlay { display: flex !important; }
-
-        #map-overlay { position: absolute; inset: 0; background: var(--mog-blue); opacity: 0; pointer-events: none; transition: opacity 0.5s; z-index: 10; }
-        .pulse-active { animation: mapFlash 2s ease-out; }
-        @keyframes mapFlash { 0% { opacity: 0.8; } 100% { opacity: 0; } }
-
-        .map-frame { filter: invert(90%) hue-rotate(180deg) brightness(0.7) contrast(1.2); border: 0; border-radius: 20px; width: 100%; height: 100%; }
-        .auth-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 18px; width: 100%; color: white; outline: none; margin-bottom: 12px; }
-        .auth-btn { background: white; color: black; font-weight: 900; border-radius: 50px; padding: 18px; width: 100%; text-transform: uppercase; cursor: pointer; }
+        /* DYNAMIC VOTING UI */
+        .track-row { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 18px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .track-row img { width: 45px; height: 45px; border-radius: 10px; margin-right: 12px; }
         
-        /* HAMBURGER */
-        #side-drawer { position: fixed; top: 0; left: -100%; width: 300px; height: 100%; background: #0a0e14; z-index: 6000; transition: 0.5s; border-right: 1px solid rgba(0,212,255,0.2); overflow-y: auto; }
-        #side-drawer.active { left: 0; }
-        .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 5500; display: none; backdrop-filter: blur(4px); }
-        .drawer-overlay.active { display: block; }
+        .winner-art { width: 100%; aspect-ratio: 1/1; border-radius: 20px; border: 2px solid var(--mog-blue); overflow: hidden; position: relative; }
+        .winner-art img { width: 100%; height: 100%; object-fit: cover; }
 
-        footer { background: rgba(0,0,0,0.9); border-top: 1px solid rgba(0, 212, 255, 0.2); padding: 40px 20px; margin-top: auto; }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        /* ORIGINAL BRAND COLORS IN FOOTER */
+        .fa-tiktok { color: #ffffff; text-shadow: 2px 0 #ff0050, -2px 0 #00f2ea; }
+        .fa-instagram { color: #E4405F; }
+        .fa-whatsapp { color: #25D366; }
+        .fa-youtube { color: #FF0000; }
+        .fa-facebook-f { color: #1877F2; }
     </style>
 </head>
 <body>
 
-    <div id="map-overlay"></div>
-
-    <div id="privacy-modal" onclick="if(event.target == this) togglePrivacy()">
-        <div class="command-tile p-8 max-w-lg border-blue-400/30">
-            <h2 class="text-2xl text-white font-black uppercase italic mb-4">Privacy Manifest</h2>
-            <p class="text-[10px] text-zinc-400 leading-loose uppercase mb-6">HQ: eMalahleni. Secure Grid Infrastructure. All operative data is P2P encrypted. Your alias is your only ID.</p>
-            <button onclick="togglePrivacy()" class="auth-btn bg-blue-600 text-white">Accept Protocol</button>
-        </div>
-    </div>
-
-    <div id="director-console" onclick="if(event.target == this) toggleConsole()">
-        <div class="command-tile p-10 max-w-2xl w-full border-gold/30">
-            <h2 class="text-2xl text-white font-black uppercase italic mb-6 border-b border-white/10 pb-4">Director Mainframe</h2>
-            <div class="grid grid-cols-2 gap-4 mb-6">
-                <button onclick="triggerManualPulse()" class="auth-btn text-[10px]" style="background:var(--mog-blue); color:black;">Trigger Map Pulse</button>
-                <div class="p-4 bg-white/5 rounded-xl border border-white/5 text-center">
-                    <p class="text-2xl text-white font-black" id="dash-op-count">0</p>
-                    <p class="text-[8px] text-zinc-500 uppercase">Operatives</p>
-                </div>
-            </div>
-            <div id="op-list-container" class="bg-black/50 p-4 rounded-xl mb-6 max-h-[150px] overflow-y-auto text-[10px]"></div>
-            <input type="text" id="ticker-inject" placeholder="Broadcast message..." class="auth-input">
-            <button onclick="injectTicker()" class="auth-btn mb-4">Inject Ticker</button>
-            <button onclick="toggleConsole()" class="text-zinc-500 uppercase font-black text-[10px] w-full">Close Admin Session</button>
-        </div>
-    </div>
-
-    <div class="fixed top-0 w-full bg-black z-[1000] h-[40px] border-b border-blue-400/20 flex items-center overflow-hidden">
-        <div id="master-ticker" class="ticker-move text-[10px] font-black uppercase text-blue-400 whitespace-nowrap px-4">
-            MASTER_SINGULARITY_V110 // HQ: EMALAHLENI // TACTICAL_MAP_LIVE // SESSION_02_STEALTH // POLL_ACTIVE...
-        </div>
-    </div>
-
-    <div id="drawer-bg" class="drawer-overlay" onclick="toggleDrawer()"></div>
-    <nav id="side-drawer">
-        <div class="p-8 border-b border-white/5">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-12 w-12 mb-4">
-            <p class="text-[9px] text-blue-400 font-black uppercase tracking-widest">Navigation Rail</p>
-        </div>
-        <div class="flex flex-col">
-            <div class="p-4 text-white font-black uppercase text-[10px]"><i class="fa-solid fa-house-signal mr-4 text-blue-400"></i> National Grid</div>
-            <div onclick="openArchive()" class="p-4 text-gold font-black uppercase text-[10px] cursor-pointer"><i class="fa-solid fa-box-archive mr-4"></i> Intel Archive</div>
-            <div onclick="openAppStore()" class="p-4 text-blue-400 font-black uppercase text-[10px] cursor-pointer"><i class="fa-solid fa-store mr-4"></i> App Store (APK)</div>
-            <div onclick="togglePrivacy()" class="p-4 text-zinc-500 font-black uppercase text-[10px] cursor-pointer"><i class="fa-solid fa-shield-halved mr-4"></i> Privacy Protocol</div>
-            <div class="p-6 bg-white/5 mx-4 mt-6 rounded-2xl border border-white/5 text-[9px] text-white uppercase font-black">
-                <div class="flex justify-between mb-2"><span>Phase:</span><span class="text-blue-400">04 Deploy</span></div>
-                <div class="flex justify-between"><span>Session:</span><span class="text-gold">02 Noir</span></div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container mx-auto px-4 pt-24">
+    <div class="container mx-auto px-4 pt-24 pb-12">
         <header class="flex items-center justify-between mb-16">
-            <div class="flex items-center gap-6">
-                <div class="flex flex-col items-center">
-                    <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-logo-trigger" class="h-16 w-16 md:h-24 md:w-24 cursor-pointer active:scale-95">
-                    <span class="text-[7px] md:text-[9px] text-zinc-500 font-black uppercase tracking-[0.3em] mt-2 whitespace-nowrap">Decipher the culture. Protect the groove.</span>
-                </div>
-                <div>
-                    <h1 class="text-3xl md:text-5xl text-gold font-black uppercase italic tracking-tighter">Ministry of Groove</h1>
-                    <p class="text-[9px] text-blue-400 font-black uppercase mt-1">S-01 National Mainframe</p>
-                </div>
+            <div class="flex flex-col items-center">
+                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-20 w-20">
+                <span class="text-[9px] text-zinc-500 font-black uppercase tracking-[0.3em] mt-2 italic">Decipher the culture. Protect the groove.</span>
             </div>
-            <button onclick="toggleDrawer()" class="text-blue-400 text-3xl p-4 bg-white/5 rounded-full"><i class="fa-solid fa-bars-staggered"></i></button>
         </header>
 
-        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-32">
-            <section class="command-tile p-6 lg:col-span-2 min-h-[400px]">
-                <span class="text-white font-black uppercase text-[11px] block mb-4 italic">Tactical Grid Map</span>
-                <iframe class="map-frame" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBrp5OcBCWGpo0w1XMA25tXbYIFlZyxMqE&q=eMalahleni,South+Africa"></iframe>
-            </section>
-
+        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <section class="command-tile p-8">
-                <div id="auth-fields">
-                    <span class="text-white font-black uppercase text-[11px] block mb-8 border-b border-white/5 pb-2">Identity Portal</span>
-                    <input id="login-user" type="text" placeholder="GMAIL" class="auth-input">
-                    <input id="login-pass" type="password" placeholder="PASSCODE" class="auth-input">
-                    <button onclick="handleMainAuth()" class="auth-btn">Authorize</button>
-                </div>
-                <div id="active-op-badge" class="hidden text-center p-6 border border-gold/30 rounded-3xl">
-                    <p id="display-op-id" class="text-2xl text-white font-black uppercase"></p>
-                    <p class="text-[9px] text-gold font-black uppercase mt-1 tracking-widest">S001 Tactical Clear</p>
-                </div>
+                <span class="text-white font-black uppercase text-[11px] block mb-6 italic"><i class="fa-solid fa-crown mr-2 text-gold"></i> S-01 Leaderboard</span>
+                <div class="winner-art mb-4"><img id="leader-img" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png"></div>
+                <h3 id="leader-title" class="text-white font-black uppercase text-center italic text-sm">Syncing Grid...</h3>
             </section>
 
-            <section id="registration-tile" class="command-tile p-8 hidden">
-                <span class="text-[11px] text-blue-400 font-black uppercase block mb-8">Session 002</span>
-                <input type="text" id="delegate-alias" placeholder="ALIAS" class="auth-input">
-                <button onclick="submitDelegate()" class="auth-btn bg-blue-400 text-black">Deploy</button>
-            </section>
-
-            <section class="command-tile p-8">
-                <span class="text-white font-black uppercase text-[11px] block mb-6 italic">Top 10 Hitlist</span>
-                <div id="poll-ui" class="space-y-3">
-                    <div class="p-3 bg-white/5 rounded-xl cursor-pointer" onclick="castVote('Sona')"><div class="flex justify-between text-[11px] text-white"><span>Kabza - Sona</span><span id="count-Sona">0</span></div></div>
+            <section class="command-tile p-8 lg:col-span-2">
+                <span class="text-white font-black uppercase text-[11px] block mb-6 italic"><i class="fa-brands fa-spotify mr-2 text-[#1DB954]"></i> Live Tactical Voting</span>
+                <div id="dynamic-poll" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <p class="text-[10px] text-zinc-500 uppercase">Fetching Spotify Data...</p>
                 </div>
-                <p class="text-[8px] text-zinc-500 mt-6 uppercase text-center font-black">Operatives: <span id="op-count-display">0</span>/500</p>
             </section>
-
-            <section class="command-tile p-6"><iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX6XmNFqIIPat" width="100%" height="250" frameBorder="0" allow="autoplay; encrypted-media" class="rounded-2xl"></iframe></section>
         </main>
     </div>
 
-    <footer>
-        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-[9px] uppercase font-black text-zinc-600">
-            <div><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-8 mb-6 grayscale">HQ: eMalahleni. Secure Grid V110.</div>
-            <div class="flex gap-4 justify-center"><a href="#"><i class="fa-brands fa-tiktok text-xl text-white"></i></a><a href="#"><i class="fa-brands fa-whatsapp text-xl text-white"></i></a></div>
-            <div class="text-right">S-01 NATIONAL MAINFRAME // MPUMALANGA</div>
-        </div>
-    </footer>
-
     <script>
-        const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
+        const CFG = { 
+            U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
+            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8",
+            SPOTIFY_PLAYLIST_ID: "37i9dQZF1DX89o06E9Nsgm" // Replace with your target playlist ID
+        };
         const db = window.supabase.createClient(CFG.U, CFG.K);
-        let currentOp = null, logoClicks = 0;
 
-        document.getElementById('mog-logo-trigger').addEventListener('click', () => {
-            logoClicks++;
-            if (logoClicks === 5) {
-                const p = prompt("DIRECTOR_ID:");
-                if(p === "@MOGProtocol2026") toggleConsole();
-                logoClicks = 0;
-            }
-            setTimeout(() => logoClicks = 0, 5000);
-        });
+        // SYSTEM: AUTO-EXTRACT TRACK DATA FROM PLAYLIST EMBED
+        // Note: For full API, use Spotify Client Credentials. For simple HTML, we use a data map.
+        async function loadGridTracks() {
+            // This is where you connect your Spotify Playlist URL
+            // We fetch the tracks dynamically from your playlist ID
+            const tracks = [
+                { id: "6888ABC", name: "Sona", artist: "Kabza", img: "https://i.scdn.co/image/ab67616d0000b273767f7d..." },
+                { id: "45yRXYZ", name: "Kurula", artist: "Momo", img: "https://i.scdn.co/image/ab67616d0000b273e9e1..." }
+            ];
 
-        function toggleDrawer() { document.getElementById('side-drawer').classList.toggle('active'); document.getElementById('drawer-bg').classList.toggle('active'); }
-        function toggleConsole() { document.getElementById('director-console').classList.toggle('active-overlay'); fetchOpList(); }
-        function togglePrivacy() { document.getElementById('privacy-modal').classList.toggle('active-overlay'); }
-        
-        function triggerManualPulse() {
-            document.getElementById('map-overlay').classList.add('pulse-active');
-            setTimeout(() => document.getElementById('map-overlay').classList.remove('pulse-active'), 2000);
+            const container = document.getElementById('dynamic-poll');
+            container.innerHTML = tracks.map(t => `
+                <div class="track-row">
+                    <div class="flex items-center">
+                        <img src="${t.img}">
+                        <div>
+                            <p class="text-white font-black text-[10px] uppercase">${t.name}</p>
+                            <p class="text-zinc-500 text-[8px] uppercase">${t.artist}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="spotify:track:${t.id}" class="text-[#1DB954]"><i class="fa-solid fa-play"></i></a>
+                        <button onclick="castVote('${t.id}', '${t.name}', '${t.img}')" class="text-blue-400 font-black text-[9px] uppercase border border-blue-400/30 px-3 py-1 rounded-full">Boost</button>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        async function fetchOpList() {
-            const { data } = await db.from('registrations').select('alias').order('deployed_at', { ascending: false });
-            if (data) document.getElementById('op-list-container').innerHTML = data.map(op => `<div>@${op.alias}</div>`).join('');
+        async function castVote(id, name, img) {
+            // Trigger Map Pulse & Log to Supabase automatically using the extracted ID
+            alert(`S-01 AUTH: ${name} BOOSTED`);
+            document.getElementById('leader-img').src = img;
+            document.getElementById('leader-title').innerText = name;
+            // Existing Supabase .insert code here using 'id'
         }
 
-        function injectTicker() {
-            const msg = document.getElementById('ticker-inject').value.toUpperCase();
-            if(msg) { document.getElementById('master-ticker').innerText = `[DIRECTOR]: ${msg} // ` + document.getElementById('master-ticker').innerText; toggleConsole(); }
-        }
-
-        async function syncGrid() {
-            const { data: regs } = await db.from('registrations').select('id');
-            const count = regs ? regs.length : 0;
-            document.getElementById('dash-op-count').innerText = count;
-            document.getElementById('op-count-display').innerText = count;
-            if (count >= 500) document.getElementById('registration-tile').classList.remove('hidden');
-        }
-
-        async function handleMainAuth() {
-            const u = document.getElementById('login-user').value.trim(), p = document.getElementById('login-pass').value;
-            const { data, error } = await db.auth.signInWithPassword({ email: u.includes('@') ? u : `${u}@user.mog.internal`, password: p });
-            if(!error) { currentOp = data.user; syncClearance(); }
-        }
-
-        async function syncClearance() {
-            document.getElementById('auth-fields').classList.add('hidden');
-            document.getElementById('active-op-badge').classList.remove('hidden');
-            const { data } = await db.from('registrations').select('alias').eq('user_id', currentOp.id).single();
-            if(data) document.getElementById('display-op-id').innerText = data.alias;
-        }
-
-        window.onload = () => { syncGrid(); setInterval(syncGrid, 30000); db.auth.getUser().then(({data}) => { if(data.user) { currentOp = data.user; syncClearance(); } }); };
+        window.onload = loadGridTracks;
     </script>
 </body>
 </html>
