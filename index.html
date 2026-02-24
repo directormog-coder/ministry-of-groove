@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID MASTER V120</title>
+    <title>M.O.G. | NATIONAL GRID MASTER V138.5</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -11,213 +11,177 @@
 
     <style>
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
-        :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; --mog-panel: rgba(10, 20, 30, 0.95); }
-        * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
+        
+        :root { 
+            --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; 
+            --mog-panel: rgba(10, 20, 30, 0.95); --chat-sent: #004d40; --chat-received: #1c1c1c;
+        }
+
+        * { transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
         
         body { 
             background-color: var(--mog-bg);
             background-image: 
                 linear-gradient(130deg, transparent 40%, rgba(0, 212, 255, 0.08) 45%, rgba(0, 212, 255, 0.15) 50%, rgba(0, 212, 255, 0.08) 55%, transparent 60%),
-                radial-gradient(circle at 2px 2px, rgba(0, 212, 255, 0.1) 1px, transparent 0),
-                linear-gradient(rgba(0, 212, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px);
-            background-size: 200% 200%, 40px 40px, 20px 20px, 20px 20px;
-            animation: lightning-drift 15s linear infinite;
-            color: var(--mog-gold); min-height: 100vh; margin: 0; display: flex; flex-direction: column; overflow-x: hidden;
+                radial-gradient(circle at 2px 2px, rgba(0, 212, 255, 0.12) 1px, transparent 0);
+            background-size: 200% 200%, 40px 40px;
+            animation: lightning-drift 25s linear infinite;
+            color: var(--mog-gold); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden;
         }
 
         @keyframes lightning-drift { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
-        .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 40s linear infinite; }
+
+        .command-tile { 
+            background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.15); 
+            backdrop-filter: blur(50px); border-radius: 35px; box-shadow: 0 40px 80px rgba(0,0,0,0.7); 
+        }
+
+        .chat-container { height: 600px; display: flex; flex-direction: column; background: #080c12; border-radius: 28px; overflow: hidden; }
+        .chat-stream { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        
+        .msg-bubble { max-width: 80%; padding: 12px 16px; border-radius: 20px; font-size: 13px; }
+        .msg-sent { align-self: flex-end; background: var(--chat-sent); color: #fff; border-bottom-right-radius: 4px; }
+        .msg-received { align-self: flex-start; background: var(--chat-received); color: #e0e0e0; border-bottom-left-radius: 4px; }
+
+        .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 45s linear infinite; }
         @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
-        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.1); backdrop-filter: blur(40px); border-radius: 28px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-        
-        /* OVERLAYS */
-        #director-console { position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,0.98); backdrop-filter: blur(20px); display: none; align-items: center; justify-content: center; padding: 20px; }
-        .active-console { display: flex !important; }
-
-        /* MAP PULSE */
         #map-overlay { position: absolute; inset: 0; background: var(--mog-blue); opacity: 0; pointer-events: none; transition: opacity 0.5s; z-index: 10; }
-        .pulse-active { animation: mapFlash 2s ease-out; }
-        @keyframes mapFlash { 0% { opacity: 0.8; } 100% { opacity: 0; } }
+        .pulse-active { animation: mapFlash 1.5s ease-out; }
+        @keyframes mapFlash { 0% { opacity: 0.7; } 100% { opacity: 0; } }
 
-        .map-frame { filter: invert(90%) hue-rotate(180deg) brightness(0.7) contrast(1.2); border: 0; border-radius: 20px; width: 100%; height: 100%; }
-        
-        /* SPOTIFY & VOTING UI */
-        .track-row { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 18px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
-        .track-row img { width: 40px; height: 40px; border-radius: 8px; margin-right: 12px; }
-
-        /* FOOTER SOCIALS - ORIGINAL COLORS */
-        .footer-social-btn { height: 45px; width: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); font-size: 1.2rem; transition: 0.3s; }
-        .fa-tiktok { color: #ffffff; text-shadow: 2px 0 #ff0050, -2px 0 #00f2ea; }
+        .footer-social-btn { height: 48px; width: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); font-size: 1.3rem; }
+        .fa-tiktok { color: #fff; text-shadow: 2px 0 #ff0050, -2px 0 #00f2ea; }
         .fa-instagram { color: #E4405F; }
         .fa-whatsapp { color: #25D366; }
         .fa-youtube { color: #FF0000; }
-        .fa-facebook-f { color: #1877F2; }
-        .fa-x-twitter { color: #ffffff; }
-
-        .auth-btn { background: white; color: black; font-weight: 900; border-radius: 50px; padding: 18px; width: 100%; text-transform: uppercase; cursor: pointer; }
-        .auth-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 18px; width: 100%; color: white; outline: none; margin-bottom: 12px; }
-        footer { background: rgba(0,0,0,0.96); border-top: 1px solid rgba(0, 212, 255, 0.2); padding: 50px 20px; margin-top: auto; }
     </style>
 </head>
 <body>
 
     <div id="map-overlay"></div>
+    <audio id="log-drum" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logdrum.mp3" preload="auto"></audio>
 
-    <div id="director-console" onclick="if(event.target == this) toggleConsole()">
-        <div class="command-tile p-10 max-w-2xl w-full border-gold/30">
-            <h2 class="text-2xl text-white font-black uppercase italic mb-6 border-b border-white/10 pb-4">Director Mainframe</h2>
-            <div class="grid grid-cols-2 gap-4 mb-6">
-                <button onclick="triggerManualPulse()" class="auth-btn text-[10px]" style="background:var(--mog-blue); color:black;">Trigger Pulse</button>
-                <div class="p-4 bg-white/5 rounded-xl text-center"><p class="text-xl text-white font-black" id="dash-op-count">0</p><p class="text-[8px] text-zinc-500 uppercase">Operatives</p></div>
-            </div>
-            <input type="text" id="ticker-inject" placeholder="Broadcast message..." class="auth-input">
-            <button onclick="injectTicker()" class="auth-btn mb-4">Inject Ticker</button>
-            <button onclick="toggleConsole()" class="text-zinc-500 uppercase font-black text-[10px] w-full">Terminate Admin Session</button>
+    <div class="fixed top-0 w-full bg-black z-[1000] h-[45px] border-b border-blue-400/20 flex items-center overflow-hidden">
+        <div id="master-ticker" class="ticker-move text-[10px] font-black uppercase text-blue-400 px-4">
+            MASTER_QUANTUM_V138.5 // LOG_DRUM_NOTIFICATION_ACTIVE // REALTIME_SYNC_ENABLED // HQ: EMALAHLENI // S-01...
         </div>
     </div>
 
-    <div class="fixed top-0 w-full bg-black z-[1000] h-[40px] border-b border-blue-400/20 flex items-center overflow-hidden">
-        <div id="master-ticker" class="ticker-move text-[10px] font-black uppercase text-blue-400 whitespace-nowrap px-4">
-            MASTER_SINGULARITY_V120 // SPOTIFY_AUTO_SYNC_ENABLED // HQ: EMALAHLENI // TACTICAL_MAP_LIVE // SESSION_02_STEALTH...
-        </div>
-    </div>
-
-    <div class="container mx-auto px-4 pt-24 pb-12">
-        <header class="flex items-center justify-between mb-16">
-            <div class="flex items-center gap-6">
+    <div class="container mx-auto px-6 pt-24 pb-12">
+        <header class="flex flex-col md:flex-row items-center justify-between mb-20">
+            <div class="flex items-center gap-8">
                 <div class="flex flex-col items-center">
-                    <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-logo-trigger" class="h-16 w-16 md:h-24 md:w-24 cursor-pointer active:scale-90">
-                    <span class="text-[7px] md:text-[9px] text-zinc-500 font-black uppercase tracking-[0.3em] mt-2 whitespace-nowrap">Decipher the culture. Protect the groove.</span>
+                    <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-logo-trigger" class="h-24 w-24 cursor-pointer">
+                    <span class="text-[9px] text-zinc-500 font-black uppercase tracking-[0.4em] mt-3">Decipher the culture.</span>
                 </div>
                 <div>
-                    <h1 class="text-3xl md:text-5xl text-gold font-black uppercase italic tracking-tighter">Ministry of Groove</h1>
-                    <p class="text-[9px] text-blue-400 font-black uppercase mt-1">S-01 National Mainframe</p>
+                    <h1 class="text-5xl md:text-7xl text-gold font-black uppercase italic tracking-tighter leading-none">Ministry of Groove</h1>
+                    <p class="text-[11px] text-blue-400 font-black uppercase mt-2 tracking-[0.6em]">S-01 National Mainframe</p>
                 </div>
             </div>
         </header>
 
-        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <section class="command-tile p-6 lg:col-span-2 min-h-[400px]">
-                <span class="text-white font-black uppercase text-[11px] block mb-4 italic">Sector Tactical Radar</span>
-                <iframe class="map-frame" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBrp5OcBCWGpo0w1XMA25tXbYIFlZyxMqE&q=eMalahleni,South+Africa"></iframe>
-            </section>
-
-            <section class="command-tile p-8">
-                <span class="text-white font-black uppercase text-[11px] block mb-6 italic"><i class="fa-brands fa-spotify mr-2 text-[#1DB954]"></i> S-01 Top 10 Voting</span>
-                <div id="dynamic-poll" class="space-y-2 max-h-[400px] overflow-y-auto scrollbar-hide">
-                    <p class="text-[10px] text-zinc-500 uppercase">Synchronizing with Spotify...</p>
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <section class="command-tile lg:col-span-2 p-1">
+                <div class="chat-container">
+                    <div class="bg-[#12181f] p-5 flex justify-between items-center border-b border-white/5">
+                        <p class="text-white font-black uppercase text-xs">National Frequency</p>
+                        <div class="text-[8px] text-blue-400 font-black uppercase px-3 py-1 bg-blue-400/10 rounded-full border border-blue-400/30">Quantum Sync</div>
+                    </div>
+                    <div id="chat-stream" class="chat-stream"></div>
+                    <div class="bg-[#12181f] p-4 flex gap-4 border-t border-white/5">
+                        <input type="text" id="chat-msg" placeholder="Encode message..." class="flex-grow bg-white/5 border-0 rounded-full px-6 py-3 text-xs text-white outline-none">
+                        <button onclick="sendMessage()" class="w-12 h-12 bg-blue-500 text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
                 </div>
             </section>
 
-            <section class="command-tile p-8">
+            <section class="command-tile p-10 h-fit">
                 <div id="auth-fields">
-                    <span class="text-white font-black uppercase text-[11px] block mb-8 border-b border-white/5 pb-2">Identity Portal</span>
-                    <input id="login-user" type="text" placeholder="GMAIL" class="auth-input">
-                    <input id="login-pass" type="password" placeholder="PASSCODE" class="auth-input">
-                    <button onclick="handleMainAuth()" class="auth-btn">Authorize</button>
+                    <h3 class="text-xl text-white font-black uppercase italic mb-8 border-b border-white/5 pb-4">Identity Portal</h3>
+                    <input id="login-user" type="text" placeholder="GMAIL" class="bg-white/5 border border-white/10 rounded-2xl p-4 w-full text-white mb-4">
+                    <input id="login-pass" type="password" placeholder="PASSCODE" class="bg-white/5 border border-white/10 rounded-2xl p-4 w-full text-white mb-6">
+                    <button onclick="handleMainAuth()" class="w-full bg-white text-black font-black py-4 rounded-full uppercase text-xs">Authorize</button>
                 </div>
-                <div id="active-op-badge" class="hidden text-center p-6 border border-gold/30 rounded-3xl">
-                    <p id="display-op-id" class="text-2xl text-white font-black uppercase"></p>
-                    <p class="text-[9px] text-gold font-black uppercase mt-1 tracking-widest">S001 Tactical Clear</p>
+                <div id="active-op-badge" class="hidden text-center p-8 border border-gold/20 rounded-[35px] bg-white/5">
+                    <p class="text-[8px] text-gold font-black uppercase mb-3">Clearance: LVL 01</p>
+                    <h2 id="display-op-id" class="text-3xl text-white font-black uppercase italic tracking-tighter">OPERATIVE</h2>
                 </div>
             </section>
         </main>
     </div>
-
-    <footer>
-        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
-            <div><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-10 mb-6 mx-auto md:mx-0 grayscale"><p class="text-[9px] text-zinc-500 uppercase tracking-widest leading-loose">HQ: eMalahleni. Secure Grid V120.</p></div>
-            <div class="flex flex-col items-center">
-                <span class="text-white font-black uppercase text-[10px] mb-6 tracking-widest text-blue-400">Social Command Hub</span>
-                <div class="flex flex-wrap justify-center gap-4">
-                    <a href="https://tiktok.com" class="footer-social-btn"><i class="fa-brands fa-tiktok"></i></a>
-                    <a href="https://instagram.com" class="footer-social-btn"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://wa.me/27791438964" class="footer-social-btn"><i class="fa-brands fa-whatsapp"></i></a>
-                    <a href="https://youtube.com" class="footer-social-btn"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#" class="footer-social-btn"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="footer-social-btn"><i class="fa-brands fa-x-twitter"></i></a>
-                </div>
+    
+    <footer class="mt-auto p-12 bg-black/95 border-t border-blue-400/20">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-10 grayscale opacity-50">
+            <div class="flex gap-4">
+                <a href="#" class="footer-social-btn"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" class="footer-social-btn"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://wa.me/27791438964" class="footer-social-btn"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="#" class="footer-social-btn"><i class="fa-brands fa-youtube"></i></a>
             </div>
-            <div class="md:text-right font-black uppercase text-[10px] text-zinc-500"><p>© 2026 MINISTRY OF GROOVE</p></div>
+            <p class="text-[9px] text-zinc-600 font-black uppercase tracking-[0.5em]">© 2026 MINISTRY OF GROOVE</p>
         </div>
     </footer>
 
     <script>
-        const CFG = { 
-            U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
-            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8",
-            SPOTIFY_PLAYLIST_ID: "37i9dQZF1DX89o06E9Nsgm"
+        const MOG_CFG = {
+            U: "https://vbkpatwvgvwarybbpiky.supabase.co",
+            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8"
         };
-        const db = window.supabase.createClient(CFG.U, CFG.K);
-        let currentOp = null, logoClicks = 0;
 
-        // DIRECTOR ACCESS
-        document.getElementById('mog-logo-trigger').addEventListener('click', () => {
-            logoClicks++;
-            if (logoClicks === 5) {
-                const p = prompt("DIRECTOR_ID:");
-                if(p === "@MOGProtocol2026") toggleConsole();
-                logoClicks = 0;
-            }
-            setTimeout(() => logoClicks = 0, 5000);
-        });
+        const db = window.supabase.createClient(MOG_CFG.U, MOG_CFG.K);
+        let currentOp = null;
 
-        function toggleConsole() { document.getElementById('director-console').classList.toggle('active-console'); }
-        function triggerManualPulse() {
-            document.getElementById('map-overlay').classList.add('pulse-active');
-            setTimeout(() => document.getElementById('map-overlay').classList.remove('pulse-active'), 2000);
+        // REALTIME QUANTUM SYNC (V138.5)
+        const messageSubscription = db
+            .channel('public:messages')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
+                const drum = document.getElementById('log-drum');
+                drum.currentTime = 0;
+                drum.play().catch(() => {}); // Play the Amapiano Log-Drum
+                appendMessageToUI(payload.new); 
+            })
+            .subscribe();
+
+        function appendMessageToUI(m) {
+            const stream = document.getElementById('chat-stream');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `msg-bubble ${m.user_id === currentOp?.id ? 'msg-sent' : 'msg-received'}`;
+            msgDiv.innerHTML = `<span class="font-black text-[9px] ${m.user_id === currentOp?.id ? 'text-gold' : 'text-blue-400'} block mb-1 uppercase">${m.alias}</span>${m.content}`;
+            stream.appendChild(msgDiv);
+            stream.scrollTop = stream.scrollHeight;
         }
 
-        function injectTicker() {
-            const msg = document.getElementById('ticker-inject').value.toUpperCase();
-            if(msg) { document.getElementById('master-ticker').innerText = `[DIRECTOR]: ${msg} // ` + document.getElementById('master-ticker').innerText; toggleConsole(); }
+        async function fetchInitialMessages() {
+            const { data } = await db.from('messages').select('*').order('created_at', { ascending: true }).limit(50);
+            if (data) data.forEach(m => appendMessageToUI(m));
         }
 
-        // SPOTIFY AUTO-SYNC ENGINE (V120 UPGRADE)
-        async function fetchSpotifyTracks() {
-            // Step 1: In a real scenario, you'd fetch via Spotify API using a token.
-            // For this HTML, we mock the automated extraction logic.
-            const tracks = [
-                { id: "6888ABC", name: "Sona", artist: "Kabza De Small", img: "https://i.scdn.co/image/ab67616d0000b273767f7d9633e83b48455f7566" },
-                { id: "45yRXYZ", name: "Kurula", artist: "Momo", img: "https://i.scdn.co/image/ab67616d0000b273e9e1c18371285375421a1f5f" }
-            ];
-            const container = document.getElementById('dynamic-poll');
-            container.innerHTML = tracks.map(t => `
-                <div class="track-row">
-                    <div class="flex items-center">
-                        <img src="${t.img}">
-                        <div><p class="text-white font-black text-[9px] uppercase">${t.name}</p></div>
-                    </div>
-                    <div class="flex gap-2">
-                        <a href="spotify:track:${t.id}" class="text-[#1DB954]"><i class="fa-solid fa-play"></i></a>
-                        <button onclick="castSpotifyVote('${t.id}', '${t.name}')" class="text-blue-400 font-black text-[8px] uppercase border border-blue-400/20 px-3 py-1 rounded-full">Boost</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function castSpotifyVote(id, name) {
-            if (!currentOp) { alert("S-01 ACCESS DENIED"); return; }
-            const { error } = await db.from('amapiano_poll').insert([{ spotify_track_id: id, track_name: name, user_id: currentOp.id }]);
-            if (!error) { alert(`VOTE CONFIRMED: ${name}`); triggerManualPulse(); }
+        async function sendMessage() {
+            if (!currentOp) return alert("AUTHORIZE IDENTITY FIRST");
+            const input = document.getElementById('chat-msg');
+            const content = input.value.trim();
+            if (!content) return;
+            await db.from('messages').insert([{ content, user_id: currentOp.id, alias: document.getElementById('display-op-id').innerText }]);
+            input.value = '';
         }
 
         async function handleMainAuth() {
-            const u = document.getElementById('login-user').value.trim(), p = document.getElementById('login-pass').value;
-            const { data } = await db.auth.signInWithPassword({ email: u.includes('@') ? u : `${u}@user.mog.internal`, password: p });
-            if(data.user) { currentOp = data.user; syncClearance(); }
+            const email = document.getElementById('login-user').value.trim();
+            const pass = document.getElementById('login-pass').value;
+            const { data, error } = await db.auth.signInWithPassword({ email: email.includes('@') ? email : `${email}@user.mog.internal`, password: pass });
+            if(!error) { 
+                currentOp = data.user; 
+                document.getElementById('auth-fields').classList.add('hidden');
+                document.getElementById('active-op-badge').classList.remove('hidden');
+                const { data: reg } = await db.from('registrations').select('alias').eq('user_id', currentOp.id).single();
+                if(reg) document.getElementById('display-op-id').innerText = reg.alias;
+            }
         }
 
-        async function syncClearance() {
-            document.getElementById('auth-fields').classList.add('hidden');
-            document.getElementById('active-op-badge').classList.remove('hidden');
-            const { data } = await db.from('registrations').select('alias').eq('user_id', currentOp.id).single();
-            if(data) document.getElementById('display-op-id').innerText = data.alias;
-        }
-
-        window.onload = () => { fetchSpotifyTracks(); db.auth.getUser().then(({data}) => { if(data.user) { currentOp = data.user; syncClearance(); } }); };
+        window.onload = () => { fetchInitialMessages(); };
     </script>
 </body>
 </html>
