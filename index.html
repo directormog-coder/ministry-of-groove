@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID MASTER TOTALITY V210</title>
+    <title>M.O.G. | NATIONAL GRID MASTER TOTALITY V290</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -11,327 +11,185 @@
 
     <style>
         /* -----------------------------------------------------------
-           1. QUANTUM THEME ENGINE & ATMOSPHERICS
+           1. QUANTUM THEME ENGINE
         ----------------------------------------------------------- */
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
         
         :root { 
-            --mog-gold: #D4AF37; 
-            --mog-blue: #00d4ff; 
-            --mog-bg: #060a0f; 
-            --mog-panel: rgba(10, 20, 30, 0.98); 
-            --mog-cyan: #00f2ea;
-            --mog-magenta: #ff0050;
-            --chat-sent: #005c4b;
-            --chat-received: #202c33;
-            --id-gradient: linear-gradient(135deg, #0f172a 0%, #060a0f 100%);
+            --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; 
+            --mog-panel: rgba(10, 20, 30, 0.98); --chat-sent: #005c4b; --chat-received: #202c33;
         }
 
-        /* DYNAMIC RESPONSIVE SCALING */
-        html { font-size: 16px; scroll-behavior: smooth; }
-        @media (max-width: 768px) { html { font-size: 14px; } }
+        html, body { height: 100vh; margin: 0; padding: 0; overflow: hidden; background-color: var(--mog-bg); }
+        * { transition: all 0.2s ease-in-out; font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
 
-        * { transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: var(--mog-blue); border-radius: 10px; }
-
-        body { 
-            background-color: var(--mog-bg);
-            /* ATMOSPHERIC ELECTRONIC BLUE LIGHTNING STRIKES */
-            background-image: 
-                linear-gradient(130deg, transparent 40%, rgba(0, 212, 255, 0.12) 45%, rgba(0, 212, 255, 0.2) 50%, rgba(0, 212, 255, 0.12) 55%, transparent 60%),
-                radial-gradient(circle at 2px 2px, rgba(0, 212, 255, 0.15) 1px, transparent 0),
-                linear-gradient(rgba(0, 212, 255, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 212, 255, 0.04) 1px, transparent 1px);
-            background-size: 200% 200%, 40px 40px, 20px 20px, 20px 20px;
-            animation: lightning-drift 20s linear infinite;
-            color: var(--mog-gold); min-height: 100vh; margin: 0; overflow-x: hidden; display: flex; flex-direction: column;
+        /* SCROLLER ARCHITECTURE */
+        .scroller-container::-webkit-scrollbar { width: 6px; }
+        .scroller-container::-webkit-scrollbar-thumb { 
+            background: linear-gradient(var(--mog-blue), var(--mog-gold)); 
+            border-radius: 10px;
         }
 
-        @keyframes lightning-drift { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
+        .matrix-grid { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 140px; gap: 12px; }
+        .scroller-container { height: 460px; overflow-y: scroll; padding: 10px; }
 
-        /* -----------------------------------------------------------
-           2. UNIVERSAL COMPONENT ARCHITECTURE
-        ----------------------------------------------------------- */
-        .command-tile { 
-            background: var(--mog-panel); 
-            border: 1px solid rgba(0, 212, 255, 0.2); 
-            backdrop-filter: blur(60px); 
-            border-radius: 40px; 
-            position: relative; 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column; 
-            box-shadow: 0 50px 100px rgba(0,0,0,0.9); 
+        /* HAMBURGER DRAWER */
+        #side-drawer { 
+            position: fixed; top: 0; left: -100%; width: 340px; height: 100%; 
+            background: #0a0e14; z-index: 9999; transition: 0.5s; 
+            border-right: 1px solid var(--mog-blue); box-shadow: 20px 0 50px rgba(0,0,0,0.9);
         }
-
-        .gateway-tile { 
-            background: linear-gradient(180deg, rgba(212, 175, 55, 0.05) 0%, rgba(10, 20, 30, 0.98) 100%);
-            border: 1px solid var(--mog-gold);
-            box-shadow: 0 0 40px rgba(212, 175, 55, 0.1);
-        }
-
-        .command-tile:hover { border-color: var(--mog-blue); box-shadow: 0 0 30px rgba(0, 212, 255, 0.2); }
-
-        /* TICKER SYSTEM */
-        .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 45s linear infinite; }
-        @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
-
-        /* -----------------------------------------------------------
-           3. LIVE MESSENGER INTERFACE
-        ----------------------------------------------------------- */
-        .messenger-view { height: 600px; display: flex; flex-direction: column; background: #0b141a; border-radius: 35px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-        .chat-bar { background: #202c33; padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between; }
-        .msg-stream { flex-grow: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay; background-color: #0b141a; }
-        
-        .bubble { max-width: 80%; padding: 14px 18px; border-radius: 22px; font-size: 14px; position: relative; }
-        .sent { align-self: flex-end; background: var(--chat-sent); color: #fff; border-top-right-radius: 4px; }
-        .received { align-self: flex-start; background: var(--chat-received); color: #e9edef; border-top-left-radius: 4px; }
-
-        /* -----------------------------------------------------------
-           4. ADAPTIVE IDENTITY MATRIX
-        ----------------------------------------------------------- */
-        .id-card { background: var(--id-gradient); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 24px; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
-        .device-pc .id-card { width: 100%; height: 260px; padding: 30px; display: flex; flex-direction: row; gap: 20px; }
-        .device-mobile .id-card { width: 100%; height: 480px; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .id-chip { width: 40px; height: 30px; background: linear-gradient(45deg, #d4af37 0%, #fef3c7 100%); border-radius: 5px; margin-bottom: 10px; }
-        .id-avatar { width: 120px; height: 120px; border-radius: 15px; border: 2px solid var(--mog-blue); object-fit: cover; }
-        .id-barcode { filter: invert(1); opacity: 0.4; height: 30px; width: 100%; object-fit: cover; margin-top: auto; }
-
-        /* -----------------------------------------------------------
-           5. VAULT & MULTIMEDIA
-        ----------------------------------------------------------- */
-        .vault-item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 22px; padding: 22px; display: flex; justify-content: space-between; align-items: center; }
-        
-        /* GLOBAL UI */
-        .modal-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.98); backdrop-filter: blur(40px); display: none; align-items: center; justify-content: center; padding: 30px; }
-        .active-modal { display: flex !important; }
-
-        #side-drawer { position: fixed; top: 0; left: -100%; width: 320px; height: 100%; background: #0a0e14; z-index: 9000; transition: 0.5s; border-right: 1px solid rgba(0,212,255,0.2); }
         #side-drawer.drawer-active { left: 0; }
-        .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 8500; display: none; backdrop-filter: blur(8px); }
-        .drawer-overlay.active { display: block; }
+        .drawer-item { 
+            padding: 15px 25px; border-bottom: 1px solid rgba(255,255,255,0.03); 
+            text-transform: uppercase; font-size: 11px; font-weight: 900; color: #666;
+            display: flex; align-items: center; gap: 15px; cursor: pointer;
+        }
+        .drawer-item:hover { background: rgba(0, 212, 255, 0.05); color: white; }
+        .folder-label { font-size: 9px; color: var(--mog-gold); padding: 20px 25px 5px; text-transform: uppercase; letter-spacing: 2px; }
 
-        #map-overlay { position: absolute; inset: 0; background: var(--mog-blue); opacity: 0; pointer-events: none; transition: opacity 0.5s; z-index: 10; }
-        .pulse-active { animation: mapFlash 1.5s ease-out; }
-        .map-frame { filter: invert(90%) hue-rotate(180deg) brightness(0.7) contrast(1.2); border: 0; border-radius: 30px; width: 100%; height: 100%; }
+        .pulse-btn { 
+            background: var(--mog-blue); color: #000; font-weight: 900; 
+            border-radius: 50px; padding: 8px 15px; font-size: 9px; 
+            text-transform: uppercase; box-shadow: 0 0 15px var(--mog-blue);
+        }
 
-        .auth-input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 20px; width: 100%; color: white; outline: none; margin-bottom: 12px; font-size: 14px; }
-        .auth-btn { background: #fff; color: #000; font-weight: 900; border-radius: 60px; padding: 18px; width: 100%; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; font-size: 11px; }
+        .liquid-mainframe {
+            display: grid; height: calc(100vh - 80px); width: 100vw; padding: 15px; gap: 15px;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-areas: "gateway messenger messenger" "gallery vault hitlist";
+        }
 
-        /* SOCIAL LINKS */
-        .social-link { height: 50px; width: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); font-size: 1.4rem; }
-        .fa-tiktok { color: #fff; text-shadow: 2px 0 var(--mog-magenta), -2px 0 var(--mog-cyan); }
-        .fa-instagram { color: #E4405F; }
-        .fa-whatsapp { color: #25D366; }
-        .fa-youtube { color: #FF0000; }
-        .fa-facebook-f { color: #1877F2; }
+        @media (max-width: 1024px) {
+            .liquid-mainframe { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "gallery" "hitlist" "vault"; overflow-y: auto; height: auto; }
+        }
+
+        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.2); backdrop-filter: blur(50px); border-radius: 35px; overflow: hidden; }
+        .area-gallery { grid-area: gallery; } .area-vault { grid-area: vault; } .area-hitlist { grid-area: hitlist; }
+
+        .item-card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 20px; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; text-align: center; padding: 10px;
+        }
+
+        .video-card { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 15px; }
+        .video-card video { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
 <body id="mog-mainframe">
 
-    <div id="map-overlay"></div>
     <audio id="log-drum" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logdrum.mp3" preload="auto"></audio>
 
-    <div id="drawer-bg" class="drawer-overlay" onclick="toggleDrawer()"></div>
     <nav id="side-drawer">
-        <div class="p-10 border-b border-white/5">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 mb-4">
-            <p class="text-[10px] text-blue-400 font-black uppercase tracking-[0.3em]">Grid Navigation</p>
+        <div class="p-8 border-b border-white/5 flex justify-between items-center">
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-12 w-12">
+            <button onclick="toggleDrawer()"><i class="fa-solid fa-xmark text-white"></i></button>
         </div>
-        <div class="flex flex-col p-6 space-y-4">
-            <div class="flex items-center gap-4 text-white font-black uppercase text-xs p-4 bg-white/5 rounded-2xl"><i class="fa-solid fa-house-signal text-blue-400"></i> National Grid</div>
-            <div onclick="toggleUI('director-console')" class="flex items-center gap-4 text-zinc-500 font-black uppercase text-xs p-4 hover:text-gold cursor-pointer"><i class="fa-solid fa-toolbox"></i> Director Hub</div>
-            <div onclick="alert('Access Restricted')" class="flex items-center gap-4 text-zinc-500 font-black uppercase text-xs p-4 hover:text-gold cursor-pointer"><i class="fa-solid fa-box-archive"></i> Intel Archive</div>
+        
+        <div class="scroller-container h-full pb-20">
+            <p class="folder-label">Mainframe Folders</p>
+            <div class="drawer-item"><i class="fa-solid fa-house-chimney"></i> National Grid Home</div>
+            <div class="drawer-item"><i class="fa-solid fa-id-card-clip"></i> Operative ID Matrix</div>
+            
+            <p class="folder-label">Mandate Files</p>
+            <div class="drawer-item"><i class="fa-solid fa-file-audio"></i> Mandate Mix Archive</div>
+            <div class="drawer-item"><i class="fa-solid fa-file-lines"></i> Tracklist Metadata</div>
+            
+            <p class="folder-label">System Ops</p>
+            <div class="drawer-item" onclick="toggleUI('director-console')"><i class="fa-solid fa-user-gear"></i> Director Hub</div>
+            <div class="drawer-item"><i class="fa-solid fa-shield-virus"></i> Security Protocol</div>
+            <div class="drawer-item"><i class="fa-solid fa-database"></i> Supabase Realtime Sync</div>
         </div>
     </nav>
 
-    <div id="director-console" class="modal-overlay" onclick="if(event.target == this) toggleUI('director-console')">
-        <div class="command-tile p-10 max-w-5xl w-full border-gold/40">
-            <h2 class="text-3xl text-white font-black uppercase italic mb-8 border-b border-white/5 pb-4">Director Console</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="p-6 bg-white/5 rounded-[30px] border border-white/10 text-center">
-                    <span class="text-[10px] text-blue-400 font-black uppercase block mb-3">Live Feed</span>
-                    <p class="text-4xl text-white font-black" id="dash-op-count">0</p>
-                </div>
-                <div class="p-6 bg-white/5 rounded-[30px] border border-white/10 flex items-center justify-center">
-                    <button onclick="triggerManualPulse()" class="auth-btn bg-blue-500 text-black w-full">Pulse Grid</button>
-                </div>
+    <header class="h-[80px] px-8 flex justify-between items-center border-b border-white/5 bg-black/40">
+        <div class="flex items-center gap-4">
+            <button onclick="toggleDrawer()" class="text-gold text-xl mr-4"><i class="fa-solid fa-bars-staggered"></i></button>
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-10 w-10">
+            <div>
+                <h1 class="text-lg font-black uppercase italic tracking-tighter text-gold">Ministry of Groove</h1>
+                <p class="text-[9px] text-zinc-500 font-black uppercase tracking-[0.2em] italic">Decipher the culture.</p>
             </div>
-            <input type="text" id="ticker-inject" placeholder="Inject broadcast message..." class="auth-input">
-            <button onclick="injectTicker()" class="auth-btn">Authorize</button>
         </div>
-    </div>
-
-    <div class="fixed top-0 w-full bg-black z-[1000] h-[50px] border-b border-blue-400/20 flex items-center overflow-hidden">
-        <div id="master-ticker" class="ticker-move text-[11px] font-black uppercase text-blue-400 px-8">
-            MASTER_SINGULARITY_V210 // FULL_VISIBILITY_MODE // ADAPTIVE_ID_MATRIX // HQ: EMALAHLENI // DECIPHER_THE_CULTURE...
+        <div class="flex items-center gap-6">
+            <button onclick="operativePulse()" class="pulse-btn">Operative Pulse</button>
+            <span class="text-[9px] text-blue-400 font-black uppercase tracking-[0.3em] hidden md:block">Witbank Sector // V290</span>
         </div>
-    </div>
+    </header>
 
-    <div class="container mx-auto px-8 pt-32 pb-12">
-        <header class="flex flex-col md:flex-row items-center justify-between mb-24 gap-10">
-            <div class="flex items-center gap-10">
-                <div class="flex flex-col items-center">
-                    <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" 
-                         id="mog-logo-trigger" 
-                         class="h-28 w-28 md:h-36 md:w-36 cursor-pointer active:scale-95 transition-transform">
-                    <span class="text-[10px] text-zinc-500 font-black uppercase tracking-[0.4em] mt-4 italic">Decipher the culture. Protect the groove.</span>
-                </div>
-                <div class="text-center md:text-left">
-                    <h1 class="text-5xl md:text-8xl text-gold font-black uppercase italic tracking-tighter leading-none">Ministry of Groove</h1>
-                    <p class="text-[12px] text-blue-400 font-black uppercase mt-3 tracking-[0.7em]">S-01 National Mainframe</p>
-                </div>
-            </div>
-            <button onclick="toggleDrawer()" class="text-blue-400 text-4xl p-6 bg-white/5 rounded-full border border-white/5"><i class="fa-solid fa-bars-staggered"></i></button>
-        </header>
+    <div class="liquid-mainframe">
         
-        <main class="grid grid-cols-1 lg:grid-cols-3 gap-12 md:gap-16">
-            
-            <section class="command-tile gateway-tile p-12 lg:col-span-3">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <div id="auth-fields">
-                        <h3 class="text-2xl text-white font-black uppercase italic mb-8 border-b border-mog-gold/30 pb-4">Gateway Access</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input id="login-user" type="text" placeholder="GMAIL / ALIAS" class="auth-input mb-0">
-                            <input id="login-pass" type="password" placeholder="GRID PASSCODE" class="auth-input mb-0">
-                        </div>
-                        <div class="flex gap-4 mt-6">
-                            <button onclick="handleMainAuth()" class="auth-btn bg-mog-gold flex-grow">Authorize Entry</button>
-                            <button onclick="alert('Registration Phase Active. Apply via WhatsApp.')" class="auth-btn bg-white/10 text-white border border-white/20">Register</button>
-                        </div>
-                    </div>
-                    
-                    <div id="active-op-badge" class="hidden">
-                        <div class="id-card">
-                            <div class="id-chip"></div>
-                            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="id-avatar">
-                            <div class="flex flex-col justify-center flex-grow p-4">
-                                <p class="text-[10px] text-gold font-black uppercase tracking-widest mb-1">National Grid OP</p>
-                                <h2 id="display-op-id" class="text-3xl text-white font-black uppercase italic tracking-tighter">OPERATIVE</h2>
-                                <p class="text-[9px] text-blue-400 font-black uppercase mt-2">Clearance: LVL 01 // S-01 Sector</p>
-                            </div>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Ean13.png" class="id-barcode">
-                        </div>
-                        <button onclick="logout()" class="text-[10px] text-red-500 font-black uppercase mt-6 tracking-widest w-full text-center">Terminate Session</button>
-                    </div>
+        <section class="command-tile area-gateway p-8">
+            <div id="auth-fields">
+                <p class="text-[10px] text-gold font-black uppercase mb-6 border-b border-gold/20 pb-2">Identity Portal</p>
+                <input id="login-user" type="text" placeholder="GMAIL" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white mb-3 text-xs outline-none">
+                <input id="login-pass" type="password" placeholder="PASSCODE" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white mb-6 text-xs outline-none">
+                <button onclick="handleMainAuth()" class="w-full bg-white text-black font-black py-4 rounded-full text-[10px] uppercase">Authorize</button>
+                <p class="text-[8px] text-zinc-600 font-black uppercase mt-6 text-center italic">Decipher the culture.</p>
+            </div>
+            <div id="active-op-badge" class="hidden text-center h-full flex flex-col justify-center">
+                <h2 id="display-op-id" class="text-3xl text-white font-black uppercase italic">OPERATIVE</h2>
+                <p class="text-[9px] text-blue-400 font-black uppercase mt-2 italic">Clearance Active</p>
+            </div>
+        </section>
 
-                    <div class="hidden lg:flex flex-col justify-center text-right">
-                        <p class="text-gold font-black text-xl uppercase italic">Decipher the culture.</p>
-                        <p class="text-blue-400 font-black text-xs uppercase tracking-widest mt-2">Protect the groove.</p>
-                    </div>
+        <section class="command-tile area-messenger">
+            <div class="flex-grow flex flex-col bg-[#0b141a] m-1 rounded-[30px] overflow-hidden">
+                <div id="chat-stream" class="flex-grow p-6 overflow-y-auto space-y-4"></div>
+                <div class="bg-[#202c33] p-4 flex gap-3">
+                    <input type="text" id="chat-msg" placeholder="Encode message..." class="flex-grow bg-[#2a3942] border-0 rounded-full px-6 py-3 text-xs text-white outline-none">
+                    <button onclick="sendMessage()" class="w-12 h-12 bg-blue-500 text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="command-tile p-10">
-                <div class="flex justify-between items-center mb-10">
-                    <span class="text-white font-black uppercase text-xs italic"><i class="fa-solid fa-play mr-2 text-gold"></i> Live Mandate Mix</span>
-                </div>
-                <div class="bg-black/50 p-6 rounded-[30px] border border-white/10 mb-6">
-                    <p class="text-[10px] text-blue-400 font-black uppercase mb-6 text-center italic">Session 002 High-Frequency</p>
-                    <audio controls class="w-full h-12">
-                        <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandatemix.mp3" type="audio/mpeg">
-                    </audio>
-                </div>
-                <p class="text-[9px] text-zinc-600 font-black uppercase text-center leading-relaxed">
-                    HQ Audio Stream. Exclusive Mandate Frequency.
-                </p>
-            </section>
+        <section class="command-tile area-gallery">
+            <div class="p-6 border-b border-white/5 flex justify-between items-center">
+                <p class="text-[10px] text-white font-black uppercase italic">M.O.G. Visuals</p>
+                <i class="fa-solid fa-video text-blue-400"></i>
+            </div>
+            <div class="scroller-container">
+                <div class="matrix-grid" id="gallery-matrix"></div>
+            </div>
+        </section>
 
-            <section class="command-tile lg:col-span-2 p-1">
-                <div class="messenger-view">
-                    <div class="chat-bar">
-                        <div class="flex items-center gap-5">
-                            <div class="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 border border-blue-400/20">
-                                <i class="fa-solid fa-tower-broadcast"></i>
-                            </div>
-                            <div>
-                                <p class="text-white font-black uppercase text-xs">National Frequency</p>
-                                <p class="text-[9px] text-blue-400 uppercase font-black">Secure Realtime Link</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div class="h-2 w-2 bg-blue-500 rounded-full animate-pulse"></div>
-                            <span class="text-[10px] text-white font-black uppercase">Live</span>
-                        </div>
-                    </div>
-                    <div id="chat-stream" class="msg-stream scrollbar-hide"></div>
-                    <div class="bg-[#202c33] p-5 flex gap-5">
-                        <input type="text" id="chat-msg" placeholder="Type message..." class="flex-grow bg-[#2a3942] border-0 rounded-full px-8 py-5 text-sm text-white outline-none">
-                        <button onclick="sendMessage()" class="w-16 h-16 bg-blue-500 text-black rounded-full flex items-center justify-center hover:scale-110 shadow-2xl"><i class="fa-solid fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </section>
+        <section class="command-tile area-vault">
+            <div class="p-6 border-b border-white/5 flex justify-between items-center">
+                <p class="text-[10px] text-white font-black uppercase italic">Mandate Archive</p>
+                <i class="fa-solid fa-file-audio text-gold"></i>
+            </div>
+            <div class="scroller-container">
+                <div class="matrix-grid" id="vault-matrix"></div>
+            </div>
+        </section>
 
-            <section class="command-tile lg:col-span-2 p-12">
-                <span class="text-white font-black uppercase text-sm mb-12 block italic"><i class="fa-solid fa-vault mr-4 text-gold"></i> S-01 National Repository</span>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="vault-item">
-                        <div class="flex items-center gap-4">
-                            <i class="fa-solid fa-file-audio text-gold text-2xl"></i>
-                            <div>
-                                <p class="text-white font-black uppercase text-xs">Mandate Mix S02</p>
-                                <p class="text-[8px] text-zinc-500 uppercase mt-1">MP3 Archive</p>
-                            </div>
-                        </div>
-                        <a href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandatemix.mp3" download class="text-gold text-2xl"><i class="fa-solid fa-cloud-arrow-down"></i></a>
-                    </div>
-                    <div class="vault-item">
-                        <div class="flex items-center gap-4">
-                            <i class="fa-solid fa-file-pdf text-gold text-2xl"></i>
-                            <div>
-                                <p class="text-white font-black uppercase text-xs">Origin 54 Textile</p>
-                                <p class="text-[8px] text-zinc-500 uppercase mt-1">Blueprint Spec</p>
-                            </div>
-                        </div>
-                        <a href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/origin54.pdf" target="_blank" class="text-gold text-2xl"><i class="fa-solid fa-eye"></i></a>
-                    </div>
-                </div>
-            </section>
+        <section class="command-tile area-hitlist">
+            <div class="p-6 border-b border-white/5 flex justify-between items-center">
+                <p class="text-[10px] text-white font-black uppercase italic">Hitlist Status</p>
+                <i class="fa-brands fa-spotify text-[#1DB954]"></i>
+            </div>
+            <div class="scroller-container">
+                <div class="matrix-grid" id="hitlist-matrix"></div>
+            </div>
+        </section>
 
-            <section class="command-tile min-h-[500px] p-10">
-                <span class="text-white font-black uppercase text-xs mb-8 block italic">Sector Radar: S-01</span>
-                <iframe class="map-frame" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBrp5OcBCWGpo0w1XMA25tXbYIFlZyxMqE&q=eMalahleni,South+Africa"></iframe>
-            </section>
-
-            <section class="command-tile lg:col-span-3 p-12">
-                <span class="text-white font-black uppercase text-sm mb-12 block italic"><i class="fa-brands fa-spotify mr-4 text-[#1DB954]"></i> TOP 10 HITLIST</span>
-                <div id="dynamic-poll" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <p class="text-[11px] text-zinc-600 uppercase font-black w-full text-center">Synchronizing Grid Frequency...</p>
-                </div>
-            </section>
-
-        </main>
     </div>
 
-    <footer class="mt-auto border-t border-white/5 py-24 bg-black/80">
-        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-24 px-10">
-            <div class="flex flex-col items-center md:items-start text-center md:text-left">
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-12 mb-10 grayscale opacity-40">
-                <p class="text-[12px] text-zinc-600 font-black uppercase tracking-widest leading-loose">
-                    Ministry of Groove Mainframe. <br> Mpumalanga, South Africa. <br> S-01 SECTOR.
-                </p>
-            </div>
-            
-            <div class="flex flex-col items-center">
-                <span class="text-white font-black uppercase text-[12px] mb-12 tracking-[0.5em] text-blue-400">Social Command Hub</span>
-                <div class="flex flex-wrap justify-center gap-6">
-                    <a href="https://tiktok.com/@directormog" target="_blank" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
-                    <a href="https://instagram.com" target="_blank" class="social-link"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://wa.me/27791438964" target="_blank" class="social-link"><i class="fa-brands fa-whatsapp"></i></a>
-                    <a href="https://youtube.com" target="_blank" class="social-link"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
+    <div id="director-console" style="display:none;" class="fixed inset-0 z-[10000] bg-black/95 flex items-center justify-center p-6">
+        <div class="command-tile p-12 max-w-4xl w-full border-gold/40">
+            <h2 class="text-2xl text-white font-black uppercase italic mb-8 border-b border-white/5 pb-4">Director Suite</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 text-center">
+                <button onclick="triggerManualPulse()" class="bg-blue-500 text-black font-black uppercase p-6 rounded-3xl text-xs">Authorize Grid Pulse</button>
+                <div class="p-6">
+                    <p class="text-[10px] text-zinc-500 uppercase">System Slogan Status</p>
+                    <p class="text-xl text-gold font-black uppercase italic">Decipher the culture.</p>
                 </div>
             </div>
-
-            <div class="flex flex-col items-center md:items-end text-[12px] font-black uppercase text-zinc-700">
-                <p>© 2026 MINISTRY OF GROOVE</p>
-                <p class="mt-4 text-blue-400/30 tracking-[1em]">V210_TOTALITY</p>
-            </div>
+            <button onclick="toggleUI('director-console')" class="text-xs text-zinc-600 uppercase w-full">Close Console</button>
         </div>
-    </footer>
-
+    </div>
+    
     <script>
         const MOG_CFG = {
             U: "https://vbkpatwvgvwarybbpiky.supabase.co",
@@ -340,12 +198,55 @@
         const db = window.supabase.createClient(MOG_CFG.U, MOG_CFG.K);
         let currentOp = null;
 
-        /* REALTIME SYNC ENGINE */
+        function toggleDrawer() { document.getElementById('side-drawer').classList.toggle('drawer-active'); }
+        function toggleUI(id) { 
+            const el = document.getElementById(id);
+            el.style.display = el.style.display === 'none' ? 'flex' : 'none'; 
+        }
+
+        async function operativePulse() {
+            document.body.style.opacity = '0.7';
+            document.getElementById('log-drum').play();
+            setTimeout(() => document.body.style.opacity = '1', 300);
+        }
+
+        function initMatrixContent() {
+            const gal = document.getElementById('gallery-matrix');
+            for(let i=1; i<=6; i++) {
+                gal.innerHTML += `
+                    <div class="item-card p-0">
+                        <div class="video-card">
+                            <video muted loop onclick="this.paused ? this.play() : this.pause()">
+                                <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/clip${i}.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                    </div>`;
+            }
+            
+            const vlt = document.getElementById('vault-matrix');
+            for(let i=1; i<=6; i++) {
+                vlt.innerHTML += `
+                    <div class="item-card bg-white/5">
+                        <i class="fa-solid fa-compact-disc text-gold mb-2 text-xl"></i>
+                        <p class="text-[8px] text-white font-black uppercase">Mandate_S0${i}</p>
+                        <button class="mt-2 text-[7px] bg-gold text-black font-black px-2 py-1 rounded">PLAY</button>
+                    </div>`;
+            }
+
+            const hit = document.getElementById('hitlist-matrix');
+            for(let i=1; i<=10; i++) {
+                hit.innerHTML += `
+                    <div class="item-card bg-white/5">
+                        <p class="text-[7px] text-white font-black uppercase">HIT_RANK_${i}</p>
+                    </div>`;
+            }
+        }
+
+        /* SUPABASE REALTIME */
         const channel = db.channel('public:messages')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
-                const drum = document.getElementById('log-drum');
-                drum.currentTime = 0;
-                drum.play().catch(() => {}); 
+                document.getElementById('log-drum').currentTime = 0;
+                document.getElementById('log-drum').play().catch(() => {});
                 appendMsg(payload.new); 
             }).subscribe();
 
@@ -353,54 +254,17 @@
             const stream = document.getElementById('chat-stream');
             const div = document.createElement('div');
             div.className = `bubble ${m.user_id === currentOp?.id ? 'sent' : 'received'}`;
-            div.innerHTML = `<span class="text-[9px] font-black uppercase block mb-1 ${m.user_id === currentOp?.id ? 'text-gold' : 'text-blue-400'}">@${m.alias}</span>${m.content}`;
+            div.innerHTML = `<span class="text-[8px] font-black uppercase block mb-1 text-gold">@${m.alias}</span>${m.content}`;
             stream.appendChild(div);
             stream.scrollTop = stream.scrollHeight;
-        }
-
-        async function fetchHistory() {
-            const { data } = await db.from('messages').select('*').order('created_at', { ascending: true }).limit(50);
-            if (data) {
-                const stream = document.getElementById('chat-stream');
-                stream.innerHTML = '';
-                data.forEach(m => appendMsg(m));
-            }
-        }
-
-        async function sendMessage() {
-            if (!currentOp) return alert("S-01 IDENTITY AUTHORIZATION REQUIRED");
-            const input = document.getElementById('chat-msg');
-            const content = input.value.trim();
-            if (!content) return;
-            const { error } = await db.from('messages').insert([{ 
-                content, user_id: currentOp.id, alias: document.getElementById('display-op-id').innerText 
-            }]);
-            if (!error) input.value = '';
-        }
-
-        /* UI COMMANDS */
-        function detectGridDevice() {
-            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-            document.getElementById('mog-mainframe').classList.add(isMobile ? 'device-mobile' : 'device-pc');
-        }
-
-        function toggleDrawer() { 
-            document.getElementById('side-drawer').classList.toggle('drawer-active'); 
-            document.getElementById('drawer-bg').classList.toggle('active'); 
-        }
-
-        function toggleUI(id) { document.getElementById(id).classList.toggle('active-modal'); }
-
-        function triggerManualPulse() {
-            document.getElementById('map-overlay').classList.add('pulse-active');
-            setTimeout(() => document.getElementById('map-overlay').classList.remove('pulse-active'), 1500);
         }
 
         async function handleMainAuth() {
             const email = document.getElementById('login-user').value.trim();
             const pass = document.getElementById('login-pass').value;
             const { data, error } = await db.auth.signInWithPassword({ 
-                email: email.includes('@') ? email : `${email}@user.mog.internal`, password: pass 
+                email: email.includes('@') ? email : `${email}@user.mog.internal`, 
+                password: pass 
             });
             if(!error) { 
                 currentOp = data.user; 
@@ -411,22 +275,7 @@
             } else { alert(error.message); }
         }
 
-        async function syncSpotify() {
-             const mock = [
-                { id: "6888ABC", name: "Sona", artist: "Kabza", img: "https://i.scdn.co/image/ab67616d0000b273767f7d9633e83b48455f7566" },
-                { id: "45yRXYZ", name: "Kurula", artist: "Momo", img: "https://i.scdn.co/image/ab67616d0000b273e9e1c18371285375421a1f5f" }
-            ];
-            document.getElementById('dynamic-poll').innerHTML = mock.map(t => `
-                <div class="flex items-center justify-between p-6 bg-white/5 border border-white/5 rounded-3xl">
-                    <div class="flex items-center gap-4"><img src="${t.img}" class="w-12 h-12 rounded-xl"><div><p class="text-white font-black text-xs uppercase">${t.name}</p></div></div>
-                    <button onclick="castVote('${t.id}', '${t.name}')" class="text-[10px] text-blue-400 font-black border border-blue-400/30 px-4 py-1 rounded-full uppercase">Boost</button>
-                </div>
-            `).join('');
-        }
-
-        function logout() { db.auth.signOut(); location.reload(); }
-
-        window.onload = () => { detectGridDevice(); fetchHistory(); syncSpotify(); db.auth.getUser().then(({data}) => { if(data.user) { currentOp = data.user; } }); };
+        window.onload = () => { initMatrixContent(); };
     </script>
 </body>
 </html>
