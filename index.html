@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID MASTER V310</title>
+    <title>M.O.G. | NATIONAL GRID V70 RESTORED</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -11,83 +11,84 @@
 
     <style>
         /* -----------------------------------------------------------
-           1. CORE THEME & LIQUID SCALING
+           1. V70 CINEMATIC ENGINE
         ----------------------------------------------------------- */
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
         
         :root { 
             --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; 
-            --mog-panel: rgba(10, 20, 30, 0.98); --chat-sent: #005c4b; --chat-received: #202c33;
+            --mog-panel: rgba(10, 20, 30, 0.95); --chat-sent: #005c4b; --chat-received: #202c33;
         }
 
-        /* ENSURE FOOTER STICKS AND CONTENT SCROLLS */
-        html, body { height: 100%; margin: 0; display: flex; flex-direction: column; background-color: var(--mog-bg); color: var(--mog-gold); }
-        * { transition: all 0.2s ease-in-out; font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
+        html, body { height: 100%; margin: 0; background-color: var(--mog-bg); color: var(--mog-gold); display: flex; flex-direction: column; }
+        * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
 
         body { 
-            background-image: radial-gradient(circle at 2px 2px, rgba(0, 212, 255, 0.1) 1px, transparent 0);
-            background-size: 30px 30px;
+            background-image: 
+                linear-gradient(rgba(6, 10, 15, 0.8), rgba(6, 10, 15, 0.8)),
+                url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-size: cover; background-attachment: fixed;
         }
 
         /* -----------------------------------------------------------
-           2. NAVIGATION & HAMBURGER (FIXED)
+           2. V70 NAVIGATION (HAMBURGER)
         ----------------------------------------------------------- */
         #side-drawer { 
             position: fixed; top: 0; left: -100%; width: 320px; height: 100%; 
             background: #0a0e14; z-index: 10000; transition: 0.5s; 
-            border-right: 1px solid var(--mog-blue); box-shadow: 20px 0 50px rgba(0,0,0,0.9);
+            border-right: 1px solid var(--mog-gold); box-shadow: 20px 0 50px rgba(0,0,0,0.9);
         }
         #side-drawer.drawer-active { left: 0; }
-        .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; display: none; backdrop-filter: blur(5px); }
+        .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; display: none; backdrop-filter: blur(8px); }
         .drawer-overlay.active { display: block; }
-
-        .drawer-item { 
-            padding: 18px 25px; border-bottom: 1px solid rgba(255,255,255,0.03); 
-            text-transform: uppercase; font-size: 11px; font-weight: 900; color: #888;
-            display: flex; align-items: center; gap: 15px; cursor: pointer;
-        }
-        .drawer-item:hover { color: var(--mog-gold); background: rgba(255,255,255,0.02); }
+        .drawer-item { padding: 20px 30px; border-bottom: 1px solid rgba(255,255,255,0.03); text-transform: uppercase; font-size: 11px; font-weight: 900; color: #888; display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .drawer-item:hover { color: var(--mog-gold); }
 
         /* -----------------------------------------------------------
-           3. TILES & SCROLLER UI
+           3. V70 TILES: CINEMATIC MULTIMEDIA
         ----------------------------------------------------------- */
-        .mainframe-scroll { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
+        .mainframe-scroll { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 120px; }
         
-        .grid-layout {
-            display: grid; gap: 20px;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        .v70-layout {
+            display: grid; gap: 25px;
+            grid-template-columns: repeat(12, 1fr);
         }
 
         .command-tile { 
-            background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.2); 
-            border-radius: 35px; overflow: hidden; display: flex; flex-direction: column;
-            min-height: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            background: var(--mog-panel); border: 1px solid rgba(212, 175, 55, 0.2); 
+            border-radius: 40px; overflow: hidden; display: flex; flex-direction: column;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
         }
 
-        .tile-scroller { flex-grow: 1; overflow-y: auto; padding: 15px; }
-        .tile-scroller::-webkit-scrollbar { width: 4px; }
-        .tile-scroller::-webkit-scrollbar-thumb { background: var(--mog-blue); border-radius: 10px; }
+        /* TILE SIZING - V70 RATIOS */
+        .tile-wide { grid-column: span 12; }
+        .tile-med { grid-column: span 8; }
+        .tile-small { grid-column: span 4; }
 
-        .list-item { 
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); 
-            border-radius: 20px; padding: 15px; margin-bottom: 12px; display: flex; 
-            justify-content: space-between; align-items: center; 
+        @media (max-width: 1024px) {
+            .tile-wide, .tile-med, .tile-small { grid-column: span 12; }
         }
+
+        /* MEDIA SCROLLERS */
+        .media-scroller { display: flex; gap: 20px; overflow-x: auto; padding: 10px 0; }
+        .media-scroller::-webkit-scrollbar { height: 4px; }
+        .media-scroller::-webkit-scrollbar-thumb { background: var(--mog-gold); border-radius: 10px; }
+
+        .v70-card {
+            min-width: 280px; height: 380px; background: rgba(255,255,255,0.03); 
+            border-radius: 30px; border: 1px solid rgba(255,255,255,0.05);
+            display: flex; flex-direction: column; overflow: hidden; position: relative;
+        }
+        .v70-card img { width: 100%; height: 60%; object-fit: cover; filter: grayscale(50%); }
+        .v70-card:hover img { filter: grayscale(0%); transform: scale(1.05); }
 
         /* -----------------------------------------------------------
-           4. COMPONENTS
+           4. V70 FOOTER & HEADER
         ----------------------------------------------------------- */
-        .auth-btn { background: #fff; color: #000; font-weight: 900; border-radius: 50px; padding: 15px; width: 100%; text-transform: uppercase; font-size: 11px; cursor: pointer; }
-        
-        /* FOOTER (RESTORED) */
-        footer { background: #000; border-top: 1px solid rgba(255,255,255,0.05); padding: 20px; text-align: center; z-index: 50; }
-        .social-icon { font-size: 1.2rem; color: #444; margin: 0 15px; transition: 0.3s; }
-        .social-icon:hover { color: var(--mog-gold); }
-
-        /* MESSENGER bubble styles */
-        .bubble { max-width: 85%; padding: 12px 16px; border-radius: 20px; font-size: 13px; margin-bottom: 10px; }
-        .sent { align-self: flex-end; background: var(--chat-sent); color: #fff; }
-        .received { align-self: flex-start; background: var(--chat-received); color: #e9edef; }
+        header { background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
+        footer { background: #000; border-top: 1px solid rgba(255,255,255,0.05); padding: 30px; z-index: 100; }
+        .social-link { font-size: 1.4rem; color: #555; transition: 0.4s; }
+        .social-link:hover { color: var(--mog-gold); transform: translateY(-5px); }
     </style>
 </head>
 <body id="mog-mainframe">
@@ -96,122 +97,115 @@
 
     <div id="drawer-overlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
     <nav id="side-drawer">
-        <div class="p-8 border-b border-white/5">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-14 w-14 mb-4">
-            <p class="text-[10px] text-blue-400 font-black uppercase tracking-widest">Grid Directories</p>
+        <div class="p-10 border-b border-white/5">
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 mb-4">
+            <p class="text-[10px] text-blue-400 font-black uppercase tracking-widest">Grid Directory</p>
         </div>
-        <div class="drawer-item" onclick="location.reload()"><i class="fa-solid fa-house"></i> National Grid Home</div>
-        <div class="drawer-item"><i class="fa-solid fa-file-audio"></i> Mandate Mix Archive</div>
-        <div class="drawer-item"><i class="fa-solid fa-id-card"></i> ID Matrix</div>
-        <div class="drawer-item" onclick="toggleUI('director-console')"><i class="fa-solid fa-user-shield"></i> Director Hub</div>
-        <div class="drawer-item" onclick="window.open('https://wa.me/27791438964')"><i class="fa-brands fa-whatsapp"></i> Support Frequency</div>
+        <div class="drawer-item" onclick="location.reload()"><i class="fa-solid fa-house"></i> National Grid</div>
+        <div class="drawer-item"><i class="fa-solid fa-compact-disc"></i> Mandate Archive</div>
+        <div class="drawer-item"><i class="fa-solid fa-id-badge"></i> ID Matrix</div>
+        <div class="drawer-item" onclick="toggleUI('director-console')"><i class="fa-solid fa-shield-halved"></i> Director suite</div>
     </nav>
 
-    <header class="h-[90px] px-8 flex justify-between items-center border-b border-white/5 bg-black/60 sticky top-0 z-[100]">
-        <div class="flex items-center gap-5">
-            <button onclick="toggleDrawer()" class="text-gold text-2xl mr-2 hover:scale-110"><i class="fa-solid fa-bars-staggered"></i></button>
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-12 w-12 shadow-lg">
+    <header class="h-[90px] px-8 flex justify-between items-center sticky top-0 z-[500]">
+        <div class="flex items-center gap-6">
+            <button onclick="toggleDrawer()" class="text-gold text-2xl"><i class="fa-solid fa-bars-staggered"></i></button>
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-14 w-14">
             <div>
-                <h1 class="text-xl font-black uppercase italic tracking-tighter text-gold leading-none">Ministry of Groove</h1>
-                <p class="text-[10px] text-zinc-500 font-black uppercase italic tracking-[0.2em] mt-1">Decipher the culture.</p>
+                <h1 class="text-2xl font-black uppercase italic tracking-tighter text-gold leading-none">Ministry of Groove</h1>
+                <p class="text-[11px] text-zinc-500 font-black uppercase italic tracking-[0.2em] mt-1">Decipher the culture.</p>
             </div>
         </div>
-        <div class="hidden md:block">
-            <span class="text-[9px] text-blue-400 font-black uppercase tracking-[0.5em] border border-blue-400/20 px-4 py-2 rounded-full">S-01 National Mainframe</span>
+        <div class="hidden lg:block text-right">
+            <span class="text-[10px] text-blue-400 font-black uppercase tracking-[0.5em] border border-blue-400/20 px-6 py-2 rounded-full">S-01 Mainframe // V70 Restore</span>
         </div>
     </header>
 
     <div class="mainframe-scroll">
-        <div class="grid-layout">
+        <div class="v70-layout">
             
-            <section class="command-tile p-8 border-gold/40 bg-gradient-to-b from-gold/5 to-transparent">
-                <p class="text-[10px] text-gold font-black uppercase mb-6 border-b border-gold/20 pb-2 italic">Identity Gateway</p>
-                <div id="auth-fields">
-                    <input id="login-user" type="text" placeholder="GMAIL / ALIAS" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white mb-3 text-xs outline-none">
-                    <input id="login-pass" type="password" placeholder="GRID PASSCODE" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white mb-6 text-xs outline-none">
-                    <button onclick="handleMainAuth()" class="auth-btn">Authorize Entry</button>
-                </div>
-                <div id="active-op-badge" class="hidden h-full flex flex-col justify-center items-center">
-                    <h2 id="display-op-id" class="text-3xl text-white font-black uppercase italic tracking-tighter">OPERATIVE</h2>
-                    <p class="text-[10px] text-blue-400 font-black uppercase mt-2">Clearance Active</p>
-                    <button onclick="logout()" class="text-[9px] text-red-500 font-black uppercase mt-10 tracking-widest">Terminate Session</button>
-                </div>
-            </section>
+            <section class="command-tile tile-wide p-10 bg-gradient-to-r from-gold/10 to-transparent">
+                <div class="flex flex-col lg:flex-row justify-between items-center gap-10">
+                    <div id="auth-fields" class="w-full lg:w-1/2">
+                        <p class="text-[11px] text-gold font-black uppercase mb-6 tracking-widest border-b border-gold/20 pb-2">Authorization Gateway</p>
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <input id="login-user" type="text" placeholder="OPERATIVE GMAIL" class="flex-grow bg-white/5 border border-white/10 rounded-2xl p-5 text-white outline-none">
+                            <input id="login-pass" type="password" placeholder="PASSCODE" class="flex-grow bg-white/5 border border-white/10 rounded-2xl p-5 text-white outline-none">
+                        </div>
+                        <button onclick="handleMainAuth()" class="w-full bg-white text-black font-black py-5 rounded-full mt-6 uppercase text-xs tracking-widest">Authorize Identity</button>
+                    </div>
+                    
+                    <div id="active-op-badge" class="hidden w-full lg:w-1/2 text-center border-l border-white/5 pl-10">
+                        <p class="text-[10px] text-gold font-black uppercase tracking-widest mb-2">Authenticated Operative</p>
+                        <h2 id="display-op-id" class="text-5xl text-white font-black uppercase italic tracking-tighter">OPERATIVE</h2>
+                        <button onclick="logout()" class="text-[10px] text-red-500 font-black uppercase mt-8 border border-red-500/20 px-6 py-2 rounded-full">Terminate Frequency</button>
+                    </div>
 
-            <section class="command-tile p-8">
-                <p class="text-[10px] text-white font-black uppercase mb-6 italic"><i class="fa-solid fa-play mr-2 text-gold"></i> Live Frequency</p>
-                <div class="bg-black/50 p-6 rounded-[30px] border border-white/10">
-                    <p class="text-[10px] text-blue-400 font-black uppercase mb-6 text-center italic">Mandate Mix Session 002.mp3</p>
-                    <audio controls class="w-full">
-                        <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandatemix.mp3" type="audio/mpeg">
-                    </audio>
-                </div>
-                <div class="mt-auto pt-6 text-center">
-                    <p class="text-[9px] text-zinc-600 font-black uppercase">Witbank HQ Feed // Online</p>
-                </div>
-            </section>
-            
-            <section class="command-tile lg:col-span-2">
-                <div class="flex-grow flex flex-col bg-[#0b141a] m-1 rounded-[30px] overflow-hidden">
-                    <div id="chat-stream" class="flex-grow p-6 overflow-y-auto flex flex-col"></div>
-                    <div class="bg-[#202c33] p-4 flex gap-4">
-                        <input type="text" id="chat-msg" placeholder="Broadcast to Grid..." class="flex-grow bg-[#2a3942] border-0 rounded-full px-6 py-4 text-sm text-white outline-none">
-                        <button onclick="sendMessage()" class="w-14 h-14 bg-blue-500 text-black rounded-full flex items-center justify-center hover:scale-110"><i class="fa-solid fa-paper-plane"></i></button>
+                    <div class="hidden lg:block text-right">
+                        <p class="text-3xl font-black italic uppercase text-white/10">S-01 Sector</p>
+                        <p class="text-gold font-black uppercase text-sm mt-2">Witbank HQ</p>
                     </div>
                 </div>
             </section>
 
-            <section class="command-tile">
-                <div class="p-6 border-b border-white/5 flex justify-between">
-                    <p class="text-[10px] text-white font-black uppercase italic">M.O.G. Visuals</p>
-                    <i class="fa-solid fa-video text-blue-400"></i>
+            <section class="command-tile tile-wide p-10">
+                <div class="flex justify-between items-center mb-10">
+                    <h3 class="text-white font-black uppercase italic text-lg tracking-tighter">Mandate Mix Archive</h3>
+                    <audio id="v70-player" controls class="h-10 w-64"></audio>
                 </div>
-                <div class="tile-scroller">
-                    <div id="gallery-list" class="space-y-4">
+                <div class="media-scroller">
+                    <div class="v70-card group">
+                        <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="p-10 bg-black/40">
+                        <div class="p-6">
+                            <p class="text-[10px] text-gold font-black uppercase">Session 002</p>
+                            <h4 class="text-white font-black uppercase text-xl mt-1">Mandate Blueprint</h4>
+                            <button onclick="playMix('mandatemix.mp3')" class="mt-6 text-[10px] bg-white text-black font-black px-8 py-3 rounded-full uppercase">Play Frequency</button>
                         </div>
+                    </div>
+                    <div class="v70-card opacity-30">
+                        <div class="flex items-center justify-center h-full"><i class="fa-solid fa-lock text-4xl"></i></div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="command-tile tile-med p-1 bg-[#0b141a]">
+                <div class="flex flex-col h-[500px]">
+                    <div id="chat-stream" class="flex-grow p-8 overflow-y-auto space-y-4"></div>
+                    <div class="p-6 bg-[#202c33] flex gap-4">
+                        <input id="chat-msg" type="text" placeholder="Broadcast message..." class="flex-grow bg-[#2a3942] border-0 rounded-full px-8 py-4 text-white text-sm outline-none">
+                        <button onclick="sendMessage()" class="w-16 h-16 bg-blue-500 text-black rounded-full flex items-center justify-center shadow-xl shadow-blue-500/20"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
                 </div>
             </section>
 
-            <section class="command-tile">
-                <div class="p-6 border-b border-white/5 flex justify-between">
-                    <p class="text-[10px] text-white font-black uppercase italic">Mandate Archive</p>
-                    <i class="fa-solid fa-file-audio text-gold"></i>
-                </div>
-                <div class="tile-scroller">
-                    <div id="vault-list" class="space-y-4">
-                        </div>
-                </div>
-            </section>
-
-            <section class="command-tile">
-                <div class="p-6 border-b border-white/5 flex justify-between">
-                    <p class="text-[10px] text-white font-black uppercase italic">Top 10 Hitlist</p>
-                    <i class="fa-brands fa-spotify text-[#1DB954]"></i>
-                </div>
-                <div class="tile-scroller">
-                    <div id="hitlist-list" class="space-y-4">
-                        </div>
+            <section class="command-tile tile-small p-8">
+                <p class="text-[11px] text-white font-black uppercase mb-8 border-b border-white/5 pb-2 italic">Hitlist status</p>
+                <div id="hitlist-v70" class="space-y-4">
+                    </div>
+                <div class="mt-auto">
+                    <iframe src="http://googleusercontent.com/spotify.com/7" width="100%" height="80" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
                 </div>
             </section>
 
         </div>
     </div>
 
-    <footer>
-        <div class="flex justify-center mb-4">
-            <a href="https://tiktok.com/@directormog" target="_blank" class="social-icon"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="https://instagram.com" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://wa.me/27791438964" target="_blank" class="social-icon"><i class="fa-brands fa-whatsapp"></i></a>
-            <a href="https://youtube.com" target="_blank" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+    <footer class="flex flex-col md:flex-row justify-between items-center gap-10">
+        <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-10 grayscale opacity-40">
+        <div class="flex gap-10">
+            <a href="https://tiktok.com/@directormog" target="_blank" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://instagram.com" target="_blank" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://wa.me/27791438964" target="_blank" class="social-link"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="https://youtube.com" target="_blank" class="social-link"><i class="fa-brands fa-youtube"></i></a>
         </div>
-        <p class="text-[9px] text-zinc-700 font-black uppercase tracking-[0.5em]">© 2026 MINISTRY OF GROOVE // DECIPHER THE CULTURE.</p>
+        <p class="text-[10px] text-zinc-700 font-black uppercase tracking-[0.5em]">© 2026 MINISTRY OF GROOVE // WITBANK HQ</p>
     </footer>
 
-    <div id="director-console" style="display:none;" class="fixed inset-0 z-[20000] bg-black/95 flex items-center justify-center p-6">
-        <div class="command-tile p-10 max-w-2xl w-full border-gold/40">
-            <h2 class="text-2xl text-white font-black uppercase italic mb-8 border-b border-white/5 pb-4">Director Suite</h2>
-            <button onclick="triggerPulse()" class="auth-btn bg-blue-500 text-black mb-4">Authorize Grid Pulse</button>
-            <button onclick="toggleUI('director-console')" class="auth-btn bg-white/5 text-white">Close Console</button>
+    <div id="director-console" style="display:none;" class="fixed inset-0 z-[20000] bg-black/98 flex items-center justify-center p-6">
+        <div class="command-tile p-12 max-w-2xl w-full border-gold/40">
+            <h2 class="text-3xl text-white font-black uppercase italic mb-8 border-b border-white/5 pb-4">Director Suite</h2>
+            <button onclick="operativePulse()" class="w-full bg-blue-500 text-black font-black p-6 rounded-full uppercase text-xs mb-4">Pulse National Grid</button>
+            <button onclick="toggleUI('director-console')" class="w-full bg-white/5 text-white font-black p-6 rounded-full uppercase text-xs">Terminate Console</button>
         </div>
     </div>
 
@@ -233,41 +227,16 @@
             el.style.display = el.style.display === 'none' ? 'flex' : 'none'; 
         }
 
-        /* SCROLLER INJECTION */
-        function initLists() {
-            const gal = document.getElementById('gallery-list');
-            for(let i=1; i<=6; i++) {
-                gal.innerHTML += `
-                    <div class="list-item">
-                        <div class="flex items-center gap-4">
-                            <i class="fa-solid fa-circle-play text-blue-400"></i>
-                            <p class="text-[10px] text-white font-black uppercase">Visual_Clip_0${i}</p>
-                        </div>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-zinc-600"></i>
-                    </div>`;
-            }
+        function playMix(file) {
+            const player = document.getElementById('v70-player');
+            player.src = `https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/${file}`;
+            player.play();
+        }
 
-            const vlt = document.getElementById('vault-list');
-            for(let i=1; i<=6; i++) {
-                vlt.innerHTML += `
-                    <div class="list-item border-gold/20">
-                        <div class="flex items-center gap-4">
-                            <i class="fa-solid fa-compact-disc text-gold"></i>
-                            <p class="text-[10px] text-white font-black uppercase">Mandate_S0${i}.mp3</p>
-                        </div>
-                        <button class="text-[8px] bg-gold text-black px-3 py-1 rounded-full font-black uppercase">Play</button>
-                    </div>`;
-            }
-
-            const hit = document.getElementById('hitlist-list');
-            for(let i=1; i<=10; i++) {
-                hit.innerHTML += `
-                    <div class="list-item">
-                        <p class="text-[10px] text-zinc-500 font-black uppercase">#${i}</p>
-                        <p class="text-[10px] text-white font-black uppercase text-center flex-grow">Amapiano Hit Frequency</p>
-                        <i class="fa-brands fa-spotify text-green-500"></i>
-                    </div>`;
-            }
+        async function operativePulse() {
+            document.body.style.opacity = '0.5';
+            document.getElementById('log-drum').play();
+            setTimeout(() => document.body.style.opacity = '1', 400);
         }
 
         /* SUPABASE REALTIME */
@@ -282,7 +251,7 @@
             const stream = document.getElementById('chat-stream');
             const div = document.createElement('div');
             div.className = `bubble ${m.user_id === currentOp?.id ? 'sent' : 'received'}`;
-            div.innerHTML = `<span class="text-[8px] font-black uppercase block mb-1 text-gold">@${m.alias}</span>${m.content}`;
+            div.innerHTML = `<span class="text-[9px] font-black uppercase block mb-1 text-gold">@${m.alias}</span>${m.content}`;
             stream.appendChild(div);
             stream.scrollTop = stream.scrollHeight;
         }
@@ -308,7 +277,12 @@
             setTimeout(() => logoClicks = 0, 5000);
         });
 
-        window.onload = () => { initLists(); };
+        window.onload = () => {
+             const hit = document.getElementById('hitlist-v70');
+             for(let i=1; i<=10; i++) {
+                 hit.innerHTML += `<div class="flex justify-between items-center bg-white/5 p-3 rounded-2xl border border-white/5"><p class="text-[10px] text-white font-black uppercase">HIT_RANK_${i}</p><i class="fa-brands fa-spotify text-green-500"></i></div>`;
+             }
+        };
     </script>
 </body>
 </html>
