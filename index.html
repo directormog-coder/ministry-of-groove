@@ -3,95 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID V330</title>
+    <title>M.O.G. | SOVEREIGN MAINFRAME V365</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        /* 1. CINEMATIC ENGINE & THEME */
+        /* -----------------------------------------------------------
+           1. MASTER ENGINE & LIQUID THEME
+        ----------------------------------------------------------- */
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
         
         :root { 
             --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; 
-            --telkom-blue: #00a1e4; --telkom-green: #8cc63f;
-            --mog-panel: rgba(10, 20, 30, 0.95);
+            --mog-panel: rgba(10, 20, 30, 0.98); --chat-sent: #005c4b; --chat-received: #202c33;
         }
 
-        html, body { height: 100%; margin: 0; background-color: var(--mog-bg); color: #fff; display: flex; flex-direction: column; overflow: hidden; }
-        * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
+        html, body { height: 100vh; margin: 0; padding: 0; overflow: hidden; background-color: var(--mog-bg); color: #fff; }
+        * { transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
 
         body { 
-            background-image: linear-gradient(rgba(6, 10, 15, 0.85), rgba(6, 10, 15, 0.85)), url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
-            background-size: cover; background-attachment: fixed;
+            background-image: radial-gradient(circle at 2px 2px, rgba(0, 212, 255, 0.1) 1px, transparent 0);
+            background-size: 40px 40px;
         }
 
-        /* 2. THE TELKOM LOGIN TILE (V330 INTEGRATION) */
-        .telkom-auth-card {
-            background-color: var(--telkom-blue);
-            border-radius: 40px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            color: white;
-            padding-top: 40px;
+        /* CUSTOM SCROLL CURSOR (RESTORED) */
+        .scroller-container::-webkit-scrollbar { width: 6px; }
+        .scroller-container::-webkit-scrollbar-thumb { 
+            background: linear-gradient(var(--mog-blue), var(--mog-gold)); border-radius: 10px;
         }
 
-        .telkom-headline { font-size: 2.8rem; font-family: 'Satoshi', sans-serif; font-weight: 900; line-height: 1.1; font-style: italic; margin-bottom: 20px; }
-        .telkom-sub { font-size: 0.9rem; padding: 0 40px; line-height: 1.4; margin-bottom: 40px; opacity: 0.9; }
-
-        .telkom-white-panel {
-            background: white;
-            width: 100%;
-            border-radius: 40px 40px 0 0;
-            padding: 40px;
-            color: #003057;
-            text-align: left;
-            position: relative;
+        /* -----------------------------------------------------------
+           2. NAVIGATION & HAMBURGER (FULL RESTORE)
+        ----------------------------------------------------------- */
+        #side-drawer { 
+            position: fixed; top: 0; left: -100%; width: 340px; height: 100%; 
+            background: #0a0e14; z-index: 10000; transition: 0.5s; 
+            border-right: 1px solid var(--mog-gold); box-shadow: 20px 0 60px rgba(0,0,0,0.9);
         }
-
-        /* Notched corner from reference */
-        .telkom-white-panel::after {
-            content: ''; position: absolute; top: 0; right: 0;
-            border-style: solid; border-width: 0 30px 30px 0;
-            border-color: transparent var(--telkom-blue) transparent transparent;
-        }
-
-        .telkom-label { font-size: 0.85rem; font-weight: 900; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .telkom-input { width: 100%; border: 1px solid #e0e0e0; border-radius: 12px; padding: 18px; margin-bottom: 25px; color: #333; outline: none; }
-        .telkom-link { color: var(--telkom-blue); font-size: 0.85rem; font-weight: 900; float: right; }
-
-        .telkom-confirm-btn { background-color: var(--telkom-green); color: #003057; width: 100%; padding: 20px; border-radius: 12px; font-weight: 900; text-transform: capitalize; font-size: 1rem; margin-bottom: 15px; }
-        .telkom-signup-btn { background: white; color: var(--telkom-blue); width: 100%; padding: 18px; border-radius: 12px; font-weight: 900; border: 1.5px solid var(--telkom-blue); }
-
-        /* 3. V70 MAIN INTERFACE COMPONENTS */
-        .mainframe-scroll { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 120px; }
-        .v70-layout { display: grid; gap: 25px; grid-template-columns: repeat(12, 1fr); }
-        .command-tile { background: var(--mog-panel); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 40px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.6); }
-
-        .tile-wide { grid-column: span 12; }
-        .tile-med { grid-column: span 8; }
-        .tile-small { grid-column: span 4; }
-
-        @media (max-width: 1024px) { .tile-wide, .tile-med, .tile-small { grid-column: span 12; } }
-
-        /* MESSENGER & MEDIA SCROLLER */
-        .msg-stream { height: 400px; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 12px; background: #0b141a; }
-        .bubble { max-width: 80%; padding: 14px 18px; border-radius: 22px; font-size: 14px; }
-        .sent { align-self: flex-end; background: #005c4b; color: white; }
-        .received { align-self: flex-start; background: #202c33; color: #e9edef; }
-
-        .media-scroller { display: flex; gap: 20px; overflow-x: auto; padding: 10px 0; }
-        .v70-card { min-width: 280px; height: 350px; background: rgba(255,255,255,0.03); border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
-
-        /* 4. NAVIGATION & FOOTER */
-        #side-drawer { position: fixed; top: 0; left: -100%; width: 320px; height: 100%; background: #0a0e14; z-index: 10000; transition: 0.5s; border-right: 1px solid var(--mog-gold); }
         #side-drawer.drawer-active { left: 0; }
-        header { background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(212, 175, 55, 0.1); height: 90px; }
-        footer { background: #000; border-top: 1px solid rgba(255,255,255,0.05); padding: 30px; z-index: 100; }
+        .drawer-item { padding: 18px 30px; border-bottom: 1px solid rgba(255,255,255,0.03); text-transform: uppercase; font-size: 11px; font-weight: 900; color: #666; display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .drawer-item:hover { color: var(--mog-gold); background: rgba(212, 175, 55, 0.05); }
+
+        /* -----------------------------------------------------------
+           3. MASTERPIECE LAYOUT (LIQUID GRID)
+        ----------------------------------------------------------- */
+        .liquid-mainframe {
+            display: grid; height: calc(100vh - 100px); width: 100vw; padding: 20px; gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-areas: 
+                "gateway messenger messenger"
+                "mandate visual hitlist";
+        }
+
+        @media (max-width: 1024px) {
+            .liquid-mainframe { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "mandate" "visual" "hitlist"; overflow-y: auto; height: auto; }
+        }
+
+        .area-gateway { grid-area: gateway; } .area-messenger { grid-area: messenger; } 
+        .area-mandate { grid-area: mandate; } .area-visual { grid-area: visual; } .area-hitlist { grid-area: hitlist; }
+
+        .command-tile { 
+            background: var(--mog-panel); border: 1px solid rgba(212, 175, 55, 0.2); 
+            border-radius: 40px; overflow: hidden; display: flex; flex-direction: column;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+        }
+
+        /* -----------------------------------------------------------
+           4. AUTH & ENROLLMENT (TELKOM-STYLE STRUCTURE)
+        ----------------------------------------------------------- */
+        .auth-tab { cursor: pointer; padding: 12px 24px; font-weight: 900; font-size: 10px; text-transform: uppercase; border-bottom: 2px solid transparent; }
+        .auth-tab.active { color: var(--mog-gold); border-color: var(--mog-gold); }
+        .auth-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 18px; width: 100%; color: white; margin-bottom: 12px; font-size: 13px; outline: none; }
+        .auth-master-btn { background: #fff; color: #000; font-weight: 900; border-radius: 60px; padding: 18px; width: 100%; text-transform: uppercase; letter-spacing: 2px; font-size: 11px; cursor: pointer; }
+
+        /* -----------------------------------------------------------
+           5. MANDATE TEXT STYLING
+        ----------------------------------------------------------- */
+        .mandate-scroller { padding: 30px; line-height: 1.8; color: #888; font-size: 0.9rem; overflow-y: auto; }
+        .mandate-section { margin-bottom: 30px; border-left: 2px solid var(--mog-gold); padding-left: 20px; }
+        .mandate-title { color: var(--mog-gold); font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+
+        /* -----------------------------------------------------------
+           6. MATRIX SCROLLER (2X3 RESTORED)
+        ----------------------------------------------------------- */
+        .matrix-2x3 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px; }
+        .matrix-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 25px; height: 160px; display: flex; flex-direction: column; items: center; justify: center; padding: 15px; text-align: center; }
     </style>
 </head>
 <body id="mog-mainframe">
@@ -99,157 +97,197 @@
     <audio id="log-drum" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logdrum.mp3" preload="auto"></audio>
 
     <nav id="side-drawer">
-        <div class="p-10 border-b border-white/5"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 mb-4"></div>
-        <div class="flex flex-col p-8 space-y-4">
-            <div class="text-white font-black uppercase text-xs cursor-pointer" onclick="location.reload()">National Grid</div>
-            <div class="text-zinc-500 font-black uppercase text-xs cursor-pointer">Intel Archive</div>
+        <div class="p-10 border-b border-white/5 flex justify-between items-center">
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-14 w-14">
+            <button onclick="toggleDrawer()"><i class="fa-solid fa-xmark text-white"></i></button>
         </div>
+        <div class="drawer-item" onclick="location.reload()"><i class="fa-solid fa-house"></i> National Grid Home</div>
+        <div class="drawer-item"><i class="fa-solid fa-compact-disc"></i> Mandate Archive</div>
+        <div class="drawer-item"><i class="fa-solid fa-user-shield"></i> Director Hub</div>
+        <div class="drawer-item" onclick="window.open('https://wa.me/27791438964')"><i class="fa-brands fa-whatsapp"></i> Support</div>
     </nav>
 
-    <header class="px-8 flex justify-between items-center sticky top-0 z-[500]">
+    <header class="h-[100px] px-10 flex justify-between items-center sticky top-0 z-[500] bg-black/80 backdrop-blur-md">
         <div class="flex items-center gap-6">
-            <button onclick="document.getElementById('side-drawer').classList.toggle('drawer-active')" class="text-gold text-2xl"><i class="fa-solid fa-bars-staggered"></i></button>
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-14 w-14">
+            <button onclick="toggleDrawer()" class="text-gold text-2xl"><i class="fa-solid fa-bars-staggered"></i></button>
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16">
             <div>
-                <h1 class="text-2xl font-black uppercase italic tracking-tighter text-gold leading-none">Ministry of Groove</h1>
-                <p class="text-[11px] text-zinc-500 font-black uppercase italic tracking-[0.2em] mt-1">Decipher the culture.</p>
+                <h1 class="text-3xl font-black uppercase italic tracking-tighter text-gold leading-none">Ministry of Groove</h1>
+                <p class="text-[11px] text-zinc-500 font-black uppercase italic tracking-[0.3em] mt-2">Decipher the culture.</p>
             </div>
         </div>
-        <div class="hidden lg:block"><span class="text-[10px] text-blue-400 font-black uppercase tracking-[0.5em] border border-blue-400/20 px-6 py-2 rounded-full">S-01 Mainframe // V330</span></div>
+        <div class="hidden lg:flex items-center gap-10">
+            <button onclick="operativePulse()" class="text-[10px] text-blue-400 font-black uppercase tracking-widest border border-blue-400/30 px-6 py-2 rounded-full">Operative Pulse</button>
+        </div>
     </header>
 
-    <div class="mainframe-scroll">
-        <div class="v70-layout">
+    <div class="liquid-mainframe">
+        
+        <section class="command-tile area-gateway p-10">
+            <div class="flex gap-6 mb-10 border-b border-white/5">
+                <span onclick="switchTab('login')" id="tab-login" class="auth-tab active">Log In</span>
+                <span onclick="switchTab('signup')" id="tab-signup" class="auth-tab">Enrollment</span>
+            </div>
             
-            <section class="telkom-auth-card tile-wide">
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-12 mb-4">
-                <p class="text-[10px] opacity-70 mb-8 font-black">v31.1.1</p>
-                
-                <h2 class="telkom-headline">Possible<br>begins here</h2>
-                <p class="telkom-sub">Get exploring! Manage your services, pay bills, top up, and load vouchers.</p>
-                
-                <div class="telkom-white-panel" id="auth-panel">
-                    <div id="auth-fields">
-                        <h3 class="text-2xl font-black mb-10">Log in</h3>
-                        
-                        <label class="telkom-label">Username <i class="fa-solid fa-circle-info text-zinc-300"></i> <a href="#" class="telkom-link">Forgot username</a></label>
-                        <input id="login-user" type="text" placeholder="Enter username" class="telkom-input">
-                        
-                        <label class="telkom-label">Password <a href="#" class="telkom-link">Forgot password</a></label>
-                        <div class="relative">
-                            <input id="login-pass" type="password" placeholder="Enter your password" class="telkom-input">
-                            <i class="fa-solid fa-eye-slash absolute right-5 top-5 text-zinc-400"></i>
-                        </div>
-                        
-                        <button onclick="handleMainAuth()" class="telkom-confirm-btn">Confirm</button>
-                        <button class="telkom-signup-btn">Sign up instead</button>
-                        
-                        <div class="text-center mt-8">
-                            <p class="text-zinc-300 text-xs mb-4">or</p>
-                            <a href="#" class="text-telkom-blue font-black underline text-sm">Continue as guest</a>
-                        </div>
-                    </div>
+            <div id="login-fields" class="w-full">
+                <input id="l-user" type="text" placeholder="GMAIL / ALIAS" class="auth-input">
+                <input id="l-pass" type="password" placeholder="PASSCODE" class="auth-input">
+                <button onclick="handleAuth()" class="auth-master-btn mt-4">Authorize Entry</button>
+            </div>
+            
+    <div class="liquid-mainframe">
+        
+        <section class="command-tile area-gateway p-10">
+            <div class="flex gap-6 mb-10 border-b border-white/5">
+                <span onclick="switchTab('login')" id="tab-login" class="auth-tab active">Log In</span>
+                <span onclick="switchTab('signup')" id="tab-signup" class="auth-tab">Enrollment</span>
+            </div>
+            
+            <div id="login-fields" class="w-full">
+                <input id="l-user" type="text" placeholder="GMAIL / ALIAS" class="auth-input">
+                <input id="l-pass" type="password" placeholder="PASSCODE" class="auth-input">
+                <button onclick="handleAuth()" class="auth-master-btn mt-4">Authorize Entry</button>
+            </div>
 
-                    <div id="active-op-badge" class="hidden text-center py-20">
-                        <p class="text-[10px] text-telkom-blue font-black uppercase tracking-widest mb-2">Authenticated Operative</p>
-                        <h2 id="display-op-id" class="text-5xl text-blue-900 font-black uppercase italic tracking-tighter">OPERATIVE</h2>
-                        <button onclick="logout()" class="text-red-500 font-black uppercase mt-10 text-xs">Terminate Session</button>
-                    </div>
+            <div id="signup-fields" class="hidden w-full">
+                <input id="s-alias" type="text" placeholder="CHOOSE ALIAS" class="auth-input">
+                <input id="s-email" type="email" placeholder="YOUR GMAIL" class="auth-input">
+                <input id="s-pass" type="password" placeholder="CREATE PASSCODE" class="auth-input">
+                <button onclick="handleSignup()" class="auth-master-btn bg-gold text-black mt-4">Submit Enrollment</button>
+            </div>
+
+            <div id="active-op-badge" class="hidden text-center h-full flex flex-col justify-center">
+                <h2 id="display-op-id" class="text-4xl text-white font-black uppercase italic">OPERATIVE</h2>
+                <button onclick="logout()" class="text-[10px] text-red-500 font-black mt-8">Terminate Session</button>
+            </div>
+        </section>
+
+        <section class="command-tile area-messenger">
+            <div class="flex-grow flex flex-col bg-[#0b141a] m-1 rounded-[30px] overflow-hidden">
+                <div id="chat-stream" class="flex-grow p-8 overflow-y-auto space-y-4"></div>
+                <div class="bg-[#202c33] p-5 flex gap-4">
+                    <input id="chat-msg" type="text" placeholder="Encode Frequency..." class="flex-grow bg-[#2a3942] border-0 rounded-full px-8 py-4 text-sm text-white outline-none">
+                    <button onclick="sendMessage()" class="w-16 h-16 bg-blue-500 text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="command-tile tile-wide p-10">
-                <div class="flex justify-between items-center mb-10">
-                    <h3 class="text-white font-black uppercase italic text-lg tracking-tighter">Mandate Mix Archive</h3>
-                    <audio id="v70-player" controls class="h-10 w-64"></audio>
+        <section class="command-tile area-mandate">
+            <div class="p-6 border-b border-white/5 flex justify-between bg-black/20">
+                <p class="text-[11px] text-gold font-black uppercase italic">S-01 Official Mandate</p>
+                <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div class="mandate-scroller scroller-container">
+                <div class="mandate-section">
+                    <p class="mandate-title">Objective</p>
+                    <p>The Ministry of Groove (Pty) Ltd is established as the primary custodian of high-fidelity sound and curated social architecture within the Mpumalanga region.</p>
                 </div>
-                <div class="media-scroller">
-                    <div class="v70-card">
-                        <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="p-10 bg-black/40">
-                        <div class="p-6">
-                            <p class="text-[10px] text-gold font-black uppercase">Session 002</p>
-                            <button onclick="document.getElementById('v70-player').src='https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandatemix.mp3';document.getElementById('v70-player').play();" class="mt-4 text-[10px] bg-white text-black font-black px-8 py-3 rounded-full uppercase">Play</button>
-                        </div>
-                    </div>
-                    <div class="v70-card opacity-30"><div class="flex items-center justify-center h-full"><i class="fa-solid fa-lock text-4xl"></i></div></div>
+                <div class="mandate-section">
+                    <p class="mandate-title">The Sonic Standard</p>
+                    <p>The Ministry rejects the saturation of commercial noise. We are committed to the preservation of Deep House, Soulful House, and Rare Grooves.</p>
                 </div>
-            </section>
-
-            <section class="command-tile tile-med p-1 bg-[#0b141a]">
-                <div id="chat-stream" class="msg-stream"></div>
-                <div class="p-6 bg-[#202c33] flex gap-4">
-                    <input id="chat-msg" type="text" placeholder="Broadcast message..." class="flex-grow bg-[#2a3942] border-0 rounded-full px-8 py-4 text-white text-sm outline-none">
-                    <button onclick="sendMessage()" class="w-14 h-14 bg-blue-500 text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
+                <div class="mandate-section">
+                    <p class="mandate-title">The Delegate Protocol</p>
+                    <p>Admission to our Sessions is governed by the Registry to ensure the integrity of our atmosphere remains uncompromised. By Invitation Only.</p>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="command-tile tile-small p-8">
-                <p class="text-[11px] text-white font-black uppercase mb-8 border-b border-white/5 pb-2 italic">Hitlist status</p>
-                <div id="hitlist-v70" class="space-y-4"></div>
-            </section>
+        <section class="command-tile area-visual">
+            <div class="p-6 border-b border-white/5 flex justify-between bg-black/20">
+                <p class="text-[11px] text-white font-black uppercase italic">Visual Archive</p>
+                <i class="fa-solid fa-video text-blue-400"></i>
+            </div>
+            <div class="scroller-container overflow-y-auto">
+                <div class="matrix-2x3" id="visual-matrix"></div>
+            </div>
+        </section>
 
-        </div>
+        <section class="command-tile area-hitlist">
+            <div class="p-6 border-b border-white/5 flex justify-between bg-black/20">
+                <p class="text-[11px] text-white font-black uppercase italic">Top 10 Hitlist</p>
+                <i class="fa-brands fa-spotify text-green-500"></i>
+            </div>
+            <div class="scroller-container overflow-y-auto p-6 space-y-4">
+                <div id="hitlist-v365" class="space-y-4"></div>
+            </div>
+        </section>
+
     </div>
-    
-    <footer>
-        <div class="flex justify-center mb-8 gap-10">
-            <a href="https://wa.me/27791438964" class="text-zinc-500 text-xl"><i class="fa-brands fa-whatsapp"></i></a>
-            <a href="https://tiktok.com/@directormog" class="text-zinc-500 text-xl"><i class="fa-brands fa-tiktok"></i></a>
+
+    <footer class="h-[100px] border-t border-white/5 bg-black flex flex-col md:flex-row items-center justify-between px-10 gap-4">
+        <p class="text-[10px] text-zinc-700 font-black uppercase tracking-[0.5em]">© 2026 MINISTRY OF GROOVE // WITBANK HQ</p>
+        <div class="flex gap-10">
+            <a href="https://tiktok.com/@directormog" target="_blank" class="text-zinc-500 hover:text-white"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://instagram.com" target="_blank" class="text-zinc-500 hover:text-white"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://wa.me/27791438964" target="_blank" class="text-zinc-500 hover:text-green-500"><i class="fa-brands fa-whatsapp"></i></a>
         </div>
-        <p class="text-[10px] text-zinc-700 font-black uppercase tracking-[0.5em] text-center">© 2026 MINISTRY OF GROOVE // WITBANK HQ</p>
     </footer>
 
     <script>
         const MOG_CFG = {
             U: "https://vbkpatwvgvwarybbpiky.supabase.co",
-            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8"
+            K: "YOUR_RESTRICTED_KEY_HERE"
         };
         const db = window.supabase.createClient(MOG_CFG.U, MOG_CFG.K);
         let currentOp = null;
 
-        const channel = db.channel('public:messages')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
-                document.getElementById('log-drum').currentTime = 0; document.getElementById('log-drum').play().catch(()=>{});
-                appendMsg(payload.new); 
-            }).subscribe();
-
-        function appendMsg(m) {
-            const stream = document.getElementById('chat-stream');
-            const div = document.createElement('div');
-            div.className = `bubble ${m.user_id === currentOp?.id ? 'sent' : 'received'}`;
-            div.innerHTML = `<span class="text-[9px] font-black uppercase block mb-1 text-gold">@${m.alias}</span>${m.content}`;
-            stream.appendChild(div);
-            stream.scrollTop = stream.scrollHeight;
+        function toggleDrawer() { document.getElementById('side-drawer').classList.toggle('drawer-active'); }
+        function switchTab(t) {
+            document.getElementById('login-fields').classList.toggle('hidden', t !== 'login');
+            document.getElementById('signup-fields').classList.toggle('hidden', t !== 'signup');
+            document.getElementById('tab-login').classList.toggle('active', t === 'login');
+            document.getElementById('tab-signup').classList.toggle('active', t === 'signup');
         }
 
-        async function handleMainAuth() {
-            const email = document.getElementById('login-user').value.trim();
-            const pass = document.getElementById('login-pass').value;
-            const { data, error } = await db.auth.signInWithPassword({ 
-                email: email.includes('@') ? email : `${email}@user.mog.internal`, password: pass 
-            });
-            if(!error) { 
-                currentOp = data.user; 
-                document.getElementById('auth-fields').classList.add('hidden');
+        async function operativePulse() {
+            document.body.style.opacity = '0.5';
+            document.getElementById('log-drum').play();
+            setTimeout(() => document.body.style.opacity = '1', 300);
+        }
+
+        /* 2X3 MATRIX INJECTION */
+        function initContent() {
+            const vis = document.getElementById('visual-matrix');
+            for(let i=1; i<=6; i++) {
+                vis.innerHTML += `
+                    <div class="matrix-item">
+                        <i class="fa-solid fa-play text-blue-400 mb-4"></i>
+                        <p class="text-[8px] text-zinc-500 uppercase">CLIP_S0${i}.MP4</p>
+                    </div>`;
+            }
+            const hit = document.getElementById('hitlist-v365');
+            for(let i=1; i<=10; i++) {
+                hit.innerHTML += `<div class="bg-white/5 p-4 rounded-2xl border border-white/5 flex justify-between items-center"><p class="text-[10px] text-white font-black uppercase">HIT_RANK_${i}</p><i class="fa-brands fa-spotify text-green-500"></i></div>`;
+            }
+        }
+
+        /* LIVE AUTH ENGINE */
+        async function handleSignup() {
+            const alias = document.getElementById('s-alias').value;
+            const email = document.getElementById('s-email').value;
+            const pass = document.getElementById('s-pass').value;
+            const { data, error } = await db.auth.signUp({ email, password: pass });
+            if(!error) {
+                await db.from('registrations').insert([{ user_id: data.user.id, alias }]);
+                alert("Enrollment Submitted. Please verify your Gmail.");
+            } else alert(error.message);
+        }
+
+        async function handleAuth() {
+            const email = document.getElementById('l-user').value;
+            const pass = document.getElementById('l-pass').value;
+            const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+            if(!error) {
+                currentOp = data.user;
+                document.getElementById('login-fields').parentElement.classList.add('hidden');
                 document.getElementById('active-op-badge').classList.remove('hidden');
                 const { data: reg } = await db.from('registrations').select('alias').eq('user_id', currentOp.id).single();
                 if(reg) document.getElementById('display-op-id').innerText = reg.alias;
-            } else { alert(error.message); }
+            } else alert(error.message);
         }
 
-        async function sendMessage() {
-            const input = document.getElementById('chat-msg');
-            if(!currentOp) return alert("AUTHORIZE IDENTITY");
-            await db.from('messages').insert([{ content: input.value.trim(), user_id: currentOp.id, alias: document.getElementById('display-op-id').innerText }]);
-            input.value = '';
-        }
-
-        window.onload = () => {
-             const hit = document.getElementById('hitlist-v70');
-             for(let i=1; i<=5; i++) {
-                 hit.innerHTML += `<div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/5"><p class="text-[10px] text-white font-black uppercase">HIT_RANK_${i}</p><i class="fa-brands fa-spotify text-green-500"></i></div>`;
-             }
-        };
+        window.onload = initContent;
     </script>
 </body>
-</html>
+        </html>
