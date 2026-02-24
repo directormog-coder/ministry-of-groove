@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID TOTALITY V400</title>
+    <title>M.O.G. | NATIONAL GRID MASTER V410</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -18,17 +18,17 @@
         }
 
         html, body { height: 100vh; width: 100vw; margin: 0; padding: 0; overflow: hidden; background-color: var(--mog-bg); }
-        * { transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
+        * { transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
 
         body { 
-            background-image: 
-                linear-gradient(rgba(6, 10, 15, 0.8), rgba(6, 10, 15, 0.8)),
-                radial-gradient(circle at 2px 2px, rgba(0, 212, 255, 0.1) 1px, transparent 0);
-            background-size: cover, 40px 40px;
+            background-image: radial-gradient(circle at 2px 2px, rgba(0, 212, 255, 0.08) 1px, transparent 0);
+            background-size: 35px 35px;
             display: flex; flex-direction: column;
         }
 
-        /* 1. NAVIGATION & HAMBURGER (FULL RESTORE) */
+        /* 1. FIXED NAVIGATION & HEADER */
+        header { height: 90px; flex-shrink: 0; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); z-index: 1000; }
+        
         #side-drawer { 
             position: fixed; top: 0; left: -100%; width: 340px; height: 100%; 
             background: #0a0e14; z-index: 10000; transition: 0.5s; 
@@ -38,10 +38,7 @@
         .drawer-item { padding: 18px 30px; border-bottom: 1px solid rgba(255,255,255,0.03); text-transform: uppercase; font-size: 11px; font-weight: 900; color: #666; display: flex; align-items: center; gap: 15px; cursor: pointer; }
         .drawer-item:hover { color: var(--mog-gold); background: rgba(212, 175, 55, 0.05); }
 
-        /* 2. PRECISION GRID LAYOUT */
-        header { height: 90px; flex-shrink: 0; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.6); backdrop-blur: 10px; }
-        footer { height: 80px; flex-shrink: 0; border-top: 1px solid rgba(255,255,255,0.05); background: #000; }
-
+        /* 2. LIQUID ALIGNMENT GRID */
         .mainframe-wrapper {
             flex: 1; display: grid; padding: 20px; gap: 20px;
             grid-template-columns: 1fr 1fr 1fr;
@@ -52,7 +49,7 @@
         }
 
         @media (max-width: 1024px) {
-            .mainframe-wrapper { grid-template-columns: 1fr; grid-template-rows: auto; grid-template-areas: "gateway" "messenger" "mandate" "visuals" "hitlist"; overflow-y: auto; height: auto; padding-bottom: 100px; }
+            .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "mandate" "visuals" "hitlist"; overflow-y: auto; height: auto; padding-bottom: 100px; }
         }
 
         .area-gateway { grid-area: gateway; } .area-messenger { grid-area: messenger; }
@@ -63,23 +60,25 @@
             border-radius: 35px; overflow: hidden; display: flex; flex-direction: column; height: 100%;
         }
 
+        /* 3. VERTICAL CINEMATIC SCROLLERS (NO MORE 2X3) */
         .scroller-box { flex: 1; overflow-y: auto; padding: 25px; }
-        .scroller-box::-webkit-scrollbar { width: 4px; }
+        .scroller-box::-webkit-scrollbar { width: 5px; }
         .scroller-box::-webkit-scrollbar-thumb { background: var(--mog-gold); border-radius: 10px; }
 
-        /* 3. AUTH & ENROLLMENT (V330/V350 HYBRID) */
-        .auth-tab { cursor: pointer; padding: 12px 20px; font-weight: 900; font-size: 10px; text-transform: uppercase; color: #555; border-bottom: 2px solid transparent; }
-        .auth-tab.active { color: var(--mog-gold); border-color: var(--mog-gold); }
+        .list-item { 
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); 
+            border-radius: 20px; padding: 15px; margin-bottom: 12px; display: flex; 
+            justify-content: space-between; align-items: center; 
+        }
+
+        /* 4. AUTH & BUTTONS */
         .auth-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 16px; width: 100%; color: white; margin-bottom: 12px; font-size: 13px; outline: none; }
         .master-btn { background: #fff; color: #000; font-weight: 900; border-radius: 50px; padding: 18px; width: 100%; text-transform: uppercase; letter-spacing: 2px; font-size: 11px; cursor: pointer; }
 
-        /* 4. CONTENT COMPONENTS */
-        .mandate-block { margin-bottom: 25px; border-left: 2px solid var(--mog-gold); padding-left: 20px; }
-        .visual-matrix { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .visual-item { aspect-ratio: 16/9; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-        .visual-item video { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-        
-        .hit-row { background: rgba(255,255,255,0.03); border-radius: 18px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        /* 5. FOOTER & SOCIAL APPS */
+        footer { height: 80px; flex-shrink: 0; border-top: 1px solid rgba(255,255,255,0.05); background: #000; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; }
+        .social-link { font-size: 1.3rem; color: #444; transition: 0.4s; }
+        .social-link:hover { color: var(--mog-gold); transform: translateY(-5px); }
     </style>
 </head>
 <body id="mog-mainframe">
@@ -91,47 +90,43 @@
             <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-14 w-14">
             <button onclick="toggleDrawer()"><i class="fa-solid fa-xmark text-white"></i></button>
         </div>
-        <div class="scroller-box h-full pb-20">
-            <p class="px-5 py-4 text-[9px] text-gold font-black uppercase tracking-widest">Mainframe Folders</p>
-            <div class="drawer-item"><i class="fa-solid fa-house"></i> National Grid Home</div>
-            <div class="drawer-item"><i class="fa-solid fa-compact-disc"></i> Mandate Archive</div>
-            <div class="drawer-item"><i class="fa-solid fa-id-card"></i> ID Matrix</div>
-            <div class="drawer-item" onclick="toggleUI('director-console')"><i class="fa-solid fa-user-shield"></i> Director Hub</div>
-            <div class="drawer-item" onclick="window.open('https://wa.me/27791438964')"><i class="fa-brands fa-whatsapp"></i> Registry Support</div>
-        </div>
+        <div class="drawer-item" onclick="location.reload()"><i class="fa-solid fa-house"></i> National Grid Home</div>
+        <div class="drawer-item"><i class="fa-solid fa-compact-disc"></i> Mandate Archive</div>
+        <div class="drawer-item" onclick="toggleUI('director-console')"><i class="fa-solid fa-user-shield"></i> Director Hub</div>
+        <div class="drawer-item" onclick="window.open('https://wa.me/27791438964')"><i class="fa-brands fa-whatsapp"></i> Registry Support</div>
     </nav>
 
     <header class="px-10 flex justify-between items-center">
         <div class="flex items-center gap-6">
-            <button onclick="toggleDrawer()" class="text-gold text-2xl"><i class="fa-solid fa-bars-staggered"></i></button>
+            <button onclick="toggleDrawer()" class="text-gold text-2xl hover:scale-110"><i class="fa-solid fa-bars-staggered"></i></button>
             <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-14 w-14">
             <div>
                 <h1 class="text-2xl font-black uppercase italic tracking-tighter text-gold leading-none">Ministry of Groove</h1>
                 <p class="text-[11px] text-zinc-500 font-black uppercase italic tracking-[0.2em] mt-1">Decipher the culture.</p>
             </div>
         </div>
-        <button onclick="operativePulse()" class="hidden md:block text-[9px] text-blue-400 font-black uppercase tracking-[0.5em] border border-blue-400/20 px-6 py-2 rounded-full">S-01 National Grid</button>
+        <div class="hidden md:block text-[9px] text-blue-400 font-black uppercase tracking-[0.5em] border border-blue-400/20 px-6 py-2 rounded-full">S-01 National Grid</div>
     </header>
 
     <main class="mainframe-wrapper">
         
         <section class="command-tile area-gateway p-10">
-            <div id="auth-header" class="flex gap-6 mb-10 border-b border-white/5">
-                <span onclick="switchTab('login')" id="tab-login" class="auth-tab active">Log In</span>
-                <span onclick="switchTab('signup')" id="tab-signup" class="auth-tab">Enrollment</span>
+            <div id="auth-tabs" class="flex gap-6 mb-10 border-b border-white/5">
+                <span onclick="switchTab('login')" id="tab-login" class="auth-tab active text-xs font-black uppercase cursor-pointer">Log In</span>
+                <span onclick="switchTab('signup')" id="tab-signup" class="auth-tab text-xs font-black uppercase cursor-pointer opacity-40">Enrollment</span>
             </div>
             
             <div id="login-fields">
-                <input id="l-user" type="text" placeholder="GMAIL / ALIAS" class="auth-input">
+                <input id="l-user" type="text" placeholder="GMAIL / EMAIL" class="auth-input">
                 <input id="l-pass" type="password" placeholder="PASSCODE" class="auth-input">
                 <button onclick="handleAuth()" class="master-btn mt-6">Authorize Entry</button>
             </div>
 
             <div id="signup-fields" class="hidden">
-                <input id="r-alias" type="text" placeholder="CHOOSE ALIAS" class="auth-input">
-                <input id="r-email" type="email" placeholder="YOUR GMAIL" class="auth-input">
+                <input id="r-alias" type="text" placeholder="ALIAS" class="auth-input">
+                <input id="r-email" type="email" placeholder="GMAIL" class="auth-input">
                 <input id="r-pass" type="password" placeholder="PASSCODE" class="auth-input">
-                <button onclick="handleSignup()" class="master-btn bg-gold text-black mt-6">Enroll in Grid</button>
+                <button onclick="handleSignup()" class="master-btn bg-gold text-black mt-6">Submit Enrollment</button>
             </div>
 
             <div id="active-op-badge" class="hidden text-center flex-grow flex flex-col justify-center">
@@ -142,9 +137,9 @@
 
         <section class="command-tile area-messenger">
             <div class="flex-grow flex flex-col bg-[#0b141a] m-1 rounded-[30px] overflow-hidden">
-                <div id="chat-stream" class="flex-grow scroller-box"></div>
+                <div id="chat-stream" class="scroller-box"></div>
                 <div class="bg-[#202c33] p-5 flex gap-4">
-                    <input id="chat-msg" type="text" placeholder="Encode message..." class="flex-grow bg-[#2a3942] border-0 rounded-full px-8 py-4 text-sm text-white outline-none">
+                    <input id="chat-msg" type="text" placeholder="Broadcast frequency..." class="flex-grow bg-[#2a3942] border-0 rounded-full px-8 py-4 text-sm text-white outline-none">
                     <button onclick="sendMessage()" class="w-14 h-14 bg-blue-500 text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </div>
@@ -153,31 +148,33 @@
         <section class="command-tile area-mandate">
             <p class="p-6 border-b border-white/5 text-[10px] text-gold font-black uppercase italic bg-black/20">The Mandate</p>
             <div class="scroller-box">
-                <div class="mandate-block"><p class="text-[10px] text-gold font-black uppercase mb-1">Objective</p><p class="text-sm text-gray-400">Custodians of high-fidelity sound and curated social architecture in Mpumalanga.</p></div>
-                <div class="mandate-block"><p class="text-[10px] text-gold font-black uppercase mb-1">Sonic Standard</p><p class="text-sm text-gray-400">Preserving Deep, Soulful, and Rare Grooves.</p></div>
-                <div class="mandate-block"><p class="text-[10px] text-gold font-black uppercase mb-1">Protocol</p><p class="text-sm text-gray-400">Registry controlled admission. By invitation only.</p></div>
+                <div class="mb-8 border-l-2 border-gold pl-4"><p class="text-gold text-[10px] font-black uppercase mb-2">Objective</p><p class="text-sm text-zinc-500">Custodians of sound and curated social architecture in Mpumalanga.</p></div>
+                <div class="mb-8 border-l-2 border-gold pl-4"><p class="text-gold text-[10px] font-black uppercase mb-2">Standard</p><p class="text-sm text-zinc-500">Preserving Deep, Soulful, and Rare Grooves.</p></div>
+                <div class="border-l-2 border-gold pl-4"><p class="text-gold text-[10px] font-black uppercase mb-2">Protocol</p><p class="text-sm text-zinc-500">Invitation only. Registry controlled admission.</p></div>
             </div>
         </section>
 
         <section class="command-tile area-visuals">
             <p class="p-6 border-b border-white/5 text-[10px] text-white font-black uppercase italic bg-black/20">Visual Archive</p>
-            <div class="scroller-box">
-                <div class="visual-matrix" id="v-matrix"></div>
-            </div>
+            <div class="scroller-box" id="visual-list">
+                </div>
         </section>
 
         <section class="command-tile area-hitlist">
             <p class="p-6 border-b border-white/5 text-[10px] text-white font-black uppercase italic bg-black/20">Top 10 Hitlist</p>
-            <div class="scroller-box" id="hit-box"></div>
+            <div class="scroller-box" id="hit-list">
+                </div>
         </section>
+
     </main>
 
-    <footer class="px-10 flex justify-between items-center">
+    <footer>
         <p class="text-[9px] text-zinc-700 font-black uppercase tracking-[0.5em]">© 2026 MINISTRY OF GROOVE // WITBANK HQ</p>
-        <div class="flex gap-8">
-            <a href="https://wa.me/27791438964" target="_blank" class="text-zinc-500 hover:text-green-500"><i class="fa-brands fa-whatsapp"></i></a>
-            <a href="https://tiktok.com/@directormog" target="_blank" class="text-zinc-500 hover:text-white"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="https://instagram.com" target="_blank" class="text-zinc-500 hover:text-white"><i class="fa-brands fa-instagram"></i></a>
+        <div class="flex gap-10">
+            <a href="https://tiktok.com/@directormog" target="_blank" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://instagram.com" target="_blank" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://wa.me/27791438964" target="_blank" class="social-link"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="https://youtube.com" target="_blank" class="social-link"><i class="fa-brands fa-youtube"></i></a>
         </div>
     </footer>
 
@@ -193,44 +190,20 @@
         function switchTab(t) {
             document.getElementById('login-fields').classList.toggle('hidden', t !== 'login');
             document.getElementById('signup-fields').classList.toggle('hidden', t !== 'signup');
-            document.getElementById('tab-login').classList.toggle('active', t === 'login');
-            document.getElementById('tab-signup').classList.toggle('active', t === 'signup');
-        }
-
-        async function handleSignup() {
-            const email = document.getElementById('r-email').value;
-            const password = document.getElementById('r-pass').value;
-            const alias = document.getElementById('r-alias').value;
-            const { data, error } = await db.auth.signUp({ email, password });
-            if (!error) {
-                await db.from('registrations').insert([{ user_id: data.user.id, alias }]);
-                alert("Enrollment Sent. Check Gmail.");
-            } else alert(error.message);
+            document.getElementById('tab-login').classList.toggle('opacity-40', t !== 'login');
+            document.getElementById('tab-signup').classList.toggle('opacity-40', t !== 'signup');
         }
 
         async function handleAuth() {
-            const email = document.getElementById('l-user').value;
-            const password = document.getElementById('l-pass').value;
-            const { data, error } = await db.auth.signInWithPassword({ email, password });
-            if (!error) {
-                currentOp = data.user;
-                document.getElementById('auth-header').classList.add('hidden');
-                document.getElementById('login-fields').classList.add('hidden');
-                document.getElementById('active-op-badge').classList.remove('hidden');
-            } else alert(error.message);
-        }
-
-        async function operativePulse() {
-            document.body.style.opacity = '0.5';
-            document.getElementById('log-drum').play();
-            setTimeout(() => document.body.style.opacity = '1', 300);
+            const { data, error } = await db.auth.signInWithPassword({ email: document.getElementById('l-user').value, password: document.getElementById('l-pass').value });
+            if(!error) location.reload(); else alert(error.message);
         }
 
         window.onload = () => {
-            const vm = document.getElementById('v-matrix');
-            const hb = document.getElementById('hit-box');
-            for(let i=1; i<=4; i++) vm.innerHTML += `<div class="visual-item"><video muted loop onmouseover="this.play()" onmouseout="this.pause()" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/clip${i}.mp4"></video></div>`;
-            for(let i=1; i<=10; i++) hb.innerHTML += `<div class="hit-row"><p class="text-[10px] text-white font-black uppercase">HIT_RANK_${i}</p><i class="fa-brands fa-spotify text-green-500"></i></div>`;
+            const vl = document.getElementById('visual-list');
+            const hl = document.getElementById('hit-list');
+            for(let i=1; i<=6; i++) vl.innerHTML += `<div class="list-item"><p class="text-[10px] text-white font-black uppercase">Clip_Archive_0${i}</p><i class="fa-solid fa-circle-play text-blue-400"></i></div>`;
+            for(let i=1; i<=10; i++) hl.innerHTML += `<div class="list-item"><p class="text-[10px] text-zinc-500 font-black">#${i}</p><p class="text-[10px] text-white font-black uppercase">HIT_FREQUENCY</p><i class="fa-brands fa-spotify text-green-500"></i></div>`;
         };
     </script>
 </body>
