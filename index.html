@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.2</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.1</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -32,6 +32,12 @@
             opacity: 0.55 !important;
         }
 
+        body::after {
+            content: ""; position: fixed; inset: 0;
+            background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+            opacity: 0.03; pointer-events: none; z-index: 50;
+        }
+
         /* SINGLE LINE GOLD BRANDING */
         #main-title {
             font-family: 'Big Shoulders Display', sans-serif !important;
@@ -50,7 +56,6 @@
         .mainframe-wrapper {
             display: grid; padding: 35px; gap: 35px;
             grid-template-columns: 1.2fr 1.5fr 1fr;
-            grid-template-rows: auto auto;
             grid-template-areas: "gateway messenger radar" "growth messenger hitlist";
             max-width: 1900px; margin: 0 auto;
         }
@@ -59,13 +64,12 @@
             .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "radar" "growth" "hitlist"; overflow-y: auto; } 
         }
 
-        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 40px; overflow: hidden; display: flex; flex-direction: column; backdrop-filter: blur(25px); box-shadow: 0 40px 80px rgba(0,0,0,0.6); position: relative; }
+        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 40px; overflow: hidden; display: flex; flex-direction: column; backdrop-filter: blur(25px); box-shadow: 0 40px 80px rgba(0,0,0,0.6); }
         .scroller-v { overflow-y: auto; scrollbar-width: none; padding: 35px; }
         .scroller-v::-webkit-scrollbar { display: none; }
 
         .prestige-label { font-size: 0.9rem; letter-spacing: 0.6em; border-left: 5px solid var(--mog-blue); padding-left: 15px; margin: 25px; font-weight: 900; color: #fff; text-transform: uppercase; }
 
-        /* GLOBAL ELEMENTS */
         .ticker-wrap { height: 35px; background: #000; border-bottom: 1px solid var(--mog-border); overflow: hidden; display: flex; align-items: center; z-index: 100; }
         .ticker-move { white-space: nowrap; animation: ticker 45s linear infinite; font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--mog-blue); letter-spacing: 2px; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
@@ -76,9 +80,9 @@
         .glitch-active { animation: jitter 0.2s infinite; text-shadow: 3px 0 #ff3333, -3px 0 #00d4ff; }
         @keyframes jitter { 0% { transform: translate(0); } 50% { transform: translate(-2px, 2px); } 100% { transform: translate(0); } }
 
-        /* RADAR MAP GREYSCALE */
         .radar-map { filter: grayscale(100%) invert(100%) opacity(0.3); transition: 0.5s; }
-        .radar-map:hover { opacity: 0.6; }
+        
+        header { height: 140px; border-bottom: 1px solid rgba(0, 212, 255, 0.1); background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); z-index: 1000; }
     </style>
 </head>
 <body id="mog-totality">
@@ -86,10 +90,47 @@
     <div id="bg-canvas"></div>
 
     <div class="ticker-wrap">
-        <div class="ticker-move">TOTALITY v100.2 RESTORED // SOVEREIGN CIRCUITRY: 55% // WITBANK HQ // DECIPHER THE CULTURE // RADAR ACTIVE // SIGNAL: STABLE...</div>
+        <div class="ticker-move">TOTALITY v100.2.1 ACTIVE // SOVEREIGN CIRCUITRY: 55% // WITBANK HQ // DECIPHER THE CULTURE // RADAR ACTIVE // SIGNAL: STABLE...</div>
     </div>
 
-    <header class="h-[140px] px-12 flex justify-between items-center relative z-10 bg-black/40 border-b border-white/5 backdrop-blur-md">
+    <nav id="side-drawer" class="fixed top-0 right-0 h-full w-80 bg-black/95 backdrop-filter blur-2xl z-[10000] border-l border-blue-500/30 translate-x-full transition-transform duration-500">
+        <div class="p-10 space-y-10">
+            <div class="flex justify-between items-center border-b border-white/5 pb-6">
+                <span class="prestige-label !m-0 text-blue-400">Mission Hub</span>
+                <button onclick="toggleDrawer()" class="text-white opacity-40 hover:opacity-100"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="flex justify-between items-center p-4 bg-white/5 rounded-xl border border-white/10">
+                    <span class="text-[10px] uppercase font-black text-zinc-400">Silent Mode</span>
+                    <input type="checkbox" id="silent-toggle" class="accent-blue-400">
+                </div>
+                
+                <ul class="space-y-4 mono text-[13px] text-gray-400">
+                    <li class="hover:text-blue-400 cursor-pointer p-2 border-b border-white/5 transition-colors">
+                        <i class="fa-solid fa-satellite mr-4"></i> SECTOR MAP
+                    </li>
+                    <li class="hover:text-blue-400 cursor-pointer p-2 border-b border-white/5 transition-colors">
+                        <i class="fa-solid fa-id-card mr-4"></i> ID MATRIX
+                    </li>
+                    <li class="hover:text-blue-400 cursor-pointer p-2 border-b border-white/5 transition-colors">
+                        <i class="fa-solid fa-handshake mr-4"></i> RECRUITMENT LINK
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pt-10 border-t border-white/5 space-y-4">
+                <button onclick="window.print()" class="mog-input !py-3 !text-center !text-[10px] uppercase font-bold text-blue-400 border-blue-400/20">
+                    Export Poster Archive
+                </button>
+                <button onclick="logout()" class="mog-input !py-3 !text-center !text-[10px] uppercase font-bold text-red-500 border-red-500/20">
+                    Sever Mainframe Link
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="px-12 flex justify-between items-center relative z-10 bg-black/40 border-b border-white/5 backdrop-blur-md">
         <div class="flex items-center gap-8">
             <button onclick="handleLogoSequence()" class="h-24 w-24 rounded-full border-2 border-blue-500/30 overflow-hidden shadow-[0_0_30px_rgba(0,212,255,0.2)] active:scale-95 transition-all">
                 <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="w-full h-full object-cover">
@@ -104,11 +145,13 @@
                 <p class="text-[10px] text-blue-500 font-black tracking-[0.4em] uppercase">Status: Sovereign_Linked</p>
                 <p class="text-sm text-zinc-500 mono mt-1" id="lat-val">12ms</p>
             </div>
-            <button onclick="toggleDrawer()" class="text-blue-400 text-4xl hover:rotate-90"><i class="fa-solid fa-bars-staggered"></i></button>
+            <button onclick="toggleDrawer()" class="text-blue-400 text-4xl hover:rotate-90">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
         </div>
     </header>
 
-    <main class="mainframe-wrapper">
+    <main class="mainframe-wrapper relative z-10">
         
         <section class="command-tile area-gateway p-12" style="grid-area: gateway;">
             <span class="prestige-label">Identity Handshake</span>
@@ -141,7 +184,7 @@
 
         <section class="command-tile area-radar h-80" style="grid-area: radar;">
             <span class="prestige-label">National Radar</span>
-            <iframe class="radar-map w-full h-full scale-150" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114954.91262973752!2d29.1522!3d-25.8728!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ee2e04361543153%3A0x6b63d33f2d2d2d2d!2seMalahleni!5e0!3m2!1sen!2sza!4v1700000000000!5m2!1sen!2sza"></iframe>
+            <iframe class="radar-map w-full h-full scale-150" src="https://maps.google.com/maps?q=Emalahleni&t=k&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
         </section>
 
         <section class="command-tile area-growth" style="grid-area: growth;">
@@ -157,13 +200,33 @@
                 </div>
             </div>
         </section>
-        
+
         <section class="command-tile area-hitlist" style="grid-area: hitlist;">
             <span class="prestige-label">Frequency Hitlist</span>
             <div id="hit-list" class="scroller-v space-y-4"></div>
         </section>
 
     </main>
+
+    <footer class="relative z-10 p-20 mt-20 border-t border-white/5 bg-black/40 backdrop-filter blur-xl">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
+            <div class="mono text-[10px] opacity-40">
+                © 2026 MINISTRY OF GROOVE<br>
+                PRESTIGE_V100.2_TOTALITY
+            </div>
+            
+            <div class="flex justify-center gap-12 text-2xl">
+                <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="hover:text-white transition-all"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="https://www.instagram.com/ministryofgroove_hq" target="_blank" class="hover:text-blue-400 transition-all"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.facebook.com/share/1D9jcB5998/" target="_blank" class="hover:text-blue-600 transition-all"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="mailto:director.mog@gmail.com" class="hover:text-gold transition-all"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+
+            <div class="text-right">
+                <span class="prestige-label !m-0 text-[10px] opacity-40 tracking-widest">Africa Sector // HQ</span>
+            </div>
+        </div>
+    </footer>
 
     <div id="director-totality" class="hidden fixed inset-0 z-[5000] bg-black/98 p-12 backdrop-blur-3xl overflow-y-auto">
         <div class="max-w-4xl mx-auto">
@@ -182,11 +245,23 @@
             </div>
         </div>
     </div>
-
+    
     <script>
         const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
         const db = window.supabase.createClient(CFG.U, CFG.K);
         let logoClicks = 0;
+
+        function toggleDrawer() {
+            const drawer = document.getElementById('side-drawer');
+            const isOpen = drawer.classList.contains('translate-x-0');
+            if (isOpen) {
+                drawer.classList.remove('translate-x-0');
+                drawer.classList.add('translate-x-full');
+            } else {
+                drawer.classList.remove('translate-x-full');
+                drawer.classList.add('translate-x-0');
+            }
+        }
 
         function handleLogoSequence() {
             logoClicks++;
@@ -229,7 +304,7 @@
         };
 
         function closeDirector() { document.getElementById('director-totality').classList.add('hidden'); }
-        function toggleDrawer() { /* Implementation for side menu if needed */ }
+        async function logout() { await db.auth.signOut(); location.reload(); }
     </script>
 </body>
 </html>
