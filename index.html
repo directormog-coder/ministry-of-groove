@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.6</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.7</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -70,7 +70,11 @@
         
         .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 2px solid var(--mog-border); padding: 20px 0; color: #fff; width: 100%; outline: none; margin-bottom: 20px; font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; }
         .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 15px; padding: 22px; width: 100%; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; }
-        
+
+        /* FIX: SIDE DRAWER HIDDEN STATE */
+        #side-drawer { visibility: hidden; pointer-events: none; }
+        #side-drawer.translate-x-0 { visibility: visible; pointer-events: auto; }
+
         .glitch-active { animation: jitter 0.2s infinite; text-shadow: 3px 0 #ff3333, -3px 0 #00d4ff; }
         @keyframes jitter { 0% { transform: translate(0); } 50% { transform: translate(-2px, 2px); } 100% { transform: translate(0); } }
 
@@ -82,7 +86,7 @@
     <div id="bg-canvas"></div>
 
     <div class="ticker-wrap">
-        <div class="ticker-move">TOTALITY v100.2.6 RESTORED // CLASSIC NAV ACTIVE // CIRCUITRY: 55% // WITBANK HQ // DECIPHER THE CULTURE...</div>
+        <div class="ticker-move">TOTALITY v100.2.7 PATCHED // SECTOR STABILIZED // CIRCUITRY: 55% // WITBANK HQ // DECIPHER THE CULTURE...</div>
     </div>
 
     <nav id="side-drawer" class="fixed top-0 right-0 h-full w-80 bg-black/95 backdrop-filter blur-2xl z-[10000] border-l border-blue-500/30 translate-x-full transition-transform duration-500 shadow-[-20px_0_60px_rgba(0,0,0,0.9)]">
@@ -187,7 +191,7 @@
 
     <footer class="relative z-10 p-20 mt-20 border-t border-white/5 bg-black/40 backdrop-filter blur-xl">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
-            <div class="mono text-[10px] opacity-40">© 2026 MINISTRY OF GROOVE<br>PRESTIGE_V100.2.6_TOTALITY</div>
+            <div class="mono text-[10px] opacity-40">© 2026 MINISTRY OF GROOVE<br>PRESTIGE_V100.2.7_TOTALITY</div>
             <div class="flex justify-center gap-12 text-2xl">
                 <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="hover:text-white transition-all"><i class="fa-brands fa-tiktok"></i></a>
                 <a href="https://www.instagram.com/ministryofgroove_hq" target="_blank" class="hover:text-blue-400 transition-all"><i class="fa-brands fa-instagram"></i></a>
@@ -219,8 +223,20 @@
         function toggleDrawer() {
             const drawer = document.getElementById('side-drawer');
             const isClosed = drawer.classList.contains('translate-x-full');
-            if (isClosed) { drawer.classList.remove('translate-x-full'); drawer.classList.add('translate-x-0'); }
-            else { drawer.classList.remove('translate-x-0'); drawer.classList.add('translate-x-full'); }
+            
+            if (isClosed) {
+                drawer.style.visibility = "visible"; 
+                drawer.classList.remove('translate-x-full');
+                drawer.classList.add('translate-x-0');
+            } else {
+                drawer.classList.remove('translate-x-0');
+                drawer.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (drawer.classList.contains('translate-x-full')) {
+                        drawer.style.visibility = "hidden";
+                    }
+                }, 500);
+            }
         }
 
         async function loginOperative() {
@@ -273,4 +289,4 @@
         async function logout() { await db.auth.signOut(); location.reload(); }
     </script>
 </body>
-    </html>
+</html>
