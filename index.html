@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M.O.G. | PRESTIGE COMMAND v2026.7</title>
+    <title>M.O.G. | PRESTIGE COMMAND v2026.9.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -11,105 +11,37 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
-        :root {
-            --mog-gold: #D4AF37;
-            --mog-blue: #00d4ff;
-            --mog-black: #050505;
-            --mog-glass: rgba(10, 10, 10, 0.7);
-            --mog-border: rgba(212, 175, 55, 0.15);
-        }
-
+        :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; --mog-glass: rgba(5, 5, 5, 0.4); --mog-border: rgba(0, 212, 255, 0.1); }
         @view-transition { navigation: auto; }
-
         * { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); scroll-behavior: smooth; }
         
-        body { 
-            background: var(--mog-black); 
-            color: var(--mog-gold); 
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
+        body { background: var(--mog-black); color: var(--mog-gold); font-family: 'Inter', sans-serif; overflow-x: hidden; min-height: 100vh; margin: 0; }
+        
+        #bg-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.15; filter: blur(2px) saturate(0.5); pointer-events: none; will-change: transform; mix-blend-mode: screen; transition: opacity 1.5s ease, filter 1.5s ease; }
 
-        #bg-canvas {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            opacity: 0.8;
-            filter: blur(0.5px) contrast(1.2);
-            pointer-events: none;
-            will-change: transform;
-            mix-blend-mode: screen;
-        }
+        main { will-change: transform, opacity; transform: translateZ(0); backface-visibility: hidden; }
 
-        main {
-            will-change: transform, opacity;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-        }
-
-        /* BENTO SYSTEM */
-        .bento-container {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 1.5rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .bento-tile {
-            background: var(--mog-glass);
-            border: 1px solid var(--mog-border);
-            backdrop-filter: blur(24px) saturate(180%);
-            border-radius: 4px;
-            position: relative;
-            overflow: hidden;
-        }
+        .bento-container { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        .bento-tile { background: var(--mog-glass) !important; border: 1px solid var(--mog-border); backdrop-filter: blur(10px); border-radius: 4px; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.02); }
 
         h1, .prestige-label { font-family: 'Tenor Sans', serif; letter-spacing: 0.4em; text-transform: uppercase; }
         .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; }
 
-        .mog-input {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--mog-border);
-            padding: 1rem;
-            color: #fff;
-            width: 100%;
-            outline: none;
-        }
+        .mog-input { background: rgba(255,255,255,0.03); border: 1px solid var(--mog-border); padding: 1rem; color: #fff; width: 100%; outline: none; }
+        .mog-input::placeholder { color: var(--mog-blue); opacity: 0.3; }
 
-        .mog-btn {
-            background: transparent;
-            border: 1px solid var(--mog-gold);
-            color: var(--mog-gold);
-            padding: 0.75rem 1.5rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            cursor: pointer;
-            position: relative;
-        }
+        .mog-btn { background: transparent; border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 0.75rem 1.5rem; font-weight: 700; letter-spacing: 0.1em; cursor: pointer; position: relative; }
         .mog-btn:hover { background: var(--mog-gold); color: #000; scale: 1.02; box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2); }
 
-        #ticker-v2 {
-            position: fixed; bottom: 0; width: 100%; 
-            background: rgba(0,0,0,0.9); height: 35px;
-            border-top: 1px solid var(--mog-border);
-            display: flex; align-items: center; z-index: 1000;
-        }
-
-        .scroll-text {
-            animation: slide-left 30s linear infinite;
-            white-space: nowrap;
-            color: var(--mog-blue);
-            font-weight: 800;
-        }
+        #ticker-v2 { position: fixed; bottom: 0; width: 100%; background: rgba(0,0,0,0.9); height: 35px; border-top: 1px solid var(--mog-border); display: flex; align-items: center; z-index: 1000; }
+        .scroll-text { animation: slide-left 30s linear infinite; white-space: nowrap; color: var(--mog-blue); font-weight: 800; }
         @keyframes slide-left { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
-
+        @keyframes shimmer { 100% { transform: translateX(200%); } }
         @keyframes scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(200%); } }
         
+        #tile-gallery img { mix-blend-mode: lighten; filter: grayscale(100%) brightness(0.8) contrast(1.2); transition: 0.5s ease; }
+        #tile-gallery img:hover { filter: grayscale(0%) brightness(1); mix-blend-mode: normal; transform: scale(1.1); z-index: 10; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--mog-border); border-radius: 10px; }
     </style>
 </head>
@@ -117,12 +49,29 @@
 
 <canvas id="bg-canvas"></canvas>
 
-<header class="p-8 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10 border-b border-white/5">
+<nav id="side-hub" class="fixed top-0 left-0 h-full w-64 bg-black/80 backdrop-filter blur-2xl z-[1000] border-r border-blue-500/20 -translate-x-full transition-transform duration-500">
+    <div class="p-8 space-y-8">
+        <div class="flex justify-between items-center">
+            <span class="prestige-label text-[10px] text-blue-400">Mission Hub</span>
+            <button onclick="toggleHub()" class="text-white opacity-40 hover:opacity-100"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <ul class="space-y-6 mono text-[11px] text-gray-400">
+            <li class="hover:text-blue-400 cursor-pointer transition-colors"><i class="fa-solid fa-satellite mr-3"></i> SECTOR MAP</li>
+            <li class="hover:text-blue-400 cursor-pointer transition-colors"><i class="fa-solid fa-waveform-path mr-3"></i> SONIC VAULT</li>
+            <li class="hover:text-blue-400 cursor-pointer transition-colors"><i class="fa-solid fa-shield-halved mr-3"></i> SECURITY DEPT</li>
+            <li class="hover:text-blue-400 cursor-pointer transition-colors"><i class="fa-solid fa-folder-open mr-3"></i> INTEL LOGS</li>
+        </ul>
+    </div>
+</nav>
+
+<header class="p-8 flex justify-between items-center relative z-10 border-b border-white/5">
     <div class="flex items-center gap-6">
-        <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 rounded-full border border-gold/50">
+        <button onclick="toggleHub()" class="p-3 text-blue-400 hover:scale-110 transition-transform">
+            <i class="fa-solid fa-bars-staggered text-xl"></i>
+        </button>
+        <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-12 w-12 rounded-full border border-gold/30">
         <div>
-            <h1 class="text-2xl text-white italic">Ministry of Groove</h1>
-            <p class="mono text-blue-400 opacity-70 mt-1">PROTOCOL: PRESTIGE COMMAND // AFRICA SECTOR</p>
+            <h1 class="text-xl text-white italic">Ministry of Groove</h1>
         </div>
     </div>
     
@@ -134,76 +83,57 @@
                 <div class="w-7 h-4 bg-gray-800 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-blue-600"></div>
             </label>
         </div>
-        <button onclick="logout()" class="mog-btn !border-white/20 !text-white/40 hover:!border-red-500 hover:!text-red-500">Disconnect</button>
+        <button onclick="logout()" class="mog-btn !py-2 !px-4 !text-[9px] !border-white/10 !text-white/40">Sever</button>
     </div>
 </header>
 
 <main class="bento-container relative z-10">
-    
-    <section id="director-node" class="bento-tile col-span-12 hidden p-8 border-red-500/50 bg-red-950/10 shadow-[0_0_40px_rgba(255,0,0,0.1)]">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
-            <div>
-                <span class="prestige-label text-red-500 text-[11px] font-bold block">Wide-Band Broadcast Override</span>
-                <p class="mono text-[9px] text-red-400 opacity-60">ENCRYPTION: LEVEL 7 // DIRECT_LINK_ACTIVE</p>
-            </div>
-            <div class="flex gap-1 items-end h-8">
-                <div class="w-1 bg-red-500 animate-[bounce_1.2s_infinite]"></div>
-                <div class="w-1 bg-red-500 animate-[bounce_0.8s_infinite] h-4"></div>
-                <div class="w-1 bg-red-500 animate-[bounce_1.5s_infinite] h-6"></div>
-                <span class="mono text-red-500 text-[10px] ml-2">SIGNAL: STABLE</span>
-            </div>
+    <div class="bento-tile col-span-12 md:col-span-4 p-8 group">
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent w-1/2 -skew-x-12 -translate-x-full group-hover:animate-[shimmer_2s_infinite] pointer-events-none"></div>
+        <div class="flex justify-between items-center mb-8">
+            <span class="prestige-label text-[10px] text-blue-400">Identity Verification</span>
+            <div class="mono text-[8px] opacity-40">0x7F</div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="md:col-span-2"><input id="dr-track" placeholder="INPUT BROADCAST TRACK URL..." class="mog-input !border-red-900/40 !bg-red-950/20 text-red-100 mono"></div>
-            <button onclick="pushUpdate()" class="mog-btn !border-red-600 !text-red-500 hover:!bg-red-600 hover:!text-white">Initiate Broadcast</button>
-        </div>
-    </section>
-
-    <div class="bento-tile col-span-12 md:col-span-4 p-8">
-        <span class="prestige-label text-[10px] block mb-6">Uplink Terminal</span>
-        <div id="auth-form" class="space-y-4">
-            <input id="email-in" type="email" placeholder="OPERATIVE_ID" class="mog-input mono">
-            <input id="password-in" type="password" placeholder="SECURE_KEY" class="mog-input mono">
+        <div id="auth-form" class="space-y-6">
+            <input id="email-in" type="email" placeholder="OPERATIVE_ID" class="mog-input mono !bg-transparent !border-b !border-t-0 !border-x-0 !border-blue-500/30">
+            <input id="password-in" type="password" placeholder="BIOMETRIC_KEY" class="mog-input mono !bg-transparent !border-b !border-t-0 !border-x-0 !border-blue-500/30">
             <div class="grid grid-cols-2 gap-4">
-                <button onclick="handleAuth('login')" class="mog-btn">Link</button>
-                <button onclick="handleAuth('signup')" class="mog-btn">Register</button>
+                <button onclick="handleAuth('login')" class="mog-btn !text-[9px]">Init Link</button>
+                <button onclick="handleAuth('signup')" class="mog-btn !text-[9px] !border-white/10 !text-white/40">Enroll</button>
             </div>
         </div>
         <div id="op-profile" class="hidden text-center py-4">
-            <div id="qrcode" class="bg-white p-2 inline-block rounded border-4 border-black mb-4"></div>
-            <p id="active-alias" class="text-xl font-bold text-white italic tracking-tighter uppercase"></p>
+            <div id="qrcode" class="bg-white p-2 inline-block rounded-sm mix-blend-screen mb-4"></div>
+            <p id="active-alias" class="text-xl font-bold italic tracking-widest uppercase"></p>
         </div>
     </div>
 
     <div class="bento-tile col-span-12 md:col-span-8 p-8">
         <div class="flex justify-between items-center mb-6 border-b border-gold/10 pb-4">
-            <span class="prestige-label text-[10px]">Sonic Archive V2</span>
+            <span class="prestige-label text-[10px]">Sonic Archive</span>
             <div id="now-playing" class="mono text-[9px] text-blue-400">STANDBY...</div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div id="mix-list" class="space-y-2 max-h-[250px] overflow-y-auto pr-4 custom-scrollbar"></div>
-            <div class="flex flex-col justify-center items-center gap-6 border-l border-white/5 pl-4">
+            <div id="mix-list" class="space-y-2 max-h-[200px] overflow-y-auto pr-4 custom-scrollbar"></div>
+            <div class="flex flex-col justify-center items-center gap-4">
                 <audio id="player" crossorigin="anonymous" class="hidden"></audio>
-                <div class="flex gap-10 text-2xl">
-                    <i id="play-btn" class="fa-solid fa-play cursor-pointer hover:text-blue-400"></i>
-                </div>
+                <i id="play-btn" class="fa-solid fa-play text-2xl cursor-pointer hover:text-blue-400"></i>
                 <div id="deep-scan-stats" class="w-full flex justify-between mono text-[7px] text-blue-400 opacity-50">
-                    <span id="ai-energy">ENERGY: 0%</span>
-                    <span id="ai-mood">THEME: STANDBY</span>
+                    <span id="ai-energy">ENERGY: 0%</span><span id="ai-mood">THEME: STANDBY</span>
                 </div>
-                <canvas id="audio-visualizer" class="w-full h-16 opacity-50"></canvas>
+                <canvas id="audio-visualizer" class="w-full h-12"></canvas>
             </div>
         </div>
     </div>
     
     <div class="bento-tile col-span-12 md:col-span-6 p-8 relative overflow-hidden">
-        <span class="prestige-label text-[10px] block mb-6">Sector Monitoring // Live Uplink</span>
-        <div id="satellite-container" class="relative h-60 w-full flex items-center justify-center border border-white/5 bg-black/40">
-            <img id="africa-map" src="https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg" class="h-full opacity-20 filter invert absolute pointer-events-none">
+        <span class="prestige-label text-[10px] block mb-6">Sector Monitoring</span>
+        <div id="satellite-container" class="relative h-60 w-full flex items-center justify-center bg-black/40 border border-white/5">
+            <img id="africa-map" src="https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg" class="h-full opacity-20 filter invert absolute">
             <video id="director-uplink" class="w-full h-full object-cover opacity-60 mix-blend-screen" autoplay muted loop playsinline>
                 <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/uplink_static.mp4" type="video/mp4">
             </video>
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent h-1/2 w-full animate-[scan_4s_linear_infinite] pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent h-1/2 w-full animate-[scan_4s_linear_infinite]"></div>
         </div>
         <div class="mt-4 flex justify-between mono text-[8px] text-blue-900">
             <span id="coord-lat">LAT: 2.1522° S</span><span id="coord-long">LONG: 24.2572° E</span><span id="sector-load">LOAD: 0%</span>
@@ -211,123 +141,126 @@
     </div>
 
     <div class="bento-tile col-span-12 md:col-span-6 p-8">
-        <span class="prestige-label text-[10px] block mb-6">Intelligence Vault</span>
-        <div id="tile-gallery" class="grid grid-cols-4 gap-4 max-h-[150px] overflow-y-auto custom-scrollbar"></div>
-        <div class="mt-6 p-4 border border-white/5 bg-white/5 rounded-sm">
-            <div class="flex justify-between items-center mb-4">
-                <span class="prestige-label text-[9px]">Session Manifest</span>
-                <span id="log-count" class="mono text-[8px] text-blue-500">ENTRIES: 0</span>
-            </div>
-            <button onclick="exportManifest()" class="mog-btn w-full !py-2 !text-[9px]">Export Intelligence</button>
+        <span class="prestige-label text-[10px] block mb-6">Intel Ingestion</span>
+        <div id="tile-gallery" class="grid grid-cols-5 gap-2 max-h-[140px] overflow-y-auto custom-scrollbar p-2 bg-black/20"></div>
+        <div class="mt-6">
+            <input type="file" id="bulk-upload" class="hidden" multiple onchange="handleMainframeUpload(this)">
+            <button onclick="document.getElementById('bulk-upload').click()" class="mog-btn w-full !py-2 !text-[9px]">Push to Mainframe</button>
+            <div id="upload-progress-container" class="hidden w-full h-1 bg-white/5 mt-4"><div id="upload-progress-bar" class="h-full bg-blue-500 w-0 transition-all"></div></div>
+            <div class="mt-4 flex justify-between items-center"><span class="prestige-label text-[8px]">Session Manifest</span><span id="log-count" class="mono text-[8px] text-blue-500">ENTRIES: 0</span></div>
+            <button onclick="exportManifest()" class="mog-btn w-full !py-1 !text-[8px] mt-2 !border-blue-500/30">Export Logs</button>
         </div>
     </div>
 
     <div class="bento-tile col-span-12 p-8 relative">
-        <div class="flex justify-between items-center mb-4">
-            <span class="prestige-label text-[10px]">Quantum Frequency Chat</span>
-            <div id="quantum-status" class="mono text-[8px] text-blue-500 animate-pulse">ENCRYPTION: ACTIVE</div>
-        </div>
-        <div id="chat-box" class="h-32 overflow-y-auto mono text-[10px] space-y-2 mb-4 custom-scrollbar"></div>
-        <div id="chat-input-area" class="hidden flex gap-2">
-            <input id="chat-in" type="text" placeholder="TRANSMIT SECURE PACKET..." class="mog-input mono">
-            <button onclick="sendChat()" class="mog-btn !px-6"><i class="fa-solid fa-shredder"></i></button>
-        </div>
+        <div class="flex justify-between items-center mb-4"><span class="prestige-label text-[10px]">Quantum Chat</span><div id="quantum-status" class="mono text-[8px] text-blue-500 animate-pulse">ENCRYPTION: ACTIVE</div></div>
+        <div id="chat-box" class="h-32 overflow-y-auto mono text-[9px] space-y-2 mb-4 custom-scrollbar"></div>
+        <div id="chat-input-area" class="hidden flex gap-2"><input id="chat-in" type="text" placeholder="SECURE PACKET..." class="mog-input mono"><button onclick="sendChat()" class="mog-btn !px-6"><i class="fa-solid fa-shredder"></i></button></div>
     </div>
-
 </main>
 
-<div id="ticker-v2">
-    <div class="bg-gold text-black px-6 h-full flex items-center mono font-bold text-[10px]">SYSTEM STATUS</div>
-    <div class="scroll-text mono flex gap-20">
-        <span>[ AFRICA_SECTOR: MONITORING ]</span><span>[ UPLINK: STABLE ]</span><span>[ DEEP_SCAN: ACTIVE ]</span>
+<footer class="relative z-10 p-10 mt-20 border-t border-white/5 bg-black/20 backdrop-filter blur-lg">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
+        <div class="mono text-[9px] opacity-40">© 2026 MINISTRY OF GROOVE<br>PRESTIGE_V2026.9.1</div>
+        <div class="flex justify-center gap-8 text-xl">
+            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="hover:text-white"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="https://www.instagram.com/ministryofgroove_hq" target="_blank" class="hover:text-blue-400"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.facebook.com/share/1D9jcB5998/" target="_blank" class="hover:text-blue-600"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="mailto:director.mog@gmail.com" class="hover:text-gold"><i class="fa-solid fa-envelope"></i></a>
+        </div>
+        <div class="text-right prestige-label text-[8px] opacity-40">Africa Sector HQ</div>
     </div>
-</div>
+</footer>
+
+<div id="ticker-v2"><div class="bg-gold text-black px-6 h-full flex items-center mono font-bold text-[10px]">SYSTEM STATUS</div><div class="scroll-text mono flex gap-20"><span>[ AFRICA_SECTOR: MONITORING ]</span><span>[ UPLINK: STABLE ]</span><span>[ QUANTUM_ENCRYPTION: ON ]</span></div></div>
 
 <script>
-    const CFG = {
-        U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
-        K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8",
-        D: "director.mog@gmail.com"
-    };
+    const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8", D: "director.mog@gmail.com" };
     const db = window.supabase.createClient(CFG.U, CFG.K);
     const audioPlayer = document.getElementById('player');
     const playBtn = document.getElementById('play-btn');
 
-    // --- NEURAL RAIN VISUALIZER ---
-    const vCanvas = document.getElementById('bg-canvas');
-    const vCtx = vCanvas.getContext('2d');
-    let particles = [], rainDrops = [];
-    const particleCount = 100, rainCount = 80;
-
+    // --- NEURAL FX CORE ---
+    let particles = [], rainDrops = [], vCanvas = document.getElementById('bg-canvas'), vCtx = vCanvas.getContext('2d');
     function initFX() {
         vCanvas.width = window.innerWidth; vCanvas.height = window.innerHeight;
-        for (let i = 0; i < particleCount; i++) particles.push({ x: Math.random()*vCanvas.width, y: Math.random()*vCanvas.height, size: Math.random()*2, vx: (Math.random()-0.5)*2, vy: (Math.random()-0.5)*2 });
-        for (let i = 0; i < rainCount; i++) rainDrops.push({ x: Math.random()*vCanvas.width, y: Math.random()*vCanvas.height, length: Math.random()*20+10, speed: Math.random()*5+2 });
+        for (let i=0; i<100; i++) particles.push({ x:Math.random()*vCanvas.width, y:Math.random()*vCanvas.height, size:Math.random()*2, vx:(Math.random()-0.5)*2, vy:(Math.random()-0.5)*2 });
+        for (let i=0; i<80; i++) rainDrops.push({ x:Math.random()*vCanvas.width, y:Math.random()*vCanvas.height, length:Math.random()*20+10, speed:Math.random()*5+2 });
     }
-
     function updateFX() {
-        vCtx.fillStyle = 'rgba(5, 5, 5, 0.2)';
-        vCtx.fillRect(0, 0, vCanvas.width, vCanvas.height);
-        const comp = analyser ? (dataArray.reduce((a, b) => a + b) / dataArray.length) / 5 : 1;
-        const color = getComputedStyle(document.documentElement).getPropertyValue('--mog-blue');
-
+        vCtx.fillStyle = 'rgba(5, 5, 5, 0.2)'; vCtx.fillRect(0, 0, vCanvas.width, vCanvas.height);
+        const comp = (analyser && dataArray) ? (dataArray.reduce((a,b)=>a+b)/dataArray.length)/5 : 1;
+        const col = getComputedStyle(document.documentElement).getPropertyValue('--mog-blue');
         particles.forEach(p => {
-            p.x += p.vx * comp; p.y += p.vy * comp;
-            if (p.x < 0) p.x = vCanvas.width; if (p.y < 0) p.y = vCanvas.height;
-            vCtx.beginPath(); vCtx.arc(p.x, p.y, p.size*(comp*0.5), 0, Math.PI*2);
-            vCtx.fillStyle = color; vCtx.fill();
+            p.x += p.vx*comp; p.y += p.vy*comp;
+            if(p.x<0) p.x=vCanvas.width; if(p.y<0) p.y=vCanvas.height;
+            vCtx.beginPath(); vCtx.arc(p.x, p.y, p.size*(comp*0.5), 0, Math.PI*2); vCtx.fillStyle=col; vCtx.fill();
         });
-
-        vCtx.strokeStyle = color; vCtx.lineWidth = 1;
+        vCtx.strokeStyle = col; vCtx.lineWidth=1;
         rainDrops.forEach(d => {
-            d.y += d.speed * (comp * 0.8);
-            if (d.y > vCanvas.height) { d.y = -d.length; d.x = Math.random()*vCanvas.width; }
-            vCtx.beginPath(); vCtx.moveTo(d.x, d.y); vCtx.lineTo(d.x, d.y + d.length); vCtx.stroke();
+            d.y += d.speed*(comp*0.8);
+            if(d.y>vCanvas.height) { d.y=-d.length; d.x=Math.random()*vCanvas.width; }
+            vCtx.beginPath(); vCtx.moveTo(d.x, d.y); vCtx.lineTo(d.x, d.y+d.length); vCtx.stroke();
         });
         requestAnimationFrame(updateFX);
     }
 
-    // --- AUDIO CORE & AI DEEP SCAN ---
+    // --- AUTH & HANDSHAKE ---
+    async function handleAuth(mode) {
+        const btn = event.currentTarget; const originalText = btn.innerText; btn.innerText = "AUTHENTICATING...";
+        vCanvas.style.opacity = "0.4"; vCanvas.style.filter = "blur(0px) saturate(1)";
+        particles.forEach(p => { p.vx *= 4; p.vy *= 4; });
+        const email = document.getElementById('email-in').value, pass = document.getElementById('password-in').value;
+        try {
+            let res = (mode === 'signup') ? await db.auth.signUp({ email, password:pass }) : await db.auth.signInWithPassword({ email, password:pass });
+            if(res.error) throw res.error;
+            btn.innerText = "LINK_ESTABLISHED";
+            document.querySelectorAll('.bento-tile').forEach(t => { t.style.boxShadow="0 0 50px var(--mog-blue)"; t.style.borderColor="var(--mog-blue)"; setTimeout(()=>{ t.style.boxShadow="none"; t.style.borderColor="var(--mog-border)"; }, 1000); });
+            setTimeout(() => { vCanvas.style.opacity = "0.15"; vCanvas.style.filter = "blur(2px) saturate(0.5)"; particles.forEach(p => { p.vx/=4; p.vy/=4; }); }, 1500);
+        } catch (e) { btn.innerText = "LINK_FAILED"; vCanvas.style.opacity = "0.15"; setTimeout(()=>btn.innerText=originalText, 2000); }
+    }
+
+    // --- AUDIO & AI ANALYTICS ---
     let audioCtx, analyser, source, dataArray, missionLog = [];
-    const THEMES = { CHILL: '#00d4ff', HYPE: '#ff3333', GOLD: '#D4AF37' };
-
-    function initAudio() {
-        if (audioCtx) return;
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        analyser = audioCtx.createAnalyser();
-        source = audioCtx.createMediaElementSource(audioPlayer);
-        source.connect(analyser); analyser.connect(audioCtx.destination);
-        analyser.fftSize = 64; dataArray = new Uint8Array(analyser.frequencyBinCount);
-        renderAudioUI();
+    function playTrack(url, name) {
+        audioPlayer.crossOrigin = "anonymous"; audioPlayer.src = url; audioPlayer.play();
+        document.getElementById('now-playing').innerText = name.toUpperCase();
+        missionLog.push({ timestamp: new Date().toLocaleTimeString(), track: name });
+        document.getElementById('log-count').innerText = `ENTRIES: ${missionLog.length}`;
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioCtx.createAnalyser(); source = audioCtx.createMediaElementSource(audioPlayer);
+            source.connect(analyser); analyser.connect(audioCtx.destination);
+            analyser.fftSize = 64; dataArray = new Uint8Array(analyser.frequencyBinCount);
+            renderAudioUI();
+        }
+        if(audioCtx.state === 'suspended') audioCtx.resume();
     }
-
     function renderAudioUI() {
-        requestAnimationFrame(renderAudioUI);
-        if (!analyser) return;
-        analyser.getByteFrequencyData(dataArray);
-        const avg = dataArray.reduce((a,b)=>a+b)/dataArray.length;
-        const low = dataArray.slice(0, 5).reduce((a,b)=>a+b)/5;
-        
-        let themeColor = THEMES.CHILL;
-        if (low > 180) themeColor = THEMES.HYPE;
-        else if (avg > 100) themeColor = THEMES.GOLD;
-
+        requestAnimationFrame(renderAudioUI); analyser.getByteFrequencyData(dataArray);
+        const avg = dataArray.reduce((a,b)=>a+b)/dataArray.length, low = dataArray.slice(0,5).reduce((a,b)=>a+b)/5;
+        const theme = low > 180 ? '#ff3333' : (avg > 100 ? '#D4AF37' : '#00d4ff');
+        document.documentElement.style.setProperty('--mog-blue', theme);
         document.getElementById('ai-energy').innerText = `ENERGY: ${Math.round(avg)}%`;
-        document.documentElement.style.setProperty('--mog-blue', themeColor);
-        
-        const map = document.getElementById('africa-map');
-        map.style.opacity = 0.2 + (low/255)*0.6;
-        map.style.filter = `invert(1) drop-shadow(0 0 ${low/10}px ${themeColor})`;
-        
-        const canvasA = document.getElementById('audio-visualizer');
-        const ctxA = canvasA.getContext('2d');
+        const map = document.getElementById('africa-map'); map.style.opacity = 0.2 + (low/255)*0.6;
+        map.style.filter = `invert(1) drop-shadow(0 0 ${low/10}px ${theme})`;
+        const canvasA = document.getElementById('audio-visualizer'), ctxA = canvasA.getContext('2d');
         ctxA.clearRect(0,0,canvasA.width,canvasA.height);
-        dataArray.forEach((v, i) => {
-            ctxA.fillStyle = themeColor;
-            ctxA.fillRect(i*10, canvasA.height - v/4, 8, v/4);
-        });
+        dataArray.forEach((v, i) => { ctxA.fillStyle = theme; ctxA.fillRect(i*10, canvasA.height - v/4, 8, v/4); });
     }
 
+    // --- UI LOGIC ---
+    function toggleHub() { const h = document.getElementById('side-hub'); h.style.transform = h.style.transform === 'translateX(0%)' ? 'translateX(-100%)' : 'translateX(0%)'; }
+    function toggleGhostMode(el) { document.querySelector('main').style.opacity = el.checked ? "0.05" : "1"; }
+    async function handleMainframeUpload(input) {
+        const files = input.files; if (!files.length) return;
+        document.getElementById('upload-progress-container').classList.remove('hidden');
+        for (let i=0; i<files.length; i++) {
+            await db.storage.from('intel-vault').upload(`${Date.now()}_${files[i].name}`, files[i]);
+            document.getElementById('upload-progress-bar').style.width = `${((i+1)/files.length)*100}%`;
+        }
+        setTimeout(() => { document.getElementById('upload-progress-container').classList.add('hidden'); fetchVault(); }, 1000);
+    }
     async function fetchVault() {
         const { data } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
         const list = document.getElementById('mix-list'), gall = document.getElementById('tile-gallery');
@@ -335,72 +268,34 @@
         data.forEach(f => {
             const url = `${CFG.U}/storage/v1/object/public/intel-vault/${f.name}`;
             if (f.name.match(/\.(mp3|wav|m4a)$/i)) {
-                const row = document.createElement('div');
-                row.className = "p-2 border border-white/5 mono text-[9px] cursor-pointer hover:bg-white/5";
-                row.innerHTML = f.name.toUpperCase();
-                row.onclick = () => { audioPlayer.crossOrigin = "anonymous"; playTrack(url, f.name); };
-                list.appendChild(row);
-            } else {
-                gall.innerHTML += `<img src="${url}" class="h-10 w-10 object-cover grayscale opacity-50 hover:opacity-100">`;
-            }
+                const r = document.createElement('div'); r.className = "p-2 border border-white/5 mono text-[8px] cursor-pointer hover:bg-white/5";
+                r.innerHTML = f.name.toUpperCase(); r.onclick = () => playTrack(url, f.name); list.appendChild(r);
+            } else { gall.innerHTML += `<img src="${url}" class="h-10 w-10 object-cover rounded-sm">`; }
         });
     }
-
-    function playTrack(url, name) {
-        audioPlayer.src = url; audioPlayer.play();
-        document.getElementById('now-playing').innerText = name.toUpperCase();
-        missionLog.push({ t: new Date().toLocaleTimeString(), n: name });
-        document.getElementById('log-count').innerText = `ENTRIES: ${missionLog.length}`;
-        initAudio(); if(audioCtx.state === 'suspended') audioCtx.resume();
-    }
-
-    // --- QUANTUM CHAT ---
     function sendChat() {
         const cin = document.getElementById('chat-in'); if(!cin.value) return;
-        const id = 'm'+Date.now();
-        const div = document.createElement('div');
+        const id = 'm'+Date.now(), div = document.createElement('div');
         div.id = id; div.className = "p-2 border-l border-blue-500 bg-blue-500/5";
-        div.innerHTML = `<span class="opacity-50 text-[7px] block">T-MINUS: 3600s</span><div class="msg-body">${cin.value}</div>`;
-        document.getElementById('chat-box').appendChild(div);
-        cin.value = "";
-        let time = 3600;
-        const timer = setInterval(() => {
-            time--; div.querySelector('span').innerText = `T-MINUS: ${time}s`;
-            if(time<=0) { div.querySelector('.msg-body').innerText = "10101011001"; clearInterval(timer); }
-        }, 1000);
+        div.innerHTML = `<span class="timer opacity-50 text-[7px] block">T-MINUS: 3600s</span><div class="msg-body">${cin.value}</div>`;
+        document.getElementById('chat-box').appendChild(div); cin.value = "";
+        let t = 3600; const tm = setInterval(() => { t--; div.querySelector('.timer').innerText = `T-MINUS: ${t}s`; if(t<=0){ div.querySelector('.msg-body').innerText = "10101110011"; clearInterval(tm); } }, 1000);
     }
+    function exportManifest() { const b = new Blob([JSON.stringify(missionLog, null, 2)], {type:'text/plain'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `MOG_LOG_${Date.now()}.txt`; a.click(); }
+    async function logout() { await db.auth.signOut(); location.reload(); }
 
-    // --- UTILS ---
-    function toggleGhostMode(el) { document.querySelector('main').style.opacity = el.checked ? "0.05" : "1"; }
-    function exportManifest() {
-        const blob = new Blob([JSON.stringify(missionLog)], {type:'text/plain'});
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "manifest.txt"; a.click();
-    }
-    async function handleAuth(m) {
-        const e = document.getElementById('email-in').value, p = document.getElementById('password-in').value;
-        if(m === 'signup') await db.auth.signUp({ email: e, password: p });
-        else await db.auth.signInWithPassword({ email: e, password: p });
-    }
     db.auth.onAuthStateChange((ev, ses) => {
         if(ses) {
-            document.getElementById('auth-form').classList.add('hidden');
-            document.getElementById('op-profile').classList.remove('hidden');
+            document.getElementById('auth-form').classList.add('hidden'); document.getElementById('op-profile').classList.remove('hidden');
             document.getElementById('chat-input-area').classList.remove('hidden');
             document.getElementById('active-alias').innerText = ses.user.email.split('@')[0];
-            if(ses.user.email === CFG.D) document.getElementById('director-node').classList.remove('hidden');
             new QRCode(document.getElementById("qrcode"), { text: ses.user.id, width: 80, height: 80 });
             fetchVault();
         }
     });
 
-    let lastM = {x:0, y:0};
-    window.addEventListener('mousemove', (e) => {
-        const d = Math.sqrt(Math.pow(e.clientX-lastM.x,2)+Math.pow(e.clientY-lastM.y,2));
-        if(d/50 > 0.5) document.documentElement.style.setProperty('--mog-gold', `hsl(${40+(d/2)}, 100%, 50%)`);
-        lastM = {x:e.clientX, y:e.clientY};
-    });
-
     window.onload = () => { initFX(); updateFX(); };
+    window.onresize = () => { vCanvas.width = window.innerWidth; vCanvas.height = window.innerHeight; };
 </script>
 </body>
 </html>
