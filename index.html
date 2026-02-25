@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.3</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.5</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -18,7 +18,7 @@
             --mog-glass: rgba(5, 12, 20, 0.85); --mog-border: rgba(0, 212, 255, 0.4);
         }
 
-        html, body { height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: #fff; }
+        html, body { min-height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: #fff; }
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Inter', sans-serif; box-sizing: border-box; }
 
         /* CYBER-CIRCUITRY BACKGROUND (55% VISIBILITY) */
@@ -42,17 +42,15 @@
         #main-title {
             font-family: 'Big Shoulders Display', sans-serif !important;
             font-size: clamp(2.5rem, 6vw, 4.5rem);
-            line-height: 1;
-            white-space: nowrap; 
+            line-height: 1; white-space: nowrap; 
             background: linear-gradient(to bottom, #fff 10%, var(--mog-gold) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
         }
 
         .slogan { color: #ffffff !important; text-shadow: 0 2px 10px rgba(0,0,0,1); letter-spacing: 0.35em; font-weight: 900; font-size: 11px; opacity: 0.9; }
 
-        /* TILE ARCHITECTURE (+30% SCALE) */
+        /* BENTO TILE INFRASTRUCTURE (+30% SCALE) */
         .mainframe-wrapper {
             display: grid; padding: 35px; gap: 35px;
             grid-template-columns: 1.2fr 1.5fr 1fr;
@@ -61,7 +59,7 @@
         }
 
         @media (max-width: 1200px) { 
-            .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "radar" "growth" "hitlist"; overflow-y: auto; height: auto; padding-bottom: 100px; } 
+            .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "radar" "growth" "hitlist"; overflow-y: auto; height: auto; } 
         }
 
         .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 40px; overflow: hidden; display: flex; flex-direction: column; backdrop-filter: blur(25px); box-shadow: 0 40px 80px rgba(0,0,0,0.6); }
@@ -90,66 +88,91 @@
     <div id="bg-canvas"></div>
 
     <div class="ticker-wrap">
-        <div class="ticker-move">TOTALITY v100.2.3 ACTIVE // LUXURY NAV ENABLED // CIRCUITRY: 55% // WITBANK HQ // SOUND & SOCIAL ARCHITECTURE // SIGNAL: STABLE...</div>
+        <div class="ticker-move">TOTALITY v100.2.5 STABILIZED // MISSION HUB ENGAGED // CIRCUITRY SYNC: 55% // WITBANK HQ // DECIPHER THE CULTURE...</div>
     </div>
 
-    <nav id="side-drawer" class="fixed top-0 right-0 h-full w-[380px] bg-black/90 backdrop-filter blur-3xl z-[10000] border-l border-white/5 translate-x-full transition-transform duration-700 cubic-bezier(0.19, 1, 0.22, 1) flex flex-col shadow-[0_0_100px_rgba(0,0,0,1)]">
+    <div id="nav-scrim" onclick="toggleDrawer()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] opacity-0 pointer-events-none transition-opacity duration-500"></div>
+
+    <nav id="side-drawer" role="navigation" aria-label="Mission Hub" class="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-black/90 backdrop-filter blur-3xl z-[10000] border-l border-white/5 translate-x-full transition-transform duration-700 cubic-bezier(0.19, 1, 0.22, 1) flex flex-col shadow-[0_0_100px_rgba(0,0,0,1)]">
         
-        <div class="p-10 border-b border-white/5 bg-white/2">
-            <div class="flex justify-between items-center mb-8">
-                <span class="mono text-[10px] text-blue-400 font-black tracking-[0.5em] uppercase">Security Level: Master</span>
-                <button onclick="toggleDrawer()" class="text-white opacity-40 hover:opacity-100 transition-all">
-                    <i class="fa-solid fa-xmark text-2xl"></i>
+        <div class="p-12 border-b border-white/5 bg-white/2">
+            <div class="flex justify-between items-center mb-10">
+                <div class="flex items-center gap-3">
+                    <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
+                    <span class="mono text-[10px] text-blue-400 font-black tracking-[0.5em] uppercase">Security Level: Master</span>
+                </div>
+                <button onclick="toggleDrawer()" aria-label="Close Menu" class="text-white opacity-40 hover:opacity-100 transition-all hover:rotate-90">
+                    <i class="fa-solid fa-xmark text-3xl"></i>
                 </button>
             </div>
             <div class="flex items-center gap-6">
-                <div class="h-16 w-16 rounded-full border border-gold/40 p-1">
-                    <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="rounded-full w-full h-full grayscale hover:grayscale-0 transition-all">
+                <div class="h-20 w-20 rounded-full border-2 border-gold/40 p-1 shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                    <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="rounded-full w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
                 </div>
                 <div>
-                    <p id="nav-op-alias" class="text-white font-black italic uppercase text-lg leading-tight">GUEST_OPERATIVE</p>
-                    <p class="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-1">EMALAHLENI SECTOR HQ</p>
+                    <p id="nav-op-alias" class="text-white font-black italic uppercase text-2xl tracking-tighter">GUEST_OPERATIVE</p>
+                    <p class="text-zinc-500 text-[10px] font-bold uppercase tracking-[0.3em] mt-2">Witbank Sector HQ</p>
                 </div>
             </div>
         </div>
 
-        <div class="flex-grow scroller-v py-6">
-            <div class="px-10 py-4">
-                <p class="text-[9px] text-zinc-600 font-black uppercase tracking-[0.4em] mb-4">Core Archives</p>
-                <ul class="space-y-2">
-                    <li class="group flex items-center gap-5 p-4 rounded-2xl hover:bg-white/5 cursor-pointer transition-all">
-                        <i class="fa-solid fa-satellite-dish text-blue-400"></i>
-                        <span class="text-sm font-bold uppercase text-zinc-300 group-hover:text-white">National Radar Grid</span>
+        <div class="flex-grow scroller-v py-8 overflow-y-auto">
+            <div class="px-12 py-4">
+                <p class="text-[10px] text-zinc-600 font-black uppercase tracking-[0.5em] mb-6">Tactical Archives</p>
+                <ul class="space-y-3">
+                    <li class="group flex items-center justify-between p-5 rounded-2xl hover:bg-white/5 cursor-pointer transition-all border border-transparent hover:border-white/5">
+                        <div class="flex items-center gap-6">
+                            <i class="fa-solid fa-satellite-dish text-blue-400 text-xl group-hover:scale-110"></i>
+                            <span class="text-md font-black uppercase text-zinc-300 group-hover:text-white">National Radar Grid</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] opacity-0 group-hover:opacity-100 translate-x-[-10px] group-hover:translate-x-0 transition-all"></i>
                     </li>
-                    <li class="group flex items-center gap-5 p-4 rounded-2xl hover:bg-white/5 cursor-pointer transition-all">
-                        <i class="fa-solid fa-compact-disc text-gold"></i>
-                        <span class="text-sm font-bold uppercase text-zinc-300 group-hover:text-white">Sonic Mandate Archive</span>
+                    <li class="group flex items-center justify-between p-5 rounded-2xl hover:bg-white/5 cursor-pointer transition-all border border-transparent hover:border-white/5">
+                        <div class="flex items-center gap-6">
+                            <i class="fa-solid fa-compact-disc text-gold text-xl group-hover:scale-110"></i>
+                            <span class="text-md font-black uppercase text-zinc-300 group-hover:text-white">Sonic Mandate Archive</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] opacity-0 group-hover:opacity-100 translate-x-[-10px] group-hover:translate-x-0 transition-all"></i>
+                    </li>
+                    <li class="group flex items-center justify-between p-5 rounded-2xl hover:bg-white/5 cursor-pointer transition-all border border-transparent hover:border-white/5">
+                        <div class="flex items-center gap-6">
+                            <i class="fa-solid fa-id-badge text-zinc-500 text-xl group-hover:scale-110"></i>
+                            <span class="text-md font-black uppercase text-zinc-300 group-hover:text-white">Operative ID Matrix</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] opacity-0 group-hover:opacity-100 translate-x-[-10px] group-hover:translate-x-0 transition-all"></i>
                     </li>
                 </ul>
             </div>
-            <div class="px-10 py-4 mt-4 border-t border-white/5 pt-8">
-                <p class="text-[9px] text-zinc-600 font-black uppercase tracking-[0.4em] mb-4">Ministry Logistics</p>
-                <ul class="space-y-2">
-                    <li class="group flex items-center gap-5 p-4 rounded-2xl hover:bg-white/5 cursor-pointer transition-all">
-                        <i class="fa-solid fa-handshake-simple text-zinc-500"></i>
-                        <span class="text-sm font-bold uppercase text-zinc-300 group-hover:text-white">Recruitment Protocol</span>
+
+            <div class="px-12 py-4 mt-8 border-t border-white/5 pt-10">
+                <p class="text-[10px] text-zinc-600 font-black uppercase tracking-[0.5em] mb-6">Sovereign Logistics</p>
+                <ul class="space-y-3">
+                    <li class="group flex items-center gap-6 p-5 rounded-2xl hover:bg-white/5 cursor-pointer transition-all">
+                        <i class="fa-solid fa-handshake-simple text-zinc-500 text-xl"></i>
+                        <span class="text-md font-black uppercase text-zinc-300 group-hover:text-white">Recruitment protocol</span>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <div class="p-10 border-t border-white/5 bg-black/40">
-            <div class="flex items-center justify-between mb-8">
-                <span class="text-[10px] font-black text-zinc-500 uppercase">Ambient Uplink</span>
-                <input type="checkbox" id="silent-toggle" class="accent-blue-400 w-4 h-4">
+        <div class="p-12 border-t border-white/5 bg-black/60 mt-auto">
+            <div class="flex items-center justify-between mb-10">
+                <div class="flex flex-col gap-1">
+                    <span class="text-[10px] font-black text-white uppercase tracking-widest">Ambient Uplink</span>
+                    <span class="text-[9px] text-zinc-600 uppercase">Silent Mode Navigation</span>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="silent-toggle" class="sr-only peer">
+                    <div class="w-11 h-6 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-zinc-400 after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
             </div>
-            <div class="grid grid-cols-2 gap-4">
-                <button onclick="window.print()" class="p-4 bg-white/5 border border-white/5 rounded-2xl text-[10px] font-black uppercase text-blue-400 hover:bg-blue-400 hover:text-black transition-all">Archive PDF</button>
-                <button onclick="logout()" class="p-4 bg-red-900/10 border border-red-900/20 rounded-2xl text-[10px] font-black uppercase text-red-500 hover:bg-red-500 hover:text-black transition-all">Sever Link</button>
+            <div class="grid grid-cols-2 gap-6">
+                <button onclick="window.print()" class="py-5 bg-white/5 border border-white/10 rounded-2xl text-[11px] font-black uppercase text-blue-400 hover:bg-blue-400 hover:text-black transition-all shadow-xl">Archive PDF</button>
+                <button onclick="logout()" class="py-5 bg-red-900/5 border border-red-900/20 rounded-2xl text-[11px] font-black uppercase text-red-500 hover:bg-red-500 hover:text-black transition-all">Sever Link</button>
             </div>
         </div>
     </nav>
-
+    
     <header class="px-12 flex justify-between items-center relative z-10 bg-black/40 border-b border-white/5 backdrop-blur-md">
         <div class="flex items-center gap-8">
             <button onclick="handleLogoSequence()" class="h-24 w-24 rounded-full border-2 border-blue-500/30 overflow-hidden shadow-[0_0_30px_rgba(0,212,255,0.2)] active:scale-95 transition-all">
@@ -170,7 +193,7 @@
             </button>
         </div>
     </header>
-    
+
     <main class="mainframe-wrapper relative z-10">
         <section class="command-tile area-gateway p-12" style="grid-area: gateway;">
             <span class="prestige-label">Identity Handshake</span>
@@ -188,22 +211,22 @@
         </section>
 
         <section class="command-tile area-messenger" style="grid-area: messenger;">
-            <div class="flex-grow flex flex-col bg-[#0b141a]/95 m-2 rounded-[35px] overflow-hidden">
-                <div class="p-6 border-b border-white/5 flex justify-between items-center bg-black/40">
-                    <span class="mono text-[11px] text-blue-400 font-bold">ENCRYPTED CHANNEL</span>
-                    <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></div>
+            <div class="flex-grow flex flex-col bg-[#0b141a]/90 m-2 rounded-[35px] overflow-hidden border border-white/5">
+                <div class="p-6 border-b border-white/5 bg-black/40 flex justify-between items-center">
+                    <span class="mono text-[11px] text-blue-400 font-bold tracking-widest">QUANTUM ENCRYPTED CHANNEL</span>
+                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></div>
                 </div>
                 <div id="chat-stream" class="scroller-v flex-grow" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay;"></div>
-                <div class="p-8 bg-[#202c33] flex gap-4">
+                <div class="bg-[#202c33] p-8 flex gap-4">
                     <input id="chat-msg-in" type="text" placeholder="Encode Frequency..." class="flex-grow bg-[#2a3942] rounded-full px-8 py-4 text-white outline-none">
-                    <button onclick="sendPacket()" class="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center text-black"><i class="fa-solid fa-paper-plane"></i></button>
+                    <button onclick="sendPacket()" class="w-14 h-14 bg-blue-500 text-black rounded-full flex items-center justify-center shadow-xl active:scale-90"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </div>
         </section>
 
         <section class="command-tile area-radar h-80" style="grid-area: radar;">
-            <span class="prestige-label">National Radar</span>
-            <iframe class="radar-map w-full h-full scale-150" src="http://googleusercontent.com/maps.google.com/4"></iframe>
+            <span class="prestige-label">National Radar Grid</span>
+            <iframe class="radar-map w-full h-full scale-150" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114942.36531301057!2d29.152431695420352!3d-25.867912447952677!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e9740520a2e5571%3A0x7d0684f04c64391e!2seMalahleni!5e0!3m2!1sen!2sza!4v1711200000000!5m2!1sen!2sza"></iframe>
         </section>
 
         <section class="command-tile area-growth" style="grid-area: growth;">
@@ -227,18 +250,17 @@
 
     <footer class="relative z-10 p-20 mt-20 border-t border-white/5 bg-black/40 backdrop-filter blur-xl">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
-            <div class="mono text-[10px] opacity-40">© 2026 MINISTRY OF GROOVE<br>PRESTIGE_V100.2.3_TOTALITY</div>
+            <div class="mono text-[10px] opacity-40">© 2026 MINISTRY OF GROOVE<br>PRESTIGE_V100.2.5_TOTALITY</div>
             <div class="flex justify-center gap-12 text-2xl">
                 <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="hover:text-white transition-all"><i class="fa-brands fa-tiktok"></i></a>
                 <a href="https://www.instagram.com/ministryofgroove_hq" target="_blank" class="hover:text-blue-400 transition-all"><i class="fa-brands fa-instagram"></i></a>
-                <a href="https://www.facebook.com/share/1D9jcB5998/" target="_blank" class="hover:text-blue-600 transition-all"><i class="fa-brands fa-facebook-f"></i></a>
                 <a href="mailto:director.mog@gmail.com" class="hover:text-gold transition-all"><i class="fa-solid fa-envelope"></i></a>
             </div>
             <div class="text-right"><span class="prestige-label !m-0 text-[10px] opacity-40 tracking-widest">Africa Sector // HQ</span></div>
         </div>
     </footer>
 
-    <div id="director-totality" class="hidden fixed inset-0 z-[5000] bg-black/98 p-12 backdrop-blur-3xl overflow-y-auto">
+    <div id="director-totality" class="hidden fixed inset-0 z-[11000] bg-black/98 p-12 backdrop-blur-3xl overflow-y-auto">
         <div class="max-w-4xl mx-auto flex flex-col">
             <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-4">
                 <h2 class="text-4xl text-white font-black italic uppercase">Master Totality</h2>
@@ -254,18 +276,37 @@
     <script>
         const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
         const db = window.supabase.createClient(CFG.U, CFG.K);
-        let logoClicks = 0;
+        let audioCtx, analyser, dataArray, isPlaying = false, logoClicks = 0;
+        const player = new Audio("https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandatemix.mp3");
 
+        
         function toggleDrawer() {
             const drawer = document.getElementById('side-drawer');
+            const scrim = document.getElementById('nav-scrim');
+            const body = document.body;
+            
             const isClosed = drawer.classList.contains('translate-x-full');
-            if (isClosed) { drawer.classList.remove('translate-x-full'); drawer.classList.add('translate-x-0'); }
-            else { drawer.classList.remove('translate-x-0'); drawer.classList.add('translate-x-full'); }
+            
+            if (isClosed) {
+                drawer.classList.remove('translate-x-full');
+                drawer.classList.add('translate-x-0');
+                scrim.classList.remove('opacity-0', 'pointer-events-none');
+                scrim.classList.add('opacity-100', 'pointer-events-auto');
+                body.style.overflow = 'hidden'; 
+            } else {
+                drawer.classList.remove('translate-x-0');
+                drawer.classList.add('translate-x-full');
+                scrim.classList.remove('opacity-100', 'pointer-events-auto');
+                scrim.classList.add('opacity-0', 'pointer-events-none');
+                body.style.overflow = ''; 
+            }
         }
 
         async function loginOperative() {
             const u = document.getElementById('login-user').value;
             const p = document.getElementById('login-pass').value;
+            if(!u || !p) return alert("Credentials required");
+            
             const { data, error } = await db.auth.signInWithPassword({ email: u.includes('@') ? u : `${u}@mog.internal`, password: p });
             if(!error) {
                 document.getElementById('signin-fields').classList.add('hidden');
@@ -273,8 +314,11 @@
                 const alias = u.split('@')[0];
                 document.getElementById('display-op-id').innerText = alias;
                 document.getElementById('nav-op-alias').innerText = alias;
-                new QRCode(document.getElementById("qrcode"), { text: "MOG-"+data.user.id, width: 150, height: 150 });
-            }
+                if(window.QRCode) {
+                    document.getElementById("qrcode").innerHTML = "";
+                    new QRCode(document.getElementById("qrcode"), { text: "MOG-"+data.user.id, width: 150, height: 150 });
+                }
+            } else alert("Authorization denied.");
         }
 
         function handleLogoSequence() {
@@ -289,17 +333,51 @@
             setTimeout(() => { logoClicks = 0; }, 5000);
         }
 
+        function togglePlay() {
+            if(!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioCtx.createAnalyser();
+                audioCtx.createMediaElementSource(player).connect(analyser); 
+                analyser.connect(audioCtx.destination);
+                analyser.fftSize = 64; 
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+                renderVisualizer();
+            }
+            if(isPlaying) { player.pause(); document.getElementById('play-btn').className = "fa-solid fa-play text-4xl"; }
+            else { player.play(); document.getElementById('play-btn').className = "fa-solid fa-pause text-4xl text-mog-blue animate-pulse"; }
+            isPlaying = !isPlaying;
+        }
+
+        function renderVisualizer() {
+            requestAnimationFrame(renderVisualizer);
+            analyser.getByteFrequencyData(dataArray);
+            const low = dataArray.slice(0, 5).reduce((a, b) => a + b) / 5;
+            const title = document.getElementById('main-title');
+            const slogan = document.querySelector('.slogan');
+            
+            if(low > 210) title.classList.add('glitch-active'); else title.classList.remove('glitch-active');
+            if(low > 200) { slogan.style.textShadow = "0 0 15px #ffffff"; slogan.style.opacity = "1"; } 
+            else { slogan.style.textShadow = "0 0 5px rgba(255,255,255,0.5)"; slogan.style.opacity = "0.8"; }
+
+            const ctx = document.getElementById('audio-visualizer').getContext('2d');
+            ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
+            dataArray.forEach((v, i) => { ctx.fillStyle = "rgba(0,212,255,0.6)"; ctx.fillRect(i*12, ctx.canvas.height - v/2, 10, v/2); });
+        }
+
         function sendPacket() {
-            const m = document.getElementById('chat-msg-in').value; if(!m) return;
+            const mIn = document.getElementById('chat-msg-in');
+            const m = mIn.value.trim(); if(!m) return;
             const s = document.getElementById('chat-stream');
             const d = document.createElement('div'); d.className = "flex flex-col items-end p-4";
-            d.innerHTML = `<div class="bg-blue-600 text-white p-5 rounded-3xl rounded-tr-none text-sm">${m}</div>`;
-            s.appendChild(d); document.getElementById('chat-msg-in').value = ""; s.scrollTop = s.scrollHeight;
+            d.innerHTML = `<div class="bg-blue-600 text-white p-5 rounded-3xl rounded-tr-none text-sm shadow-xl">${m}</div>`;
+            s.appendChild(d); mIn.value = ""; s.scrollTop = s.scrollHeight; mIn.focus();
         }
 
         window.onload = () => {
             const hl = document.getElementById('hit-list');
-            for(let i=1; i<=10; i++) { hl.innerHTML += `<div class="flex justify-between items-center p-5 bg-white/5 border border-white/5 rounded-2xl"><span>#${i} Frequency</span><i class="fa-brands fa-spotify text-green-500"></i></div>`; }
+            for(let i=1; i<=10; i++) {
+                hl.innerHTML += `<div class="flex justify-between items-center p-5 bg-white/5 border border-white/5 rounded-2xl"><span>#${i} Frequency</span><i class="fa-brands fa-spotify text-green-500"></i></div>`;
+            }
             setInterval(() => { document.getElementById('lat-val').innerText = `${Math.floor(Math.random()*10)+8}ms`; }, 4000);
         };
 
