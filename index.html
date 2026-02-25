@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | PRESTIGE TOTALITY v100.0</title>
+    <title>M.O.G. | PRESTIGE TOTALITY v00.1</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -11,17 +11,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=JetBrains+Mono:wght@300;700&family=Inter:wght@400;900&family=Clash+Display:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=JetBrains+Mono:wght@300;700&family=Inter:wght@400;900&display=swap');
         
         :root { 
             --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; 
             --mog-glass: rgba(5, 12, 20, 0.85); --mog-border: rgba(0, 212, 255, 0.4);
         }
 
-        html, body { height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: #fff; }
+        html, body { height: 100vh; width: 100vw; margin: 0; padding: 0; overflow: hidden; background-color: var(--mog-black); color: #fff; }
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Inter', sans-serif; box-sizing: border-box; }
 
-        /* CYBER-CIRCUITRY BACKGROUND (55% Visibility Calibration) */
+        /* CYBER-CIRCUITRY BACKGROUND (55% Visibility) */
         #bg-canvas {
             position: fixed; inset: 0; z-index: -1;
             background-color: #050505;
@@ -29,7 +29,7 @@
                 radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.2) 0%, transparent 70%),
                 url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 L20 50 L30 40 L50 40 M50 40 L60 50 L80 50 M30 40 L30 10 L40 0 M70 100 L70 60 L60 50' fill='none' stroke='rgba(0,212,255,0.25)' stroke-width='0.5'/%3E%3Ccircle cx='50' cy='40' r='1.5' fill='rgba(0,212,255,0.5)'/%3E%3Cpath d='M100 80 L80 80 L70 90 L50 90' fill='none' stroke='rgba(0,212,255,0.15)' stroke-width='0.5'/%3E%3C/svg%3E");
             background-size: 400px 400px;
-            opacity: 0.55;
+            opacity: 0.55 !important;
         }
 
         body::after {
@@ -38,26 +38,42 @@
             opacity: 0.03; pointer-events: none; z-index: 50;
         }
 
-        /* POSTER TYPOGRAPHY V10.2 */
-        h1 { 
-            font-family: 'Big Shoulders Display', sans-serif !important; 
-            font-size: clamp(3rem, 8vw, 6rem); line-height: 0.75; text-transform: uppercase; letter-spacing: -0.05em; 
-            background: linear-gradient(to bottom, #fff 20%, var(--mog-gold) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        /* SINGLE LINE GOLD BRANDING */
+        #main-title {
+            font-family: 'Big Shoulders Display', sans-serif !important;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            line-height: 1;
+            white-space: nowrap; 
+            background: linear-gradient(to bottom, #fff 10%, var(--mog-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
         }
-        .slogan { color: #ffffff !important; text-shadow: 0 2px 10px rgba(0,0,0,1); letter-spacing: 0.35em; font-weight: 900; font-size: 11px; }
 
-        /* COMMAND TILE INFRASTRUCTURE (+30% SCALE) */
+        .slogan {
+            color: #ffffff !important;
+            text-shadow: 0 2px 10px rgba(0,0,0,1);
+            letter-spacing: 0.35em;
+            font-weight: 900;
+            font-size: 11px;
+            opacity: 0.9;
+        }
+
+        .ticker-wrap { height: 35px; background: #000; border-bottom: 1px solid var(--mog-border); overflow: hidden; display: flex; align-items: center; z-index: 100; }
+        .ticker-move { white-space: nowrap; animation: ticker 45s linear infinite; font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--mog-blue); letter-spacing: 2px; }
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        header { height: 140px; border-bottom: 1px solid rgba(0, 212, 255, 0.1); background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); z-index: 1000; }
+        
+        /* BENTO GRID (+30% SCALE) */
         .mainframe-wrapper {
-            display: grid; padding: 35px; gap: 35px;
+            flex: 1; display: grid; padding: 35px; gap: 35px;
             grid-template-columns: 1.2fr 1fr 1fr;
-            grid-template-rows: auto auto;
+            grid-template-rows: 1fr 1.2fr;
             grid-template-areas: "gateway messenger visuals" "mandate messenger hitlist";
             max-width: 1800px; margin: 0 auto;
         }
-        @media (max-width: 1100px) { 
-            .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "visuals" "mandate" "hitlist"; overflow-y: auto; height: auto; padding-bottom: 100px; } 
-        }
+        @media (max-width: 1100px) { .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "visuals" "mandate" "hitlist"; overflow-y: auto; height: auto; } }
 
         .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 40px; overflow: hidden; display: flex; flex-direction: column; backdrop-filter: blur(20px); box-shadow: 0 40px 80px rgba(0,0,0,0.6); }
         .scroller-v { overflow-y: auto; scrollbar-width: none; padding: 35px; }
@@ -65,28 +81,21 @@
 
         .prestige-label { font-size: 0.9rem; letter-spacing: 0.6em; border-left: 5px solid var(--mog-blue); padding-left: 15px; margin: 25px; font-weight: 900; color: #fff; text-transform: uppercase; }
 
-        /* GLOBAL TICKER */
-        .ticker-wrap { height: 35px; background: #000; border-bottom: 1px solid var(--mog-border); overflow: hidden; display: flex; align-items: center; z-index: 100; }
-        .ticker-move { white-space: nowrap; animation: ticker 45s linear infinite; font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--mog-blue); letter-spacing: 2px; }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
-        /* INPUTS & BUTTONS */
         .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 2px solid var(--mog-border); padding: 20px 0; color: #fff; width: 100%; outline: none; margin-bottom: 20px; font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; }
         .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 15px; padding: 22px; width: 100%; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; }
-
+        
         #side-drawer { position: fixed; top: 0; right: -340px; width: 340px; height: 100%; background: #050c14; z-index: 10000; border-left: 1px solid var(--mog-blue); transition: 0.5s; }
         #side-drawer.drawer-active { right: 0; }
-
         .glitch-active { animation: jitter 0.2s infinite; text-shadow: 3px 0 #ff3333, -3px 0 #00d4ff; }
         @keyframes jitter { 0% { transform: translate(0); } 50% { transform: translate(-2px, 2px); } 100% { transform: translate(0); } }
     </style>
 </head>
-<body id="mog-totality">
+<body id="mog-mainframe">
 
     <div id="bg-canvas"></div>
 
     <div class="ticker-wrap">
-        <div class="ticker-move">TOTALITY v100.0 // SOVEREIGN CIRCUITRY SYNCED // AFRICA SECTOR: ACTIVE // RSA RADAR BYPASS // SOUND & SOCIAL ARCHITECTURE // SIGNAL: CRYSTAL...</div>
+        <div class="ticker-move">MAINFRAME v00.1 SOVEREIGN TOTALITY // WITBANK HQ // DECIPHER THE CULTURE // SOUND & SOCIAL ARCHITECTURE // SIGNAL STABLE...</div>
     </div>
 
     <header class="h-[140px] px-12 flex justify-between items-center relative z-10 bg-black/40 border-b border-white/5 backdrop-blur-md">
@@ -94,11 +103,17 @@
             <button onclick="handleLogoSequence()" class="h-24 w-24 rounded-full border-2 border-blue-500/30 overflow-hidden shadow-[0_0_30px_rgba(0,212,255,0.2)] active:scale-95 transition-all">
                 <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="w-full h-full object-cover">
             </button>
+            
             <div class="flex flex-col">
-                <h1 id="main-title">Ministry<br><span class="pl-12">of Groove</span></h1>
-                <p class="slogan italic uppercase mt-3 ml-1">Custodians of sound and social architecture</p>
+                <h1 id="main-title" class="font-black italic uppercase tracking-tighter mb-1">
+                    Ministry of Groove
+                </h1>
+                <p class="slogan italic uppercase mt-1 ml-1 text-white">
+                    Custodians of sound and social architecture
+                </p>
             </div>
         </div>
+        
         <div class="flex items-center gap-10">
             <div class="text-right hidden sm:block">
                 <p class="text-[10px] text-blue-500 font-black tracking-[0.4em] uppercase">Status: Sovereign_Linked</p>
@@ -107,27 +122,13 @@
                     <p class="text-sm text-zinc-500 mono" id="lat-val">12ms</p>
                 </div>
             </div>
-            <button onclick="toggleDrawer()" class="text-blue-400 text-4xl hover:rotate-90"><i class="fa-solid fa-bars-staggered"></i></button>
+            <button onclick="toggleDrawer()" class="text-blue-400 text-4xl hover:rotate-90">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
         </div>
     </header>
 
-    <nav id="side-drawer">
-        <div class="p-10 border-b border-white/5 flex justify-between items-center">
-            <span class="prestige-label !m-0">Sovereign Menu</span>
-            <button onclick="toggleDrawer()"><i class="fa-solid fa-xmark text-white text-2xl"></i></button>
-        </div>
-        <div class="p-8 space-y-6">
-            <div class="flex justify-between items-center p-4 bg-white/5 rounded-xl border border-white/10">
-                <span class="text-[10px] uppercase font-black text-zinc-400">Silent Mode</span>
-                <input type="checkbox" id="silent-toggle" class="accent-blue-400">
-            </div>
-            <button onclick="capturePoster()" class="mog-input !text-center !text-[10px] uppercase font-bold text-blue-400 border-blue-400/20">Generate Poster Archive</button>
-            <button onclick="logout()" class="mog-input !text-center !text-[10px] uppercase font-bold text-red-500 border-red-500/20">Sever Mainframe Link</button>
-        </div>
-    </nav>
-
     <main class="mainframe-wrapper">
-        
         <section class="command-tile area-gateway p-12">
             <span class="prestige-label">Identity Handshake</span>
             <div id="auth-ui" class="h-full flex flex-col justify-center">
@@ -159,8 +160,8 @@
                     <button onclick="sendPacket()" class="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl shadow-xl active:scale-90"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </div>
-                </section>
-                
+                    </section>
+                    
         <section class="command-tile area-visuals">
             <span class="prestige-label">Visual Intel</span>
             <div class="scroller-v">
@@ -191,8 +192,22 @@
             <span class="prestige-label">Frequency Hitlist</span>
             <div id="hit-list" class="scroller-v space-y-4"></div>
         </section>
-
     </main>
+
+    <nav id="side-drawer">
+        <div class="p-10 border-b border-white/5 flex justify-between items-center">
+            <span class="prestige-label !m-0">Sovereign Menu</span>
+            <button onclick="toggleDrawer()"><i class="fa-solid fa-xmark text-white text-2xl"></i></button>
+        </div>
+        <div class="p-8 space-y-6">
+            <div class="flex justify-between items-center p-4 bg-white/5 rounded-xl border border-white/10">
+                <span class="text-[10px] uppercase font-black text-zinc-400">Silent Mode</span>
+                <input type="checkbox" id="silent-toggle" class="accent-blue-400">
+            </div>
+            <button onclick="window.print()" class="mog-input !text-center !text-[10px] uppercase font-bold text-blue-400 border-blue-400/20">Generate Poster Archive</button>
+            <button onclick="logout()" class="mog-input !text-center !text-[10px] uppercase font-bold text-red-500 border-red-500/20">Sever Mainframe Link</button>
+        </div>
+    </nav>
 
     <div id="director-totality" class="hidden fixed inset-0 z-[5000] bg-black/98 p-12 overflow-y-auto backdrop-blur-3xl">
         <div class="max-w-6xl mx-auto">
@@ -295,7 +310,6 @@
         };
 
         function closeDirector() { document.getElementById('director-totality').classList.add('hidden'); }
-        async function capturePoster() { window.print(); }
         async function logout() { await db.auth.signOut(); location.reload(); }
     </script>
 </body>
