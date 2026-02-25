@@ -1,18 +1,24 @@
 {
   "short_name": "M.O.G.",
   "name": "Ministry of Groove: National Grid",
+  "description": "Decrypting the Culture. Synchronizing the Grid.",
   "icons": [
     {
       "src": "https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png",
       "type": "image/png",
-      "sizes": "512x512",
+      "sizes": "192x192",
       "purpose": "any maskable"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
   "start_url": "/index.html",
-  "background_color": "#1a1a1a",
+  "background_color": "#060a0f",
   "display": "standalone",
   "scope": "/",
   "theme_color": "#D4AF37",
-  "description": "National Sovereignty High-Fidelity Network"
+  "orientation": "portrait-primary"
 }
