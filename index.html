@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M.O.G. | PRESTIGE COMMAND v2026.9.6</title>
+    <title>M.O.G. | MAINFRAME CIRCUITRY v2026.9.7</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -15,250 +15,244 @@
             --mog-gold: #D4AF37; 
             --mog-blue: #00d4ff; 
             --mog-black: #050505; 
-            --mog-glass: rgba(5, 15, 20, 0.65); 
-            --mog-border: rgba(0, 212, 255, 0.3); 
+            --mog-glass: rgba(5, 12, 20, 0.75); 
+            --mog-border: rgba(0, 212, 255, 0.4); 
         }
 
         * { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); scroll-behavior: smooth; }
         body { background: var(--mog-black); color: var(--mog-gold); font-family: 'Inter', sans-serif; overflow-x: hidden; min-height: 100vh; margin: 0; }
         
-        /* BACKGROUND VISIBILITY +30% (Opacity 0.5) */
+        /* THE BLUE CIRCUITRY BACKGROUND (LOGO RECONSTRUCTION) */
         #bg-canvas {
             position: fixed; inset: 0; z-index: -1;
             background-color: #050505;
             background-image: 
-                radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.2) 0%, transparent 80%),
-                url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 L90 10 L90 90 L10 90 Z' fill='none' stroke='rgba(0,212,255,0.15)' stroke-width='0.7'/%3E%3Ccircle cx='10' cy='10' r='1.5' fill='rgba(0,212,255,0.4)'/%3E%3Cpath d='M10 10 L30 30 M90 10 L70 30 M10 90 L30 70 M90 90 L70 70' stroke='rgba(0,212,255,0.1)' stroke-width='0.7'/%3E%3C/svg%3E");
-            background-size: 180px 180px;
-            opacity: 0.5;
+                radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.2) 0%, transparent 70%),
+                /* High-fidelity circuitry pattern derived from logo */
+                url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 L20 50 L30 40 L50 40 M50 40 L60 50 L80 50 M30 40 L30 10 L40 0 M70 100 L70 60 L60 50' fill='none' stroke='rgba(0,212,255,0.25)' stroke-width='0.5'/%3E%3Ccircle cx='50' cy='40' r='1.5' fill='rgba(0,212,255,0.5)'/%3E%3Ccircle cx='30' cy='10' r='1' fill='rgba(0,212,255,0.3)'/%3E%3Cpath d='M100 80 L80 80 L70 90 L50 90' fill='none' stroke='rgba(0,212,255,0.15)' stroke-width='0.5'/%3E%3C/svg%3E");
+            background-size: 400px 400px;
+            opacity: 0.55; /* +30% Visibility as requested */
             transition: opacity 1.5s ease, filter 1.5s ease;
         }
 
         #bg-canvas::after {
             content: ""; position: absolute; inset: 0;
-            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 212, 255, 0.25) 0%, transparent 50%);
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 212, 255, 0.3) 0%, transparent 50%);
             pointer-events: none;
         }
 
-        /* TYPOGRAPHY POSTER SCALE */
+        /* POSTER TYPOGRAPHY */
         h1 { 
             font-family: 'Big Shoulders Display', sans-serif !important; 
-            font-size: 7rem; line-height: 0.8; text-transform: uppercase; letter-spacing: -0.05em; 
+            font-size: 7.5rem; line-height: 0.8; text-transform: uppercase; letter-spacing: -0.05em; 
             background: linear-gradient(to bottom, #fff 40%, var(--mog-gold) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.3));
         }
 
-        .glitch-active { animation: jitter 0.2s infinite; text-shadow: 3px 0 #ff3333, -3px 0 #00d4ff; }
-        @keyframes jitter { 0% { transform: translate(0); } 50% { transform: translate(-2px, 2px); } 100% { transform: translate(0); } }
+        .glitch-active { animation: jitter 0.2s infinite; text-shadow: 4px 0 #ff3333, -4px 0 #00d4ff; }
+        @keyframes jitter { 0% { transform: translate(0); } 50% { transform: translate(-3px, 3px); } 100% { transform: translate(0); } }
 
-        /* BENTO TILE SCALE +30% */
+        /* UPLINK TILES (+30% SCALE) */
         .bento-container { 
-            display: grid; grid-template-columns: repeat(12, 1fr); gap: 2.5rem; 
+            display: grid; grid-template-columns: repeat(12, 1fr); gap: 3rem; 
             max-width: 1800px; margin: 0 auto; padding: 6rem 3rem; 
         }
         
         .bento-tile { 
             background: var(--mog-glass) !important; border: 1px solid var(--mog-border); 
-            backdrop-filter: blur(12px); border-radius: 6px; position: relative; overflow: hidden;
-            box-shadow: inset 0 0 25px rgba(0, 212, 255, 0.1), 0 0 50px rgba(0, 0, 0, 0.7);
-            padding: 3rem; /* Increased padding */
+            backdrop-filter: blur(15px); border-radius: 8px; position: relative; overflow: hidden;
+            box-shadow: inset 0 0 30px rgba(0, 212, 255, 0.15), 0 40px 100px rgba(0, 0, 0, 0.8);
+            padding: 3.5rem; 
         }
 
-        .prestige-label { font-size: 0.85rem; letter-spacing: 0.6em; border-left: 4px solid var(--mog-blue); padding-left: 12px; margin-bottom: 2rem; display: block; font-weight: 900; }
-        .mono-heavy { font-size: 1.6rem; letter-spacing: -1px; font-weight: 700; text-transform: uppercase; }
+        .prestige-label { font-size: 0.9rem; letter-spacing: 0.7em; border-left: 5px solid var(--mog-blue); padding-left: 15px; margin-bottom: 2.5rem; display: block; font-weight: 900; color: #fff; }
+        .mono-heavy { font-size: 1.8rem; letter-spacing: -1px; font-weight: 700; text-transform: uppercase; color: var(--mog-blue); }
 
-        /* SECTOR OVERLAY UI */
-        #africa-map { transition: all 0.5s ease; filter: invert(1) brightness(1.5); }
-        .sector-highlight { position: absolute; border: 2px solid var(--mog-blue); background: rgba(0, 212, 255, 0.1); display: none; pointer-events: none; mix-blend-mode: screen; }
+        /* SECTOR MAP INTERACTIVITY */
+        #africa-map { filter: invert(1) brightness(1.5) drop-shadow(0 0 10px var(--mog-blue)); transition: 0.5s ease; }
+        .scanning { filter: invert(1) brightness(2) sepia(1) hue-rotate(150deg) saturate(5) !important; }
 
-        .mog-btn { font-size: 0.85rem; padding: 1rem 2rem; border-width: 2px; }
-        #ticker-v2 { height: 45px; }
-        .scroll-text { font-size: 13px; }
+        .mog-input { background: rgba(0, 212, 255, 0.05); border: none; border-bottom: 2px solid var(--mog-border); padding: 1.2rem 0; color: #fff; width: 100%; font-size: 1.2rem; }
+        .mog-btn { background: transparent; border: 2px solid var(--mog-gold); color: var(--mog-gold); padding: 1.2rem 2.5rem; font-weight: 900; text-transform: uppercase; cursor: pointer; letter-spacing: 0.2em; }
+        .mog-btn:hover { background: var(--mog-gold); color: #000; box-shadow: 0 0 30px var(--mog-gold); }
+
+        #ticker-v2 { height: 50px; background: #000; border-top: 2px solid var(--mog-border); }
+        .scroll-text { font-size: 14px; font-weight: 800; color: var(--mog-blue); }
+
+        @media print { body { background: #000 !important; } .mog-btn, canvas, #bg-canvas { display: none; } }
     </style>
 </head>
 <body>
 
 <canvas id="bg-canvas"></canvas>
 
-<nav id="side-hub" class="fixed top-0 left-0 h-full w-80 bg-black/95 backdrop-filter blur-2xl z-[1000] border-r border-blue-500/30 -translate-x-full transition-transform duration-500">
-    <div class="p-10 space-y-10">
-        <span class="prestige-label text-blue-400">Mission Hub</span>
-        <ul class="space-y-8 mono text-[13px] text-gray-400">
-            <li class="hover:text-blue-400 cursor-pointer"><i class="fa-solid fa-satellite mr-4"></i> SECTOR MAP</li>
-            <li class="hover:text-blue-400 cursor-pointer"><i class="fa-solid fa-waveform-path mr-4"></i> SONIC VAULT</li>
-            <li onclick="capturePoster()" class="text-blue-500 cursor-pointer border-t border-white/10 pt-6"><i class="fa-solid fa-camera mr-4"></i> EXPORT ARCHIVE</li>
-        </ul>
-    </div>
-</nav>
-
 <header class="p-12 flex flex-col md:flex-row justify-between items-end relative z-10 border-b border-white/10">
     <div class="flex flex-col gap-0">
         <div class="flex items-center gap-6 mb-4">
-             <button onclick="toggleHub()" class="p-4 text-blue-400 hover:rotate-90 transition-transform"><i class="fa-solid fa-plus text-3xl"></i></button>
-            <span class="mono text-[12px] tracking-[.8em] text-blue-500 uppercase">Sector: Africa / 2026</span>
+            <button onclick="toggleHub()" class="text-blue-400 hover:rotate-90 transition-transform"><i class="fa-solid fa-plus text-4xl"></i></button>
+            <span class="mono text-[14px] tracking-[1em] text-blue-500 uppercase font-bold">Mainframe // Africa Sector</span>
         </div>
-        <h1 id="main-title">Ministry<br><span class="pl-16 text-blue-400">of Groove</span></h1>
+        <h1>Ministry<br><span class="pl-20 text-blue-400">of Groove</span></h1>
     </div>
     <div class="flex flex-col items-end gap-6">
-        <div class="flex gap-10 text-lg mono-heavy"><span class="text-white">UPLINK // ACTIVE</span><span class="text-blue-500" id="live-bpm">BPM // 124</span></div>
-        <button onclick="logout()" class="mog-btn !border-red-900 !text-red-500 !py-2 !px-6">TERMINATE</button>
+        <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-24 w-24 rounded-full border-2 border-blue-500/50 shadow-[0_0_20px_rgba(0,212,255,0.3)]">
+        <button onclick="logout()" class="mog-btn !border-red-600 !text-red-600 !py-2 !px-8">Terminate Link</button>
     </div>
 </header>
 
 <main class="bento-container relative z-10">
     <div class="bento-tile col-span-12 md:col-span-5">
-        <span class="prestige-label">Identity Verification</span>
-        <div id="auth-form" class="space-y-10">
-            <input id="email-in" type="email" placeholder="OPERATIVE_ID" class="mog-input mono !text-lg !bg-transparent !border-b-2">
-            <input id="password-in" type="password" placeholder="BIOMETRIC_KEY" class="mog-input mono !text-lg !bg-transparent !border-b-2">
-            <button onclick="handleAuth('login')" class="mog-btn w-full">Initialize Handshake</button>
+        <span class="prestige-label">Identity Handshake</span>
+        <div id="auth-form" class="space-y-12">
+            <input id="email-in" type="email" placeholder="OPERATIVE_ID" class="mog-input mono">
+            <input id="password-in" type="password" placeholder="SECURE_KEY" class="mog-input mono">
+            <button onclick="handleAuth('login')" class="mog-btn w-full">Access Mainframe</button>
         </div>
-        <div id="op-profile" class="hidden text-center"><div id="qrcode" class="bg-white p-4 inline-block mb-6"></div><p id="active-alias" class="text-3xl font-black italic uppercase"></p></div>
+        <div id="op-profile" class="hidden text-center">
+            <div id="qrcode" class="bg-white p-6 inline-block mb-8 rounded"></div>
+            <p id="active-alias" class="text-4xl font-black italic text-white"></p>
+        </div>
     </div>
 
     <div class="bento-tile col-span-12 md:col-span-7">
-        <div class="flex justify-between items-center mb-10"><span class="prestige-label !mb-0">Sonic Archive</span><div id="now-playing" class="mono-heavy text-blue-400">STANDBY...</div></div>
+        <div class="flex justify-between items-start mb-12">
+            <span class="prestige-label">Sonic Intelligence</span>
+            <div id="now-playing" class="mono-heavy text-right">00 // STANDBY</div>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div id="mix-list" class="space-y-4 max-h-[300px] overflow-y-auto pr-6 custom-scrollbar"></div>
-            <div class="flex flex-col justify-center items-center gap-8 border-l border-white/5 pl-8">
+            <div id="mix-list" class="space-y-4 max-h-[350px] overflow-y-auto pr-6 custom-scrollbar"></div>
+            <div class="flex flex-col items-center justify-center gap-10">
                 <audio id="player" crossorigin="anonymous" class="hidden"></audio>
-                <i id="play-btn" class="fa-solid fa-play text-6xl cursor-pointer hover:text-white"></i>
-                <div id="deep-scan-stats" class="w-full flex justify-between mono text-[10px] text-blue-400 opacity-70"><span id="ai-energy">ENERGY: 0%</span><span id="ai-mood">THEME: STANDBY</span></div>
-                <canvas id="audio-visualizer" class="w-full h-24"></canvas>
+                <i id="play-btn" class="fa-solid fa-play text-8xl cursor-pointer hover:text-white text-blue-500"></i>
+                <canvas id="audio-visualizer" class="w-full h-32"></canvas>
             </div>
         </div>
     </div>
-    
-    <div class="bento-tile col-span-12 md:col-span-8 group relative">
-        <span class="prestige-label">Geospatial Sector Map</span>
-        <div id="satellite-container" class="relative h-[450px] w-full flex items-center justify-center bg-black/80 border border-blue-500/20">
-            <img id="africa-map" src="https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg" class="h-full absolute pointer-events-auto cursor-crosshair">
-            <div id="sector-info" class="absolute bottom-6 left-6 mono text-[11px] text-blue-400 bg-black/80 p-4 border border-blue-500/40">SECTOR: MONITORING...</div>
+
+    <div class="bento-tile col-span-12 md:col-span-8">
+        <span class="prestige-label">Geospatial Africa Scan</span>
+        <div id="satellite-container" class="relative h-[500px] w-full flex items-center justify-center bg-black/80 border border-blue-500/30 overflow-hidden">
+            <img id="africa-map" src="https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg" class="h-[90%] absolute cursor-crosshair">
+            <div id="scan-line" class="absolute inset-0 bg-blue-500/10 h-1 w-full animate-[scan_3s_linear_infinite] shadow-[0_0_20px_var(--mog-blue)]"></div>
+            <div id="sector-info" class="absolute top-10 right-10 mono text-xs text-blue-400 bg-black/90 p-6 border border-blue-500/40">SECTOR_ID: 000 // STANDBY</div>
         </div>
     </div>
 
-    <div class="bento-tile col-span-12 md:col-span-4 p-10">
-        <span class="prestige-label">Secure Frequency</span>
-        <div id="chat-box" class="h-64 overflow-y-auto mono text-[11px] space-y-6 custom-scrollbar mb-6"></div>
-        <div id="chat-input-area" class="hidden flex gap-4"><input id="chat-in" type="text" placeholder="TRANSMIT..." class="mog-input mono"><button onclick="sendChat()" class="mog-btn"><i class="fa-solid fa-paper-plane"></i></button></div>
+    <div class="bento-tile col-span-12 md:col-span-4">
+        <span class="prestige-label">Quantum Comms</span>
+        <div id="chat-box" class="h-80 overflow-y-auto mono text-sm space-y-6 custom-scrollbar mb-8"></div>
+        <div id="chat-input-area" class="hidden flex gap-4">
+            <input id="chat-in" type="text" placeholder="SEND PACKET..." class="mog-input mono">
+            <button onclick="sendChat()" class="mog-btn !px-8"><i class="fa-solid fa-shredder"></i></button>
+        </div>
     </div>
 </main>
 
-<footer class="p-20 mt-20 bg-black/60 backdrop-filter blur-3xl border-t border-white/5">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-        <div class="mono text-[12px] opacity-50">MINISTRY OF GROOVE // PRESTIGE_V2026.9.6</div>
-        <div class="flex gap-12 text-3xl">
-            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="hover:text-white"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="https://www.instagram.com/ministryofgroove_hq" target="_blank" class="hover:text-blue-400"><i class="fa-brands fa-instagram"></i></a>
-        </div>
-    </div>
-</footer>
-
-<div id="ticker-v2"><div class="bg-gold text-black px-8 h-full flex items-center mono font-black text-[12px]">MAINFRAME LIVE</div><div class="scroll-text"><span>[ AFRICA_SECTOR: SCANNING ]</span><span>[ UPLINK_STRENGTH: 99.8% ]</span><span>[ DEEP_SCAN_AI: OPERATIONAL ]</span></div></div>
+<div id="ticker-v2"><div class="bg-gold text-black px-10 h-full flex items-center mono font-black">SYSTEM_STABLE</div><div class="scroll-text"><span>[ AFRICA_SECTOR: FULL_VISIBILITY ]</span><span>[ CIRCUITRY_LINK: ESTABLISHED ]</span><span>[ DEEP_SCAN_AI: ACTIVE ]</span></div></div>
 
 <script>
-    const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8", D: "director.mog@gmail.com" };
+    const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
     const db = window.supabase.createClient(CFG.U, CFG.K);
     const audioPlayer = document.getElementById('player');
-    const playBtn = document.getElementById('play-btn');
+    const vCanvas = document.getElementById('bg-canvas');
+    const vCtx = vCanvas.getContext('2d');
+    let particles = [], analyser, dataArray;
 
-    // --- CYBER-CIRCUITRY FX ---
-    let particles = [], vCanvas = document.getElementById('bg-canvas'), vCtx = vCanvas.getContext('2d');
+    // --- CIRCUITRY PARTICLES (LOGO DATA PACKETS) ---
     function initFX() {
         vCanvas.width = window.innerWidth; vCanvas.height = window.innerHeight;
-        for (let i=0; i<150; i++) particles.push({ x:Math.random()*vCanvas.width, y:Math.random()*vCanvas.height, vx:(Math.random()>0.5?1.5:-1.5), vy:(Math.random()>0.5?1.5:-1.5) });
+        for (let i=0; i<200; i++) particles.push({ x:Math.random()*vCanvas.width, y:Math.random()*vCanvas.height, vx:(Math.random()>0.5?2:-2), vy:0 });
     }
+
     function updateFX() {
         vCtx.clearRect(0, 0, vCanvas.width, vCanvas.height);
-        const comp = (analyser) ? (dataArray.reduce((a,b)=>a+b)/dataArray.length)/5 : 1;
-        const col = getComputedStyle(document.documentElement).getPropertyValue('--mog-blue');
+        const comp = analyser ? (dataArray.reduce((a,b)=>a+b)/dataArray.length)/5 : 1;
         particles.forEach(p => {
-            if (Math.random() > 0.98) p.vx = (Math.random() > 0.5 ? 2.5 : -2.5);
-            if (Math.random() > 0.98) p.vy = (Math.random() > 0.5 ? 2.5 : -2.5);
+            if(Math.random()>0.97) { // Logic-gate direction change
+                p.vx = (Math.random()>0.5?2:-2); p.vy = (Math.random()>0.5?2:-2);
+            }
             p.x += p.vx * comp; p.y += p.vy * comp;
             if(p.x<0) p.x=vCanvas.width; if(p.y<0) p.y=vCanvas.height;
-            vCtx.beginPath(); vCtx.arc(p.x, p.y, 2, 0, Math.PI*2); vCtx.fillStyle=col; vCtx.shadowBlur=15; vCtx.shadowColor=col; vCtx.fill();
+            vCtx.fillStyle = '#00d4ff'; vCtx.shadowBlur = 15; vCtx.shadowColor = '#00d4ff';
+            vCtx.fillRect(p.x, p.y, 3, 3);
         });
         requestAnimationFrame(updateFX);
     }
 
-    // --- SECTOR OVERLAY LOGIC ---
+    // --- INTERACTIVE SECTOR SCAN ---
     const africaMap = document.getElementById('africa-map');
+    africaMap.addEventListener('mouseenter', () => africaMap.classList.add('scanning'));
+    africaMap.addEventListener('mouseleave', () => africaMap.classList.remove('scanning'));
     africaMap.addEventListener('mousemove', (e) => {
-        const sectors = ["NORTH_AFRICA_HUB", "CENTRAL_SECTOR", "SOUTH_COMMAND", "EAST_LINK", "WEST_VAULT"];
-        const randomSector = sectors[Math.floor(Math.random() * sectors.length)];
-        document.getElementById('sector-info').innerText = `SECTOR: ${randomSector} // SCANNING...`;
-        africaMap.style.filter = "invert(1) brightness(2) sepia(1) hue-rotate(160deg) saturate(3)";
-    });
-    africaMap.addEventListener('mouseleave', () => {
-        africaMap.style.filter = "invert(1) brightness(1.5)";
-        document.getElementById('sector-info').innerText = `SECTOR: MONITORING...`;
+        const sectors = ["MAGHREB_LINK", "SAHEL_WATCH", "CONGO_BASIN", "KALAHARI_NODE", "ZAMBEZI_FLOW"];
+        document.getElementById('sector-info').innerText = `SECTOR_ID: ${sectors[Math.floor(Math.random()*5)]} // ACTIVE_SCAN`;
     });
 
-    // --- AUTH & HANDSHAKE ---
-    async function handleAuth(mode) {
-        const btn = event.currentTarget; btn.innerText = "AUTHENTICATING...";
-        vCanvas.style.opacity = "0.9";
-        const email = document.getElementById('email-in').value, pass = document.getElementById('password-in').value;
-        try {
-            let res = (mode === 'signup') ? await db.auth.signUp({ email, password:pass }) : await db.auth.signInWithPassword({ email, password:pass });
-            if(res.error) throw res.error;
-            btn.innerText = "LINK_SUCCESS";
-            setTimeout(() => { vCanvas.style.opacity = "0.5"; }, 2000);
-        } catch (e) { btn.innerText = "FAILED"; setTimeout(()=>btn.innerText="Init Handshake", 2000); }
-    }
-
-    // --- AUDIO CORE ---
-    let audioCtx, analyser, source, dataArray;
+    // --- AUDIO & AI ---
     function playTrack(url, name) {
-        audioPlayer.crossOrigin = "anonymous"; audioPlayer.src = url; audioPlayer.play();
+        audioPlayer.src = url; audioPlayer.play();
         document.getElementById('now-playing').innerText = name.toUpperCase();
-        if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            analyser = audioCtx.createAnalyser(); source = audioCtx.createMediaElementSource(audioPlayer);
+        if(!analyser) {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioCtx.createAnalyser(); 
+            const source = audioCtx.createMediaElementSource(audioPlayer);
             source.connect(analyser); analyser.connect(audioCtx.destination);
             analyser.fftSize = 64; dataArray = new Uint8Array(analyser.frequencyBinCount);
             renderAudioUI();
         }
     }
+
     function renderAudioUI() {
         requestAnimationFrame(renderAudioUI); analyser.getByteFrequencyData(dataArray);
-        const avg = dataArray.reduce((a,b)=>a+b)/dataArray.length, low = dataArray.slice(0,5).reduce((a,b)=>a+b)/5;
-        const theme = low > 180 ? '#ff3333' : (avg > 100 ? '#D4AF37' : '#00d4ff');
-        document.documentElement.style.setProperty('--mog-blue', theme);
-        document.getElementById('ai-energy').innerText = `ENERGY: ${Math.round(avg)}%`;
-        if (low > 210) document.getElementById('main-title').classList.add('glitch-active'); else document.getElementById('main-title').classList.remove('glitch-active');
-        const map = document.getElementById('africa-map'); map.style.opacity = 0.5 + (low/255)*0.5;
-        const canvasA = document.getElementById('audio-visualizer'), ctxA = canvasA.getContext('2d');
-        ctxA.clearRect(0,0,canvasA.width,canvasA.height);
-        dataArray.forEach((v, i) => { ctxA.fillStyle = theme; ctxA.fillRect(i*15, canvasA.height - v/3, 12, v/3); });
+        const low = dataArray.slice(0,5).reduce((a,b)=>a+b)/5;
+        if(low > 210) document.getElementById('main-title').classList.add('glitch-active');
+        else document.getElementById('main-title').classList.remove('glitch-active');
+        const ctxA = document.getElementById('audio-visualizer').getContext('2d');
+        ctxA.clearRect(0,0,300,150);
+        dataArray.forEach((v, i) => { ctxA.fillStyle = '#00d4ff'; ctxA.fillRect(i*12, 150 - v/2, 10, v/2); });
     }
 
-    // --- UTILS ---
-    function toggleHub() { const h = document.getElementById('side-hub'); h.style.transform = h.style.transform === 'translateX(0%)' ? 'translateX(-100%)' : 'translateX(0%)'; }
+    // --- SYSTEM LOGIC ---
+    async function handleAuth(mode) {
+        vCanvas.style.opacity = "1"; // Maximum visibility surge
+        const email = document.getElementById('email-in').value, pass = document.getElementById('password-in').value;
+        const { data, error } = await db.auth.signInWithPassword({ email, password:pass });
+        if(!error) {
+            vCanvas.style.opacity = "0.55";
+            document.querySelectorAll('.bento-tile').forEach(t => t.style.borderColor="#00d4ff");
+        }
+    }
+
+    db.auth.onAuthStateChange((ev, ses) => {
+        if(ses) {
+            document.getElementById('auth-form').classList.add('hidden');
+            document.getElementById('op-profile').classList.remove('hidden');
+            document.getElementById('chat-input-area').classList.remove('hidden');
+            document.getElementById('active-alias').innerText = ses.user.email.split('@')[0];
+            new QRCode(document.getElementById("qrcode"), { text: ses.user.id, width: 120, height: 120 });
+            fetchVault();
+        }
+    });
+
     async function fetchVault() {
-        const { data } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
-        const list = document.getElementById('mix-list');
-        list.innerHTML = "";
+        const { data } = await db.storage.from('intel-vault').list();
+        const list = document.getElementById('mix-list'); list.innerHTML = "";
         data.forEach(f => {
-            if (f.name.match(/\.(mp3|wav|m4a)$/i)) {
-                const r = document.createElement('div'); r.className = "p-4 border border-white/5 mono text-xs cursor-pointer hover:bg-white/10";
-                r.innerHTML = f.name.toUpperCase(); r.onclick = () => playTrack(`${CFG.U}/storage/v1/object/public/intel-vault/${f.name}`, f.name); list.appendChild(r);
+            if(f.name.match(/\.(mp3|wav|m4a)$/i)) {
+                const r = document.createElement('div');
+                r.className = "p-5 border border-white/10 mono text-sm cursor-pointer hover:bg-blue-500/10 hover:text-white";
+                r.innerHTML = f.name.toUpperCase();
+                r.onclick = () => playTrack(`${CFG.U}/storage/v1/object/public/intel-vault/${f.name}`, f.name);
+                list.appendChild(r);
             }
         });
     }
-    function sendChat() {
-        const cin = document.getElementById('chat-in'); if(!cin.value) return;
-        const div = document.createElement('div'); div.className = "p-4 border-l-4 border-blue-500 bg-blue-500/5";
-        div.innerHTML = `<span class="mono text-[9px] opacity-40">PACKET_TRANS: ${Date.now()}</span><div class="msg-body mt-2">${cin.value}</div>`;
-        document.getElementById('chat-box').appendChild(div); cin.value = "";
-    }
-    async function logout() { await db.auth.signOut(); location.reload(); }
 
-    db.auth.onAuthStateChange((ev, ses) => { if(ses) { 
-        document.getElementById('auth-form').classList.add('hidden'); document.getElementById('op-profile').classList.remove('hidden'); 
-        document.getElementById('chat-input-area').classList.remove('hidden'); fetchVault(); 
-    }});
+    window.addEventListener('mousemove', (e) => {
+        const x = (e.clientX/window.innerWidth)*100, y = (e.clientY/window.innerHeight)*100;
+        vCanvas.style.setProperty('--mouse-x', `${x}%`); vCanvas.style.setProperty('--mouse-y', `${y}%`);
+    });
 
     window.onload = () => { initFX(); updateFX(); };
 </script>
