@@ -14,21 +14,15 @@
         @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=JetBrains+Mono:wght@300;700&family=Inter:wght@400;700;900&display=swap');
         
         :root { 
-            --mog-gold: #D4AF37; 
-            --mog-blue: #00d4ff; 
-            --mog-black: #050505; 
-            --mog-glass: rgba(15, 20, 25, 0.92); 
-            --mog-border: rgba(255, 255, 255, 0.1);
+            --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; 
+            --mog-glass: rgba(15, 20, 25, 0.92); --mog-border: rgba(255, 255, 255, 0.12);
         }
 
         body { 
-            background-color: var(--mog-black); 
-            color: #fff; font-family: 'Inter', sans-serif;
-            margin: 0; padding: 40px; min-height: 100vh;
-            overflow-x: hidden;
+            background-color: var(--mog-black); color: #fff; font-family: 'Inter', sans-serif;
+            margin: 0; padding: 40px; min-height: 100vh; overflow-x: hidden;
         }
 
-        /* CIRCUITRY BACKGROUND */
         #bg-canvas {
             position: fixed; inset: 0; z-index: -1;
             background-image: 
@@ -36,174 +30,129 @@
                 url("data:image/svg+xml,%3Csvg width='400' height='400' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 L20 50 L30 40 L50 40 M50 40 L60 50 L80 50 M30 40 L30 10 L40 0 M70 100 L70 60 L60 50' fill='none' stroke='rgba(0,212,255,0.1)' stroke-width='0.3'/%3E%3C/svg%3E");
         }
 
-        /* UPGRADED LOGO HEADER */
-        .logo-container { display: flex; align-items: center; gap: 10px; margin-bottom: 40px; }
-        .logo-main { font-family: 'Big Shoulders Display'; font-size: 6rem; line-height: 1; display: flex; align-items: center; }
-        .logo-letter { background: linear-gradient(to bottom, #fff, var(--mog-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .logo-seal { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--mog-gold); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
-        .header-sub { font-family: 'Big Shoulders Display'; font-size: 2.5rem; opacity: 0.9; margin-left: 15px; border-left: 2px solid rgba(255,255,255,0.2); padding-left: 20px; }
+        .header-main { display: flex; align-items: center; gap: 15px; margin-bottom: 35px; }
+        .logo-m, .logo-g { font-family: 'Big Shoulders Display'; font-size: 6rem; background: linear-gradient(to bottom, #fff, var(--mog-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
+        .seal-o { width: 95px; height: 95px; border-radius: 50%; border: 2px solid var(--mog-gold); filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5)); }
+        .header-divider { height: 100px; width: 2px; background: rgba(255,255,255,0.15); margin: 0 10px; }
+        .totality-text { font-family: 'Big Shoulders Display'; font-size: 2.8rem; line-height: 0.9; opacity: 0.95; }
 
-        /* PRECISE BENTO GRID LAYOUT */
         .bento-grid {
             display: grid;
-            grid-template-columns: 1.2fr 1fr 1fr;
+            grid-template-columns: 1.25fr 1fr 1fr;
             grid-template-areas: 
-                "gateway messenger1 messenger2"
+                "gateway messenger messenger-alt"
                 "gateway radar growth"
                 "gateway command hitlist";
-            gap: 25px;
-            max-width: 1600px; margin: 0 auto;
+            gap: 25px; max-width: 1600px; margin: 0 auto;
         }
 
         .tile {
-            background: var(--mog-glass);
-            border: 1px solid var(--mog-border);
-            border-radius: 12px; padding: 25px;
-            backdrop-filter: blur(25px);
-            display: flex; flex-direction: column;
+            background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 12px;
+            padding: 24px; backdrop-filter: blur(30px); display: flex; flex-direction: column;
             position: relative;
         }
 
         .tile-header {
             display: flex; justify-content: space-between; align-items: center;
             font-size: 0.75rem; font-weight: 900; text-transform: uppercase;
-            letter-spacing: 0.2em; color: var(--mog-blue);
-            margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 10px;
+            letter-spacing: 0.25em; color: var(--mog-blue);
+            margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 10px;
         }
 
-        /* GRID POSITIONING */
-        .tile-gate { grid-area: gateway; }
-        .tile-m1 { grid-area: messenger1; }
-        .tile-g1 { grid-area: gallery; }
-        .tile-rad { grid-area: radar; }
-        .tile-gro { grid-area: growth; }
-        .tile-cmd { grid-area: command; }
-        .tile-hit { grid-area: hitlist; }
+        .area-gateway { grid-area: gateway; }
+        .area-messenger { grid-area: messenger; }
+        .area-messenger-alt { grid-area: messenger-alt; }
+        .area-radar { grid-area: radar; }
+        .area-growth { grid-area: growth; }
+        .area-command { grid-area: command; }
+        .area-hitlist { grid-area: hitlist; }
 
         .som-btn {
             background: linear-gradient(135deg, #00d4ff 0%, #0080ff 100%);
-            color: white; padding: 12px; border-radius: 6px;
-            font-weight: 900; text-transform: uppercase; font-size: 0.8rem;
-            width: 100%; margin-top: auto; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
-            transition: 0.2s;
+            color: white; padding: 12px; border-radius: 6px; font-weight: 900;
+            text-transform: uppercase; font-size: 0.8rem; width: 100%;
+            margin-top: auto; cursor: pointer;
         }
-        .som-btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
-
-        .inner-well { background: rgba(0,0,0,0.4); border-radius: 8px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        .mono-text { font-family: 'JetBrains Mono'; font-size: 0.75rem; color: rgba(255,255,255,0.7); line-height: 1.6; }
-        
-        .mog-input { background: rgba(255,255,255,0.03); border: 1px solid var(--mog-border); padding: 12px; border-radius: 4px; width: 100%; margin-bottom: 12px; font-family: 'JetBrains Mono'; color: #fff; }
-
-        @media (max-width: 1100px) {
-            .bento-grid { grid-template-columns: 1fr 1fr; grid-template-areas: "gateway gateway" "messenger1 messenger2" "radar growth" "command hitlist"; }
-        }
+        .som-btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); }
+        .inner-well { background: rgba(0,0,0,0.45); border-radius: 8px; padding: 18px; border: 1px solid rgba(255,255,255,0.05); }
+        .mono-small { font-family: 'JetBrains Mono'; font-size: 0.72rem; color: rgba(255,255,255,0.65); line-height: 1.6; }
+        .mog-input { background: rgba(255,255,255,0.04); border: 1px solid var(--mog-border); padding: 14px; border-radius: 5px; width: 100%; margin-bottom: 12px; color: #fff; font-family: 'JetBrains Mono'; }
     </style>
 </head>
 <body>
 
     <div id="bg-canvas"></div>
 
-    <header class="logo-container">
-        <div class="logo-main">
-            <span class="logo-letter">M.</span>
-            <img src="1000225933.jpg" class="logo-seal mx-2" alt="MOG">
-            <span class="logo-letter">G.</span>
-        </div>
-        <div class="header-sub">
-            SOVEREIGN TOTALITY <br>
-            <span class="text-sm font-mono opacity-50 tracking-widest">v100.2.8</span>
-        </div>
+    <header class="header-main">
+        <div class="logo-m">M.</div>
+        <img src="1000225933.jpg" class="seal-o" alt="MOG SEAL" onclick="handleLogoSequence()">
+        <div class="logo-g">G.</div>
+        <div class="header-divider"></div>
+        <div class="totality-text">SOVEREIGN TOTALITY <br> <span class="text-sm font-mono opacity-50 tracking-[0.4em]">v100.2.8</span></div>
     </header>
 
     <main class="bento-grid">
-        <section class="tile tile-gate">
-            <div class="tile-header">
-                <span><i class="fa-solid fa-circle text-[6px] mr-2"></i> GATEWAY</span>
-                <i class="fa-solid fa-xmark opacity-30"></i>
-            </div>
+        <section class="tile area-gateway">
+            <div class="tile-header"><span><i class="fa-solid fa-satellite-dish text-[6px] mr-3"></i> GATEWAY</span><i class="fa-solid fa-xmark opacity-30"></i></div>
             <div id="auth-box">
-                <p class="text-[10px] font-bold uppercase opacity-60 mb-4 tracking-[0.2em]">Command Tile: Identity_Sync</p>
+                <p class="text-[10px] font-bold uppercase opacity-60 mb-5 tracking-widest">MODULE: IDENTITY_MATRIX</p>
                 <input id="login-user" type="text" placeholder="OPERATIVE_ID" class="mog-input">
                 <input id="login-pass" type="password" placeholder="PASSCODE" class="mog-input">
-                <div class="inner-well mt-4 mb-6">
-                    <p class="mono-text">
-                        ENCRYPTION: AES-256-RSA<br>
-                        NODE: PRIMARY_HANDSHAKE<br>
-                        SECTOR: WITBANK_MPU_RSA
-                    </p>
+                <div class="inner-well mt-4 mb-8">
+                    <p class="mono-small">ENCRYPTION: AES-256-RSA <br> SECTOR: WITBANK_HQ_RSA <br> SOURCE: NATIONAL_GRID</p>
                 </div>
-                <button onclick="loginOperative()" class="som-btn">AUTHORIZE_ACCESS</button>
+                <button onclick="loginOperative()" class="som-btn">Authorize_Access</button>
             </div>
             <div id="profile-active" class="hidden text-center py-10">
-                <div id="qrcode" class="bg-white p-4 rounded-lg inline-block mb-6 shadow-[0_0_20px_rgba(255,255,255,0.1)]"></div>
-                <h3 id="display-id" class="text-gold font-black italic text-2xl tracking-tighter uppercase"></h3>
+                <div id="qrcode" class="bg-white p-4 rounded-lg inline-block mb-6"></div>
+                <h3 id="display-id" class="text-gold font-black italic text-2xl uppercase"></h3>
+                <div id="director-wealth" class="hidden mt-6 pt-4 border-t border-gold/30">
+                    <p class="text-gold font-bold">DIRECTOR_VALUATION</p>
+                    <p class="text-2xl font-mono text-white">$ 4,829,102.00</p>
+                </div>
             </div>
         </section>
 
-        <section class="tile tile-m1">
-            <div class="tile-header">
-                <span><i class="fa-solid fa-circle text-[6px] mr-2"></i> MESSENGER</span>
-                <i class="fa-solid fa-xmark opacity-30"></i>
-            </div>
-            <p class="text-[9px] uppercase opacity-40 mb-3 tracking-widest">Handshake Protocol</p>
-            <div class="inner-well"><p class="mono-text text-blue-300">Wesk: Trnatoreas e drfwooa timat lciettvrotgrtsutice...</p></div>
+        <section class="tile area-messenger">
+            <div class="tile-header"><span><i class="fa-solid fa-message text-[6px] mr-3"></i> MESSENGER</span><i class="fa-solid fa-xmark opacity-30"></i></div>
+            <p class="text-[9px] uppercase opacity-40 mb-3 tracking-widest">Flicker move</p>
+            <div class="inner-well"><p class="mono-small text-blue-300 italic">Wesk: Trnatoreas e drfwooa timat lciettvrotgrtsutice...</p></div>
+            <button class="som-btn" onclick="playMandate()">SOM NOW</button>
+        </section>
+
+        <section class="tile area-messenger-alt">
+            <div class="tile-header"><span><i class="fa-solid fa-message text-[6px] mr-3"></i> MESSENGER</span><i class="fa-solid fa-xmark opacity-30"></i></div>
+            <p class="text-[9px] uppercase opacity-40 mb-3 tracking-widest">Firicker mode</p>
+            <div class="inner-well"><p class="mono-small">Raon fcaqlke 130 // Handshake confirmed via Sector 7.</p></div>
             <button class="som-btn">SOM NOW</button>
         </section>
 
-        <section class="tile tile-m2">
-            <div class="tile-header">
-                <span><i class="fa-solid fa-circle text-[6px] mr-2"></i> MESSENGER</span>
-                <i class="fa-solid fa-xmark opacity-30"></i>
-            </div>
-            <p class="text-[9px] uppercase opacity-40 mb-3 tracking-widest">Flicker Mode</p>
-            <div class="inner-well"><p class="mono-text">Raon fcaqlke 130 // Handshake logic confirmed via Sector 7.</p></div>
-            <button class="som-btn">SOM NOW</button>
-        </section>
-
-        <section class="tile tile-rad">
-            <div class="tile-header">
-                <span><i class="fa-solid fa-circle text-[6px] mr-2"></i> RADAR</span>
-                <i class="fa-solid fa-xmark opacity-30"></i>
-            </div>
-            <div class="h-28 bg-black/60 rounded overflow-hidden relative border border-white/5 mb-2">
-                <iframe class="w-full h-full grayscale invert opacity-30 scale-150" src="http://googleusercontent.com/maps.google.com/7"></iframe>
+        <section class="tile area-radar">
+            <div class="tile-header"><span><i class="fa-solid fa-map text-[6px] mr-3"></i> RADAR</span><i class="fa-solid fa-xmark opacity-30"></i></div>
+            <div class="inner-well mb-3" style="padding: 0; overflow: hidden; height: 110px; opacity: 0.6;">
+                <iframe class="w-full h-full grayscale invert scale-150" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3596.1!2d29.2!3d-25.8!"></iframe>
             </div>
             <button class="som-btn som-btn-gold">SOM NOW</button>
         </section>
 
-        <section class="tile tile-gro">
-            <div class="tile-header">
-                <span><i class="fa-solid fa-circle text-[6px] mr-2"></i> GROWTH</span>
-                <i class="fa-solid fa-xmark opacity-30"></i>
-            </div>
-            <div class="text-2xl font-black italic mb-2 text-blue-400">SYNC_CORE: 93.4%</div>
-            <p class="mono-text text-[10px]">Woss q can b ot weere steaat reereplst lthy connettte...</p>
+        <section class="tile area-growth">
+            <div class="tile-header"><span><i class="fa-solid fa-chart-line text-[6px] mr-3"></i> GROWTH</span><i class="fa-solid fa-xmark opacity-30"></i></div>
+            <p class="text-blue-400 font-black italic mb-2">SYNC_CORE: 93.4%</p>
+            <p class="mono-small">Woss q can b ot weere steaat reereplst lthy connettte...</p>
             <button class="som-btn">SOM NOW</button>
         </section>
 
-        <section class="tile tile-cmd">
-            <div class="tile-header">
-                <span><i class="fa-solid fa-circle text-[6px] mr-2"></i> COMMAND TILE</span>
-                <i class="fa-solid fa-xmark opacity-30"></i>
-            </div>
+        <section class="tile area-command">
+            <div class="tile-header"><span><i class="fa-solid fa-terminal text-[6px] mr-3"></i> COMMAND TILE</span><i class="fa-solid fa-xmark opacity-30"></i></div>
             <div class="flex gap-6 items-center">
-                <div class="bg-white p-2 rounded shadow-[0_0_15px_rgba(255,255,255,0.05)]">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=MOG-SYSTEM-CORE" class="w-14 h-14">
-                </div>
-                <p class="mono-text text-[9px] opacity-60">HANDSHAKE: VERIFIED <br> @MOGProtocol2026</p>
+                <div class="bg-white p-2 rounded"><img src="https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=MOG-INTERNAL" class="w-14 h-14"></div>
+                <p class="mono-small opacity-60">HANDSHAKE: VERIFIED <br> RSA_PRIME_SYNC <br> @MOGProtocol2026</p>
             </div>
         </section>
 
-        <section class="tile tile-hit">
-            <div class="tile-header">
-                <span><i class="fa-solid fa-circle text-[6px] mr-2"></i> HITLIST</span>
-                <i class="fa-solid fa-xmark opacity-30"></i>
-            </div>
-            <div class="inner-well border-gold/20">
-                <p class="mono-text text-gold font-bold uppercase">Target: Node_039 // Status: Tracing</p>
-            </div>
+        <section class="tile area-hitlist">
+            <div class="tile-header"><span><i class="fa-solid fa-crosshairs text-[6px] mr-3"></i> HITLIST</span><i class="fa-solid fa-xmark opacity-30"></i></div>
+            <div class="inner-well border-gold/30"><p class="mono-small text-gold font-bold uppercase">Target: Node_039 // STATUS: MONITORING</p></div>
             <button class="som-btn som-btn-gold">SOM NOW</button>
         </section>
     </main>
@@ -214,18 +163,34 @@
             K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" 
         };
         const db = window.supabase.createClient(CFG.U, CFG.K);
+        const mandateAudio = new Audio("mandate_mix.mp3");
+        let logoClicks = 0;
 
         async function loginOperative() {
             const u = document.getElementById('login-user').value;
             const p = document.getElementById('login-pass').value;
             const { data, error } = await db.auth.signInWithPassword({ email: u.includes('@') ? u : `${u}@mog.internal`, password: p });
-
             if(!error) {
                 document.getElementById('auth-box').classList.add('hidden');
                 document.getElementById('profile-active').classList.remove('hidden');
                 document.getElementById('display-id').innerText = u.toUpperCase();
                 new QRCode(document.getElementById("qrcode"), { text: "MOG-" + data.user.id, width: 140, height: 140 });
-            } else { alert("IDENTITY UNRECOGNIZED"); }
+            } else { alert("ACCESS DENIED: IDENTITY UNRECOGNIZED"); }
+        }
+
+        function playMandate() { mandateAudio.play(); }
+
+        function handleLogoSequence() {
+            logoClicks++;
+            if (logoClicks === 5) { 
+                const p = prompt("BYPASS_KEY:");
+                if(p === '7486') document.getElementById('director-wealth').classList.remove('hidden');
+            }
+            setTimeout(() => { logoClicks = 0; }, 5000);
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js').then(() => console.log("GRID_SYNC_COMPLETE"));
         }
     </script>
 </body>
