@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | SOVEREIGN COMMAND v2026.10.0</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v10.2</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -15,14 +15,13 @@
         
         :root { 
             --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; 
-            --mog-glass: rgba(5, 12, 20, 0.85); --mog-border: rgba(0, 212, 255, 0.3);
+            --mog-glass: rgba(5, 12, 20, 0.85); --mog-border: rgba(0, 212, 255, 0.4);
         }
 
-        /* 1. LIQUID MAINFRANE ENGINE */
         html, body { height: 100vh; width: 100vw; margin: 0; padding: 0; overflow: hidden; background-color: var(--mog-black); color: #fff; }
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Inter', sans-serif; box-sizing: border-box; }
 
-        /* CYBER-CIRCUITRY BACKGROUND (V9.7 REFINED) */
+        /* CYBER-CIRCUITRY BACKGROUND (55% Visibility) */
         #bg-canvas {
             position: fixed; inset: 0; z-index: -1;
             background-color: #050505;
@@ -39,48 +38,41 @@
             opacity: 0.03; pointer-events: none; z-index: 50;
         }
 
-        /* 2. NAVIGATION & TICKER */
-        .ticker-wrap { height: 35px; background: #000; border-bottom: 1px solid var(--mog-border); overflow: hidden; flex-shrink: 0; display: flex; align-items: center; z-index: 100; }
+        /* BRANDING CALIBRATION V10.1 */
+        h1 { 
+            font-family: 'Big Shoulders Display', sans-serif !important; 
+            font-size: 5.5rem; line-height: 0.75; text-transform: uppercase; letter-spacing: -0.05em; 
+            background: linear-gradient(to bottom, #fff 20%, var(--mog-gold) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        h1 span { color: var(--mog-gold); }
+        header p { color: #ffffff !important; text-shadow: 0 2px 10px rgba(0,0,0,1); letter-spacing: 0.35em; font-weight: 900; opacity: 0.9; }
+        #main-title { filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); }
+
+        .ticker-wrap { height: 35px; background: #000; border-bottom: 1px solid var(--mog-border); overflow: hidden; display: flex; align-items: center; z-index: 100; }
         .ticker-move { white-space: nowrap; animation: ticker 45s linear infinite; font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--mog-blue); letter-spacing: 2px; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        header { height: 100px; flex-shrink: 0; border-bottom: 1px solid rgba(0, 212, 255, 0.1); background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); z-index: 1000; }
-        h1 { font-family: 'Big Shoulders Display', sans-serif !important; font-size: 4.5rem; line-height: 0.8; text-transform: uppercase; letter-spacing: -0.05em; background: linear-gradient(to bottom, #fff 40%, var(--mog-gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header { height: 140px; border-bottom: 1px solid rgba(0, 212, 255, 0.1); background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); z-index: 1000; }
         
-        #side-drawer { position: fixed; top: 0; left: -100%; width: 340px; height: 100%; background: #050c14; z-index: 10000; border-right: 1px solid var(--mog-blue); transition: 0.5s; }
-        #side-drawer.drawer-active { left: 0; }
-
-        /* 3. GRID LAYOUT: SOVEREIGN MAINFRAME */
+        /* BENTO GRID (+30% SCALE) */
         .mainframe-wrapper {
-            flex: 1; display: grid; padding: 25px; gap: 25px;
+            flex: 1; display: grid; padding: 35px; gap: 35px;
             grid-template-columns: 1.2fr 1fr 1fr;
             grid-template-rows: 1fr 1.2fr;
-            grid-template-areas: 
-                "gateway messenger visuals"
-                "mandate messenger hitlist";
+            grid-template-areas: "gateway messenger visuals" "mandate messenger hitlist";
         }
+        @media (max-width: 1100px) { .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "visuals" "mandate" "hitlist"; overflow-y: auto; } }
 
-        @media (max-width: 1100px) {
-            .mainframe-wrapper { grid-template-columns: 1fr; grid-template-rows: auto; grid-template-areas: "gateway" "messenger" "visuals" "mandate" "hitlist"; overflow-y: auto; height: auto; }
-        }
+        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 40px; overflow: hidden; display: flex; flex-direction: column; backdrop-filter: blur(20px); box-shadow: 0 40px 80px rgba(0,0,0,0.6); }
+        .scroller-box { flex: 1; overflow-y: auto; padding: 35px; }
+        .prestige-label { font-size: 0.9rem; letter-spacing: 0.6em; border-left: 5px solid var(--mog-blue); padding-left: 15px; margin: 25px; font-weight: 900; color: #fff; text-transform: uppercase; }
 
-        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 30px; overflow: hidden; display: flex; flex-direction: column; backdrop-filter: blur(15px); box-shadow: 0 40px 80px rgba(0,0,0,0.5); }
-        .scroller-box { flex: 1; overflow-y: auto; padding: 25px; scrollbar-width: none; }
-        .scroller-box::-webkit-scrollbar { display: none; }
-
-        .prestige-label { font-size: 0.8rem; letter-spacing: 0.5em; border-left: 4px solid var(--mog-blue); padding-left: 12px; margin: 20px; font-weight: 900; color: #fff; text-transform: uppercase; }
-
-        /* 4. CONTENT STYLING */
-        .list-item { background: rgba(0,212,255,0.03); border: 1px solid rgba(0,212,255,0.1); border-radius: 15px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .list-item:hover { border-color: var(--mog-blue); background: rgba(0,212,255,0.1); transform: translateX(5px); }
-
-        .matrix-2x2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 20px 20px; }
-        .matrix-item { aspect-ratio: 1; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--mog-border); }
-
-        .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 2px solid var(--mog-border); padding: 15px 0; color: #fff; width: 100%; outline: none; margin-bottom: 15px; font-family: 'JetBrains Mono', monospace; }
-        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 12px; padding: 18px; width: 100%; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; }
-
-        /* 5. GLITCH & PULSE */
+        .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 2px solid var(--mog-border); padding: 20px 0; color: #fff; width: 100%; outline: none; margin-bottom: 20px; font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; }
+        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 15px; padding: 22px; width: 100%; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; }
+        
+        #side-drawer { position: fixed; top: 0; left: -100%; width: 340px; height: 100%; background: #050c14; z-index: 10000; border-right: 1px solid var(--mog-blue); }
+        #side-drawer.drawer-active { left: 0; }
         .glitch-active { animation: jitter 0.2s infinite; text-shadow: 3px 0 #ff3333, -3px 0 #00d4ff; }
         @keyframes jitter { 0% { transform: translate(0); } 50% { transform: translate(-2px, 2px); } 100% { transform: translate(0); } }
     </style>
@@ -90,162 +82,111 @@
     <div id="bg-canvas"></div>
 
     <div class="ticker-wrap">
-        <div class="ticker-move">
-            MAINFRAME v10.0 ACTIVE // SECTOR: AFRICA // ENCRYPTION: SOVEREIGN TOTALITY // DECIPHER THE CULTURE // WITBANK HQ: EMALAHLENI // THE CIRCUITRY IS LIVE...
-        </div>
+        <div class="ticker-move">MAINFRAME v10.2 SOVEREIGN TOTALITY // WITBANK HQ // DECIPHER THE CULTURE // SOUND & SOCIAL ARCHITECTURE // SIGNAL STABLE...</div>
     </div>
 
-    <nav id="side-drawer">
-        <div class="p-10 border-b border-white/5 flex justify-between items-center">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-14 w-14">
-            <button onclick="toggleDrawer()"><i class="fa-solid fa-xmark text-white text-2xl"></i></button>
-        </div>
-        <div class="p-4">
-            <div class="p-6 text-zinc-500 font-black uppercase text-[10px] tracking-widest">Navigation Hub</div>
-            <div class="drawer-item px-6 py-4 flex gap-4 items-center text-white/60 hover:text-white cursor-pointer" onclick="location.reload()"><i class="fa-solid fa-house"></i> Grid Home</div>
-            <div class="drawer-item px-6 py-4 flex gap-4 items-center text-white/60 hover:text-white cursor-pointer" onclick="capturePoster()"><i class="fa-solid fa-camera"></i> Export Archive</div>
-        </div>
-    </nav>
-
-    <header class="px-12 flex justify-between items-center">
+    <header class="px-12 flex justify-between items-center relative z-10">
         <div class="flex items-center gap-8">
-            <button onclick="toggleDrawer()" class="text-blue-400 text-3xl hover:rotate-90"><i class="fa-solid fa-plus"></i></button>
-            <div class="hidden md:block">
-                <h1 id="main-title">Ministry<br><span class="pl-12 text-blue-400">of Groove</span></h1>
+            <button onclick="toggleDrawer()" class="text-blue-400 text-4xl hover:rotate-90"><i class="fa-solid fa-plus"></i></button>
+            <div class="flex flex-col">
+                <h1 id="main-title">Ministry<br><span class="pl-12">of Groove</span></h1>
+                <p class="text-[11px] text-white font-black uppercase italic tracking-[0.35em] mt-3 ml-1">Custodians of sound and social architecture</p>
             </div>
         </div>
-        <div class="flex items-center gap-8">
+        <div class="flex items-center gap-10">
             <div class="text-right hidden sm:block">
-                <p class="text-[10px] text-blue-500 font-black tracking-[0.3em] uppercase">Status: Linked</p>
-                <p class="text-xs text-zinc-500 mono" id="live-bpm">BPM: 124</p>
+                <p class="text-[10px] text-blue-500 font-black tracking-[0.4em] uppercase">Status: Sovereign_Linked</p>
+                <p class="text-sm text-zinc-500 mono mt-1" id="live-bpm">BPM: 124</p>
             </div>
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-20 w-20 rounded-full border-2 border-blue-500/30">
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-28 w-28 rounded-full border-2 border-blue-500/30">
         </div>
     </header>
 
     <main class="mainframe-wrapper">
         
-        <section class="command-tile area-gateway p-10">
+        <section class="command-tile area-gateway p-12">
             <span class="prestige-label">Identity Handshake</span>
             <div id="auth-form" class="h-full flex flex-col justify-center">
                 <input id="l-user" type="text" placeholder="OPERATIVE_ID (GMAIL)" class="mog-input">
                 <input id="l-pass" type="password" placeholder="SECURE_PASSCODE" class="mog-input">
-                <button onclick="handleAuth()" class="master-btn mt-6">Authorize Entry</button>
-                <button onclick="toggleEnroll()" class="text-[9px] text-zinc-500 mt-6 uppercase tracking-widest">New Operative? Enroll Here</button>
+                <button onclick="handleAuth()" class="master-btn mt-8">Authorize Entry</button>
             </div>
-
             <div id="active-op-badge" class="hidden text-center flex flex-col items-center">
-                <div id="qrcode" class="bg-white p-4 rounded-2xl mb-6"></div>
-                <h2 id="display-op-id" class="text-3xl text-white font-black italic uppercase">OPERATIVE</h2>
-                <div class="flex gap-4 mt-8">
-                    <button onclick="logout()" class="mog-btn border border-red-500/40 text-red-500 px-6 py-2 rounded-full text-[10px] font-black uppercase">Sever Link</button>
-                </div>
+                <div id="qrcode" class="bg-white p-4 rounded-2xl mb-8"></div>
+                <h2 id="display-op-id" class="text-4xl text-white font-black italic uppercase">OPERATIVE</h2>
+                <button onclick="logout()" class="text-[10px] text-red-500 font-black mt-10 uppercase tracking-widest">Terminate Session</button>
             </div>
         </section>
 
         <section class="command-tile area-messenger">
-            <div class="flex-grow flex flex-col bg-[#0b141a]/80 m-2 rounded-[25px] overflow-hidden">
+            <div class="flex-grow flex flex-col bg-[#0b141a]/90 m-2 rounded-[35px] overflow-hidden border border-white/5">
                 <div class="p-6 border-b border-white/5 bg-black/40 flex justify-between items-center">
-                    <span class="mono text-[10px] text-blue-400 font-bold">SIGNAL: ENCRYPTED</span>
-                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span class="mono text-[11px] text-blue-400 font-bold tracking-widest">QUANTUM ENCRYPTED CHANNEL</span>
+                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></div>
                 </div>
-                <div id="chat-stream" class="scroller-box p-8 space-y-4"></div>
-                <div class="bg-[#202c33] p-5 flex gap-4">
-                    <input id="chat-msg" type="text" placeholder="Encode Frequency..." class="flex-grow bg-[#2a3942] border-0 rounded-full px-8 py-4 text-sm text-white outline-none">
-                    <button onclick="sendMessage()" class="w-14 h-14 bg-blue-500 text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
+                <div id="chat-stream" class="scroller-box p-8 space-y-6"></div>
+                <div class="bg-[#202c33] p-8 flex gap-6">
+                    <input id="chat-msg" type="text" placeholder="Encode Frequency..." class="flex-grow bg-[#2a3942] border-0 rounded-full px-10 py-5 text-md text-white outline-none">
+                    <button onclick="sendMessage()" class="w-16 h-16 bg-blue-500 text-black rounded-full flex items-center justify-center text-xl"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </div>
         </section>
-
+        
         <section class="command-tile area-visuals">
             <span class="prestige-label">Visual Intelligence</span>
             <div class="scroller-box">
-                <div class="matrix-2x2" id="v-matrix"></div>
+                <div id="v-matrix" class="grid grid-cols-2 gap-6 p-4"></div>
             </div>
         </section>
 
         <section class="command-tile area-mandate">
             <span class="prestige-label">Sonic Mandate</span>
             <div class="scroller-box">
-                <div class="mb-8 border-l-2 border-mog-gold pl-6">
-                    <p class="text-mog-gold text-[10px] font-black uppercase mb-2">Objective</p>
-                    <p class="text-sm text-zinc-400">Custodians of sound and social architecture in Mpumalanga.</p>
-                </div>
-                <div class="p-6 bg-blue-500/10 rounded-2xl border border-blue-500/20">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="mono text-[10px] text-blue-400">SONIC CORE</span>
-                        <i id="play-btn" class="fa-solid fa-play text-2xl text-white cursor-pointer" onclick="togglePlay()"></i>
+                <div class="p-8 bg-blue-500/10 rounded-3xl border border-blue-500/20 mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="mono text-[12px] text-blue-400">SONIC CORE</span>
+                        <i id="play-btn" class="fa-solid fa-play text-4xl text-white cursor-pointer" onclick="togglePlay()"></i>
                     </div>
-                    <canvas id="audio-visualizer" class="w-full h-12"></canvas>
+                    <canvas id="audio-visualizer" class="w-full h-16"></canvas>
                 </div>
+                <p class="text-xs text-zinc-500 leading-relaxed uppercase tracking-wider">Custodians of sound and social architecture in Mpumalanga. Preserving Art through Deep Tech Noir and Ancestral Soul.</p>
             </div>
         </section>
 
         <section class="command-tile area-hitlist">
             <span class="prestige-label">Top 10 Hitlist</span>
-            <div id="hit-list" class="scroller-box"></div>
+            <div id="hit-list" class="scroller-box space-y-4"></div>
         </section>
 
     </main>
 
-    <footer class="flex justify-between items-center px-12 bg-black/40 backdrop-filter blur-lg border-t border-white/5">
-        <p class="text-[9px] text-zinc-700 font-black uppercase tracking-[0.5em]">© 2026 MINISTRY OF GROOVE // WITBANK HQ</p>
-        <div class="flex gap-10">
-            <a href="https://tiktok.com/@directormog" target="_blank" class="text-zinc-500 hover:text-white"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="https://wa.me/27791438964" target="_blank" class="text-zinc-500 hover:text-green-500"><i class="fa-brands fa-whatsapp"></i></a>
-        </div>
-    </footer>
-    
     <script>
-        const CFG = {
-            U: "https://vbkpatwvgvwarybbpiky.supabase.co",
-            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8"
-        };
+        const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
         const db = window.supabase.createClient(CFG.U, CFG.K);
         let audioCtx, analyser, dataArray, isPlaying = false;
         const player = new Audio("https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandatemix.mp3");
 
-        function toggleDrawer() { document.getElementById('side-drawer').classList.toggle('drawer-active'); }
-        
-        // --- AUTH LOGIC (v460 blended with v9.7 surges) ---
         async function handleAuth() {
-            const btn = event.target;
-            btn.innerText = "AUTHENTICATING...";
             const email = document.getElementById('l-user').value;
             const password = document.getElementById('l-pass').value;
-
             const { data, error } = await db.auth.signInWithPassword({ email, password });
             if(!error) {
                 document.getElementById('auth-form').classList.add('hidden');
                 document.getElementById('active-op-badge').classList.remove('hidden');
                 document.getElementById('display-op-id').innerText = email.split('@')[0];
-                new QRCode(document.getElementById("qrcode"), { text: "MOG-OP-"+data.user.id, width: 150, height: 150 });
-                
-                // Visual Handshake Pulse
-                document.querySelectorAll('.command-tile').forEach(t => {
-                    t.style.borderColor = "var(--mog-blue)";
-                    t.style.boxShadow = "0 0 50px rgba(0,212,255,0.2)";
-                });
-            } else {
-                btn.innerText = "LINK FAILED";
-                setTimeout(() => btn.innerText = "Authorize Entry", 2000);
+                new QRCode(document.getElementById("qrcode"), { text: "MOG-"+data.user.id, width: 150, height: 150 });
             }
         }
 
-        // --- AUDIO ENGINE ---
         function togglePlay() {
             if(!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                analyser = audioCtx.createAnalyser();
-                const source = audioCtx.createMediaElementSource(player);
-                source.connect(analyser);
-                analyser.connect(audioCtx.destination);
-                analyser.fftSize = 64;
-                dataArray = new Uint8Array(analyser.frequencyBinCount);
+                audioCtx = new AudioContext(); analyser = audioCtx.createAnalyser();
+                audioCtx.createMediaElementSource(player).connect(analyser); analyser.connect(audioCtx.destination);
+                analyser.fftSize = 64; dataArray = new Uint8Array(analyser.frequencyBinCount);
                 renderVisualizer();
             }
-            if(isPlaying) { player.pause(); document.getElementById('play-btn').className = "fa-solid fa-play text-2xl text-white"; }
-            else { player.play(); document.getElementById('play-btn').className = "fa-solid fa-pause text-2xl text-mog-blue animate-pulse"; }
+            if(isPlaying) { player.pause(); document.getElementById('play-btn').className = "fa-solid fa-play text-4xl"; }
+            else { player.play(); document.getElementById('play-btn').className = "fa-solid fa-pause text-4xl text-mog-blue animate-pulse"; }
             isPlaying = !isPlaying;
         }
 
@@ -253,54 +194,36 @@
             requestAnimationFrame(renderVisualizer);
             analyser.getByteFrequencyData(dataArray);
             const low = dataArray.slice(0, 5).reduce((a, b) => a + b) / 5;
-            if(low > 210) document.getElementById('main-title').classList.add('glitch-active');
-            else document.getElementById('main-title').classList.remove('glitch-active');
+            const title = document.getElementById('main-title');
+            const slogan = document.querySelector('header p');
             
-            const canvas = document.getElementById('audio-visualizer');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            dataArray.forEach((v, i) => {
-                ctx.fillStyle = "rgba(0,212,255,0.5)";
-                ctx.fillRect(i*10, canvas.height - v/4, 6, v/4);
-            });
+            if(low > 210) title.classList.add('glitch-active'); else title.classList.remove('glitch-active');
+            if(low > 200) { slogan.style.textShadow = "0 0 15px #ffffff"; slogan.style.opacity = "1"; } 
+            else { slogan.style.textShadow = "0 0 5px rgba(255,255,255,0.5)"; slogan.style.opacity = "0.8"; }
+
+            const ctx = document.getElementById('audio-visualizer').getContext('2d');
+            ctx.clearRect(0,0,300,150);
+            dataArray.forEach((v, i) => { ctx.fillStyle = "rgba(0,212,255,0.6)"; ctx.fillRect(i*12, 150 - v/2, 10, v/2); });
         }
 
-        // --- DYNAMIC CONTENT POPULATION ---
+        function sendMessage() {
+            const msg = document.getElementById('chat-msg').value; if(!msg) return;
+            const stream = document.getElementById('chat-stream');
+            const div = document.createElement('div'); div.className = "flex flex-col items-end";
+            div.innerHTML = `<div class="bg-blue-600 text-white p-5 rounded-3xl rounded-tr-none text-sm shadow-xl">${msg}</div>`;
+            stream.appendChild(div); document.getElementById('chat-msg').value = ""; stream.scrollTop = stream.scrollHeight;
+        }
+
         window.onload = () => {
             const vm = document.getElementById('v-matrix');
             const hl = document.getElementById('hit-list');
             for(let i=1; i<=4; i++) {
-                vm.innerHTML += `
-                    <div class="matrix-item relative group">
-                        <video muted loop src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/clip${i}.mp4" class="w-full h-full object-cover opacity-40 group-hover:opacity-100 transition-opacity"></video>
-                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100"><i class="fa-solid fa-expand text-white text-xl"></i></div>
-                    </div>`;
+                vm.innerHTML += `<div class="aspect-square bg-black border border-white/5 rounded-2xl overflow-hidden"><video muted loop src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/clip${i}.mp4" onmouseover="this.play()" onmouseout="this.pause()" class="w-full h-full object-cover opacity-50 hover:opacity-100"></video></div>`;
             }
             for(let i=1; i<=10; i++) {
-                hl.innerHTML += `
-                    <div class="list-item">
-                        <div class="flex items-center gap-4">
-                            <span class="mono text-[9px] text-zinc-600">0${i}</span>
-                            <p class="text-[10px] text-white font-black uppercase">Frequency_Pulse_${i*12}</p>
-                        </div>
-                        <i class="fa-brands fa-spotify text-green-500"></i>
-                    </div>`;
+                hl.innerHTML += `<div class="flex justify-between items-center p-5 bg-white/5 border border-white/5 rounded-2xl"><span class="text-xs font-black uppercase">#${i} Frequency_Pulse</span><i class="fa-brands fa-spotify text-green-500"></i></div>`;
             }
         };
-
-        function sendMessage() {
-            const msg = document.getElementById('chat-msg').value;
-            if(!msg) return;
-            const stream = document.getElementById('chat-stream');
-            const div = document.createElement('div');
-            div.className = "flex flex-col items-end";
-            div.innerHTML = `<div class="bg-blue-600 text-white p-4 rounded-2xl rounded-tr-none text-xs shadow-xl">${msg}</div><span class="text-[8px] text-zinc-500 mt-1 uppercase">Op_Transmitted</span>`;
-            stream.appendChild(div);
-            document.getElementById('chat-msg').value = "";
-            stream.scrollTop = stream.scrollHeight;
-        }
-
-        async function capturePoster() { window.print(); }
         async function logout() { await db.auth.signOut(); location.reload(); }
     </script>
 </body>
