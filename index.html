@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V70.0.3</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V70.1.1</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,226 +18,250 @@
     <style>
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; --mog-panel: rgba(10, 20, 30, 0.95); }
-        
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
-        h1, .tile-title { font-family: 'Clash Display', sans-serif; }
+        h1 { font-family: 'Clash Display', sans-serif; }
+        body { background-color: var(--mog-bg); color: var(--mog-gold); margin: 0; width: 100%; min-height: 100vh; overflow-x: hidden; }
         
-        body { 
-            background-color: var(--mog-bg); 
-            background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 85%);
-            background-attachment: fixed;
-            color: var(--mog-gold); margin: 0; overflow-x: hidden;
-            width: 100vw; min-height: 100vh;
-        }
-
-        /* FLUID EDGE-TO-EDGE GRID */
-        .grid-full-width { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; width: 100%; padding: 0 1rem; }
-        @media (max-width: 768px) { .grid-full-width { padding: 0 0.5rem; gap: 0.75rem; } }
-
-        .command-tile { 
-            background: var(--mog-panel); 
-            border: 1px solid rgba(0, 212, 255, 0.15); 
-            backdrop-filter: blur(30px); 
-            border-radius: 24px; 
-            overflow: hidden;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8);
-            height: 100%;
-        }
-
+        .grid-full-width { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.25rem; width: 100%; padding: 0 1.25rem; }
+        @media (max-width: 1024px) { .grid-full-width { display: flex; flex-direction: column; padding: 0 0.75rem; } }
+        
+        .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.15); backdrop-filter: blur(30px); border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; }
         .director-active body { animation: goldPulse 4s infinite alternate ease-in-out; }
-        @keyframes goldPulse { from { filter: brightness(1); } to { filter: brightness(1.25); } }
-
-        #side-menu { 
-            position: fixed; top: 0; right: -320px; 
-            width: 320px; height: 100%; 
-            background: #080c10; border-left: 1px solid rgba(0,212,255,0.2); 
-            z-index: 3000; padding: 2.5rem; 
-            transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1); 
-        }
-        #side-menu.active { right: 0; }
-        .nav-link { display: block; padding: 12px 16px; background: rgba(255,255,255,0.02); border-radius: 10px; font-size: 10px; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; color: white; }
-
-        .radar-container { filter: grayscale(1) invert(1) contrast(1.2) brightness(0.7) hue-rotate(180deg); opacity: 0.6; pointer-events: none; }
-        .mog-chat-row { display: flex; gap: 10px; margin-bottom: 15px; align-items: flex-end; }
-        .mog-bubble { padding: 10px 15px; border-radius: 18px; font-size: 13px; color: #fff; background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.15); max-width: 85%; }
-
-        .scroller-v { overflow-y: auto; scrollbar-width: thin; }
+        @keyframes goldPulse { from { filter: brightness(1); } to { filter: brightness(1.2); } }
+        
         .director-only { display: none !important; }
-        .director-active .director-only { display: block !important; }
-
-        .social-icon { font-size: 1.4rem; color: var(--mog-gold); opacity: 0.6; transition: 0.4s; }
-        .social-icon:hover { opacity: 1; transform: translateY(-3px); color: var(--mog-blue); }
-
-        .leader-row { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 10px 15px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .rank-gold { color: #FFD700; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
+        .director-active .director-only { display: flex !important; }
+        
+        #side-menu { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background: #080c10; border-left: 1px solid rgba(212, 175, 55, 0.2); z-index: 5000; transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1); }
+        #side-menu.active { right: 0; }
+        
+        .mog-bubble { padding: 10px 15px; border-radius: 18px; font-size: 13px; color: #fff; background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.15); max-width: 85%; }
+        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="scrollbar-hide pb-24">
+<body class="pb-32">
 
-    <div id="startup-overlay" class="fixed inset-0 z-[9999] bg-[#060a0f] flex flex-col items-center justify-center transition-opacity duration-1000">
-        <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-32 w-32 animate-pulse mb-4">
-        <div class="text-gold font-black uppercase tracking-[0.5em] text-[10px]">Synchronizing Grid...</div>
+    <div id="startup-overlay" class="fixed inset-0 z-[9999] bg-[#060a0f] flex flex-col items-center justify-center transition-opacity duration-700">
+        <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-28 w-28 animate-pulse">
+        <div class="text-gold font-black uppercase tracking-[0.4em] text-[9px] mt-4 italic">Neural Handshake Active...</div>
     </div>
 
-    <div id="ticker-wrap" class="fixed top-0 w-full bg-black z-[1000] h-[35px] border-b border-gold flex items-center overflow-hidden">
-        <div class="ticker-move text-[9px] font-black uppercase text-gold">MASTER_V70.0.3 // LEADERBOARD_SYNC_ACTIVE // eMALAHLENI_RADAR_LIVE // SOCIAL_GRID_CONNECTED...</div>
-    </div>
-
-    <button onclick="toggleMenu()" class="fixed top-12 right-5 z-[2500] text-blue-400 text-2xl p-2 bg-black/40 rounded-full border border-white/5 backdrop-blur-md">
-        <i class="fa-solid fa-bars-staggered"></i>
-    </button>
-    
-    <nav id="side-menu" class="scroller-v">
-        <div class="flex justify-between items-center mb-6">
-            <span class="text-gold font-black uppercase text-xs italic">Sovereign Folders</span>
-            <button onclick="toggleMenu()"><i class="fa-solid fa-xmark text-xl text-zinc-500"></i></button>
-        </div>
-
-        <div class="bg-gold/10 border border-gold/30 rounded-2xl p-5 text-center mb-8">
-            <span class="text-[8px] font-black text-gold uppercase tracking-widest">Phase 2 Unlocks In</span>
-            <div id="timer" class="text-xl font-black text-white italic my-1 tabular-nums">00:00:00:00</div>
-        </div>
-
-        <a href="javascript:void(0)" onclick="openDirective()" class="nav-link"><i class="fa-solid fa-scroll mr-2 text-gold"></i> Grid Directives</a>
-        <a href="#" class="nav-link"><i class="fa-solid fa-user-plus mr-2 text-blue-400"></i> Recruitment</a>
-    </nav>
-
-    <div id="app-content" class="container mx-auto px-4 mt-[60px]">
-        <header class="flex items-center gap-6 mb-10 pt-4">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-16 w-16 md:h-24 md:w-24 cursor-pointer active:scale-95">
-            <div class="min-w-0 flex-grow">
-                <h1 class="brand-title text-[#D4AF37] uppercase font-black truncate">Ministry of Groove</h1>
-                <p class="grid-subtext text-blue-400 uppercase font-black">Sector: eMalahleni // RSA Grid</p>
+    <div class="mt-[60px]">
+        <header class="flex items-center justify-between px-6 mb-8">
+            <div class="flex items-center gap-5">
+                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-16 w-16 cursor-pointer hover:scale-105 active:scale-95">
+                <div>
+                    <h1 class="text-2xl text-gold font-black uppercase italic tracking-tighter">Ministry of Groove</h1>
+                    <p class="text-[8px] text-blue-400 font-black tracking-widest uppercase">RSA Sector // eMalahleni Grid</p>
+                </div>
             </div>
+            <button onclick="toggleMenu()" class="text-blue-400 text-2xl p-3 bg-white/5 rounded-full"><i class="fa-solid fa-bars-staggered"></i></button>
         </header>
 
         <main class="grid-full-width">
             <div class="col-span-12 lg:col-span-4 space-y-6">
-                <section class="command-tile p-8">
-                    <div class="flex justify-between items-center mb-6">
-                        <span class="text-[10px] font-black text-gold uppercase tracking-tighter italic">Top Operatives</span>
-                        <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                
+                <section class="command-tile p-6 border-gold/40 director-only shadow-[0_0_30px_rgba(212,175,55,0.1)]">
+                    <span class="text-[10px] font-black text-gold uppercase italic mb-4 block underline">Director Intel Injection</span>
+                    <input type="file" id="intel-file" accept="image/*" class="hidden" onchange="previewImage(this)">
+                    <div id="upload-preview" class="w-full h-32 bg-white/5 rounded-xl border-2 border-dashed border-white/10 mb-4 flex items-center justify-center cursor-pointer" onclick="document.getElementById('intel-file').click()">
+                        <span class="text-[9px] text-zinc-500 font-bold uppercase">Tap to Capture Intel</span>
                     </div>
-                    <div id="leaderboard" class="space-y-2">
-                        <p class="text-[9px] text-zinc-500 text-center animate-pulse">Scanning Neural Signals...</p>
-                    </div>
+                    <button id="upload-btn" onclick="injectIntel()" class="w-full bg-gold text-black font-black py-3 rounded-full text-[10px] uppercase hidden">Inject to Grid</button>
+                </section>
+                
+                <section class="command-tile p-6">
+                    <span class="text-[10px] font-black text-gold uppercase italic mb-4 block">Operative Rankings</span>
+                    <div id="leaderboard" class="space-y-2"></div>
                 </section>
 
-                <section class="command-tile h-64">
-                    <div class="tile-header p-2 bg-black/40 border-b border-white/5 text-[8px] text-blue-400 font-black text-center uppercase">Tactical Radar // Witbank Sector</div>
-                    <div class="w-full h-full radar-container">
-                        <iframe width="100%" height="100%" frameborder="0" src="https://maps.google.com/maps?q=eMalahleni,South%20Africa&t=k&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+                <section class="command-tile h-64 relative">
+                    <div class="p-2 bg-black/40 text-[8px] text-blue-400 font-black text-center uppercase border-b border-white/5 z-10">Sector Radar</div>
+                    <div class="w-full h-full filter grayscale invert opacity-50 mix-blend-screen">
+                        <iframe width="100%" height="100%" frameborder="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114918.42823620958!2d29.13526189914445!3d-25.874130638520775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e97669d50013329%3A0xc3c6b240a6e5b56e!2seMalahleni!5e0!3m2!1sen!2sza!4v1715671234567"></iframe>
                     </div>
                 </section>
             </div>
 
             <div class="col-span-12 lg:col-span-8 space-y-6">
-                <section class="command-tile h-[500px] flex flex-col bg-black/40">
-                    <div class="tile-header p-4 border-b border-white/5 flex justify-between bg-black/20">
-                        <span class="text-white font-black text-xs uppercase italic">Frequency Comms</span>
-                        <div id="lat-val" class="text-[8px] text-zinc-500 font-black italic uppercase">8ms</div>
+                
+                <section class="command-tile h-[550px] flex flex-col bg-black/40">
+                    <div class="p-4 border-b border-white/5 flex justify-between items-center bg-black/20">
+                        <span class="text-white font-black text-xs uppercase italic tracking-widest">Frequency Comms</span>
+                        <div class="flex items-center gap-3">
+                            <button id="google-link-btn" onclick="loginWithGoogle()" class="text-[8px] bg-white text-black px-4 py-2 rounded-full font-black uppercase shadow-lg active:scale-95">
+                                <i class="fa-brands fa-google mr-1"></i> Google Link
+                            </button>
+                            <div id="lat-val" class="text-[8px] text-zinc-500 font-black italic">12MS</div>
+                        </div>
                     </div>
-                    <div id="chat-stream" class="flex-grow p-6 scroller-v flex flex-col"></div>
-                    <div class="p-4 bg-black/80 flex gap-4">
-                        <input type="text" id="chat-msg-in" placeholder="Transmit thought..." class="flex-grow bg-[#111] border border-white/10 rounded-full px-6 py-4 text-white text-sm outline-none">
-                        <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg active:scale-90"><i class="fa-solid fa-paper-plane"></i></button>
+                    <div id="chat-stream" class="flex-grow p-5 flex flex-col overflow-y-auto space-y-4"></div>
+                    <div class="p-4 bg-black/80 flex gap-3 border-t border-white/5">
+                        <input type="text" id="chat-msg-in" placeholder="Transmit thought..." class="flex-grow bg-[#111] border border-white/10 rounded-full px-6 py-4 text-white text-sm outline-none focus:border-blue-500">
+                        <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg"><i class="fa-solid fa-paper-plane"></i></button>
                     </div>
                 </section>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <section class="command-tile h-[450px] flex flex-col border-red-600/20">
-                        <iframe class="flex-grow" src="https://www.youtube.com/embed/videoseries?list=PL4fGSI1pDJn6jXS_m5iK2v7r097Rq9Z_1" frameborder="0" allowfullscreen></iframe>
+                    <section class="command-tile h-[400px] flex flex-col">
+                        <div class="p-4 border-b border-white/5 bg-blue-600/5 text-[9px] font-black text-blue-400 uppercase tracking-widest">Visual Intel Archive</div>
+                        <div id="gallery-grid" class="flex-grow p-4 grid grid-cols-2 gap-3 overflow-y-auto"></div>
                     </section>
-                    
-                    <section class="command-tile h-[450px] flex flex-col border-gold/10">
-                        <div class="p-4 border-b border-white/5 bg-gold/5 flex justify-between">
-                            <span class="text-[9px] font-black text-gold uppercase">Sovereign Archive</span>
-                            <div class="director-only">
-                                <input type="file" id="archive-inject" class="hidden" onchange="uploadArchive(this)">
-                                <button onclick="document.getElementById('archive-inject').click()" class="text-[8px] bg-gold/10 border border-gold px-3 py-1 rounded-full font-black">INJECT</button>
-                            </div>
-                        </div>
-                        <div class="flex-grow p-4 scroller-v space-y-3" id="archive-grid"></div>
+                    <section class="command-tile h-[400px] flex flex-col">
+                        <div class="p-4 border-b border-white/5 bg-gold/5 text-[9px] font-black text-gold uppercase tracking-widest">Sovereign Archive</div>
+                        <div id="archive-grid" class="flex-grow p-4 space-y-3 overflow-y-auto"></div>
                     </section>
                 </div>
             </div>
         </main>
     </div>
 
-    <footer class="fixed bottom-0 w-full bg-black/90 backdrop-blur-xl border-t border-gold/20 py-5 px-8 z-[2000]">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex gap-10">
-                <a href="https://instagram.com/ministryofgroove" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-                <a href="https://tiktok.com/@ministryofgroove" class="social-icon"><i class="fa-brands fa-tiktok"></i></a>
-                <a href="https://youtube.com/@ministryofgroove" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
-                <a href="https://facebook.com/ministryofgroove" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
-            </div>
-            <div class="text-center md:text-right">
-                <p class="text-[9px] font-black uppercase text-gold italic">Ministry of Groove © 2026</p>
-                <p class="text-[7px] text-blue-400 font-bold uppercase tracking-widest">Decrypting the Culture. Synchronizing the Grid.</p>
-            </div>
+    <footer class="fixed bottom-0 w-full bg-black/95 backdrop-blur-3xl border-t border-gold/20 py-5 px-8 z-[2000] flex justify-between items-center">
+        <div class="flex gap-10">
+            <a href="https://instagram.com/ministryofgroove" class="text-gold hover:text-blue-400 text-xl"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://tiktok.com/@ministryofgroove" class="text-gold hover:text-blue-400 text-xl"><i class="fa-brands fa-tiktok"></i></a>
         </div>
+        <p class="text-[9px] font-black uppercase text-gold italic opacity-70">M.O.G. © 2026</p>
     </footer>
 
+    <nav id="side-menu" class="p-8">
+        <div class="flex justify-between items-center mb-8">
+            <span class="text-gold font-black text-xs uppercase italic">Control Menu</span>
+            <button onclick="toggleMenu()" class="text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="timer" class="p-5 bg-gold/5 border border-gold/20 rounded-2xl text-center font-black text-white text-xl mb-8 tabular-nums italic">--:--:--:--</div>
+        <div id="user-status" class="text-[10px] text-zinc-500 uppercase font-black text-center">Operative Unlinked</div>
+    </nav>
+
     <script>
-        const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
+        const CFG = { 
+            U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
+            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" 
+        };
         const db = window.supabase.createClient(CFG.U, CFG.K);
         let logoClicks = 0, isDirector = false;
 
         function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
-        function handleLogoSequence() { logoClicks++; if (logoClicks === 5) { alert("DIRECTOR PORTAL ACCESS"); isDirector = true; document.documentElement.classList.add('director-active'); } }
 
-        async function updateLeaderboard() {
-            const { data } = await db.from('messages').select('alias');
-            if (data) {
-                const counts = data.reduce((acc, curr) => {
-                    const name = curr.alias || 'Anonymous';
-                    acc[name] = (acc[name] || 0) + 1;
-                    return acc;
-                }, {});
-                const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 5);
-                document.getElementById('leaderboard').innerHTML = sorted.map(([name, count], i) => `
-                    <div class="leader-row">
-                        <span class="text-[10px] font-black ${i===0?'rank-gold':''}">${i+1}. ${name.toUpperCase()}</span>
-                        <span class="text-[9px] text-blue-400 font-black">${count} SIGS</span>
-                    </div>`).join('');
+        // DIRECTOR SECRET SEQUENCE
+        function handleLogoSequence() { 
+            logoClicks++; 
+            if (logoClicks === 5) { 
+                isDirector = true; 
+                document.documentElement.classList.add('director-active'); 
+                alert("DIRECTOR MODE: AUTHORIZED"); 
+                fetchGallery(); 
+            } 
+        }
+
+        // GOOGLE AUTHENTICATION
+        async function loginWithGoogle() {
+            const { error } = await db.auth.signInWithOAuth({
+                provider: 'google',
+                options: { redirectTo: "https://ministry-of-groove.vercel.app" }
+            });
+            if (error) alert("Neural Handshake Failed: " + error.message);
+        }
+
+        async function checkSession() {
+            const { data: { user } } = await db.auth.getUser();
+            if (user) {
+                document.getElementById('google-link-btn').innerHTML = `<i class="fa-solid fa-check mr-1"></i> ${user.user_metadata.full_name || 'Linked'}`;
+                document.getElementById('user-status').innerText = `Operative: ${user.email}`;
             }
         }
 
-        async function fetchArchive() {
-            const { data } = await db.storage.from('archive').list('public');
+        // CHAT LOGIC
+        async function sendPacket() {
+            const input = document.getElementById('chat-msg-in');
+            const { data: { user } } = await db.auth.getUser();
+            const alias = user ? (user.user_metadata.full_name || user.email) : "Operative";
+            
+            if(!input.value.trim()) return;
+            await db.from('messages').insert([{ content: input.value, alias: alias }]);
+            input.value = "";
+            fetchMessages();
+        }
+
+        async function fetchMessages() {
+            const { data } = await db.from('messages').select('*').order('created_at', { ascending: false }).limit(20);
             if (data) {
-                document.getElementById('archive-grid').innerHTML = data.map((f, i) => {
-                    const { data: { publicUrl } } = db.storage.from('archive').getPublicUrl(`public/${f.name}`);
-                    return `<div class="p-3 bg-white/5 rounded-xl flex items-center justify-between border border-white/5">
-                        <p class="text-[9px] text-white truncate uppercase font-bold">${f.name}</p>
-                        <button onclick="new Audio('${publicUrl}').play()" class="text-emerald-500"><i class="fa-solid fa-play"></i></button>
+                document.getElementById('chat-stream').innerHTML = data.reverse().map(m => `
+                    <div class="flex flex-col ${m.alias === 'Director' ? 'items-end' : 'items-start'}">
+                        <span class="text-[8px] font-black uppercase mb-1 ${m.alias === 'Director' ? 'text-gold' : 'text-blue-400'}">${m.alias}</span>
+                        <div class="mog-bubble ${m.alias === 'Director' ? 'border-gold/30 bg-gold/5' : ''}">${m.content}</div>
+                    </div>`).join('');
+                document.getElementById('chat-stream').scrollTop = document.getElementById('chat-stream').scrollHeight;
+            }
+        }
+
+        // GALLERY LOGIC (Intel)
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById('upload-preview').innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover rounded-xl">`;
+                    document.getElementById('upload-btn').classList.remove('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function injectIntel() {
+            const file = document.getElementById('intel-file').files[0];
+            if (!file) return;
+            const { error } = await db.storage.from('gallery').upload(`public/${Date.now()}-${file.name}`, file);
+            if (error) alert("Error: " + error.message);
+            else { fetchGallery(); document.getElementById('upload-btn').classList.add('hidden'); document.getElementById('upload-preview').innerHTML = '<span class="text-[9px] text-zinc-500 font-bold uppercase">Tap to Capture Intel</span>'; }
+        }
+
+        async function fetchGallery() {
+            const { data } = await db.storage.from('gallery').list('public');
+            if (data) {
+                document.getElementById('gallery-grid').innerHTML = data.map(f => {
+                    const path = `public/${f.name}`;
+                    const { data: { publicUrl } } = db.storage.from('gallery').getPublicUrl(path);
+                    return `<div class="relative h-32 w-full">
+                        <img src="${publicUrl}" class="w-full h-full object-cover rounded-xl border border-white/5 bg-black">
+                        ${isDirector ? `<button onclick="deleteIntel('${path}')" class="absolute top-1 right-1 bg-red-600 text-white text-[8px] p-1 rounded-full"><i class="fa-solid fa-trash"></i></button>` : ''}
                     </div>`;
                 }).join('');
             }
         }
 
-        function startCountdown() {
+        async function deleteIntel(filePath) {
+            if (!confirm("Execute Deletion Protocol?")) return;
+            const { error } = await db.storage.from('gallery').remove([filePath]);
+            if (error) alert("Deletion Failed"); else fetchGallery();
+        }
+
+        // RANKINGS
+        async function updateLeaderboard() {
+            const { data } = await db.from('messages').select('alias');
+            if (data) {
+                const counts = data.reduce((acc, curr) => { const n = curr.alias || 'Guest'; acc[n] = (acc[n] || 0) + 1; return acc; }, {});
+                const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 5);
+                document.getElementById('leaderboard').innerHTML = sorted.map(([name, count], i) => `
+                    <div class="flex justify-between p-3 bg-white/5 rounded-xl border border-white/5">
+                        <span class="text-[10px] font-black uppercase ${i===0?'text-gold':''}">${i+1}. ${name}</span>
+                        <span class="text-[9px] text-blue-400 font-bold">${count} SIGS</span>
+                    </div>`).join('');
+            }
+        }
+
+        // INITIALIZE
+        window.addEventListener('load', () => { 
+            checkSession(); updateLeaderboard(); fetchGallery(); fetchMessages();
+            db.channel('messages').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => { fetchMessages(); updateLeaderboard(); }).subscribe();
+            
+            setTimeout(() => { document.getElementById('startup-overlay').style.opacity = '0'; setTimeout(() => document.getElementById('startup-overlay').remove(), 1000); }, 1500);
+            
             const target = new Date("March 25, 2026 00:00:00").getTime();
             setInterval(() => {
                 const diff = target - new Date().getTime();
                 const d = Math.floor(diff / (1000 * 60 * 60 * 24)), h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)), m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)), s = Math.floor((diff % (1000 * 60)) / 1000);
-                document.getElementById('timer').innerText = `${d}d ${h}h ${m}m ${s}s`;
+                document.getElementById('timer').innerText = `${d}D ${h}H ${m}M ${s}S`;
             }, 1000);
-        }
-
-        async function sendPacket() {
-            const input = document.getElementById('chat-msg-in');
-            if(!input.value.trim()) return;
-            await db.from('messages').insert([{ content: input.value, alias: "Operative" }]);
-            input.value = "";
-            updateLeaderboard();
-        }
-
-        window.addEventListener('load', () => { 
-            fetchArchive(); updateLeaderboard(); startCountdown();
-            setTimeout(() => { document.getElementById('startup-overlay').style.opacity = '0'; setTimeout(() => document.getElementById('startup-overlay').remove(), 1000); }, 1500);
-            setInterval(() => { document.getElementById('lat-val').innerText = `${Math.floor(Math.random()*10)+5}ms`; }, 5000); 
         });
     </script>
 </body>
