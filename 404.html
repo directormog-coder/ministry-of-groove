@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | FREQUENCY INTERRUPTED</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@900&display=swap');
+        body { background-color: #060a0f; color: #D4AF37; font-family: 'Satoshi', sans-serif; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .glitch { font-family: 'Clash Display', sans-serif; animation: glitch 1s linear infinite; }
+        @keyframes glitch {
+            2%, 64% { transform: translate(2px, 0) skew(0deg); }
+            4%, 60% { transform: translate(-2px, 0) skew(0deg); }
+            62% { transform: translate(0, 0) skew(5deg); }
+        }
+    </style>
+</head>
+<body class="p-6 text-center">
+    <div class="max-w-md">
+        <h1 class="glitch text-8xl font-black italic mb-4">404</h1>
+        <div class="h-1 w-20 bg-blue-500 mx-auto mb-8"></div>
+        <h2 class="text-white text-xs font-black uppercase tracking-[0.4em] mb-6">Neural Link Severed</h2>
+        <p class="text-zinc-500 text-[10px] uppercase leading-relaxed mb-10 tracking-widest">
+            You have strayed beyond the eMalahleni Grid parameters. <br>The requested frequency does not exist in this sector.
+        </p>
+        <a href="/" class="inline-block border border-gold px-10 py-4 rounded-full text-[10px] font-black uppercase hover:bg-gold hover:text-black transition-all">
+            Re-establish Connection
+        </a>
+    </div>
+</body>
+</html>
