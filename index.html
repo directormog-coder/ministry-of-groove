@@ -3,176 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M.O.G. | PRESTIGE COMMAND v2026.9.1</title>
+    <title>M.O.G. | PRESTIGE COMMAND v2026.9.4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=JetBrains+Mono:wght@300;700&family=Inter:wght@400;900&display=swap');
 
-        :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; --mog-glass: rgba(5, 5, 5, 0.4); --mog-border: rgba(0, 212, 255, 0.1); }
-        @view-transition { navigation: auto; }
+        :root { 
+            --mog-gold: #D4AF37; 
+            --mog-blue: #00d4ff; 
+            --mog-black: #050505; 
+            --mog-glass: rgba(5, 5, 5, 0.4); 
+            --mog-border: rgba(0, 212, 255, 0.1); 
+        }
+
         * { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); scroll-behavior: smooth; }
-        
         body { background: var(--mog-black); color: var(--mog-gold); font-family: 'Inter', sans-serif; overflow-x: hidden; min-height: 100vh; margin: 0; }
         
-        #bg-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.15; filter: blur(2px) saturate(0.5); pointer-events: none; will-change: transform; mix-blend-mode: screen; transition: opacity 1.5s ease, filter 1.5s ease; }
+        /* POSTER GRAIN & BACKGROUND */
+        body::after {
+            content: ""; position: fixed; inset: 0;
+            background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+            opacity: 0.03; pointer-events: none; z-index: 50;
+        }
 
-        main { will-change: transform, opacity; transform: translateZ(0); backface-visibility: hidden; }
+        #bg-canvas { 
+            position: fixed; inset: 0; z-index: -1; opacity: 0.15; 
+            filter: blur(2px) saturate(0.5); pointer-events: none; 
+            will-change: transform; mix-blend-mode: screen; 
+            transition: opacity 1.5s ease, filter 1.5s ease; 
+        }
 
-        .bento-container { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; max-width: 1400px; margin: 0 auto; padding: 2rem; }
-        .bento-tile { background: var(--mog-glass) !important; border: 1px solid var(--mog-border); backdrop-filter: blur(10px); border-radius: 4px; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.02); }
+        /* TYPOGRAPHY POSTER RULES */
+        h1 { 
+            font-family: 'Big Shoulders Display', sans-serif !important; 
+            font-size: 5rem; line-height: 0.8; text-transform: uppercase; letter-spacing: -0.05em; 
+            background: linear-gradient(to bottom, #fff 40%, var(--mog-gold) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
+        }
 
-        h1, .prestige-label { font-family: 'Tenor Sans', serif; letter-spacing: 0.4em; text-transform: uppercase; }
+        .glitch-active { animation: jitter 0.2s infinite; text-shadow: 2px 0 #ff3333, -2px 0 #00d4ff; filter: contrast(1.5); }
+        @keyframes jitter { 0% { transform: translate(0); } 25% { transform: translate(1px, -1px); } 50% { transform: translate(-1px, 1px); } 100% { transform: translate(0); } }
+
+        .prestige-label { 
+            font-family: 'Inter', sans-serif; font-weight: 900; font-size: 0.65rem; 
+            letter-spacing: 0.5em; color: var(--mog-blue); border-left: 3px solid var(--mog-blue);
+            padding-left: 8px; margin-bottom: 1.5rem; display: block;
+        }
+
+        .mono-heavy { font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; font-size: 1.2rem; letter-spacing: -1px; }
         .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; }
 
+        .vertical-meta {
+            writing-mode: vertical-rl; text-orientation: mixed; position: absolute;
+            right: 10px; top: 50%; transform: translateY(-50%); font-size: 8px; opacity: 0.2; letter-spacing: 0.2em;
+        }
+
+        /* BENTO & TILE REFINEMENT */
+        .bento-container { 
+            display: grid; grid-template-columns: repeat(12, 1fr); gap: 2rem; 
+            max-width: 1600px; margin: 0 auto; padding: 4rem 2rem; transform: translateZ(0); 
+        }
+        .bento-tile { 
+            background: var(--mog-glass) !important; border: 1px solid var(--mog-border); 
+            backdrop-filter: blur(10px); border-radius: 4px; position: relative; overflow: hidden; 
+        }
+
         .mog-input { background: rgba(255,255,255,0.03); border: 1px solid var(--mog-border); padding: 1rem; color: #fff; width: 100%; outline: none; }
-        .mog-input::placeholder { color: var(--mog-blue); opacity: 0.3; }
-
-        .mog-btn { background: transparent; border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 0.75rem 1.5rem; font-weight: 700; letter-spacing: 0.1em; cursor: pointer; position: relative; }
-        .mog-btn:hover { background: var(--mog-gold); color: #000; scale: 1.02; box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2); }
-
-        #ticker-v2 { position: fixed; bottom: 0; width: 100%; background: rgba(0,0,0,0.9); height: 35px; border-top: 1px solid var(--mog-border); display: flex; align-items: center; z-index: 1000; }
-        .scroll-text { animation: slide-left 30s linear infinite; white-space: nowrap; color: var(--mog-blue); font-weight: 800; }
-        @keyframes slide-left { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
-        @keyframes shimmer { 100% { transform: translateX(200%); } }
-        @keyframes scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(200%); } }
+        .mog-btn { background: transparent; border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 0.75rem 1.5rem; font-weight: 700; letter-spacing: 0.1em; cursor: pointer; }
         
-        #tile-gallery img { mix-blend-mode: lighten; filter: grayscale(100%) brightness(0.8) contrast(1.2); transition: 0.5s ease; }
-        #tile-gallery img:hover { filter: grayscale(0%) brightness(1); mix-blend-mode: normal; transform: scale(1.1); z-index: 10; }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--mog-border); border-radius: 10px; }
+        #ticker-v2 { position: fixed; bottom: 0; width: 100%; background: #000; height: 35px; border-top: 1px solid var(--mog-border); z-index: 1000; display: flex; align-items: center; }
+        .scroll-text { animation: slide-left 30s linear infinite; white-space: nowrap; color: var(--mog-blue); font-weight: 800; font-size: 10px; }
+        @keyframes slide-left { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+        @keyframes scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(200%); } }
+
+        @media print {
+            body { background: #000 !important; -webkit-print-color-adjust: exact; }
+            .mog-btn, #ticker-v2, #bg-canvas, header button { display: none !important; }
+            main { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            .bento-tile { break-inside: avoid; border: 1px solid #D4AF37 !important; }
+        }
     </style>
 </head>
 <body>
 
 <canvas id="bg-canvas"></canvas>
 
-<nav id="side-hub" class="fixed top-0 left-0 h-full w-64 bg-black/80 backdrop-filter blur-2xl z-[1000] border-r border-blue-500/20 -translate-x-full transition-transform duration-500">
+<nav id="side-hub" class="fixed top-0 left-0 h-full w-64 bg-black/90 backdrop-filter blur-2xl z-[1000] border-r border-blue-500/20 -translate-x-full transition-transform duration-500">
     <div class="p-8 space-y-8">
         <div class="flex justify-between items-center">
-            <span class="prestige-label text-[10px] text-blue-400">Mission Hub</span>
-            <button onclick="toggleHub()" class="text-white opacity-40 hover:opacity-100"><i class="fa-solid fa-xmark"></i></button>
+            <span class="prestige-label text-blue-400">Mission Hub</span>
+            <button onclick="toggleHub()" class="text-white opacity-40"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <ul class="space-y-6 mono text-[11px] text-gray-400">
-            <li class="hover:text-blue-400 cursor-pointer transition-colors"><i class="fa-solid fa-satellite mr-3"></i> SECTOR MAP</li>
-            <li class="hover:text-blue-400 cursor-pointer transition-colors"><i class="fa-solid fa-waveform-path mr-3"></i> SONIC VAULT</li>
-            <li class="hover:text-blue-400 cursor-pointer transition-colors"><i class="fa-solid fa-shield-halved mr-3"></i> SECURITY DEPT</li>
-            <li class="hover:text-blue-400 cursor-pointer transition-colors"><i class="fa-solid fa-folder-open mr-3"></i> INTEL LOGS</li>
+            <li class="hover:text-blue-400 cursor-pointer"><i class="fa-solid fa-satellite mr-3"></i> SECTOR MAP</li>
+            <li class="hover:text-blue-400 cursor-pointer"><i class="fa-solid fa-waveform-path mr-3"></i> SONIC VAULT</li>
         </ul>
+        <div class="mt-10 pt-4 border-t border-white/5">
+            <button onclick="capturePoster()" class="mog-btn w-full !text-[9px]">Generate Archive</button>
+        </div>
     </div>
 </nav>
 
-<header class="p-8 flex justify-between items-center relative z-10 border-b border-white/5">
-    <div class="flex items-center gap-6">
-        <button onclick="toggleHub()" class="p-3 text-blue-400 hover:scale-110 transition-transform">
-            <i class="fa-solid fa-bars-staggered text-xl"></i>
-        </button>
-        <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-12 w-12 rounded-full border border-gold/30">
-        <div>
-            <h1 class="text-xl text-white italic">Ministry of Groove</h1>
+<header class="p-10 flex flex-col md:flex-row justify-between items-end relative z-10 border-b border-white/5 bg-gradient-to-b from-black to-transparent">
+    <div class="flex flex-col gap-0">
+        <div class="flex items-center gap-4 mb-2">
+             <button onclick="toggleHub()" class="p-3 text-blue-400 hover:rotate-90 transition-transform">
+                <i class="fa-solid fa-plus text-2xl"></i>
+            </button>
+            <span class="mono text-[10px] tracking-[.8em] text-blue-500 uppercase">Classified / 2026</span>
         </div>
+        <h1 id="main-title">Ministry<br><span class="pl-12">of Groove</span></h1>
     </div>
-    
-    <div class="flex items-center gap-4">
-        <div class="flex items-center gap-3 px-4 py-2 border border-white/5 rounded-sm bg-white/5">
-            <span class="mono text-[8px] text-blue-400">GHOST_MODE</span>
-            <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" id="ghost-toggle" class="sr-only peer" onchange="toggleGhostMode(this)">
-                <div class="w-7 h-4 bg-gray-800 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-blue-600"></div>
-            </label>
-        </div>
-        <button onclick="logout()" class="mog-btn !py-2 !px-4 !text-[9px] !border-white/10 !text-white/40">Sever</button>
+    <div class="flex flex-col items-end gap-4 mt-6 md:mt-0">
+        <div class="flex gap-6 text-xs mono-heavy"><span class="text-white">STATUS // LINKED</span><span class="text-blue-500">BPM // 124</span></div>
+        <button onclick="logout()" class="mog-btn !border-white/10 !text-white/20 !py-1 !text-[8px]">TERMINATE_SESSION</button>
     </div>
 </header>
 
 <main class="bento-container relative z-10">
-    <div class="bento-tile col-span-12 md:col-span-4 p-8 group">
-        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent w-1/2 -skew-x-12 -translate-x-full group-hover:animate-[shimmer_2s_infinite] pointer-events-none"></div>
-        <div class="flex justify-between items-center mb-8">
-            <span class="prestige-label text-[10px] text-blue-400">Identity Verification</span>
-            <div class="mono text-[8px] opacity-40">0x7F</div>
-        </div>
-        <div id="auth-form" class="space-y-6">
+    <div class="bento-tile col-span-12 md:col-span-4 p-10 group">
+        <div class="vertical-meta mono">SECURE_NODE_0x7F</div>
+        <span class="prestige-label">Identity Verification</span>
+        <div id="auth-form" class="space-y-8 mt-4">
             <input id="email-in" type="email" placeholder="OPERATIVE_ID" class="mog-input mono !bg-transparent !border-b !border-t-0 !border-x-0 !border-blue-500/30">
             <input id="password-in" type="password" placeholder="BIOMETRIC_KEY" class="mog-input mono !bg-transparent !border-b !border-t-0 !border-x-0 !border-blue-500/30">
-            <div class="grid grid-cols-2 gap-4">
-                <button onclick="handleAuth('login')" class="mog-btn !text-[9px]">Init Link</button>
-                <button onclick="handleAuth('signup')" class="mog-btn !text-[9px] !border-white/10 !text-white/40">Enroll</button>
-            </div>
+            <div class="grid grid-cols-2 gap-4"><button onclick="handleAuth('login')" class="mog-btn !text-[9px]">Init Link</button><button onclick="handleAuth('signup')" class="mog-btn !text-[9px] !border-white/10 !text-white/40">Enroll</button></div>
         </div>
-        <div id="op-profile" class="hidden text-center py-4">
-            <div id="qrcode" class="bg-white p-2 inline-block rounded-sm mix-blend-screen mb-4"></div>
-            <p id="active-alias" class="text-xl font-bold italic tracking-widest uppercase"></p>
+        <div id="op-profile" class="hidden text-center py-4"><div id="qrcode" class="bg-white p-2 inline-block rounded-sm mix-blend-screen mb-4"></div><p id="active-alias" class="text-xl font-bold italic uppercase"></p></div>
+    </div>
+
+    <div class="bento-tile col-span-12 md:col-span-8 p-10">
+        <div class="vertical-meta mono">SONIC_ENCRYPTION_LAYER_09</div>
+        <div class="flex flex-col mb-8"><span class="prestige-label">Sonic Archive</span><div id="now-playing" class="mono-heavy text-white">Standby...</div></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div id="mix-list" class="space-y-3 max-h-[200px] overflow-y-auto pr-4 custom-scrollbar"></div>
+            <div class="flex flex-col justify-center items-center gap-6">
+                <audio id="player" crossorigin="anonymous" class="hidden"></audio>
+                <i id="play-btn" class="fa-solid fa-play text-4xl cursor-pointer hover:text-blue-400"></i>
+                <div id="deep-scan-stats" class="w-full flex justify-between mono text-[7px] text-blue-400 opacity-50"><span id="ai-energy">ENERGY: 0%</span><span id="ai-mood">THEME: STANDBY</span></div>
+                <canvas id="audio-visualizer" class="w-full h-16"></canvas>
+            </div>
         </div>
     </div>
 
-    <div class="bento-tile col-span-12 md:col-span-8 p-8">
-        <div class="flex justify-between items-center mb-6 border-b border-gold/10 pb-4">
-            <span class="prestige-label text-[10px]">Sonic Archive</span>
-            <div id="now-playing" class="mono text-[9px] text-blue-400">STANDBY...</div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div id="mix-list" class="space-y-2 max-h-[200px] overflow-y-auto pr-4 custom-scrollbar"></div>
-            <div class="flex flex-col justify-center items-center gap-4">
-                <audio id="player" crossorigin="anonymous" class="hidden"></audio>
-                <i id="play-btn" class="fa-solid fa-play text-2xl cursor-pointer hover:text-blue-400"></i>
-                <div id="deep-scan-stats" class="w-full flex justify-between mono text-[7px] text-blue-400 opacity-50">
-                    <span id="ai-energy">ENERGY: 0%</span><span id="ai-mood">THEME: STANDBY</span>
-                </div>
-                <canvas id="audio-visualizer" class="w-full h-12"></canvas>
-            </div>
-        </div>
-    </div>
-    
-    <div class="bento-tile col-span-12 md:col-span-6 p-8 relative overflow-hidden">
-        <span class="prestige-label text-[10px] block mb-6">Sector Monitoring</span>
-        <div id="satellite-container" class="relative h-60 w-full flex items-center justify-center bg-black/40 border border-white/5">
+    <div class="bento-tile col-span-12 md:col-span-6 p-10 relative overflow-hidden">
+        <span class="prestige-label">Sector Monitoring</span>
+        <div id="satellite-container" class="relative h-64 w-full flex items-center justify-center bg-black/60 border border-white/5">
             <img id="africa-map" src="https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg" class="h-full opacity-20 filter invert absolute">
-            <video id="director-uplink" class="w-full h-full object-cover opacity-60 mix-blend-screen" autoplay muted loop playsinline>
-                <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/uplink_static.mp4" type="video/mp4">
-            </video>
+            <video id="director-uplink" class="w-full h-full object-cover opacity-60 mix-blend-screen" autoplay muted loop playsinline><source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/uplink_static.mp4" type="video/mp4"></video>
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent h-1/2 w-full animate-[scan_4s_linear_infinite]"></div>
         </div>
-        <div class="mt-4 flex justify-between mono text-[8px] text-blue-900">
-            <span id="coord-lat">LAT: 2.1522° S</span><span id="coord-long">LONG: 24.2572° E</span><span id="sector-load">LOAD: 0%</span>
-        </div>
+        <div class="mt-6 flex justify-between mono text-[8px] text-blue-900"><span id="coord-lat">LAT: 2.1522° S</span><span id="coord-long">LONG: 24.2572° E</span><span id="sector-load">LOAD: 0%</span></div>
     </div>
-
-    <div class="bento-tile col-span-12 md:col-span-6 p-8">
-        <span class="prestige-label text-[10px] block mb-6">Intel Ingestion</span>
-        <div id="tile-gallery" class="grid grid-cols-5 gap-2 max-h-[140px] overflow-y-auto custom-scrollbar p-2 bg-black/20"></div>
-        <div class="mt-6">
+    
+    <div class="bento-tile col-span-12 md:col-span-6 p-10">
+        <span class="prestige-label">Intel Ingestion</span>
+        <div id="tile-gallery" class="grid grid-cols-5 gap-2 max-h-[160px] overflow-y-auto custom-scrollbar p-2 bg-black/20"></div>
+        <div class="mt-6 space-y-4">
             <input type="file" id="bulk-upload" class="hidden" multiple onchange="handleMainframeUpload(this)">
-            <button onclick="document.getElementById('bulk-upload').click()" class="mog-btn w-full !py-2 !text-[9px]">Push to Mainframe</button>
-            <div id="upload-progress-container" class="hidden w-full h-1 bg-white/5 mt-4"><div id="upload-progress-bar" class="h-full bg-blue-500 w-0 transition-all"></div></div>
-            <div class="mt-4 flex justify-between items-center"><span class="prestige-label text-[8px]">Session Manifest</span><span id="log-count" class="mono text-[8px] text-blue-500">ENTRIES: 0</span></div>
-            <button onclick="exportManifest()" class="mog-btn w-full !py-1 !text-[8px] mt-2 !border-blue-500/30">Export Logs</button>
+            <button onclick="document.getElementById('bulk-upload').click()" class="mog-btn w-full !text-[9px]">Push to Mainframe</button>
+            <div id="upload-progress-container" class="hidden w-full h-1 bg-white/5"><div id="upload-progress-bar" class="h-full bg-blue-500 w-0 transition-all"></div></div>
+            <div class="flex justify-between items-center"><span class="prestige-label !mb-0 !border-0 !p-0 text-[8px]">Session Manifest</span><span id="log-count" class="mono text-[8px] text-blue-500">ENTRIES: 0</span></div>
+            <button onclick="exportManifest()" class="mog-btn w-full !py-1 !text-[8px] !border-blue-500/30">Export Manifest</button>
         </div>
     </div>
 
-    <div class="bento-tile col-span-12 p-8 relative">
-        <div class="flex justify-between items-center mb-4"><span class="prestige-label text-[10px]">Quantum Chat</span><div id="quantum-status" class="mono text-[8px] text-blue-500 animate-pulse">ENCRYPTION: ACTIVE</div></div>
-        <div id="chat-box" class="h-32 overflow-y-auto mono text-[9px] space-y-2 mb-4 custom-scrollbar"></div>
-        <div id="chat-input-area" class="hidden flex gap-2"><input id="chat-in" type="text" placeholder="SECURE PACKET..." class="mog-input mono"><button onclick="sendChat()" class="mog-btn !px-6"><i class="fa-solid fa-shredder"></i></button></div>
+    <div class="bento-tile col-span-12 p-10 relative">
+        <div class="flex justify-between items-center mb-6"><span class="prestige-label !mb-0">Quantum Frequency Chat</span><div id="quantum-status" class="mono text-[8px] text-blue-500 animate-pulse">ENCRYPTION: ACTIVE</div></div>
+        <div id="chat-box" class="h-40 overflow-y-auto mono text-[10px] space-y-4 custom-scrollbar"></div>
+        <div id="chat-input-area" class="hidden flex gap-4 mt-6"><input id="chat-in" type="text" placeholder="SECURE PACKET..." class="mog-input mono"><button onclick="sendChat()" class="mog-btn !px-10"><i class="fa-solid fa-shredder"></i></button></div>
     </div>
 </main>
 
-<footer class="relative z-10 p-10 mt-20 border-t border-white/5 bg-black/20 backdrop-filter blur-lg">
+<footer class="relative z-10 p-20 mt-20 border-t border-white/5 bg-black/40 backdrop-filter blur-xl">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
-        <div class="mono text-[9px] opacity-40">© 2026 MINISTRY OF GROOVE<br>PRESTIGE_V2026.9.1</div>
-        <div class="flex justify-center gap-8 text-xl">
-            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="hover:text-white"><i class="fa-brands fa-tiktok"></i></a>
+        <div class="mono text-[10px] opacity-40">© 2026 MINISTRY OF GROOVE<br>PRESTIGE_V2026.9.4_POSTER_EDITION</div>
+        <div class="flex justify-center gap-10 text-2xl">
+            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="hover:text-white transition-all"><i class="fa-brands fa-tiktok"></i></a>
             <a href="https://www.instagram.com/ministryofgroove_hq" target="_blank" class="hover:text-blue-400"><i class="fa-brands fa-instagram"></i></a>
             <a href="https://www.facebook.com/share/1D9jcB5998/" target="_blank" class="hover:text-blue-600"><i class="fa-brands fa-facebook-f"></i></a>
             <a href="mailto:director.mog@gmail.com" class="hover:text-gold"><i class="fa-solid fa-envelope"></i></a>
         </div>
-        <div class="text-right prestige-label text-[8px] opacity-40">Africa Sector HQ</div>
+        <div class="text-right prestige-label !mb-0 text-[10px] opacity-40">Africa Sector HQ</div>
     </div>
 </footer>
 
-<div id="ticker-v2"><div class="bg-gold text-black px-6 h-full flex items-center mono font-bold text-[10px]">SYSTEM STATUS</div><div class="scroll-text mono flex gap-20"><span>[ AFRICA_SECTOR: MONITORING ]</span><span>[ UPLINK: STABLE ]</span><span>[ QUANTUM_ENCRYPTION: ON ]</span></div></div>
+<div id="ticker-v2"><div class="bg-gold text-black px-6 h-full flex items-center mono font-bold text-[10px]">SYSTEM STATUS</div><div class="scroll-text"><span>[ AFRICA_SECTOR: MONITORING ]</span><span>[ UPLINK: STABLE ]</span><span>[ QUANTUM_ENCRYPTION: ON ]</span><span>[ POSTER_MODE: ACTIVE ]</span></div></div>
 
 <script>
     const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8", D: "director.mog@gmail.com" };
@@ -180,7 +200,7 @@
     const audioPlayer = document.getElementById('player');
     const playBtn = document.getElementById('play-btn');
 
-    // --- NEURAL FX CORE ---
+    // --- NEURAL POSTER FX ---
     let particles = [], rainDrops = [], vCanvas = document.getElementById('bg-canvas'), vCtx = vCanvas.getContext('2d');
     function initFX() {
         vCanvas.width = window.innerWidth; vCanvas.height = window.innerHeight;
@@ -189,7 +209,7 @@
     }
     function updateFX() {
         vCtx.fillStyle = 'rgba(5, 5, 5, 0.2)'; vCtx.fillRect(0, 0, vCanvas.width, vCanvas.height);
-        const comp = (analyser && dataArray) ? (dataArray.reduce((a,b)=>a+b)/dataArray.length)/5 : 1;
+        const comp = (analyser) ? (dataArray.reduce((a,b)=>a+b)/dataArray.length)/5 : 1;
         const col = getComputedStyle(document.documentElement).getPropertyValue('--mog-blue');
         particles.forEach(p => {
             p.x += p.vx*comp; p.y += p.vy*comp;
@@ -198,14 +218,13 @@
         });
         vCtx.strokeStyle = col; vCtx.lineWidth=1;
         rainDrops.forEach(d => {
-            d.y += d.speed*(comp*0.8);
-            if(d.y>vCanvas.height) { d.y=-d.length; d.x=Math.random()*vCanvas.width; }
+            d.y += d.speed*(comp*0.8); if(d.y>vCanvas.height) { d.y=-d.length; d.x=Math.random()*vCanvas.width; }
             vCtx.beginPath(); vCtx.moveTo(d.x, d.y); vCtx.lineTo(d.x, d.y+d.length); vCtx.stroke();
         });
         requestAnimationFrame(updateFX);
     }
 
-    // --- AUTH & HANDSHAKE ---
+    // --- AUTH & POSTER SURGE ---
     async function handleAuth(mode) {
         const btn = event.currentTarget; const originalText = btn.innerText; btn.innerText = "AUTHENTICATING...";
         vCanvas.style.opacity = "0.4"; vCanvas.style.filter = "blur(0px) saturate(1)";
@@ -220,7 +239,7 @@
         } catch (e) { btn.innerText = "LINK_FAILED"; vCanvas.style.opacity = "0.15"; setTimeout(()=>btn.innerText=originalText, 2000); }
     }
 
-    // --- AUDIO & AI ANALYTICS ---
+    // --- AUDIO & GLITCH AI ---
     let audioCtx, analyser, source, dataArray, missionLog = [];
     function playTrack(url, name) {
         audioPlayer.crossOrigin = "anonymous"; audioPlayer.src = url; audioPlayer.play();
@@ -234,7 +253,6 @@
             analyser.fftSize = 64; dataArray = new Uint8Array(analyser.frequencyBinCount);
             renderAudioUI();
         }
-        if(audioCtx.state === 'suspended') audioCtx.resume();
     }
     function renderAudioUI() {
         requestAnimationFrame(renderAudioUI); analyser.getByteFrequencyData(dataArray);
@@ -242,6 +260,11 @@
         const theme = low > 180 ? '#ff3333' : (avg > 100 ? '#D4AF37' : '#00d4ff');
         document.documentElement.style.setProperty('--mog-blue', theme);
         document.getElementById('ai-energy').innerText = `ENERGY: ${Math.round(avg)}%`;
+        
+        // GLITCH SYNC
+        const title = document.getElementById('main-title');
+        if (low > 210) title.classList.add('glitch-active'); else title.classList.remove('glitch-active');
+
         const map = document.getElementById('africa-map'); map.style.opacity = 0.2 + (low/255)*0.6;
         map.style.filter = `invert(1) drop-shadow(0 0 ${low/10}px ${theme})`;
         const canvasA = document.getElementById('audio-visualizer'), ctxA = canvasA.getContext('2d');
@@ -249,9 +272,14 @@
         dataArray.forEach((v, i) => { ctxA.fillStyle = theme; ctxA.fillRect(i*10, canvasA.height - v/4, 8, v/4); });
     }
 
-    // --- UI LOGIC ---
+    // --- POSTER UTILITIES ---
     function toggleHub() { const h = document.getElementById('side-hub'); h.style.transform = h.style.transform === 'translateX(0%)' ? 'translateX(-100%)' : 'translateX(0%)'; }
     function toggleGhostMode(el) { document.querySelector('main').style.opacity = el.checked ? "0.05" : "1"; }
+    async function capturePoster() {
+        const flash = document.createElement('div'); flash.className = "fixed inset-0 bg-white z-[2000] opacity-0 transition-opacity duration-100";
+        document.body.appendChild(flash); setTimeout(() => flash.style.opacity = "0.8", 50);
+        setTimeout(() => { flash.style.opacity = "0"; window.print(); flash.remove(); }, 300);
+    }
     async function handleMainframeUpload(input) {
         const files = input.files; if (!files.length) return;
         document.getElementById('upload-progress-container').classList.remove('hidden');
@@ -270,16 +298,15 @@
             if (f.name.match(/\.(mp3|wav|m4a)$/i)) {
                 const r = document.createElement('div'); r.className = "p-2 border border-white/5 mono text-[8px] cursor-pointer hover:bg-white/5";
                 r.innerHTML = f.name.toUpperCase(); r.onclick = () => playTrack(url, f.name); list.appendChild(r);
-            } else { gall.innerHTML += `<img src="${url}" class="h-10 w-10 object-cover rounded-sm">`; }
+            } else { gall.innerHTML += `<img src="${url}" class="h-10 w-10 object-cover rounded-sm grayscale opacity-50 hover:opacity-100">`; }
         });
     }
     function sendChat() {
         const cin = document.getElementById('chat-in'); if(!cin.value) return;
-        const id = 'm'+Date.now(), div = document.createElement('div');
-        div.id = id; div.className = "p-2 border-l border-blue-500 bg-blue-500/5";
-        div.innerHTML = `<span class="timer opacity-50 text-[7px] block">T-MINUS: 3600s</span><div class="msg-body">${cin.value}</div>`;
+        const div = document.createElement('div'); div.className = "p-2 border-l border-blue-500 bg-blue-500/5 transition-all duration-1000";
+        div.innerHTML = `<span class="timer opacity-50 text-[7px] block">T-MINUS: 3600s</span><div class="msg-body text-white">${cin.value}</div>`;
         document.getElementById('chat-box').appendChild(div); cin.value = "";
-        let t = 3600; const tm = setInterval(() => { t--; div.querySelector('.timer').innerText = `T-MINUS: ${t}s`; if(t<=0){ div.querySelector('.msg-body').innerText = "10101110011"; clearInterval(tm); } }, 1000);
+        let t = 3600; const tm = setInterval(() => { t--; div.querySelector('.timer').innerText = `T-MINUS: ${t}s`; if(t<=0){ div.querySelector('.msg-body').innerText = "1101011001"; clearInterval(tm); } }, 1000);
     }
     function exportManifest() { const b = new Blob([JSON.stringify(missionLog, null, 2)], {type:'text/plain'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `MOG_LOG_${Date.now()}.txt`; a.click(); }
     async function logout() { await db.auth.signOut(); location.reload(); }
@@ -296,6 +323,14 @@
 
     window.onload = () => { initFX(); updateFX(); };
     window.onresize = () => { vCanvas.width = window.innerWidth; vCanvas.height = window.innerHeight; };
+    
+    // BIO-LINK MOUSE VELOCITY
+    let lastM = {x:0, y:0};
+    window.addEventListener('mousemove', (e) => {
+        const d = Math.sqrt(Math.pow(e.clientX-lastM.x,2)+Math.pow(e.clientY-lastM.y,2));
+        if(d/50 > 0.5) document.documentElement.style.setProperty('--mog-gold', `hsl(${40+(d/2)}, 100%, 50%)`);
+        lastM = {x:e.clientX, y:e.clientY};
+    });
 </script>
 </body>
 </html>
