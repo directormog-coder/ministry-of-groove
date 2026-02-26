@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.13</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.16</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -20,7 +20,7 @@
         html, body { min-height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: #fff; }
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Inter', sans-serif; }
 
-        /* CYBER-CIRCUITRY BACKGROUND */
+        /* CYBER-CIRCUITRY BACKGROUND (55% Visibility) */
         #bg-canvas {
             position: fixed; inset: 0; z-index: -1;
             background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.12) 0%, transparent 70%),
@@ -78,7 +78,7 @@
     <div id="bg-canvas"></div>
 
     <div class="ticker-wrap">
-        <div class="ticker-move">TOTALITY v100.2.13 // NEURAL SYNC ACTIVE // MIDDELBURG HQ // SECTOR: MPUMALANGA // RSA NATIONAL RADAR: ONLINE // ORIGIN 54 STATUS: CLASSIFIED // AMAPIANO FREQUENCY: STABLE...</div>
+        <div class="ticker-move">TOTALITY v100.2.16 // NEURAL SYNC ACTIVE // HUB: hzelmkthdqtbcxffsstl // CLEAN HANDSHAKE PROTOCOL ENABLED // RSA NATIONAL RADAR: ONLINE // AMAPIANO FREQUENCY: STABLE...</div>
     </div>
 
     <div id="side-menu">
@@ -87,12 +87,12 @@
             <a href="#" class="menu-link">Intel Archive</a>
             <a href="#" class="menu-link">Frequency Comms</a>
             <a href="#" class="menu-link">National Hitlist</a>
-            <a href="#" class="menu-link">ID Matrix</a>
             <div class="mt-24 pt-10 border-t border-white/10">
                 <p class="text-[10px] uppercase tracking-[0.4em] text-zinc-500 font-black">Sector Intelligence</p>
                 <p class="text-sm text-gold mt-3 font-bold">Middelburg, Mpumalanga // RSA</p>
+                
                 <div class="mt-8 p-4 bg-white/5 rounded-2xl border border-white/10">
-                    <span class="text-[9px] uppercase font-black text-blue-400 block mb-2">Mandate Mix v1.0</span>
+                    <span class="text-[9px] uppercase font-black text-blue-400 block mb-2 text-center">Mandate Mix v1.0</span>
                     <audio id="mandate-player" controls class="w-full h-8 opacity-40">
                         <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" type="audio/mpeg">
                     </audio>
@@ -103,7 +103,7 @@
 
     <header class="px-12 py-8 flex justify-between items-center bg-black/40 border-b border-white/5 backdrop-blur-xl sticky top-0 z-[1000]">
         <div class="flex items-center gap-8">
-            <button onclick="toggleMenu()" class="text-blue-400 text-3xl p-4 bg-white/5 rounded-2xl hover:bg-white/10"><i class="fa-solid fa-bars-staggered"></i></button>
+            <button onclick="toggleMenu()" class="text-blue-400 text-3xl p-4 bg-white/5 rounded-2xl hover:bg-white/10 transition-all"><i class="fa-solid fa-bars-staggered"></i></button>
             <img id="main-logo" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-20 w-20 rounded-full border-2 border-blue-500/30 cursor-pointer shadow-2xl active:scale-90">
             <div class="flex flex-col">
                 <h1 id="main-title">Ministry of Groove</h1>
@@ -125,27 +125,26 @@
             <div id="active-op-badge" class="hidden text-center animate-fade-in">
                 <div id="qrcode" class="bg-white p-5 rounded-3xl inline-block mb-8 shadow-2xl border-8 border-black"></div>
                 <h2 id="display-op-id" class="text-4xl font-black italic uppercase text-gold tracking-tighter">OPERATIVE</h2>
-                <p class="text-[10px] text-zinc-500 uppercase tracking-[0.4em] mt-3">Neural Verified Access</p>
             </div>
 
             <div class="director-only flex-col mt-8 space-y-5">
                 <div class="bg-black/60 rounded-3xl p-8 border border-white/5">
-                    <span class="text-[10px] font-black text-gold uppercase tracking-widest block mb-5 underline">System Diagnostics</span>
+                    <span class="text-[10px] font-black text-gold uppercase tracking-widest block mb-5 underline">System Health Report</span>
                     <div class="space-y-4">
                         <div class="flex items-center justify-between text-[11px] font-bold">
-                            <span class="text-zinc-400 uppercase">Supabase Connectivity</span>
-                            <span id="health-db" class="flex items-center"><span class="status-dot offline"></span>CHECKING</span>
+                            <span class="text-zinc-400">Database Uplink</span>
+                            <span id="health-db" class="flex items-center"><span class="status-dot offline"></span>SYNCING</span>
                         </div>
                         <div class="flex items-center justify-between text-[11px] font-bold">
-                            <span class="text-zinc-400 uppercase">Google Handshake</span>
+                            <span class="text-zinc-400">Google Handshake</span>
                             <span id="health-auth" class="flex items-center"><span class="status-dot online"></span>ACTIVE</span>
                         </div>
                     </div>
                 </div>
-                <button onclick="toggleMaintenance()" class="w-full py-4 rounded-2xl border border-blue-500/40 text-[10px] font-black uppercase hover:bg-blue-600">Toggle Maintenance</button>
-                <button onclick="purgeLogs()" class="w-full py-4 rounded-2xl border border-red-900 text-red-500 text-[10px] font-black uppercase hover:bg-red-600">Purge Totality Logs</button>
+                <button onclick="toggleMaintenance()" class="w-full py-4 rounded-2xl border border-blue-500/40 text-[10px] font-black uppercase">Toggle Maintenance</button>
+                <button onclick="purgeLogs()" class="w-full py-4 rounded-2xl border border-red-900 text-red-500 text-[10px] font-black uppercase">Purge Entry Logs</button>
                 <a href="/origin54.html" class="flex items-center justify-between w-full p-5 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-white/10 hover:border-white/30 transition-all">
-                    <span class="text-[11px] font-black text-white uppercase italic">Origin 54 Archive</span>
+                    <span class="text-[11px] font-black text-white uppercase italic">Origin 54 Switcher</span>
                     <i class="fa-solid fa-arrow-right-long text-gold"></i>
                 </a>
             </div>
@@ -160,47 +159,41 @@
             </div>
             <div id="chat-stream" class="flex-grow p-10 overflow-y-auto space-y-6"></div>
             <div class="p-8 bg-black/50 flex gap-5 border-t border-white/5">
-                <input type="text" id="chat-msg-in" placeholder="Transmit packet..." class="flex-grow bg-white/5 border border-white/10 rounded-full px-10 py-5 text-white text-base outline-none focus:border-blue-500">
+                <input type="text" id="chat-msg-in" placeholder="Transmit thought..." class="flex-grow bg-white/5 border border-white/10 rounded-full px-10 py-5 text-white text-base outline-none focus:border-blue-500">
                 <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-2xl active:scale-90"><i class="fa-solid fa-paper-plane text-xl"></i></button>
             </div>
         </section>
 
         <section class="command-tile h-96" style="grid-area: radar;">
-            <div class="absolute top-6 left-6 z-10 bg-black/80 px-4 py-2 rounded-lg text-[9px] font-black text-blue-400 uppercase tracking-[0.3em] border border-blue-500/30">Mpumalanga Sector Radar</div>
-            <iframe class="w-full h-full grayscale invert opacity-20 scale-[2.5] pointer-events-none" src="http://googleusercontent.com/maps.google.com/5"></iframe>
+            <iframe class="w-full h-full grayscale invert opacity-20 scale-[2.5] pointer-events-none" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115160.03859664426!2d29.408713!3d-25.772592!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ebdf4f280e7c53d%3A0x676b7e53f93c8d3d!2sMiddelburg!5e0!3m2!1sen!2sza!4v17100000000001"></iframe>
         </section>
 
         <section class="command-tile p-10 h-96" style="grid-area: hitlist;">
-            <span class="text-[11px] font-black text-gold uppercase italic mb-6 block underline tracking-widest">Amapiano National Hitlist</span>
             <iframe class="rounded-3xl w-full h-full opacity-70 grayscale hover:grayscale-0 transition-all shadow-2xl" src="https://www.youtube.com/embed/videoseries?list=PL4fGSI1pDJn6jxsM-tS2j8nS_kK0qO7yG" frameborder="0"></iframe>
         </section>
 
         <section class="command-tile p-10 col-span-full mt-6" style="grid-area: extra;">
              <span class="text-[11px] font-black text-blue-400 uppercase italic mb-8 block underline tracking-[0.4em]">Visual Intel Archive</span>
-             <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                 </div>
+             <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6"></div>
         </section>
     </main>
 
     <footer class="fixed bottom-0 w-full bg-black/95 border-t border-gold/20 py-8 px-16 z-[2000] flex justify-between items-center text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500">
-        <div class="flex gap-14">
-            <a href="https://instagram.com/ministryofgroove" target="_blank" class="text-white text-3xl opacity-40 hover:opacity-100 hover:text-gold transition-all"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="text-white text-3xl opacity-40 hover:opacity-100 hover:text-gold transition-all"><i class="fa-brands fa-tiktok"></i></a>
+        <div class="flex gap-14 text-white text-3xl opacity-40">
+            <a href="https://instagram.com/ministryofgroove" target="_blank" class="hover:opacity-100 hover:text-gold transition-all"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="hover:opacity-100 hover:text-gold transition-all"><i class="fa-brands fa-tiktok"></i></a>
         </div>
-        <div class="text-center">
-            <p class="text-gold italic">M.O.G. © 2026 // TOTALITY v100.2.13</p>
-            <p class="text-[7px] mt-2 opacity-30">Custodians of the Digital Frequency</p>
-        </div>
+        <p class="text-gold italic">M.O.G. © 2026 // MPUMALANGA HQ</p>
         <div class="flex gap-10">
             <a href="/privacy.html" class="hover:text-gold transition-colors">Privacy</a>
             <a href="/tos.html" class="hover:text-gold transition-colors">Terms</a>
         </div>
-    </footer>
-
+            </footer>
+            
     <script>
         const CFG = { 
-            U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
-            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" 
+            U: "https://hzelmkthdqtbcxffsstl.supabase.co", 
+            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY" 
         };
         const db = window.supabase.createClient(CFG.U, CFG.K);
         let logoClicks = 0;
@@ -214,7 +207,7 @@
                     provider: 'google', options: { redirectTo: cleanRedirect, queryParams: { prompt: 'select_account' } } 
                 });
                 if (error) throw error;
-            } catch (err) { alert("Neural Handshake Severed: Check Supabase Dashboard Connectivity."); }
+            } catch (err) { alert("Neural Handshake Severed: Check Connectivity."); }
         }
 
         async function loginOperative() {
