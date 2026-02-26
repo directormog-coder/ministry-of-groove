@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.8</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.8.6</title>
     
+    <link rel="manifest" href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/manifest.json">
+    <meta name="theme-color" content="#050505">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -20,6 +23,29 @@
 
         html, body { min-height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: #fff; }
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Inter', sans-serif; box-sizing: border-box; }
+
+        /* CIRCULAR SPLASH SCREEN */
+        #splash-screen {
+            position: fixed; inset: 0; z-index: 99999;
+            background: var(--mog-black);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1s ease-out, visibility 1s;
+        }
+
+        .splash-logo-container {
+            width: 200px; height: 200px;
+            /* ISOLATING THE CIRCULAR CORE ONLY */
+            clip-path: circle(50% at 50% 50%);
+            border-radius: 50%;
+            border: 2px solid var(--mog-gold);
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
+            animation: pulse-glow 2s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            from { transform: scale(0.95); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
+            to { transform: scale(1.05); box-shadow: 0 0 60px rgba(0, 212, 255, 0.4); }
+        }
 
         /* CYBER-CIRCUITRY BACKGROUND (55% VISIBILITY) */
         #bg-canvas {
@@ -55,27 +81,40 @@
         }
 
         .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 40px; overflow: hidden; display: flex; flex-direction: column; backdrop-filter: blur(25px); box-shadow: 0 40px 80px rgba(0,0,0,0.6); }
-        
         #side-drawer { visibility: hidden; pointer-events: none; }
         #side-drawer.translate-x-0 { visibility: visible; pointer-events: auto; }
-
-        .ticker-wrap { height: 35px; background: #000; border-bottom: 1px solid var(--mog-border); overflow: hidden; display: flex; align-items: center; z-index: 100; }
-        .ticker-move { white-space: nowrap; animation: ticker 45s linear infinite; font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--mog-blue); letter-spacing: 2px; }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
         header { height: 140px; border-bottom: 1px solid rgba(0, 212, 255, 0.1); background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); z-index: 1000; }
-        
         .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 2px solid var(--mog-border); padding: 20px 0; color: #fff; width: 100%; outline: none; margin-bottom: 20px; font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; }
         .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 15px; padding: 22px; width: 100%; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; }
     </style>
 </head>
 <body id="mog-totality">
 
+    <div id="splash-screen">
+        <div class="splash-logo-container">
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="w-full h-full object-cover">
+        </div>
+        <p class="mt-8 mono text-[10px] text-blue-400 tracking-[0.5em] uppercase animate-pulse">Initializing Totality...</p>
+    </div>
+
     <div id="bg-canvas"></div>
 
-    <div class="ticker-wrap">
-        <div class="ticker-move">TOTALITY v100.2.8 SYNCED // RAW CONTENT HANDSHAKE ACTIVE // CIRCUITRY: 55% // WITBANK HQ...</div>
-    </div>
+    <header class="px-12 flex justify-between items-center relative z-10 bg-black/40 border-b border-white/5 backdrop-blur-md">
+        <div class="flex items-center gap-6">
+            <button onclick="toggleDrawer()" class="text-blue-400 text-3xl hover:rotate-90 transition-transform active:scale-90">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+            <div class="flex items-center gap-6">
+                <div class="h-20 w-20 rounded-full border-2 border-blue-500/30 overflow-hidden shadow-[0_0_30px_rgba(0,212,255,0.2)] active:scale-95 transition-all">
+                    <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="w-full h-full object-cover cursor-pointer">
+                </div>
+                <div class="flex flex-col">
+                    <h1 id="main-title">Ministry of Groove</h1>
+                    <p class="slogan italic uppercase mt-1 ml-1 text-white">Custodians of sound and social architecture</p>
+                </div>
+            </div>
+        </div>
+    </header>
 
     <nav id="side-drawer" class="fixed top-0 right-0 h-full w-80 bg-black/95 backdrop-filter blur-2xl z-[10000] border-l border-blue-500/30 translate-x-full transition-transform duration-500 shadow-[-20px_0_60px_rgba(0,0,0,0.9)]">
         <div class="p-10 space-y-10">
@@ -84,37 +123,18 @@
                 <button onclick="toggleDrawer()" class="text-white opacity-40 hover:opacity-100"><i class="fa-solid fa-xmark text-2xl"></i></button>
             </div>
             <ul class="space-y-4 mono text-[13px] text-gray-400">
-                <li class="hover:text-blue-400 cursor-pointer p-2 border-b border-white/5 transition-colors"><i class="fa-solid fa-satellite mr-4"></i> SECTOR MAP</li>
-                <li class="hover:text-blue-400 cursor-pointer p-2 border-b border-white/5 transition-colors"><i class="fa-solid fa-id-card mr-4"></i> ID MATRIX</li>
+                <li class="hover:text-blue-400 cursor-pointer p-2 border-b border-white/5 transition-colors">SECTOR MAP</li>
+                <li class="hover:text-blue-400 cursor-pointer p-2 border-b border-white/5 transition-colors">ID MATRIX</li>
             </ul>
         </div>
     </nav>
 
-    <header class="px-12 flex justify-between items-center relative z-10 bg-black/40 border-b border-white/5 backdrop-blur-md">
-        <div class="flex items-center gap-6">
-            <button onclick="toggleDrawer()" class="text-blue-400 text-3xl hover:rotate-90 transition-transform active:scale-90">
-                <i class="fa-solid fa-bars-staggered"></i>
-            </button>
-            <div class="flex items-center gap-6">
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-20 w-20 rounded-full border-2 border-blue-500/30 shadow-[0_0_30px_rgba(0,212,255,0.2)] cursor-pointer" alt="MOG Logo">
-                <div class="flex flex-col">
-                    <h1 id="main-title">Ministry of Groove</h1>
-                    <p class="slogan italic uppercase mt-1 ml-1 text-white">Custodians of sound and social architecture</p>
-                </div>
-            </div>
-        </div>
-    </header>
-    
     <main class="mainframe-wrapper relative z-10">
         <section class="command-tile area-gateway p-12" style="grid-area: gateway;">
             <div id="signin-fields">
                 <input id="login-user" type="text" placeholder="OPERATIVE_ID" class="mog-input">
                 <input id="login-pass" type="password" placeholder="PASSCODE" class="mog-input">
                 <button onclick="loginOperative()" class="master-btn mt-4">Authorize</button>
-            </div>
-            <div id="active-op-badge" class="hidden text-center">
-                <div id="qrcode" class="bg-white p-4 rounded-xl inline-block mb-4"></div>
-                <h2 id="display-op-id" class="text-3xl font-black italic uppercase">OPERATIVE</h2>
             </div>
         </section>
 
@@ -132,9 +152,16 @@
     <script>
         const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
         const db = window.supabase.createClient(CFG.U, CFG.K);
-        let logoClicks = 0;
 
-        // AUDIO PROTOCOL: REPOSITORY FILENAME SYNC (UNDERSCORE)
+        // SPLASH LOGIC
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.style.opacity = '0';
+                setTimeout(() => { splash.style.visibility = 'hidden'; }, 1000);
+            }, 2500);
+        });
+
         const player = new Audio("https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3");
 
         function toggleDrawer() {
@@ -155,21 +182,7 @@
             const u = document.getElementById('login-user').value;
             const p = document.getElementById('login-pass').value;
             const { data, error } = await db.auth.signInWithPassword({ email: u.includes('@') ? u : `${u}@mog.internal`, password: p });
-            if(!error) {
-                document.getElementById('signin-fields').classList.add('hidden');
-                document.getElementById('active-op-badge').classList.remove('hidden');
-                document.getElementById('display-op-id').innerText = u.split('@')[0];
-                new QRCode(document.getElementById("qrcode"), { text: "MOG-"+data.user.id, width: 150, height: 150 });
-            }
-        }
-
-        function handleLogoSequence() {
-            logoClicks++;
-            if (logoClicks === 5) { 
-                const p = prompt("BYPASS_KEY:");
-                if(p === '7486' || p === '@MOGProtocol2026') { document.getElementById('director-wealth').classList.remove('hidden'); }
-            }
-            setTimeout(() => { logoClicks = 0; }, 5000);
+            if(!error) { alert("Operative Authorized."); }
         }
     </script>
 </body>
