@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.34</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.35</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -20,7 +20,7 @@
         html, body { min-height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: #fff; }
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Inter', sans-serif; }
 
-        /* CYBER-CIRCUITRY BACKGROUND (RESTORED) */
+        /* RESTORED CYBER-CIRCUITRY BACKGROUND */
         #bg-canvas {
             position: fixed; inset: 0; z-index: -1;
             background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.12) 0%, transparent 70%),
@@ -28,25 +28,7 @@
             background-size: 400px 400px; opacity: 0.55;
         }
 
-        /* HEADER ARCHITECTURE (TRIPLE-ELEMENT FLEX) */
-        header {
-            padding: 1.5rem 3rem; background: rgba(0,0,0,0.7); backdrop-filter: blur(25px);
-            border-bottom: 1px solid var(--mog-border); position: sticky; top: 0; z-index: 1000;
-        }
-        .header-container { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
-        .brand-section { display: flex; align-items: center; gap: 1.25rem; }
-        #main-title {
-            font-family: 'Big Shoulders Display', sans-serif !important;
-            font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1;
-            background: linear-gradient(to bottom, #fff 20%, var(--mog-gold) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .status-badge {
-            background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3);
-            padding: 0.5rem 1.25rem; border-radius: 99px; display: flex; align-items: center; gap: 0.75rem;
-        }
-
-        /* MAINFRAME LAYOUT (V70 TRI-COLUMN) */
+        /* RESTORED TRI-COLUMN MAINFRAME */
         .mainframe-wrapper {
             display: grid; padding: 30px; gap: 30px;
             grid-template-columns: 1.2fr 1.6fr 1fr;
@@ -57,21 +39,28 @@
 
         .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 45px; overflow: hidden; backdrop-filter: blur(40px); position: relative; }
         
-        /* 8-DIGIT HARD-LOCK GATE */
+        #main-title {
+            font-family: 'Big Shoulders Display', sans-serif !important;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            background: linear-gradient(to bottom, #fff 20%, var(--mog-gold) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        /* 8-DIGIT OTP GATE */
         #otp-gate { position: fixed; inset: 0; z-index: 9999; background: #000; display: none; flex-direction: column; align-items: center; justify-content: center; }
         .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 2px solid var(--mog-border); padding: 18px 0; color: #fff; width: 100%; outline: none; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; }
-        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 18px; padding: 22px; width: 100%; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; }
+        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 18px; padding: 22px; width: 100%; text-transform: uppercase; cursor: pointer; }
 
-        /* SIDEBAR & BUBBLES */
         #side-menu { position: fixed; top: 0; right: -400px; width: 400px; height: 100%; background: #050505; border-left: 2px solid var(--mog-border); z-index: 5000; padding: 50px; }
         #side-menu.active { right: 0; }
+        
         .mog-bubble { background: rgba(0, 212, 255, 0.08); border: 1px solid rgba(0, 212, 255, 0.15); border-radius: 20px; padding: 15px; font-size: 14px; color: #eee; margin-bottom: 10px; }
-
+        
         .director-only { display: none !important; }
         .director-active .director-only { display: flex !important; }
     </style>
 </head>
-<body>
+<body class="pb-40">
 
     <div id="bg-canvas"></div>
 
@@ -87,12 +76,12 @@
     <div id="side-menu">
         <button onclick="toggleMenu()" class="text-white text-4xl mb-16"><i class="fa-solid fa-xmark"></i></button>
         <nav>
-            <p class="text-[10px] uppercase tracking-widest text-zinc-500 font-black mb-10">System Access</p>
-            <a href="#" class="block text-2xl font-black italic uppercase text-white mb-6 hover:text-gold">Intel Archive</a>
-            <div class="mt-20 pt-10 border-t border-white/10">
+            <p class="text-[10px] uppercase tracking-widest text-zinc-500 font-black mb-10 text-center underline">System Navigation</p>
+            <a href="#" class="block text-2xl font-black italic uppercase text-white mb-6 hover:text-gold transition-all">Intel Archive</a>
+            <div class="mt-20 pt-10 border-t border-white/10 text-center">
                 <p class="text-sm text-gold font-bold italic">Middelburg HQ // RSA</p>
                 <div class="mt-8 p-4 bg-white/5 rounded-2xl border border-white/10">
-                    <span class="text-[9px] uppercase font-black text-blue-400 block mb-2 text-center">Mandate Mix v1.0</span>
+                    <span class="text-[9px] uppercase font-black text-blue-400 block mb-2">Mandate Mix v1.0</span>
                     <audio id="mandate-player" controls class="w-full h-8 opacity-40">
                         <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" type="audio/mpeg">
                     </audio>
@@ -101,23 +90,22 @@
         </nav>
     </div>
 
-    <header>
-        <div class="header-container">
-            <div class="brand-section">
+    <header class="px-12 py-8 bg-black/60 border-b border-white/10 backdrop-blur-2xl sticky top-0 z-[1000]">
+        <div class="flex flex-wrap items-center justify-between gap-6">
+            <div class="flex items-center gap-6">
                 <button onclick="toggleMenu()" class="text-blue-400 text-2xl p-4 bg-white/5 rounded-2xl hover:bg-white/10 transition-all"><i class="fa-solid fa-bars-staggered"></i></button>
-                <img id="main-logo" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleDirectorSequence()" class="h-16 w-16 md:h-20 md:w-20 rounded-full border-2 border-blue-500/30 shadow-2xl">
+                <img id="main-logo" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleDirectorSequence()" class="h-20 w-20 rounded-full border-2 border-blue-500/30 shadow-2xl">
                 <div>
                     <h1 id="main-title">Ministry of Groove</h1>
                     <p class="text-[9px] font-black uppercase tracking-[0.4em] text-zinc-500">Sovereign Custodians of Sound</p>
                 </div>
             </div>
-
-            <div class="status-badge">
-                <div class="flex flex-col items-center">
-                    <span id="op-counter" class="text-gold font-black text-2xl leading-none">1</span>
-                    <span class="text-[7px] uppercase text-white/50 tracking-tighter">Live Operatives</span>
+            <div class="flex items-center gap-6 bg-white/5 px-6 py-4 rounded-full border border-white/10">
+                <div class="text-center px-4">
+                    <span id="op-counter" class="text-gold font-black text-2xl">1</span>
+                    <span class="text-[7px] uppercase block text-zinc-500">Live Operatives</span>
                 </div>
-                <div class="h-8 w-[1px] bg-white/10 mx-2"></div>
+                <div class="w-[1px] h-8 bg-white/10"></div>
                 <button onclick="loginWithGoogle()" class="text-[9px] bg-white text-black px-6 py-2 rounded-full font-black uppercase hover:bg-gold transition-all">Google Link</button>
             </div>
         </div>
@@ -126,39 +114,56 @@
     <main class="mainframe-wrapper">
         <section class="command-tile p-12 flex flex-col justify-center" style="grid-area: gateway;">
             <div id="auth-ui">
-                <input id="manual-email" type="email" placeholder="OPERATIVE_EMAIL" class="mog-input mb-4">
-                <button onclick="requestManualCode()" class="master-btn">Authorize</button>
+                <span class="text-[11px] font-black text-blue-400 uppercase tracking-widest block mb-6 text-center">Neural Identity Matrix</span>
+                <input id="manual-email" type="email" placeholder="OPERATIVE_EMAIL" class="mog-input">
+                <button onclick="requestManualCode()" class="master-btn mt-6">Authorize</button>
             </div>
-            <div id="op-badge" class="hidden text-center">
+            <div id="op-badge" class="hidden text-center animate-fade-in">
                 <div id="qrcode-container" class="bg-white p-4 rounded-3xl inline-block border-4 border-gold shadow-2xl">
                     <div id="qrcode"></div>
                 </div>
-                <h2 id="op-display-id" class="text-3xl font-black italic uppercase text-gold mt-6 tracking-tighter">OPERATIVE</h2>
+                <h2 id="op-display-id" class="text-4xl font-black italic uppercase text-gold mt-6 tracking-tighter">OPERATIVE</h2>
             </div>
-            <div class="director-only flex-col mt-8 pt-8 border-t border-white/5 space-y-4">
-                <div class="bg-black/60 rounded-3xl p-6 border border-white/5 text-[10px] text-zinc-400">
-                    <span class="text-gold uppercase font-black underline mb-3 block text-center">Realtime Diagnostics</span>
-                    <div class="flex justify-between"><span>Hub:</span><span>hzelmkthdqtbcxffsstl</span></div>
-                </div>
+            <div class="director-only mt-8 pt-8 border-t border-white/5 space-y-4">
                 <a href="/origin54.html" class="master-btn text-center text-[10px] py-4 bg-zinc-900 border border-gold/40 text-white">Origin 54 Switcher</a>
             </div>
         </section>
 
         <section class="command-tile min-h-[700px] flex flex-col" style="grid-area: messenger;">
+            <div class="relative h-64 w-full overflow-hidden">
+                <video muted loop autoplay class="w-full h-full object-cover opacity-60">
+                    <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/1000211769.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+            </div>
             <div id="chat-stream" class="flex-grow p-10 overflow-y-auto space-y-4"></div>
             <div class="p-8 bg-black/50 flex gap-4 border-t border-white/5">
-                <input type="text" id="chat-input" placeholder="Transmit thought..." class="flex-grow bg-white/5 border border-white/10 rounded-full px-8 py-4 outline-none">
-                <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-xl"><i class="fa-solid fa-paper-plane"></i></button>
+                <input type="text" id="chat-input" placeholder="Transmit packet..." class="flex-grow bg-white/5 border border-white/10 rounded-full px-8 py-4 outline-none">
+                <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-xl"><i class="fa-solid fa-paper-plane text-xl"></i></button>
             </div>
         </section>
 
         <section class="command-tile h-96" style="grid-area: radar;">
             <iframe class="w-full h-full grayscale invert opacity-20 scale-[2.5] pointer-events-none" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115160.03859664426!2d29.408713!3d-25.772592!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ebdf4f280e7c53d%3A0x676b7e53f93c8d3d!2sMiddelburg!5e0!3m2!1sen!2sza!4v17100000000001"></iframe>
         </section>
+
         <section class="command-tile p-10 h-96" style="grid-area: hitlist;">
             <iframe class="rounded-3xl w-full h-full opacity-70 grayscale hover:grayscale-0 transition-all shadow-2xl" src="https://www.youtube.com/embed/videoseries?list=PL4fGSI1pDJn6jxsM-tS2j8nS_kK0qO7yG" frameborder="0"></iframe>
         </section>
+
+        <section class="command-tile p-10 col-span-full mt-6" style="grid-area: extra;">
+             <span class="text-[11px] font-black text-blue-400 uppercase italic mb-8 block underline tracking-[0.4em]">Visual Intel Archive</span>
+             <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6"></div>
+        </section>
     </main>
+
+    <footer class="fixed bottom-0 w-full bg-black/95 border-t border-gold/20 py-8 px-16 z-[2000] flex justify-between items-center text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500">
+        <div class="flex gap-14 text-white text-3xl opacity-40">
+            <a href="https://instagram.com/ministryofgroove" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://tiktok.com/@ministryofgroove" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+        <p class="text-gold italic font-black">M.O.G. © 2026 // MPUMALANGA HQ</p>
+    </footer>
 
     <script>
         const CFG = { 
@@ -206,7 +211,7 @@
             });
         }
 
-        // REALTIME PRESENCE & MESSENGER
+        /** REALTIME SYNC **/
         const channel = db.channel('online-operatives');
         channel.on('presence', { event: 'sync' }, () => {
             document.getElementById('op-counter').innerText = Object.keys(channel.presenceState()).length;
@@ -217,20 +222,6 @@
             }
         });
 
-        async function fetchMessages() {
-            const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
-            if (data) data.forEach(msg => appendMessage(msg));
-        }
-
-        function appendMessage(msg) {
-            const stream = document.getElementById('chat-stream');
-            const div = document.createElement('div');
-            div.className = "mog-bubble animate-fade-in";
-            div.innerHTML = `<span class="text-gold font-black uppercase text-[10px] block mb-1">${msg.alias}</span>${msg.content}`;
-            stream.appendChild(div);
-            stream.scrollTop = stream.scrollHeight;
-        }
-
         async function sendPacket() {
             const input = document.getElementById('chat-input');
             const { data: { user } } = await db.auth.getUser();
@@ -240,7 +231,12 @@
         }
 
         db.channel('public:messages').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
-            appendMessage(payload.new);
+            const stream = document.getElementById('chat-stream');
+            const div = document.createElement('div');
+            div.className = "mog-bubble animate-fade-in";
+            div.innerHTML = `<span class="text-gold font-black uppercase text-[10px] block mb-1">${payload.new.alias}</span>${payload.new.content}`;
+            stream.appendChild(div);
+            stream.scrollTop = stream.scrollHeight;
         }).subscribe();
 
         async function checkSecurity() {
@@ -254,14 +250,21 @@
                     document.getElementById('op-display-id').innerText = user.email.split('@')[0];
                     generateMogQR(user.id);
                     if(user.email === 'director.mog@gmail.com') document.documentElement.classList.add('director-active');
-                    fetchMessages();
+                    const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
+                    if (data) data.forEach(msg => {
+                        const stream = document.getElementById('chat-stream');
+                        const div = document.createElement('div');
+                        div.className = "mog-bubble";
+                        div.innerHTML = `<span class="text-gold font-black uppercase text-[10px] block mb-1">${msg.alias}</span>${msg.content}`;
+                        stream.appendChild(div);
+                    });
                 }
             }
         }
 
         function handleDirectorSequence() {
             logoClicks++;
-            if(logoClicks === 5) { document.documentElement.classList.add('director-active'); alert("DIRECTORATE UNLOCKED"); logoClicks = 0; }
+            if(logoClicks === 5) { document.documentElement.classList.add('director-active'); logoClicks = 0; }
             setTimeout(() => logoClicks = 0, 5000);
         }
 
