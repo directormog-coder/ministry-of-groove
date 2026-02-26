@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.43</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.66</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -15,219 +15,192 @@
         :root { 
             --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; 
             --mog-glass: rgba(5, 12, 20, 0.95); --mog-border: rgba(0, 212, 255, 0.3);
-            --mog-neon-blue: rgba(0, 212, 255, 0.6);
+            --mog-neon-blue: rgba(0, 212, 255, 0.6); --mog-silver: #C0C0C0;
         }
 
-        html, body { min-height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: #fff; }
-        * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Inter', sans-serif; }
+        html, body { min-height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: #fff; scroll-behavior: smooth; }
+        * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 
-        /* CYBER-CIRCUITRY BACKGROUND */
-        #bg-canvas {
-            position: fixed; inset: 0; z-index: -1;
-            background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.12) 0%, transparent 70%),
-                url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 L20 50 L30 40 L50 40' fill='none' stroke='rgba(0,212,255,0.15)' stroke-width='0.5'/%3E%3C/svg%3E");
-            background-size: 400px 400px; opacity: 0.55;
-        }
+        #bg-canvas { position: fixed; inset: 0; z-index: -1; background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.12) 0%, transparent 70%), url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 L20 50 L30 40 L50 40' fill='none' stroke='rgba(0,212,255,0.15)' stroke-width='0.5'/%3E%3C/svg%3E"); background-size: 400px 400px; opacity: 0.55; }
 
-        /* PRE-FLIGHT IDENTITY MODAL */
-        #pre-flight-modal {
-            position: fixed; inset: 0; z-index: 9998; background: rgba(0,0,0,0.95);
-            display: none; flex-direction: column; align-items: center; justify-content: center;
-            backdrop-filter: blur(30px);
+        .mainframe-wrapper { 
+            display: grid; padding: 30px; gap: 30px; 
+            grid-template-columns: 1.2fr 1.6fr 1fr; 
+            grid-template-areas: "gateway messenger chart" "location messenger vault" "history messenger requests" "director director director"; 
+            max-width: 1900px; margin: 0 auto; 
         }
-
-        /* MAINFRAME GRID */
-        .mainframe-wrapper {
-            display: grid; padding: 30px; gap: 30px;
-            grid-template-columns: 1.2fr 1.6fr 1fr;
-            grid-template-areas: "gateway messenger radar" "extra messenger hitlist";
-            max-width: 1900px; margin: 0 auto;
-        }
-        @media (max-width: 1200px) { .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "hitlist" "radar" "extra"; } }
+        @media (max-width: 1200px) { .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "chart" "location" "vault" "history" "requests" "director"; } }
 
         .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 45px; overflow: hidden; backdrop-filter: blur(40px); position: relative; }
-        
-        /* LOGO ORBITAL RING */
-        .logo-wrapper {
-            position: relative; padding: 8px; border-radius: 50%;
-            background: conic-gradient(from 0deg, var(--mog-gold), var(--mog-blue), var(--mog-gold));
-            box-shadow: 0 0 25px var(--mog-neon-blue);
-            animation: rotate-orbit 10s linear infinite;
-        }
+        .logo-wrapper { position: relative; padding: 8px; border-radius: 50%; background: conic-gradient(from 0deg, var(--mog-gold), var(--mog-blue), var(--mog-gold)); box-shadow: 0 0 25px var(--mog-neon-blue); animation: rotate-orbit 10s linear infinite; }
         @keyframes rotate-orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        #main-title { font-family: 'Big Shoulders Display', sans-serif !important; font-size: clamp(2rem, 5vw, 3.5rem); background: linear-gradient(to bottom, #fff 20%, var(--mog-gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 2px solid var(--mog-border); padding: 18px 0; color: #fff; width: 100%; outline: none; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; }
-        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 18px; padding: 22px; width: 100%; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; }
-
-        #qrcode-container { background: #fff; padding: 20px; border-radius: 35px; border: 4px solid var(--mog-blue); display: inline-block; box-shadow: 0 0 40px var(--mog-neon-blue); }
-        #otp-gate { position: fixed; inset: 0; z-index: 9999; background: #000; display: none; flex-direction: column; align-items: center; justify-content: center; }
         
-        /* SOCIAL FOOTER ICONS */
-        .social-link { font-size: 1.4rem; color: rgba(255,255,255,0.4); transition: all 0.4s; }
-        .social-link:hover { color: var(--mog-gold); transform: translateY(-5px); text-shadow: 0 0 15px var(--mog-gold); }
+        #countdown-hub { background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); padding: 5px 20px; border-radius: 50px; display: none; align-items: center; gap: 12px; }
+        #live-siren, #ascension-overlay, #broadcast-overlay { position: fixed; inset: 0; z-index: 10001; background: rgba(0,0,0,0.96); display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(80px); }
+        
+        .director-active #director-tile { display: block; }
+        #director-tile { grid-area: director; display: none; border: 2px solid #ef4444; background: rgba(239, 68, 68, 0.05); margin-top: 20px; }
 
-        .mog-bubble { background: rgba(0, 212, 255, 0.08); border: 1px solid var(--mog-border); border-radius: 20px; padding: 15px; font-size: 14px; color: #eee; margin-bottom: 10px; }
-        .intel-card { border-radius: 25px; overflow: hidden; border: 1px solid var(--mog-border); background: #000; transition: transform 0.5s; position: relative; }
-        .intel-card:hover { transform: translateY(-10px); border-color: var(--mog-gold); }
+        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 18px; padding: 20px; width: 100%; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; font-size: 11px; }
+        .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 1px solid var(--mog-border); padding: 15px 0; color: #fff; width: 100%; outline: none; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+        
+        .vault-item { background: #000; border: 1px solid var(--mog-border); border-radius: 20px; overflow: hidden; margin-bottom: 15px; }
+        .vlog-badge { border: 2px solid var(--mog-gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
+        .social-link { font-size: 1.2rem; color: rgba(255,255,255,0.4); transition: 0.4s; }
+        .social-link:hover { color: var(--mog-gold); transform: translateY(-5px); }
     </style>
 </head>
 <body class="pb-40">
-
     <div id="bg-canvas"></div>
 
-    <div id="pre-flight-modal">
-        <div class="command-tile p-12 max-w-md w-full text-center border-blue-500/30">
-            <div class="mb-8 flex justify-center"><div class="logo-wrapper w-24 h-24 flex items-center justify-center bg-black rounded-full"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="w-20 h-20 rounded-full"></div></div>
-            <h2 class="text-2xl font-black italic uppercase text-white mb-2 tracking-tighter">Welcome, <span id="greet-alias" class="text-gold">Operative</span></h2>
-            <p class="text-[10px] text-zinc-500 uppercase tracking-widest mb-10 leading-relaxed">Initiating Neural Handshake...<br>Transmit 8-digit access code?</p>
-            <div class="space-y-4">
-                <button onclick="confirmInitiateOTP()" class="master-btn w-full">Yes, Transmit Code</button>
-                <button onclick="abortSession()" class="text-[10px] font-black uppercase text-zinc-600 hover:text-red-500">No, Terminate Request</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="otp-gate">
-        <div class="command-tile p-12 max-w-md w-full text-center border-gold">
-            <span class="text-[10px] font-black text-blue-400 uppercase tracking-widest block mb-4">Neural Handshake Protocol</span>
-            <h2 class="text-2xl font-black italic uppercase text-white mb-8">Enter 8-Digit Code</h2>
-            <input id="otp-code-input" type="text" maxlength="8" placeholder="00000000" class="mog-input tracking-[0.5em] mb-6">
-            <button onclick="verifyNeuralCode()" class="master-btn">Confirm Identity</button>
-            <div onclick="abortSession()" class="text-zinc-500 text-[10px] font-black uppercase mt-8 cursor-pointer hover:text-red-500">← Return</div>
-        </div>
-    </div>
+    <div id="live-siren"><div class="relative text-center z-10"><h1 class="text-blue-400 font-black italic text-5xl uppercase mb-4">Transmission Live</h1><button onclick="document.getElementById('live-siren').style.display='none'" class="master-btn px-20">Enter Frequency</button></div></div>
+    <div id="ascension-overlay"><div class="text-center"><h1 class="text-gold font-black italic text-6xl uppercase mb-4 animate-bounce">Ascension</h1><p id="ascension-msg" class="text-white uppercase tracking-widest text-sm mb-12">Tier Status Upgraded</p><button onclick="document.getElementById('ascension-overlay').style.display='none'" class="master-btn px-20">Acknowledge</button></div></div>
+    <div id="broadcast-overlay"><div class="command-tile p-16 max-w-2xl w-full text-center border-gold"><span class="text-gold font-black uppercase text-xs mb-6 block tracking-[0.5em]">Director Signal</span><h2 id="broadcast-msg-display" class="text-3xl font-black italic text-white mb-12 uppercase"></h2><button onclick="document.getElementById('broadcast-overlay').style.display='none'" class="master-btn w-full">Close Feed</button></div></div>
 
     <header class="px-12 py-8 bg-black/60 border-b border-white/10 backdrop-blur-2xl sticky top-0 z-[1000]">
-        <div class="header-container flex flex-wrap items-center justify-between gap-6">
-            <div class="brand-section flex items-center gap-6">
-                <div class="logo-wrapper"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleDirectorSequence()" class="h-16 w-16 md:h-20 md:w-20 rounded-full"></div>
-                <div><h1 id="main-title">Ministry of Groove</h1><p class="text-[9px] font-black uppercase tracking-[0.4em] text-zinc-500 italic">Sovereign Custodians of Sound</p></div>
+        <div class="flex flex-wrap items-center justify-between gap-6">
+            <div class="flex items-center gap-6">
+                <div class="logo-wrapper" onclick="handleDirectorSequence()"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 md:h-20 md:w-20 rounded-full cursor-pointer"></div>
+                <h1 class="text-4xl font-black italic uppercase text-white tracking-tighter" style="font-family: 'Big Shoulders Display';">M.O.G.</h1>
             </div>
+            <div id="countdown-hub"><span id="timer-display" class="font-mono text-blue-400 text-sm font-bold">00:00:00:00</span></div>
             <div class="status-badge flex items-center gap-6 bg-white/5 px-6 py-4 rounded-full border border-white/10">
-                <div class="text-center px-4 border-r border-white/10"><span id="op-counter" class="text-gold font-black text-2xl leading-none">1</span><span class="text-[7px] uppercase block text-zinc-500">Operatives</span></div>
-                <button onclick="loginWithGoogle()" class="text-[9px] bg-white text-black px-6 py-2 rounded-full font-black uppercase hover:bg-gold transition-all">Google Link</button>
-                <button onclick="initiateLogout()" class="text-red-500"><i class="fa-solid fa-power-off"></i></button>
+                <span id="op-counter" class="text-gold font-black text-2xl">0</span>
+                <button onclick="initiateLogout()" class="text-red-500 hover:scale-125 transition-all"><i class="fa-solid fa-power-off"></i></button>
             </div>
         </div>
     </header>
 
     <main class="mainframe-wrapper">
         <section class="command-tile p-12 flex flex-col justify-center" style="grid-area: gateway;">
-            <div id="auth-ui"><span class="text-[11px] font-black text-blue-400 uppercase tracking-widest block mb-6 text-center">Neural Identity Matrix</span><input id="manual-email" type="email" placeholder="OPERATIVE_EMAIL" class="mog-input"><button onclick="requestManualCode()" class="master-btn mt-6">Authorize</button></div>
-            <div id="op-badge" class="hidden text-center animate-fade-in"><div id="qrcode-container"><div id="qrcode"></div></div><h2 id="op-display-id" class="text-4xl font-black italic uppercase text-gold mt-6 tracking-tighter">OPERATIVE</h2></div>
+            <div id="op-badge" class="text-center">
+                <div id="qrcode-container" class="bg-white p-4 rounded-3xl inline-block border-4 transition-all duration-1000"><div id="qrcode"></div></div>
+                <h2 id="op-display-id" class="text-2xl font-black italic uppercase text-white mt-6">OPERATIVE</h2>
+                <div id="tier-tag" class="text-[8px] font-black uppercase mt-2 py-1 px-4 rounded-full inline-block">Novice Status</div>
+            </div>
         </section>
 
         <section class="command-tile min-h-[700px] flex flex-col" style="grid-area: messenger;">
-            <div id="chat-stream" class="flex-grow p-10 overflow-y-auto space-y-4"></div>
-            <div class="p-8 bg-black/50 flex gap-4 border-t border-white/5"><input type="text" id="chat-input" placeholder="Transmit thought..." class="flex-grow bg-white/5 border border-white/10 rounded-full px-8 py-4 outline-none"><button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-xl"><i class="fa-solid fa-paper-plane text-xl"></i></button></div>
+            <div id="chat-stream" class="flex-grow p-10 overflow-y-auto"></div>
+            <div class="p-8 bg-black/50 flex gap-4 border-t border-white/5">
+                <input type="text" id="chat-input" placeholder="Transmit thought..." class="flex-grow bg-white/5 border border-white/10 rounded-full px-8 py-4 outline-none">
+                <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-xl"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
         </section>
 
-        <section class="command-tile h-96" style="grid-area: radar;"><iframe class="w-full h-full grayscale invert opacity-20 scale-[2.5] pointer-events-none" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115160.03859664426!2d29.408713!3d-25.772592!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ebdf4f280e7c53d%3A0x676b7e53f93c8d3d!2sMiddelburg!5e0!3m2!1sen!2sza!4v17100000000001"></iframe></section>
-        <section class="command-tile p-10 h-96" style="grid-area: hitlist;"><iframe class="rounded-3xl w-full h-full opacity-70 grayscale hover:grayscale-0 transition-all shadow-2xl" src="https://www.youtube.com/embed/videoseries?list=PL4fGSI1pDJn6jxsM-tS2j8nS_kK0qO7yG" frameborder="0"></iframe></section>
-        
-        <section class="command-tile p-10 col-span-full mt-6" style="grid-area: extra;">
-             <span class="text-[11px] font-black text-blue-400 uppercase italic mb-8 block underline">Visual Intel Archive // ORIGIN 54 Collective</span>
-             <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
+        <section class="command-tile p-10 overflow-y-auto" style="grid-area: chart;"><span class="text-[11px] font-black text-gold uppercase italic mb-6 block underline tracking-[0.4em]">Sovereign Chart Index</span><div id="chart-index" class="space-y-4"></div></section>
+
+        <section class="command-tile p-10 h-64 overflow-y-auto" style="grid-area: location;"><span class="text-[11px] font-black text-blue-400 uppercase italic mb-6 block underline">Sector Coordinates</span><div id="location-node-container" class="space-y-4"></div></section>
+
+        <section class="command-tile p-10 overflow-y-auto h-96" style="grid-area: vault;"><span class="text-[11px] font-black text-blue-400 uppercase italic mb-6 block underline">Visual Intel Vault</span><div id="vault-content" class="space-y-6"></div></section>
+
+        <section class="command-tile p-10 h-96 overflow-y-auto" style="grid-area: history;"><span class="text-[11px] font-black text-gold uppercase italic mb-6 block underline">Private Set Archive</span><div id="setlist-container" class="space-y-4"></div></section>
+
+        <section class="command-tile p-10" style="grid-area: requests;"><span class="text-[11px] font-black text-blue-400 uppercase italic mb-4 block underline">Booth Request Line</span><input id="track-request-input" class="mog-input mb-4" placeholder="Artist - Track Name"><button onclick="sendRequest()" class="master-btn py-4">Send Request</button></section>
+
+        <section id="director-tile" class="command-tile p-12 col-span-full border-red-500/40">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                <div class="bg-black/40 p-8 rounded-3xl border border-red-500/20">
+                    <h2 class="text-red-500 font-black italic text-xl uppercase mb-6">Master Console</h2>
+                    <button onclick="triggerLiveSiren()" class="bg-blue-600 text-white w-full py-4 rounded-xl font-black text-xs mb-4">Siren Trigger</button>
+                    <input id="target-datetime" type="datetime-local" class="mog-input mb-4">
+                    <button onclick="setTemporalTarget()" class="bg-gold text-black w-full py-4 rounded-xl font-black text-xs">Set Sync Timer</button>
+                    <button onclick="broadcastSignal()" class="mt-4 text-[9px] text-zinc-500 font-black uppercase w-full">Transmit Signal</button>
+                </div>
+                <div class="bg-black/40 p-8 rounded-3xl border border-gold/20">
+                    <h2 class="text-gold font-black italic text-xl uppercase mb-6">Intel Deployment</h2>
+                    <input id="vault-url" class="mog-input mb-4" placeholder="URL"><input id="vault-title-in" class="mog-input mb-4" placeholder="Title">
+                    <select id="vault-type" class="w-full bg-black/50 border border-white/10 p-2 text-white text-[10px] mb-6 rounded-lg"><option value="SESSION">SESSION</option><option value="VLOG">DIRECTOR VLOG</option></select>
+                    <button onclick="deployVaultIntel()" class="bg-gold text-black w-full py-4 rounded-xl font-black text-xs">Deploy Intel</button>
+                </div>
+                <div id="request-inbox" class="bg-black/40 p-8 rounded-3xl border border-white/10 overflow-y-auto h-64"><h2 class="text-white font-black italic text-xl uppercase mb-6">Booth Requests</h2></div>
+            </div>
+            <div id="live-op-feed" class="mt-8 space-y-2"></div>
         </section>
     </main>
 
     <footer class="fixed bottom-0 w-full bg-black/95 border-t border-gold/20 py-8 px-16 z-[2000] flex justify-between items-center text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500">
-        <div class="flex flex-wrap gap-8 items-center">
+        <div class="flex gap-10">
             <a href="https://instagram.com/ministryofgroove" target="_blank" class="social-link"><i class="fa-brands fa-instagram"></i></a>
             <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
             <a href="https://facebook.com/ministryofgroove" target="_blank" class="social-link"><i class="fa-brands fa-facebook"></i></a>
-            <a href="https://youtube.com/@ministryofgroove" target="_blank" class="social-link"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://x.com/ministryofgroove" target="_blank" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="https://linkedin.com/company/ministryofgroove" target="_blank" class="social-link"><i class="fa-brands fa-linkedin-in"></i></a>
             <a href="mailto:director.mog@gmail.com" class="social-link"><i class="fa-solid fa-envelope"></i></a>
         </div>
-        <p class="text-gold italic font-black hidden sm:block">M.O.G. © 2026 // MPUMALANGA HQ</p>
+        <p class="text-gold italic font-black">M.O.G. © 2026 // MPUMALANGA HQ</p>
     </footer>
 
     <script>
         const CFG = { U: "https://hzelmkthdqtbcxffsstl.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY" };
         const db = window.supabase.createClient(CFG.U, CFG.K);
-        let logoClicks = 0; let pendingUserEmail = "";
+        let timerInterval, logoClicks = 0;
 
         async function checkSecurity() {
             const { data: { user } } = await db.auth.getUser();
-            if (user && sessionStorage.getItem('mog_handshake_verified') !== 'true') {
-                pendingUserEmail = user.email;
-                document.getElementById('greet-alias').innerText = user.email.split('@')[0];
-                document.getElementById('pre-flight-modal').style.display = 'flex';
-            } else if (user && sessionStorage.getItem('mog_handshake_verified') === 'true') { showSovereignGrid(user); }
+            if (user && sessionStorage.getItem('mog_handshake_verified') === 'true') { setupGrid(user); }
+            else { initiateLogout(); }
         }
 
-        async function confirmInitiateOTP() {
-            document.getElementById('pre-flight-modal').style.display = 'none';
-            sessionStorage.setItem('mog_pending_email', pendingUserEmail);
-            await db.auth.signInWithOtp({ email: pendingUserEmail });
-            document.getElementById('otp-gate').style.display = 'flex';
+        async function setupGrid(user) {
+            const alias = user.email.split('@')[0];
+            document.getElementById('op-display-id').innerText = alias;
+            if(user.email === 'director.mog@gmail.com') document.documentElement.classList.add('director-active');
+            
+            const { count } = await db.from('messages').select('*', { count: 'exact', head: true }).eq('alias', alias);
+            processTier(count, user.email, user.id);
+            fetchComms(); fetchHistory(); fetchVault(); fetchChartIndex(); fetchCoordinates();
+            if(user.email === 'director.mog@gmail.com') fetchRequests();
+    
+            db.channel('sovereign-totality').on('broadcast', { event: 'live-now' }, () => document.getElementById('live-siren').style.display = 'flex')
+                         .on('broadcast', { event: 'set-timer' }, p => startCountdown(p.payload.target))
+                         .on('broadcast', { event: 'alert' }, p => {
+                            if(Date.now() - p.payload.timestamp < 86400000) {
+                                document.getElementById('broadcast-msg-display').innerText = p.payload.msg;
+                                document.getElementById('broadcast-overlay').style.display = 'flex';
+                            }
+                         }).subscribe();
         }
 
-        async function verifyNeuralCode() {
-            const token = document.getElementById('otp-code-input').value.trim();
-            const email = sessionStorage.getItem('mog_pending_email');
-            const { error } = await db.auth.verifyOtp({ email, token, type: 'magiclink' });
-            if (!error) { sessionStorage.setItem('mog_handshake_verified', 'true'); location.reload(); } else { alert("NEURAL MISMATCH"); }
+        function processTier(count, email, userId) {
+            let color = "#00d4ff", label = "Novice", tClass = "tier-novice";
+            if (email === 'director.mog@gmail.com' || count >= 50) { color = "#D4AF37"; label = "Elite"; tClass = "tier-elite"; }
+            else if (count >= 10) { color = "#C0C0C0"; label = "Sentinel"; tClass = "tier-sentinel"; }
+            document.getElementById('qrcode-container').className = `bg-white p-4 rounded-3xl inline-block border-4 ${tClass}`;
+            document.getElementById('tier-tag').innerText = label + " Status";
+            document.getElementById('tier-tag').style.color = color;
+            new QRCode(document.getElementById("qrcode"), { text: "MOG-OP-" + userId, width: 200, height: 200, colorDark: color, colorLight: "#ffffff", logo: "https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png", logoWidth: 55, logoHeight: 55, quietZone: 12 });
         }
 
-        function abortSession() { sessionStorage.clear(); location.reload(); }
-        async function initiateLogout() { await db.auth.signOut(); sessionStorage.clear(); location.reload(); }
-
-        function showSovereignGrid(user) {
-            document.getElementById('auth-ui').classList.add('hidden');
-            document.getElementById('op-badge').classList.remove('hidden');
-            document.getElementById('op-display-id').innerText = user.email.split('@')[0];
-            generateMogQR(user.id);
-            deployIntelArchive();
-            fetchComms();
+        function startCountdown(target) {
+            document.getElementById('countdown-hub').style.display = 'flex';
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const dist = target - new Date().getTime();
+                if (dist < 0) { clearInterval(timerInterval); document.getElementById('live-siren').style.display = 'flex'; return; }
+                const h = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)), m = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60)), s = Math.floor((dist % (1000 * 60)) / 1000);
+                document.getElementById('timer-display').innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            }, 1000);
         }
 
-        function generateMogQR(userId) {
-            new QRCode(document.getElementById("qrcode"), {
-                text: "MOG-OP-" + userId, width: 240, height: 240, colorDark: "#D4AF37", colorLight: "#ffffff",
-                PO: "#00d4ff", PI: "#00d4ff", correctLevel: QRCode.CorrectLevel.H,
-                logo: "https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png",
-                logoWidth: 70, logoHeight: 70, quietZone: 15
-            });
-        }
+        // DIRECTOR COMMANDS
+        function triggerLiveSiren() { db.channel('sovereign-totality').send({ type: 'broadcast', event: 'live-now' }); }
+        function setTemporalTarget() { const target = document.getElementById('target-datetime').value; if(target) db.channel('sovereign-totality').send({ type: 'broadcast', event: 'set-timer', payload: { target: new Date(target).getTime() } }); }
+        async function deployVaultIntel() { const u = document.getElementById('vault-url').value, t = document.getElementById('vault-type').value, l = document.getElementById('vault-title-in').value; if(u) await db.from('messages').insert([{ content: `${u}|${l}|${t}`, alias: 'VAULT_ITEM' }]); location.reload(); }
 
-        function deployIntelArchive() {
-            const collection = [{ name: "Zulu Heritage Set", img: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800" },{ name: "Ashanti Gold Collective", img: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=800" },{ name: "Maasai Warrior Tracksuit", img: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800" }];
-            const grid = document.getElementById('gallery-grid');
-            collection.forEach(item => {
-                const card = document.createElement('div'); card.className = "intel-card h-80";
-                card.innerHTML = `<img src="${item.img}" class="w-full h-full object-cover opacity-70"><div class="absolute bottom-0 p-6 bg-black/80 w-full text-[10px] font-black uppercase text-gold">${item.name}</div>`;
-                grid.appendChild(card);
-            });
-        }
+        // FETCHERS
+        async function fetchVault() { const { data } = await db.from('messages').select('*').eq('alias', 'VAULT_ITEM').order('created_at', { ascending: false }); const v = document.getElementById('vault-content'); if(data) { v.innerHTML = ""; data.forEach(i => { const [url, title, type] = i.content.split('|'); const e = document.createElement('div'); e.className = `vault-item ${type === 'VLOG' ? 'vlog-badge' : ''}`; e.innerHTML = `<img src="${url}" class="w-full h-32 object-cover opacity-50"><p class="p-4 text-[9px] uppercase font-black">${title}</p>`; v.appendChild(e); }); } }
+        async function fetchChartIndex() { const { data } = await db.from('messages').select('*').eq('alias', 'YT_CHART').order('created_at', { ascending: false }).limit(10); const c = document.getElementById('chart-index'); if(data) { c.innerHTML = ""; data.forEach((i, x) => { const [n, v] = i.content.split('|'); const d = document.createElement('div'); d.className = "flex items-center gap-4 bg-white/5 p-4 rounded-xl cursor-pointer"; d.onclick = () => window.open(`https://www.youtube.com/watch?v=${v}`, '_blank'); d.innerHTML = `<span class="text-gold font-bold">#${x+1}</span><span class="text-[9px] uppercase">${n}</span>`; c.appendChild(d); }); } }
+        async function fetchCoordinates() { const { data } = await db.from('messages').select('*').eq('alias', 'SECTOR_LOC').limit(1); if(data && data[0]) { const [n, u] = data[0].content.split('|'); document.getElementById('location-node-container').innerHTML = `<div class="bg-blue-500/10 p-6 rounded-2xl border border-blue-500/20 cursor-pointer" onclick="window.open('${u}','_blank')"><p class="text-white font-black text-xs">${n}</p></div>`; } }
+        async function fetchSetArchive() { const { data } = await db.from('messages').select('*').eq('alias', 'SET_REFERENCE').order('created_at', { ascending: false }); const s = document.getElementById('setlist-container'); if(data) { s.innerHTML = ""; data.forEach(i => { const [t, l] = i.content.split('|'); const b = document.createElement('div'); b.className = "bg-white/5 p-4 rounded-2xl"; b.innerHTML = `<p class="text-white text-[10px] font-black underline mb-2">${t}</p><p class="text-zinc-500 text-[8px] uppercase">${l}</p>`; s.appendChild(b); }); } }
+        
+        async function sendPacket() { const i = document.getElementById('chat-input'); const { data: { user } } = await db.auth.getUser(); if (i.value && user) await db.from('messages').insert([{ content: i.value, alias: user.email.split('@')[0] }]); i.value = ""; }
+        function appendMessage(msg) { if(['REQ_','VAULT_ITEM','YT_CHART','SET_REFERENCE','SECTOR_LOC'].some(k => msg.alias.includes(k))) return; const s = document.getElementById('chat-stream'); const d = document.createElement('div'); d.className = "bg-white/5 p-4 rounded-2xl mb-4 border border-white/5"; d.innerHTML = `<span class="text-blue-400 font-black text-[9px] block mb-1">${msg.alias}</span>${msg.content}`; s.appendChild(d); s.scrollTop = s.scrollHeight; }
+        async function fetchComms() { const { data } = await db.from('messages').select('*').order('created_at', { ascending: true }); if (data) data.forEach(msg => appendMessage(msg)); }
+        db.channel('public:messages').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, p => appendMessage(p.new)).subscribe();
 
-        const channel = db.channel('online-operatives').on('presence', { event: 'sync' }, () => { document.getElementById('op-counter').innerText = Object.keys(channel.presenceState()).length; }).subscribe(async (status) => { if (status === 'SUBSCRIBED') { const { data: { user } } = await db.auth.getUser(); if (user) await channel.track({ user: user.email }); } });
-
-        async function fetchComms() {
-            const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
-            if (data) data.forEach(msg => appendMessage(msg));
-        }
-
-        function appendMessage(msg) {
-            const stream = document.getElementById('chat-stream');
-            const div = document.createElement('div'); div.className = "mog-bubble animate-fade-in";
-            div.innerHTML = `<span class="text-blue-400 font-black uppercase text-[10px] block mb-1">${msg.alias}</span>${msg.content}`;
-            stream.appendChild(div); stream.scrollTop = stream.scrollHeight;
-        }
-
-        async function sendPacket() {
-            const input = document.getElementById('chat-input');
-            const { data: { user } } = await db.auth.getUser();
-            if (!input.value || !user) return;
-            await db.from('messages').insert([{ content: input.value, alias: user.email.split('@')[0] }]);
-            input.value = "";
-        }
-
-        db.channel('public:messages').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => { appendMessage(payload.new); }).subscribe();
+        async function initiateLogout() { await db.auth.signOut(); sessionStorage.clear(); localStorage.clear(); location.reload(); }
+        async function sendRequest() { const t = document.getElementById('track-request-input').value, { data: { user } } = await db.auth.getUser(); if(t) await db.from('messages').insert([{ content: t, alias: `REQ_${user.email.split('@')[0]}` }]); document.getElementById('track-request-input').value = ""; alert("Frequency Sent."); }
+        async function fetchRequests() { const { data } = await db.from('messages').select('*').like('alias', 'REQ_%'); const b = document.getElementById('request-inbox'); if(data) data.forEach(r => { const e = document.createElement('div'); e.className = "text-[9px] text-zinc-400 mb-2 p-2 bg-white/5 rounded"; e.innerHTML = `<span class="text-white">${r.alias.replace('REQ_','')}</span>: ${r.content}`; b.appendChild(e); }); }
+        function handleDirectorSequence() { logoClicks++; if(logoClicks === 5) { document.documentElement.classList.add('director-active'); logoClicks = 0; } setTimeout(() => logoClicks = 0, 5000); }
         window.onload = checkSecurity;
     </script>
 </body>
