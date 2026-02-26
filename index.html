@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.35</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.36</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -20,7 +20,7 @@
         html, body { min-height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: #fff; }
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Inter', sans-serif; }
 
-        /* RESTORED CYBER-CIRCUITRY BACKGROUND */
+        /* CYBER-CIRCUITRY BACKGROUND */
         #bg-canvas {
             position: fixed; inset: 0; z-index: -1;
             background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.12) 0%, transparent 70%),
@@ -28,7 +28,7 @@
             background-size: 400px 400px; opacity: 0.55;
         }
 
-        /* RESTORED TRI-COLUMN MAINFRAME */
+        /* TRI-COLUMN MAINFRAME GRID */
         .mainframe-wrapper {
             display: grid; padding: 30px; gap: 30px;
             grid-template-columns: 1.2fr 1.6fr 1fr;
@@ -46,14 +46,17 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* 8-DIGIT OTP GATE */
+        /* HARD-LOCK OTP GATE (NEW BACK BUTTON INTEGRATED) */
         #otp-gate { position: fixed; inset: 0; z-index: 9999; background: #000; display: none; flex-direction: column; align-items: center; justify-content: center; }
         .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 2px solid var(--mog-border); padding: 18px 0; color: #fff; width: 100%; outline: none; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; }
         .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 18px; padding: 22px; width: 100%; text-transform: uppercase; cursor: pointer; }
+        
+        .sever-btn { color: #555; font-size: 10px; font-weight: 900; text-transform: uppercase; margin-top: 30px; letter-spacing: 2px; cursor: pointer; }
+        .sever-btn:hover { color: #ef4444; }
 
+        /* SIDEBAR */
         #side-menu { position: fixed; top: 0; right: -400px; width: 400px; height: 100%; background: #050505; border-left: 2px solid var(--mog-border); z-index: 5000; padding: 50px; }
         #side-menu.active { right: 0; }
-        
         .mog-bubble { background: rgba(0, 212, 255, 0.08); border: 1px solid rgba(0, 212, 255, 0.15); border-radius: 20px; padding: 15px; font-size: 14px; color: #eee; margin-bottom: 10px; }
         
         .director-only { display: none !important; }
@@ -70,22 +73,24 @@
             <h2 class="text-2xl font-black italic uppercase text-white mb-8">Enter 8-Digit Code</h2>
             <input id="otp-code-input" type="text" maxlength="8" placeholder="00000000" class="mog-input tracking-[0.5em] mb-6">
             <button onclick="verifyNeuralCode()" class="master-btn">Confirm Identity</button>
+            <div onclick="severHandshake()" class="sever-btn">← Sever Handshake / Return</div>
         </div>
     </div>
 
     <div id="side-menu">
         <button onclick="toggleMenu()" class="text-white text-4xl mb-16"><i class="fa-solid fa-xmark"></i></button>
-        <nav>
+        <nav class="flex flex-col h-full">
             <p class="text-[10px] uppercase tracking-widest text-zinc-500 font-black mb-10 text-center underline">System Navigation</p>
             <a href="#" class="block text-2xl font-black italic uppercase text-white mb-6 hover:text-gold transition-all">Intel Archive</a>
-            <div class="mt-20 pt-10 border-t border-white/10 text-center">
-                <p class="text-sm text-gold font-bold italic">Middelburg HQ // RSA</p>
-                <div class="mt-8 p-4 bg-white/5 rounded-2xl border border-white/10">
-                    <span class="text-[9px] uppercase font-black text-blue-400 block mb-2">Mandate Mix v1.0</span>
-                    <audio id="mandate-player" controls class="w-full h-8 opacity-40">
-                        <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" type="audio/mpeg">
-                    </audio>
-                </div>
+            
+            <div class="mt-10 p-4 bg-white/5 rounded-2xl border border-white/10">
+                <audio id="mandate-player" controls class="w-full h-8 opacity-40">
+                    <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+
+            <div class="mt-auto pb-20">
+                <button onclick="initiateLogout()" class="w-full py-4 bg-red-900/20 border border-red-500/30 text-red-500 text-xs font-black uppercase tracking-widest rounded-xl hover:bg-red-500 hover:text-white transition-all">Terminate Session (Logout)</button>
             </div>
         </nav>
     </div>
@@ -101,12 +106,12 @@
                 </div>
             </div>
             <div class="flex items-center gap-6 bg-white/5 px-6 py-4 rounded-full border border-white/10">
-                <div class="text-center px-4">
-                    <span id="op-counter" class="text-gold font-black text-2xl">1</span>
-                    <span class="text-[7px] uppercase block text-zinc-500">Live Operatives</span>
+                <div class="text-center px-4 border-r border-white/10">
+                    <span id="op-counter" class="text-gold font-black text-2xl leading-none">1</span>
+                    <span class="text-[7px] uppercase block text-zinc-500">Operatives</span>
                 </div>
-                <div class="w-[1px] h-8 bg-white/10"></div>
-                <button onclick="loginWithGoogle()" class="text-[9px] bg-white text-black px-6 py-2 rounded-full font-black uppercase hover:bg-gold transition-all">Google Link</button>
+                <button id="auth-main-btn" onclick="loginWithGoogle()" class="text-[9px] bg-white text-black px-6 py-2 rounded-full font-black uppercase hover:bg-gold transition-all">Google Link</button>
+                <button onclick="initiateLogout()" class="text-red-500 hover:text-white transition-all"><i class="fa-solid fa-power-off"></i></button>
             </div>
         </div>
     </header>
@@ -122,7 +127,7 @@
                 <div id="qrcode-container" class="bg-white p-4 rounded-3xl inline-block border-4 border-gold shadow-2xl">
                     <div id="qrcode"></div>
                 </div>
-                <h2 id="op-display-id" class="text-4xl font-black italic uppercase text-gold mt-6 tracking-tighter">OPERATIVE</h2>
+                <h2 id="op-display-id" class="text-3xl font-black italic uppercase text-gold mt-6 tracking-tighter">OPERATIVE</h2>
             </div>
             <div class="director-only mt-8 pt-8 border-t border-white/5 space-y-4">
                 <a href="/origin54.html" class="master-btn text-center text-[10px] py-4 bg-zinc-900 border border-gold/40 text-white">Origin 54 Switcher</a>
@@ -146,7 +151,6 @@
         <section class="command-tile h-96" style="grid-area: radar;">
             <iframe class="w-full h-full grayscale invert opacity-20 scale-[2.5] pointer-events-none" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115160.03859664426!2d29.408713!3d-25.772592!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ebdf4f280e7c53d%3A0x676b7e53f93c8d3d!2sMiddelburg!5e0!3m2!1sen!2sza!4v17100000000001"></iframe>
         </section>
-
         <section class="command-tile p-10 h-96" style="grid-area: hitlist;">
             <iframe class="rounded-3xl w-full h-full opacity-70 grayscale hover:grayscale-0 transition-all shadow-2xl" src="https://www.youtube.com/embed/videoseries?list=PL4fGSI1pDJn6jxsM-tS2j8nS_kK0qO7yG" frameborder="0"></iframe>
         </section>
@@ -197,10 +201,21 @@
             const email = sessionStorage.getItem('mog_pending_email');
             const { error } = await db.auth.verifyOtp({ email, token, type: 'magiclink' });
             if (!error) { sessionStorage.setItem('mog_handshake_verified', 'true'); location.reload(); }
-            else { alert("NEURAL MISMATCH: Access Denied."); }
+            else { alert("NEURAL MISMATCH"); }
         }
 
-        // UPGRADED QR GENERATOR (LOGO-CENTERED)
+        function severHandshake() {
+            document.getElementById('otp-gate').style.display = 'none';
+            sessionStorage.removeItem('mog_pending_email');
+        }
+
+        async function initiateLogout() {
+            await db.auth.signOut();
+            sessionStorage.clear();
+            location.reload();
+        }
+
+        // UPGRADED QR GENERATOR
         function generateMogQR(userId) {
             new QRCode(document.getElementById("qrcode"), {
                 text: "MOG-OP-" + userId, width: 220, height: 220,
@@ -271,4 +286,4 @@
         window.onload = checkSecurity;
     </script>
 </body>
-</html>
+    </html>
