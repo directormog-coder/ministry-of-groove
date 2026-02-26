@@ -5,76 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ORIGIN 54 // THE ASILI COLLECTIVE</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;800&family=Playfair+Display:italic,wght@700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0a0a0a; color: #f5f5f5; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        body { background-color: #0a0a0a; color: #f5f5f5; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; opacity: 0; transition: opacity 0.8s ease-in; }
         .serif-italic { font-family: 'Playfair Display', serif; }
         .kerning-wide { letter-spacing: 0.5em; }
-        .fade-in { animation: fadeIn 1.5s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .scroll-reveal { opacity: 0; transition: all 1s; }
-        .reveal-active { opacity: 1; transform: translateY(0); }
+        .selection:bg-white selection:text-black { background: white; color: black; }
+        body.authorized { opacity: 1; }
     </style>
 </head>
-<body class="selection:bg-white selection:text-black">
+<body>
 
     <nav class="fixed top-0 w-full z-50 flex justify-between items-center p-8 mix-blend-difference">
         <span class="text-xs font-extrabold kerning-wide uppercase">Origin 54</span>
         <div class="flex gap-8 text-[10px] font-bold uppercase tracking-widest">
-            <a href="#collection" class="hover:opacity-50">Collection</a>
-            <a href="#manifesto" class="hover:opacity-50">Manifesto</a>
+            <a href="/" class="hover:opacity-50">Exit to Grid</a>
         </div>
     </nav>
 
     <section class="h-screen flex flex-col items-center justify-center text-center px-6">
-        <div class="fade-in">
-            <h1 class="text-6xl md:text-9xl font-extrabold tracking-tighter mb-4 leading-none">ASILI.</h1>
-            <p class="serif-italic text-xl md:text-2xl opacity-60">The Collective of Origin</p>
-        </div>
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-            <span class="text-[8px] uppercase tracking-[0.6em]">Scroll to Enter</span>
-        </div>
+        <h1 class="text-6xl md:text-9xl font-extrabold tracking-tighter mb-4 leading-none">ASILI.</h1>
+        <p class="serif-italic text-xl md:text-2xl opacity-60">The Collective of Origin</p>
     </section>
-
-    <section id="manifesto" class="py-32 px-10 max-w-4xl mx-auto text-center">
-        <h2 class="text-[10px] font-bold uppercase tracking-[0.8em] text-zinc-500 mb-12">The Manifesto</h2>
-        <p class="text-2xl md:text-4xl leading-tight font-light">
-            We are rooted in the soil of the <span class="serif-italic">continent</span>, but designed for the <span class="serif-italic">future</span>. A garment is not just fabric—it is an <span class="font-extrabold uppercase italic">Identity Handshake</span>.
-        </p>
-    </section>
-
-    <section id="collection" class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-        <div class="bg-zinc-900 h-[600px] flex items-center justify-center relative group overflow-hidden">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-40 opacity-20 group-hover:scale-110 transition-transform duration-1000">
-            <div class="absolute bottom-8 left-8">
-                <p class="text-[10px] font-bold uppercase tracking-widest">Drop 01 // Concept</p>
-            </div>
-        </div>
-        <div class="bg-zinc-900 h-[600px] flex items-center justify-center relative group overflow-hidden">
-             <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/refs/heads/main/1000219947.png" class="h-40 opacity-20 group-hover:scale-110 transition-transform duration-1000">
-            <div class="absolute bottom-8 left-8">
-                <p class="text-[10px] font-bold uppercase tracking-widest">The Asili Seal</p>
-            </div>
-        </div>
-    </section>
-
-    <footer class="py-20 text-center border-t border-white/5">
-        <p class="text-[10px] font-bold uppercase kerning-wide opacity-30">© 2026 ORIGIN 54 Collective</p>
-        <div class="mt-8 flex justify-center gap-10">
-             <a href="/" class="text-[8px] uppercase font-black hover:text-white text-zinc-600">Back to the Grid</a>
-        </div>
-    </footer>
 
     <script>
-        // Simple scroll reveal
-        window.addEventListener('scroll', () => {
-            const reveals = document.querySelectorAll('.scroll-reveal');
-            reveals.forEach(el => {
-                if (el.getBoundingClientRect().top < window.innerHeight - 100) {
-                    el.classList.add('reveal-active');
-                }
-            });
-        });
+        const CFG = { 
+            U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
+            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" 
+        };
+        const db = window.supabase.createClient(CFG.U, CFG.K);
+
+        async function protectSovereignty() {
+            const { data: { user } } = await db.auth.getUser();
+            
+            // If not the Director, force exit to the Main Grid
+            if (!user || user.email !== 'director.mog@gmail.com') {
+                window.location.href = "/";
+            } else {
+                // Grant visual access
+                document.body.classList.add('authorized');
+                console.log("DIRECTOR AUTHORIZED: ASILI COLLECTIVE UNLOCKED");
+            }
+        }
+
+        window.onload = protectSovereignty;
     </script>
 </body>
 </html>
