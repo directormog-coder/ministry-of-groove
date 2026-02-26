@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL AMAPIANO GRID V70.1.9</title>
+    <title>M.O.G. | NATIONAL AMAPIANO GRID V70.1.10</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -15,121 +16,121 @@
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; }
         body { background-color: var(--mog-bg); color: var(--mog-gold); min-height: 100vh; overflow-x: hidden; }
         
-        /* Layout Grid */
-        .grid-full-width { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.25rem; width: 100%; padding: 0 1.25rem; }
-        @media (max-width: 1024px) { .grid-full-width { display: flex; flex-direction: column; padding: 0 0.75rem; } }
+        .grid-master { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; width: 100%; padding: 0 1.5rem; }
+        @media (max-width: 1024px) { .grid-master { display: flex; flex-direction: column; } }
         
         .command-tile { background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.1); backdrop-filter: blur(30px); border-radius: 24px; overflow: hidden; }
         
-        /* Director Unlock */
+        /* Sidebar System */
+        #side-menu { position: fixed; top: 0; right: -350px; width: 350px; height: 100%; background: #080c10; border-left: 1px solid rgba(212, 175, 55, 0.2); z-index: 5000; padding: 40px; }
+        #side-menu.active { right: 0; }
+        .menu-link { display: block; font-size: 24px; font-weight: 900; text-transform: uppercase; font-style: italic; margin-bottom: 20px; color: white; }
+        .menu-link:hover { color: var(--mog-gold); padding-left: 10px; }
+
+        /* Director Visibility */
         .director-only { display: none !important; }
         .director-active .director-only { display: flex !important; }
-        
-        /* Maintenance Shield */
-        #maintenance-screen { display: none; position: fixed; inset: 0; z-index: 10000; background: #000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        body.maintenance:not(.director-active) #grid-ui { display: none; }
-        body.maintenance:not(.director-active) #maintenance-screen { display: flex; }
 
-        .mog-bubble { padding: 10px 15px; border-radius: 18px; font-size: 13px; color: #fff; background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.1); max-width: 85%; }
         ::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="pb-32">
+<body class="pb-40">
 
-    <div id="maintenance-screen">
-        <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-24 w-24 grayscale mb-6 animate-pulse">
-        <h1 class="text-2xl font-black italic uppercase tracking-tighter text-white">Grid Offline</h1>
-        <p class="text-[9px] text-zinc-500 uppercase tracking-[0.4em] mt-2">Maintenance in Progress</p>
+    <div id="side-menu">
+        <button onclick="toggleMenu()" class="text-white text-3xl mb-12"><i class="fa-solid fa-xmark"></i></button>
+        <nav>
+            <a href="#" class="menu-link">The Grid</a>
+            <a href="#" class="menu-link">Intel Archive</a>
+            <a href="#" class="menu-link">Frequency Comms</a>
+            <a href="#" class="menu-link">Leaderboard</a>
+            <div class="mt-20 pt-10 border-t border-white/10">
+                <p class="text-[10px] uppercase tracking-widest text-zinc-500">Sector Intelligence</p>
+                <p class="text-xs text-gold mt-2">Middelburg, Mpumalanga</p>
+            </div>
+        </nav>
     </div>
 
     <div id="grid-ui">
-        <header class="flex items-center justify-between px-6 py-8">
-            <div class="flex items-center gap-5">
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-16 w-16 cursor-pointer">
+        <header class="flex items-center justify-between px-8 py-10">
+            <div class="flex items-center gap-6">
+                <img id="main-logo" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" 
+                     onclick="handleLogoSequence()" class="h-16 w-16 cursor-pointer">
                 <div>
-                    <h1 class="text-2xl text-gold font-black uppercase italic tracking-tighter leading-none">Ministry of Groove</h1>
-                    <p class="text-[8px] text-blue-400 font-black tracking-widest uppercase mt-1">Sector: eMalahleni // V70.1.9</p>
+                    <h1 class="text-3xl text-gold font-black uppercase italic tracking-tighter leading-none">Ministry of Groove</h1>
+                    <p class="text-[9px] text-blue-400 font-black tracking-widest uppercase mt-1">Sovereign Grid // V70.1.10</p>
                 </div>
             </div>
-            <button id="google-link-btn" onclick="loginWithGoogle()" class="text-[9px] bg-white text-black px-6 py-3 rounded-full font-black uppercase">Google Link</button>
+            <div class="flex items-center gap-4">
+                <button id="google-link-btn" onclick="loginWithGoogle()" class="text-[9px] bg-white text-black px-6 py-3 rounded-full font-black uppercase">Google Link</button>
+                <button onclick="toggleMenu()" class="text-blue-400 text-2xl p-3 bg-white/5 rounded-full"><i class="fa-solid fa-bars-staggered"></i></button>
+            </div>
         </header>
 
-        <main class="grid-full-width">
+        <main class="grid-master">
             <div class="col-span-12 lg:col-span-4 space-y-6">
                 
                 <section class="command-tile p-6 border-gold/40 director-only flex-col space-y-4">
-                    <span class="text-[10px] font-black text-gold uppercase italic underline tracking-widest">Directorate Console</span>
+                    <span class="text-[10px] font-black text-gold uppercase italic underline">Directorate Master Keys</span>
+                    <button onclick="toggleMaintenance()" class="w-full py-3 rounded-xl border border-blue-500/30 text-[9px] font-black uppercase">Toggle Maintenance</button>
+                    <div id="entry-log-viewer" class="h-32 overflow-y-auto bg-black/40 rounded-xl p-3 border border-white/5 space-y-1 text-[9px]"></div>
                     
-                    <button onclick="toggleMaintenance()" class="w-full py-4 rounded-xl border border-blue-500/30 text-[9px] font-black uppercase hover:bg-blue-500 hover:text-white transition-all">Toggle Maintenance Mode</button>
-                    
-                    <button onclick="purgeLogs()" class="w-full py-4 rounded-xl border border-red-500/30 text-red-500 text-[9px] font-black uppercase hover:bg-red-500 hover:text-white transition-all">Purge Entry Logs</button>
-                    
-                    <div id="entry-log-viewer" class="h-48 overflow-y-auto bg-black/40 rounded-xl p-4 border border-white/5 space-y-2 text-white">
-                        <p class="text-[8px] text-zinc-600 italic">Syncing Operative Logs...</p>
-                    </div>
-
-                    <div class="mt-6 pt-6 border-t border-white/5">
-                        <span class="text-[8px] font-black text-zinc-500 uppercase tracking-widest block mb-3">Project Switcher</span>
-                        <a href="/origin54.html" class="group flex items-center justify-between w-full p-4 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-white/5 hover:border-white/20 transition-all">
-                            <div class="flex flex-col items-start">
-                                <span class="text-[10px] font-black text-white uppercase tracking-tighter">Origin 54</span>
-                                <span class="text-[7px] text-zinc-500 uppercase">The Asili Collective</span>
-                            </div>
-                            <i class="fa-solid fa-arrow-right-long text-zinc-700 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
-                        </a>
-                    </div>
+                    <a href="/origin54.html" class="flex items-center justify-between w-full p-4 rounded-xl bg-white/5 border border-white/5">
+                        <span class="text-[10px] font-black text-white uppercase italic">Origin 54 Archive</span>
+                        <i class="fa-solid fa-arrow-right text-gold"></i>
+                    </a>
                 </section>
 
                 <section class="command-tile p-6">
-                    <span class="text-[10px] font-black text-gold uppercase italic mb-4 block">System Status</span>
-                    <div class="flex items-center gap-3">
-                        <div class="h-2 w-2 rounded-full bg-green-500 animate-ping"></div>
-                        <span class="text-xs text-zinc-400">Frequency Grid: Active</span>
+                    <span class="text-[10px] font-black text-blue-400 uppercase italic mb-4 block">Top Frequency Drops</span>
+                    <div class="space-y-4">
+                        <iframe class="rounded-xl w-full h-20" src="https://www.youtube.com/embed/videoseries?list=PL4fGSI1pDJn6jxsM-tS2j8nS_kK0qO7yG" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        <p class="text-[8px] text-zinc-500 uppercase text-center tracking-widest">Live Sync via YouTube Music</p>
                     </div>
+                </section>
+
+                <section class="command-tile p-6 bg-gradient-to-br from-blue-900/20 to-black">
+                    <i class="fa-solid fa-box-archive text-2xl text-blue-400 mb-4"></i>
+                    <h3 class="text-white font-black uppercase italic text-sm">Intel Archive</h3>
+                    <p class="text-[10px] text-zinc-500 mt-2">Classified data from previous Amapiano injections. Restricted to Level 1 Operatives.</p>
                 </section>
             </div>
 
             <div class="col-span-12 lg:col-span-8 space-y-6">
-                <section class="command-tile p-8 border-blue-500/20 bg-gradient-to-br from-black to-[#0a141e] relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-10"><i class="fa-solid fa-shield-halved text-6xl text-gold"></i></div>
+                <section class="command-tile p-8 border-blue-500/20 bg-gradient-to-br from-black to-[#0a141e] relative">
                     <h2 class="text-3xl font-black text-white italic uppercase mb-4">The Mission Brief</h2>
-                    <p class="text-zinc-400 text-xs leading-relaxed mb-8">
-                        The Ministry of Groove is a sovereign digital archive dedicated to the decentralization of the Amapiano frequency. 
-                        Rooted in eMalahleni, branching into the global collective.
-                    </p>
-
-                    <div id="director-signature" class="director-only flex items-center justify-between border-t border-gold/20 pt-6 mt-6">
-                        <div class="flex flex-col">
-                            <span class="text-[10px] font-black text-gold uppercase italic">Authorized By:</span>
-                            <span class="text-2xl text-white italic mt-1" style="font-family: 'Dancing Script', cursive;">The Director</span>
-                        </div>
-                        <div class="relative">
-                            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/refs/heads/main/1000219947.png" class="h-20 w-20 brightness-125">
-                            <div class="absolute inset-0 border border-gold/20 rounded-full animate-ping"></div>
-                        </div>
+                    <p class="text-zinc-400 text-xs leading-relaxed mb-6">Decentralizing the Amapiano frequency. Establishing a sovereign digital archive for the collective. Rooted in eMalahleni soil.</p>
+                    <div id="director-signature" class="director-only flex items-center justify-between border-t border-gold/20 pt-6">
+                        <span class="text-2xl text-white italic" style="font-family: 'Dancing Script', cursive;">The Director</span>
+                        <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/refs/heads/main/1000219947.png" class="h-16 w-16">
                     </div>
                 </section>
-                
-                <section class="command-tile h-[500px] flex flex-col">
+
+                <section class="command-tile h-[450px] flex flex-col">
                     <div id="chat-stream" class="flex-grow p-6 overflow-y-auto space-y-4"></div>
                     <div class="p-4 flex gap-3">
                         <input type="text" id="chat-msg-in" placeholder="Transmit thought..." class="flex-grow bg-[#111] border border-white/10 rounded-full px-6 py-4 text-white text-sm outline-none">
-                        <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center transition-transform active:scale-90"><i class="fa-solid fa-paper-plane"></i></button>
+                        <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
                     </div>
+                </section>
+
+                <section class="command-tile p-6">
+                    <span class="text-[10px] font-black text-gold uppercase italic mb-4 block">Visual Intel Archive</span>
+                    <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        </div>
                 </section>
             </div>
         </main>
     </div>
-
-    <footer class="fixed bottom-0 w-full bg-black/95 backdrop-blur-3xl border-t border-gold/20 py-5 px-8 z-[2000] flex justify-between items-center">
-        <div class="flex gap-10">
-            <a href="https://instagram.com/ministryofgroove" target="_blank" class="text-gold text-xl"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="text-gold text-xl"><i class="fa-brands fa-tiktok"></i></a>
+    
+    <footer class="fixed bottom-0 w-full bg-black/95 backdrop-blur-3xl border-t border-gold/20 py-6 px-10 z-[2000] flex justify-between items-center">
+        <div class="flex gap-12">
+            <a href="https://instagram.com/ministryofgroove" target="_blank" class="text-gold text-2xl hover:text-blue-400"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="text-gold text-2xl hover:text-blue-400"><i class="fa-brands fa-tiktok"></i></a>
         </div>
-        <div class="flex items-center">
+        <div class="flex items-center gap-6">
             <p class="text-[9px] font-black uppercase text-gold italic opacity-70">M.O.G. © 2026</p>
-            <a href="/privacy.html" class="text-[8px] uppercase text-zinc-500 hover:text-gold ml-4">Privacy Policy</a>
-            <a href="/tos.html" class="text-[8px] uppercase text-zinc-500 hover:text-gold ml-4">Terms of Service</a>
+            <a href="/privacy.html" class="text-[9px] uppercase text-zinc-500 hover:text-gold transition-colors">Privacy Policy</a>
+            <a href="/tos.html" class="text-[9px] uppercase text-zinc-500 hover:text-gold transition-colors">Terms of Service</a>
         </div>
     </footer>
 
@@ -141,52 +142,21 @@
         const db = window.supabase.createClient(CFG.U, CFG.K);
         let logoClicks = 0;
 
+        function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
+
         async function handleLogoSequence() {
             logoClicks++;
             const { data: { user } } = await db.auth.getUser();
             if (logoClicks === 5 && user?.email === 'director.mog@gmail.com') {
                 document.documentElement.classList.add('director-active');
-                alert("DIRECTORATE AUTHENTICATED");
+                alert("DIRECTORATE AUTHORIZED");
                 fetchLogs();
             }
+            setTimeout(() => { logoClicks = 0; }, 3000);
         }
 
         async function loginWithGoogle() {
             await db.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: "https://ministry-of-groove.vercel.app" } });
-        }
-
-        async function toggleMaintenance() {
-            const { data } = await db.from('system_config').select('is_maintenance_mode').single();
-            await db.from('system_config').update({ is_maintenance_mode: !data.is_maintenance_mode }).eq('id', 'main_config');
-            location.reload();
-        }
-
-        async function purgeLogs() {
-            if(confirm("PERMANENTLY PURGE ALL LOGS?")) {
-                await db.from('entry_logs').delete().neq('operative_email', 'EMPTY');
-                fetchLogs();
-            }
-        }
-
-        async function fetchLogs() {
-            const { data } = await db.from('entry_logs').select('*').order('created_at', { ascending: false });
-            if (data) {
-                document.getElementById('entry-log-viewer').innerHTML = data.map(log => `
-                    <div class="text-[8px] border-b border-white/5 pb-2">
-                        <span class="text-gold font-black">${new Date(log.created_at).toLocaleTimeString()}</span> - 
-                        <span class="text-white uppercase">${log.operative_name}</span>
-                    </div>
-                `).join('');
-            }
-        }
-
-        async function sendPacket() {
-            const input = document.getElementById('chat-msg-in');
-            const { data: { user } } = await db.auth.getUser();
-            if(!input.value.trim()) return;
-            await db.from('messages').insert([{ content: input.value, alias: user?.user_metadata.full_name || "Guest Operative" }]);
-            input.value = "";
-            fetchMessages();
         }
 
         async function fetchMessages() {
@@ -197,7 +167,6 @@
                         <span class="text-[8px] font-black uppercase text-blue-400 mb-1">${m.alias}</span>
                         <div class="mog-bubble">${m.content}</div>
                     </div>`).join('');
-                document.getElementById('chat-stream').scrollTop = document.getElementById('chat-stream').scrollHeight;
             }
         }
 
@@ -210,8 +179,6 @@
                     sessionStorage.setItem('logged', 'true');
                 }
             }
-            const { data: config } = await db.from('system_config').select('is_maintenance_mode').single();
-            if (config?.is_maintenance_mode) document.body.classList.add('maintenance');
         }
 
         window.onload = () => { checkStatus(); fetchMessages(); };
