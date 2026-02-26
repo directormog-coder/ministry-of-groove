@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.9</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.3.0</title>
     
-    <link rel="manifest" href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/manifest.json">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#050505">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -63,7 +64,6 @@
         .ticker-move { white-space: nowrap; animation: ticker 40s linear infinite; font-size: 9px; font-weight: 900; color: var(--mog-gold); letter-spacing: 2px; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* PREMIUM BUTTONS */
         .premium-btn { 
             background: linear-gradient(135deg, #D4AF37 0%, #8A6D3B 100%); 
             color: #000; font-weight: 900; text-transform: uppercase; 
@@ -82,7 +82,7 @@
 
     <div id="splash-screen">
         <div class="splash-logo-container">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="w-full h-full object-cover">
+            <img src="logo.png" class="w-full h-full object-cover">
         </div>
         <p class="mt-8 mono text-[9px] text-gold tracking-[0.5em] uppercase animate-pulse">Ministry of Groove: Totality Engine</p>
     </div>
@@ -90,19 +90,19 @@
     <div id="bg-canvas"></div>
 
     <div id="ticker-wrap">
-        <div class="ticker-move">MASTER_V100.2.9 // PHASE_2: PREMIUM_UPLINK_READY // RSA_BOND_SYNC // NO_GHOST_ZONES // WITBANK_HQ ONLINE...</div>
+        <div class="ticker-move">MASTER_V100.3.0 // PWA_STABILIZED // REVENUE_PORTAL_ACTIVE // RSA_BOND_SYNC // WITBANK_HQ ONLINE...</div>
     </div>
 
     <div id="app-content" class="mt-20 p-6 lg:p-12">
         <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-12 relative z-50">
             <div class="flex items-center gap-6">
-                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-20 w-20 rounded-full border-2 border-gold/40 shadow-2xl cursor-pointer">
+                <img src="logo.png" onclick="handleLogoSequence()" class="h-20 w-20 rounded-full border-2 border-gold/40 shadow-2xl cursor-pointer">
                 <div>
                     <h1 id="main-title">Ministry of Groove</h1>
                     <div class="flex gap-6 mt-3">
                         <span class="nav-link" onclick="scrollTo('radar')">Radar</span>
                         <span class="nav-link" onclick="scrollTo('chat')">Frequency</span>
-                        <span class="nav-link" onclick="scrollTo('wealth')">Vault</span>
+                        <span class="nav-link" onclick="scrollTo('vault')">Vault</span>
                     </div>
                 </div>
             </div>
@@ -148,11 +148,18 @@
                         </div>
                     </section>
 
-                    <section id="wealth" class="command-tile p-8 flex flex-col justify-between">
+                    <section id="vault" class="command-tile p-8 flex flex-col justify-between">
                         <div>
                             <div class="tile-header flex justify-between px-0 mb-6 border-none bg-transparent"><span class="tile-title text-gold">Phase 2: Premium Gateway</span><i class="fa-solid fa-crown text-gold"></i></div>
-                            <p class="text-[10px] text-zinc-400 uppercase leading-relaxed mb-6">Access the full Ministry of Groove intelligence archive, master mixes, and priority grid alerts.</p>
-                            <button class="premium-btn mb-4">Unlock Premium Access</button>
+                            <p class="text-[10px] text-zinc-400 uppercase leading-relaxed mb-6">Access the full archive, master mixes, and priority grid alerts.</p>
+                            
+                            <div class="rounded-xl overflow-hidden mb-4 border border-white/10 aspect-video">
+                                <video muted loop autoplay class="w-full h-full object-cover opacity-60">
+                                    <source src="1000211769.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            
+                            <button class="premium-btn">Unlock Premium Access</button>
                         </div>
                         <div class="pt-6 border-t border-white/10">
                             <p class="text-[9px] text-zinc-500 uppercase font-black mb-3 tracking-widest text-center">RSA Bond Sync Tracking</p>
@@ -164,7 +171,7 @@
 
                 <section class="command-tile p-4">
                     <div class="tile-header flex justify-between border-none bg-transparent mb-2"><span class="tile-title">Sovereign Mandate Archive</span><i class="fa-solid fa-compact-disc text-gold"></i></div>
-                    <audio src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" controls class="w-full h-10"></audio>
+                    <audio src="mandate_mix.mp3" controls class="w-full h-10"></audio>
                 </section>
             </div>
         </main>
@@ -173,11 +180,9 @@
     <section id="director-dashboard" class="hidden fixed inset-0 z-[11000] bg-black/98 p-10 overflow-y-auto backdrop-blur-3xl">
         <div class="max-w-4xl mx-auto flex flex-col h-full">
             <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-4"><h2 class="text-3xl text-white font-black uppercase italic">Master Totality</h2><button onclick="toggleDirectorUI()" class="text-white text-2xl">×</button></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <div class="bg-white/5 p-10 rounded-3xl border border-gold/20 text-center">
-                    <span class="text-xs text-gold uppercase tracking-[0.5em]">Total Liquidity</span>
-                    <p class="text-5xl font-black mt-4">R73,827.00</p>
-                </div>
+            <div class="bg-white/5 p-10 rounded-3xl border border-gold/20 text-center max-w-xl mx-auto">
+                <span class="text-xs text-gold uppercase tracking-[0.5em]">Total Liquidity</span>
+                <p class="text-5xl font-black mt-4">R73,827.00</p>
             </div>
         </div>
     </section>
@@ -186,6 +191,13 @@
         const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
         const db = window.supabase.createClient(CFG.U, CFG.K);
         let logoClicks = 0;
+
+        // PWA SERVICE WORKER REGISTRATION
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js');
+            });
+        }
 
         // SPLASH LOGIC
         window.addEventListener('load', () => {
@@ -217,13 +229,6 @@
             d.innerHTML = m;
             s.appendChild(d); mIn.value = ""; s.scrollTop = s.scrollHeight;
         }
-
-        window.onload = () => {
-            setInterval(() => { 
-                const lat = Math.floor(Math.random()*10)+8;
-                console.log(`Uplink: ${lat}ms`);
-            }, 4000);
-        };
     </script>
 </body>
 </html>
