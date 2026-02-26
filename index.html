@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <meta name="google-signin-client_id" content="210696195426-aleglo26fj6j5qusktr1eptme4m7j8s6.apps.googleusercontent.com">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.5.0</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.6.0</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,166 +17,213 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=JetBrains+Mono:wght@300;700;800&family=Inter:wght@400;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Big+Shoulders+Display:wght@900&family=JetBrains+Mono:wght@300;700;800&family=Inter:wght@300;400;600;800&display=swap');
         
         :root { 
             --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; 
-            --mog-glass: rgba(5, 12, 20, 0.85); --mog-border: rgba(0, 212, 255, 0.3);
+            --mog-glass: rgba(5, 12, 20, 0.95); --mog-border: rgba(212, 175, 55, 0.3);
             --wa-bg: #0b141a;
         }
 
-        html, body { min-height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: #fff; }
-        * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'JetBrains Mono', monospace; box-sizing: border-box; }
+        html, body { min-height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: var(--mog-gold); }
+        * { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif; box-sizing: border-box; }
+        h1, h2, .tile-title { font-family: 'Tenor Sans', sans-serif !important; letter-spacing: 3px; text-transform: uppercase; }
 
         /* NEURAL LIGHTNING CANVAS */
-        #lightning-canvas { position: fixed; inset: 0; z-index: -2; opacity: 0.3; pointer-events: none; }
+        #lightning-canvas { position: fixed; inset: 0; z-index: -2; opacity: 0.4; pointer-events: none; }
 
         /* CIRCULAR SPLASH */
         #splash-screen { position: fixed; inset: 0; z-index: 99999; background: var(--mog-black); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s; }
         .splash-logo-container { width: 180px; height: 180px; clip-path: circle(50% at 50% 50%); border: 2px solid var(--mog-gold); animation: pulse-glow 2s infinite alternate; }
         @keyframes pulse-glow { from { transform: scale(0.95); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); } to { transform: scale(1.05); box-shadow: 0 0 60px rgba(0, 212, 255, 0.4); } }
         
-        /* THE GRID BACKGROUND (55% VISIBILITY) */
+        /* BACKGROUND & GRID */
         #bg-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.55; background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.2) 0%, transparent 70%), url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 L40 40 M80 0 L40 40 M0 80 L40 40 M80 80 L40 40' stroke='%2300d4ff' stroke-width='0.5' fill='none' opacity='0.15'/%3E%3C/svg%3E"); }
         
         /* UI THEME */
-        #main-title { font-family: 'Big Shoulders Display', sans-serif !important; font-size: clamp(1.8rem, 4vw, 3.5rem); background: linear-gradient(to bottom, #fff 10%, var(--mog-gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 8px; overflow: hidden; backdrop-filter: blur(15px); box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8); }
-        .tile-header { border-bottom: 1px solid rgba(0, 212, 255, 0.1); padding: 15px 20px; background: rgba(0, 212, 255, 0.05); font-weight: 800; font-size: 10px; text-transform: uppercase; color: var(--mog-blue); letter-spacing: 2px; }
-        .premium-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 12px; font-size: 11px; font-weight: 800; text-transform: uppercase; cursor: pointer; background: transparent; letter-spacing: 2px; border-radius: 4px; }
-        .premium-btn:hover { background: var(--mog-gold); color: #000; box-shadow: 0 0 30px var(--mog-gold); }
+        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 2px; overflow: hidden; backdrop-filter: blur(20px); box-shadow: 0 15px 50px rgba(0, 0, 0, 1); }
+        .tile-header { border-bottom: 1px solid rgba(212, 175, 55, 0.1); padding: 16px 20px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, transparent 100%); display: flex; justify-content: space-between; align-items: center; }
+        .tile-title { font-size: 0.75rem; color: var(--mog-gold); }
+
+        .mog-input { background: #000 !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; color: var(--mog-blue) !important; padding: 14px; width: 100%; outline: none; font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; }
+        .mog-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 12px 24px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; cursor: pointer; background: transparent; letter-spacing: 2px; }
+        .mog-btn:hover { background: var(--mog-gold); color: #000; box-shadow: 0 0 30px var(--mog-gold); }
         
-        .wa-bubble { max-width: 85%; padding: 10px 14px; border-radius: 4px; margin-bottom: 8px; font-size: 12px; background: #202c33; color: white; border-left: 3px solid var(--mog-blue); }
-        .scroller-v { overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--mog-gold) transparent; }
+        .social-link { font-size: 1.4rem; color: var(--mog-gold); transition: 0.4s; }
+        .social-link:hover { color: #fff; transform: translateY(-5px); filter: drop-shadow(0 0 10px var(--mog-blue)); }
+
+        .track-row { padding: 14px; border: 1px solid rgba(0, 212, 255, 0.1); background: rgba(0, 212, 255, 0.02); display: flex; justify-content: space-between; align-items: center; cursor: pointer; margin-bottom: 8px; font-size: 0.7rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+        .track-row:hover { background: var(--mog-gold); color: #000; }
 
         /* TICKER */
-        #ticker-wrap { position: fixed; bottom: 0; left: 0; width: 100%; height: 35px; background: #000; border-top: 1px solid var(--mog-gold); z-index: 1000; display: flex; align-items: center; overflow: hidden; }
-        .ticker-move { white-space: nowrap; animation: ticker 40s linear infinite; font-size: 9px; font-weight: 900; color: var(--mog-gold); letter-spacing: 2px; }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        #event-ticker { position: fixed; bottom: 0; left: 0; width: 100%; height: 40px; background: #000; border-top: 1px solid var(--mog-gold); z-index: 1000; display: flex; align-items: center; overflow: hidden; }
+        .ticker-label { background: var(--mog-gold); color: #000; padding: 0 25px; font-size: 11px; font-weight: 900; height: 100%; display: flex; align-items: center; }
+        #ticker-content { white-space: nowrap; animation: ticker-scroll 45s linear infinite; font-size: 11px; color: var(--mog-blue); font-weight: 600; padding-left: 20px; }
+        @keyframes ticker-scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        
+        .wa-bubble { max-width: 85%; padding: 12px 16px; border-radius: 2px; margin-bottom: 8px; font-size: 12px; background: #202c33; color: white; border-left: 3px solid var(--mog-blue); font-family: 'JetBrains Mono', monospace; }
+        .scroller-v::-webkit-scrollbar { width: 4px; }
+        .scroller-v::-webkit-scrollbar-thumb { background: var(--mog-gold); }
     </style>
 </head>
-<body>
+<body id="mog-totality">
 
     <canvas id="lightning-canvas"></canvas>
     <div id="splash-screen"><div class="splash-logo-container"><img src="logo.png" class="w-full h-full object-cover"></div></div>
     <div id="bg-canvas"></div>
 
-    <div id="app-content" class="p-6 lg:p-12 pb-24">
-        
-        <header class="flex flex-col lg:flex-row justify-between items-center gap-8 mb-12 relative z-50">
-            <div class="flex items-center gap-6">
-                <img src="logo.png" onclick="handleLogoSequence()" class="h-20 w-20 rounded-full border-2 border-gold/40 shadow-2xl cursor-pointer">
-                <div>
-                    <h1 id="main-title">Ministry of Groove</h1>
-                    <p class="text-[10px] text-blue-400 tracking-[.5em] mt-2 uppercase font-black italic">Tier-0 Operational Interface</p>
+    <header class="p-10 flex flex-col lg:flex-row justify-between items-center relative z-50 gap-8">
+        <div class="flex items-center gap-8">
+            <img src="logo.png" onclick="handleLogoSequence()" class="h-20 w-20 border-2 border-gold rounded-full shadow-2xl cursor-pointer">
+            <div>
+                <h1 class="text-3xl font-normal text-white italic tracking-[.25em]">MINISTRY OF GROOVE</h1>
+                <div class="flex gap-8 mt-4">
+                    <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://www.instagram.com/ministryofgroove_hq" target="_blank" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/share/1D9jcB5998/" target="_blank" class="social-link"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="mailto:director.mog@gmail.com" class="social-link"><i class="fa-solid fa-envelope"></i></a>
                 </div>
             </div>
-            <div id="auth-status" class="text-[10px] text-red-500 font-bold border border-red-900 px-6 py-2 bg-red-950/10 tracking-[0.4em]">ID_REQUIRED</div>
-        </header>
+        </div>
+        <div class="flex gap-4">
+             <div id="auth-status" class="text-[10px] text-red-500 font-bold border border-red-900 px-6 py-2 bg-red-950/20 tracking-[.3em] uppercase">Satellite Link Offline</div>
+             <button onclick="logout()" class="mog-btn !w-auto !px-6 !border-white/10 !text-white/30">Sever</button>
+        </div>
+    </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-50">
+    <main class="p-10 grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-50">
+        <div class="lg:col-span-4 space-y-10">
+            <section class="command-tile">
+                <div class="tile-header"><span class="tile-title">Handshake & Uplink</span></div>
+                <div class="p-8">
+                    <div id="auth-form">
+                        <input id="email-in" type="email" placeholder="OPERATIVE EMAIL" class="mog-input">
+                        <input id="password-in" type="password" placeholder="SECURITY KEY" class="mog-input">
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <button onclick="handleAuth('login')" class="mog-btn">Login</button>
+                            <button onclick="handleAuth('signup')" class="mog-btn">Register</button>
+                        </div>
+                        <button onclick="loginWithGoogle()" class="mog-btn w-full mt-4 !border-blue-500 !text-blue-400">Google Identify</button>
+                    </div>
+                    <div id="op-profile" class="hidden text-center">
+                        <p id="active-alias" class="text-2xl font-black text-white uppercase mb-8 italic"></p>
+                        <div id="qrcode" class="bg-white p-3 inline-block rounded-sm"></div>
+                    </div>
+                </div>
+            </section>
             
-            <div class="lg:col-span-4 space-y-10">
-                <section class="command-tile">
-                    <div class="tile-header"><span>Satellite Africa Prime</span> <i class="fa-solid fa-satellite"></i></div>
-                    <div class="p-4">
-                        <div id="map-area" class="h-48 bg-[url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg')] bg-contain bg-no-repeat bg-center filter invert opacity-30 relative"></div>
-                        <p class="text-[9px] text-blue-500 mt-4 text-center font-bold tracking-widest">Scanning Frequencies...</p>
-                    </div>
-                </section>
-
-                <section class="command-tile p-8">
-                    <div class="tile-header !p-0 !border-none mb-6">Identity Handshake</div>
-                    <div id="auth-ui" class="space-y-4">
-                        <input id="email-in" type="email" placeholder="OPERATIVE EMAIL" class="w-full bg-black border border-blue-500/20 p-4 text-white text-[10px] outline-none">
-                        <button onclick="loginWithGoogle()" class="premium-btn w-full"><i class="fa-brands fa-google mr-2"></i> Identify via Google</button>
-                    </div>
-                </section>
-            </div>
-
-            <div class="lg:col-span-8 space-y-10">
-                
-                <section id="director-node" class="command-tile hidden !border-red-600">
-                    <div class="tile-header !text-red-500"><span>Directorate Command</span> <i class="fa-solid fa-shield-halved"></i></div>
-                    <div class="p-6 grid md:grid-cols-2 gap-6">
-                        <div onclick="document.getElementById('file-in').click()" class="border-2 border-dashed border-red-600/20 p-8 flex flex-col items-center justify-center cursor-pointer hover:bg-red-600/5">
-                            <input type="file" id="file-in" class="hidden" multiple onchange="handleUpload(this.files)">
-                            <i class="fa-solid fa-upload text-red-600 mb-2"></i>
-                            <p id="up-text" class="text-[9px] font-bold uppercase">Deploy Sonic Intel</p>
-                        </div>
-                        <div class="space-y-3">
-                            <button onclick="toggleDirectorUI()" class="premium-btn w-full !border-red-600 !text-red-600">Enter Private Vault</button>
-                        </div>
-                    </div>
-                </section>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <section class="command-tile h-[500px] flex flex-col">
-                        <div class="tile-header">Sonic Vault <i class="fa-solid fa-vault"></i></div>
-                        <div class="p-6 flex-grow flex flex-col">
-                            <audio id="player" controls src="mandate_mix.mp3" class="w-full h-10 mb-6 bg-black border border-gold/20"></audio>
-                            <div id="sonic-list" class="flex-grow scroller-v space-y-2">
-                                </div>
-                        </div>
-                    </section>
-
-                    <section class="command-tile h-[500px] flex flex-col" style="background: var(--wa-bg);">
-                        <div class="tile-header !bg-[#202c33] text-white">Frequency Chat <i class="fa-solid fa-message"></i></div>
-                        <div id="chat-stream" class="flex-grow p-4 scroller-v flex flex-col" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay;"></div>
-                        <div class="p-3 bg-[#202c33] flex gap-3">
-                            <input type="text" id="chat-msg-in" placeholder="Transmit packet..." class="flex-grow bg-[#2a3942] rounded-lg p-3 text-white text-sm outline-none border-none">
-                            <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg"><i class="fa-solid fa-paper-plane"></i></button>
-                        </div>
-                    </section>
+            <section class="command-tile">
+                <div class="tile-header"><span class="tile-title">Sonic Archive</span> <i class="fa-solid fa-vault"></i></div>
+                <div class="p-6">
+                    <audio id="player" src="mandate_mix.mp3" controls class="w-full h-10 mb-8 bg-black border border-gold/20"></audio>
+                    <div id="mix-list" class="space-y-2 max-h-80 overflow-y-auto pr-2 scrollbar-v"></div>
                 </div>
+            </section>
+        </div>
+
+        <div class="lg:col-span-8 space-y-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <section class="command-tile">
+                    <div class="tile-header"><span class="tile-title">Satellite Africa Prime</span> <i class="fa-solid fa-satellite animate-spin-slow"></i></div>
+                    <div class="p-6">
+                        <div id="map-area" class="h-60 bg-[url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg')] bg-contain bg-no-repeat bg-center filter invert sepia saturate-200 hue-rotate-180 relative border border-blue-900/20">
+                            <div class="absolute w-full h-1 bg-blue-500 top-0 animate-[scan_4s_linear_infinite] shadow-[0_0_15px_#00d4ff]"></div>
+                        </div>
+                    </div>
+                </section>
+                <section class="command-tile">
+                    <div class="tile-header"><span class="tile-title">Visual Vault</span></div>
+                    <div class="p-6">
+                        <div id="tile-gallery" class="grid grid-cols-4 gap-3 h-52 overflow-y-auto scrollbar-v"></div>
+                        <button onclick="downloadManifest()" class="mog-btn w-full mt-8">Export Mission Manifest</button>
+                    </div>
+                </section>
             </div>
-        </main>
-    </div>
-    
+
+            <section id="director-node" class="command-tile hidden !border-red-600 shadow-[0_0_50px_rgba(255,51,51,0.1)]">
+                <div class="tile-header"><span class="tile-title !text-red-500">Directorate Command</span> <i class="fa-solid fa-shield-halved"></i></div>
+                <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div onclick="document.getElementById('file-in').click()" class="border-2 border-dashed border-red-600/20 p-8 flex flex-col items-center justify-center cursor-pointer hover:bg-red-600/5">
+                        <input type="file" id="file-in" class="hidden" multiple onchange="handleUpload(this.files)">
+                        <i class="fa-solid fa-upload text-red-600 mb-2"></i>
+                        <p id="up-text" class="text-[9px] font-bold uppercase">Deploy Sonic Intel</p>
+                    </div>
+                    <div class="space-y-4">
+                        <button onclick="toggleDirectorUI()" class="mog-btn w-full !border-red-600 !text-red-500">Access Private Wealth Vault</button>
+                        <button onclick="pushBroadcast()" class="mog-btn w-full !border-white/20 !text-white">Emergency Signal Broadcast</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="command-tile">
+                <div class="tile-header"><span class="tile-title">Frequency Comms</span> <i class="fa-solid fa-message"></i></div>
+                <div class="p-6">
+                    <div id="chat-stream" class="h-52 overflow-y-auto space-y-4 mb-6 scrollbar-v font-mono" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay;"></div>
+                    <div class="flex gap-4">
+                        <input id="chat-msg-in" type="text" placeholder="TRANSMIT PACKET..." class="mog-input">
+                        <button onclick="sendPacket()" class="mog-btn !w-40">Transmit</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
     <section id="director-dashboard" class="hidden fixed inset-0 z-[11000] bg-black/98 p-10 overflow-y-auto backdrop-blur-3xl">
         <div class="max-w-4xl mx-auto space-y-12">
             <div class="flex justify-between items-center border-b border-gold/30 pb-4">
-                <h2 class="text-3xl text-white font-black uppercase italic">Director Vault</h2>
+                <h2 class="text-3xl text-white font-black italic">Directorate Vault</h2>
                 <button onclick="toggleDirectorUI()" class="text-white text-2xl">×</button>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div class="command-tile p-10 text-center border-gold/40">
                     <span class="text-xs text-gold uppercase tracking-[0.5em]">Wealth Index</span>
-                    <p id="main-wealth-display" class="text-5xl font-black mt-4 text-white">R0.00</p>
+                    <p id="main-wealth-display" class="text-5xl font-black mt-4 text-white">R73,827.00</p>
                 </div>
-                <div class="command-tile p-8 border-gold/20 text-center">
-                    <span class="tile-title !p-0 !border-none mb-6">Sovereign QR Protocol</span>
-                    <div id="qr-protocol" class="bg-white p-4 rounded-xl inline-block"></div>
+                <div class="command-tile p-10 border-gold/40">
+                    <p class="text-[9px] text-zinc-500 uppercase font-black mb-3 text-center">RSA Bond Tracker</p>
+                    <div class="flex justify-between items-end"><span class="text-xs text-white/60">Yield:</span><span id="bond-yield-val" class="text-xl text-gold font-black">R13,827.19</span></div>
+                    <div class="w-full bg-white/5 h-1.5 rounded-full mt-3 overflow-hidden">
+                        <div id="bond-progress-bar" class="bg-gold h-full" style="width: 45%"></div>
+                    </div>
                 </div>
             </div>
             <div id="merch-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
     </section>
 
-    <div id="ticker-wrap"><div class="ticker-move">MASTER_V100.5.0 // NEURAL_LINK_ESTABLISHED // SATELLITE_PRIME_SYNC // DIRECTORATE_BYPASS_READY // FREQUENCY_SYNC_ACTIVE...</div></div>
+    <div id="event-ticker">
+        <div class="ticker-label">MOG_LOG</div>
+        <div id="ticker-content">... SYSTEM V100.6.0 PRESTIGE TOTALITY ONLINE ... AFRICA SECTOR PRIME STABLE ... SONIC VAULT ACCESSIBLE ... DIRECTORATE LINK READY ...</div>
+    </div>
 
     <script>
         const CFG = { 
-            U: "https://hzelmkthdqtbcxffsstl.supabase.co", 
-            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY",
+            U: "https://vbkpatwvgvwarybbpiky.supabase.co", 
+            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8",
             D: "director.mog@gmail.com",
             REDIRECT: "https://hzelmkthdqtbcxffsstl.supabase.co/auth/v1/callback"
         };
         const db = window.supabase.createClient(CFG.U, CFG.K);
         let user = null; let logoClicks = 0;
 
-        // PWA & INITIALIZATION
+        // --- PWA & VISUALS ---
         if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('service-worker.js')); }
-
-        window.addEventListener('load', () => {
-            initVisuals();
+        
+        window.onload = () => {
+            initNeuralVisuals();
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
                 setTimeout(() => document.getElementById('splash-screen').style.visibility = 'hidden', 1000);
             }, 2500);
-        });
+        };
 
-        // AUTH HANDSHAKE
+        // --- AUTH PROTOCOL ---
+        async function handleAuth(mode) {
+            const e = document.getElementById('email-in').value, p = document.getElementById('password-in').value;
+            const { error } = mode === 'signup' ? await db.auth.signUp({ email: e, password: p }) : await db.auth.signInWithPassword({ email: e, password: p });
+            if (error) alert("HANDSHAKE FAILED: " + error.message);
+        }
+
         async function loginWithGoogle() {
             await db.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: CFG.REDIRECT } });
         }
@@ -184,58 +231,53 @@
         db.auth.onAuthStateChange((event, session) => {
             if (session) {
                 user = session.user;
-                document.getElementById('auth-status').innerText = "ENCRYPTED";
-                document.getElementById('auth-status').className = "text-[10px] text-blue-400 font-bold border border-blue-900 px-6 py-2 bg-blue-950/10 tracking-[0.4em]";
+                document.getElementById('auth-form').classList.add('hidden');
+                document.getElementById('op-profile').classList.remove('hidden');
+                document.getElementById('active-alias').innerText = user.email.split('@')[0].toUpperCase();
+                document.getElementById('auth-status').innerText = "Link Encrypted";
+                document.getElementById('auth-status').className = "text-[10px] text-blue-400 font-bold border border-blue-900 px-6 py-2 bg-blue-950/20 tracking-[.3em]";
+                
                 if (user.email === CFG.D) document.getElementById('director-node').classList.remove('hidden');
-                syncVault(); syncWealth(); syncMerch(); generateQR(); initSatellite();
+                new QRCode(document.getElementById("qrcode"), { text: user.id, width: 100, height: 100 });
+                
+                syncSystem();
             }
         });
 
-        // SATELLITE TRACKER
-        function initSatellite() {
-            const channel = db.channel('africa_prime');
-            channel.on('presence', { event: 'sync' }, () => {
-                const state = channel.presenceState();
-                const map = document.getElementById('map-area');
-                map.innerHTML = '';
-                Object.keys(state).forEach((id, i) => {
-                    const ping = document.createElement('div');
-                    ping.className = "absolute w-2 h-2 bg-blue-400 rounded-full animate-ping";
-                    ping.style.top = (20 + (i * 15)) % 80 + "%";
-                    ping.style.left = (40 + (i * 10)) % 80 + "%";
-                    map.appendChild(ping);
-                });
-            }).subscribe(async (status) => { if (status === 'SUBSCRIBED') await channel.track({ online_at: new Date() }); });
+        // --- SYSTEM SYNC ---
+        async function syncSystem() {
+            fetchVault();
+            syncWealth();
+            syncMerch();
+            initSatellitePresence();
         }
 
-        // DATA SYNC
-        async function syncVault() {
-            const { data } = await db.storage.from('intel-vault').list();
-            if (data) {
-                document.getElementById('sonic-list').innerHTML = data.map(file => `
-                    <div class="p-3 border border-white/5 flex justify-between items-center cursor-pointer hover:bg-gold hover:text-black font-bold text-[10px]" onclick="playTrack('${file.name}')">
-                        <span><i class="fa-solid fa-play mr-3"></i>${file.name.toUpperCase()}</span>
-                    </div>
-                `).join('');
-            }
-        }
-
-        function playTrack(name) {
-            const url = `${CFG.U}/storage/v1/object/public/intel-vault/${name}`;
-            const p = document.getElementById('player');
-            p.src = url; p.play();
-        }
-
-        async function handleUpload(files) {
-            document.getElementById('up-text').innerText = "TRANSMITTING...";
-            for (const file of files) { await db.storage.from('intel-vault').upload(`${Date.now()}-${file.name}`, file); }
-            document.getElementById('up-text').innerText = "DEPLOY SONIC INTEL";
-            syncVault();
+        async function fetchVault() {
+            const { data } = await db.storage.from('intel-vault').list('', { sortBy: { column: 'created_at', order: 'desc' } });
+            const list = document.getElementById('mix-list');
+            const gallery = document.getElementById('tile-gallery');
+            list.innerHTML = ""; gallery.innerHTML = "";
+            if (data) data.forEach(f => {
+                const url = `${CFG.U}/storage/v1/object/public/intel-vault/${f.name}`;
+                if (f.name.match(/\.(mp3|wav)$/i)) {
+                    const row = document.createElement('div');
+                    row.className = "track-row";
+                    row.innerHTML = `<span><i class="fa-solid fa-play mr-4"></i>${f.name.toUpperCase()}</span>`;
+                    row.onclick = () => { document.getElementById('player').src = url; document.getElementById('player').play(); };
+                    list.appendChild(row);
+                } else if (f.name.match(/\.(jpg|png|webp)$/i)) {
+                    gallery.innerHTML += `<div class="aspect-square bg-black border border-white/5 overflow-hidden cursor-pointer hover:border-gold"><img src="${url}" class="w-full h-full object-cover"></div>`;
+                }
+            });
         }
 
         async function syncWealth() {
             const { data } = await db.from('wealth_stats').select('*').single();
-            if (data) document.getElementById('main-wealth-display').innerText = `R${data.total_wealth.toLocaleString()}`;
+            if (data) {
+                document.getElementById('main-wealth-display').innerText = `R${data.total_wealth.toLocaleString()}`;
+                document.getElementById('bond-yield-val').innerText = `R${data.bond_yield.toLocaleString()}`;
+                document.getElementById('bond-progress-bar').style.width = `${data.bond_progress}%`;
+            }
         }
 
         async function syncMerch() {
@@ -249,14 +291,26 @@
             }
         }
 
-        // UTILS
-        function generateQR() {
-            const qr = document.getElementById("qr-protocol");
-            qr.innerHTML = "";
-            new QRCode(qr, { text: window.location.href, width: 120, height: 120 });
+        function initSatellitePresence() {
+            const channel = db.channel('africa_prime');
+            channel.on('presence', { event: 'sync' }, () => {
+                const state = channel.presenceState();
+                const map = document.getElementById('map-area');
+                if(!map) return;
+                map.innerHTML = '<div class="absolute w-full h-1 bg-blue-500 top-0 animate-[scan_4s_linear_infinite] shadow-[0_0_15px_#00d4ff]"></div>';
+                Object.keys(state).forEach((id, i) => {
+                    const ping = document.createElement('div');
+                    ping.className = "absolute w-2 h-2 bg-blue-400 rounded-full animate-ping";
+                    ping.style.top = (20 + (i * 15)) % 80 + "%";
+                    ping.style.left = (40 + (i * 10)) % 80 + "%";
+                    map.appendChild(ping);
+                });
+            }).subscribe(async (status) => { if (status === 'SUBSCRIBED') await channel.track({ online_at: new Date() }); });
         }
 
+        // --- COMMAND UTILS ---
         function toggleDirectorUI() { document.getElementById('director-dashboard').classList.toggle('hidden'); }
+        async function logout() { await db.auth.signOut(); location.reload(); }
 
         function handleLogoSequence() {
             logoClicks++;
@@ -265,6 +319,13 @@
                 if(p === '7486' || p === '@MOGProtocol2026') toggleDirectorUI();
             }
             setTimeout(() => logoClicks = 0, 5000);
+        }
+
+        async function handleUpload(files) {
+            document.getElementById('up-text').innerText = "TRANSMITTING...";
+            for (const file of files) { await db.storage.from('intel-vault').upload(`${Date.now()}_${file.name}`, file); }
+            document.getElementById('up-text').innerText = "DEPLOY SONIC INTEL";
+            fetchVault();
         }
 
         function sendPacket() {
@@ -276,22 +337,26 @@
             mIn.value = "";
         }
 
-        // NEURAL VISUALS
-        function initVisuals() {
-            const canvas = document.getElementById('lightning-canvas');
-            const ctx = canvas.getContext('2d');
-            let w = canvas.width = window.innerWidth, h = canvas.height = window.innerHeight;
-            function anim() {
-                ctx.fillStyle = 'rgba(0,0,0,0.05)'; ctx.fillRect(0,0,w,h);
-                if(Math.random() > 0.97) {
+        function initNeuralVisuals() {
+            resize();
+            function animate() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.15)'; ctx.fillRect(0, 0, w, h);
+                if (Math.random() > 0.95) {
                     ctx.strokeStyle = '#00d4ff'; ctx.lineWidth = 1; ctx.beginPath();
-                    let x = Math.random()*w, y=0; ctx.moveTo(x,y);
-                    for(let i=0; i<8; i++) { x+=(Math.random()-0.5)*100; y+=h/8; ctx.lineTo(x,y); }
+                    let x = Math.random()*w, y = Math.random()*h; ctx.moveTo(x,y);
+                    for(let i=0; i<12; i++){ x+=(Math.random()-0.5)*150; y+=(Math.random()-0.5)*150; ctx.lineTo(x,y); }
                     ctx.stroke();
                 }
-                requestAnimationFrame(anim);
+                requestAnimationFrame(animate);
             }
-            anim();
+            animate();
+        }
+        let w, h; function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+        window.onresize = resize;
+
+        function downloadManifest() {
+            const blob = new Blob([`M.O.G. TOTALITY MANIFEST\n${new Date().toISOString()}\nOPERATIVE: ${user ? user.email : 'GUEST'}`], { type: 'text/plain' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "MOG_TOTALITY_INTEL.txt"; a.click();
         }
     </script>
 </body>
