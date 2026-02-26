@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.8.7 MASTER</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.9</title>
     
     <link rel="manifest" href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/manifest.json">
     <meta name="theme-color" content="#050505">
@@ -20,7 +19,7 @@
         
         :root { 
             --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; 
-            --mog-glass: rgba(5, 12, 20, 0.85); --mog-border: rgba(0, 212, 255, 0.4);
+            --mog-glass: rgba(10, 20, 30, 0.85); --mog-border: rgba(0, 212, 255, 0.3);
             --wa-bg: #0b141a;
         }
 
@@ -33,7 +32,7 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
         .splash-logo-container {
-            width: 200px; height: 200px; clip-path: circle(50% at 50% 50%);
+            width: 180px; height: 180px; clip-path: circle(50% at 50% 50%);
             border: 2px solid var(--mog-gold); animation: pulse-glow 2s infinite alternate;
         }
         @keyframes pulse-glow {
@@ -51,31 +50,32 @@
 
         #main-title {
             font-family: 'Big Shoulders Display', sans-serif !important;
-            font-size: clamp(2rem, 5vw, 4rem); line-height: 1; white-space: nowrap; 
+            font-size: clamp(1.8rem, 4vw, 3.5rem); line-height: 1; white-space: nowrap; 
             background: linear-gradient(to bottom, #fff 10%, var(--mog-gold) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
         }
 
-        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 28px; overflow: hidden; backdrop-filter: blur(40px); box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8); }
-        .tile-header { border-bottom: 1px solid rgba(0, 212, 255, 0.2); padding: 18px 24px; background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, transparent 100%); }
-        .tile-title { font-family: 'Clash Display', sans-serif; letter-spacing: 4px; text-transform: uppercase; font-size: 10px; color: var(--mog-blue); }
+        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 24px; overflow: hidden; backdrop-filter: blur(40px); }
+        .tile-header { border-bottom: 1px solid rgba(0, 212, 255, 0.1); padding: 15px 20px; background: rgba(0, 212, 255, 0.05); }
+        .tile-title { font-family: 'Clash Display', sans-serif; letter-spacing: 3px; text-transform: uppercase; font-size: 9px; color: var(--mog-blue); font-weight: 700; }
 
         #ticker-wrap { position: fixed; top: 0; width: 100%; background: #000; border-bottom: 1px solid var(--mog-gold); z-index: 1000; height: 35px; display: flex; align-items: center; overflow: hidden; }
-        .ticker-move { white-space: nowrap; animation: ticker 45s linear infinite; font-size: 9px; font-weight: 900; letter-spacing: 2.5px; color: var(--mog-gold); text-transform: uppercase; }
+        .ticker-move { white-space: nowrap; animation: ticker 40s linear infinite; font-size: 9px; font-weight: 900; color: var(--mog-gold); letter-spacing: 2px; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* WHATSAPP CHAT */
-        .wa-bubble { position: relative; max-width: 85%; padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; font-size: 13px; color: #e9edef; }
-        .wa-in { background: #202c33; align-self: flex-start; }
-        .wa-out { background: #005c4b; align-self: flex-end; }
+        /* PREMIUM BUTTONS */
+        .premium-btn { 
+            background: linear-gradient(135deg, #D4AF37 0%, #8A6D3B 100%); 
+            color: #000; font-weight: 900; text-transform: uppercase; 
+            padding: 14px; border-radius: 12px; width: 100%; font-size: 10px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
 
-        .revenue-btn { background: linear-gradient(135deg, #D4AF37 0%, #8A6D3B 100%); color: #000; font-weight: 900; text-transform: uppercase; padding: 12px; border-radius: 12px; width: 100%; font-size: 11px; }
-        
-        #side-drawer { visibility: hidden; pointer-events: none; }
-        #side-drawer.translate-x-0 { visibility: visible; pointer-events: auto; }
-        .scroller-v { overflow-y: auto; scrollbar-width: none; }
-        .scroller-v::-webkit-scrollbar { display: none; }
+        .wa-bubble { max-width: 85%; padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; font-size: 13px; }
+        .wa-out { background: #005c4b; align-self: flex-end; color: white; }
+
+        .nav-link { font-size: 10px; font-weight: 900; letter-spacing: 2px; color: rgba(255,255,255,0.5); text-transform: uppercase; cursor: pointer; }
+        .nav-link:hover { color: var(--mog-blue); }
     </style>
 </head>
 <body id="mog-totality">
@@ -84,105 +84,86 @@
         <div class="splash-logo-container">
             <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="w-full h-full object-cover">
         </div>
-        <p class="mt-8 mono text-[10px] text-blue-400 tracking-[0.5em] uppercase animate-pulse">Initializing Totality...</p>
+        <p class="mt-8 mono text-[9px] text-gold tracking-[0.5em] uppercase animate-pulse">Ministry of Groove: Totality Engine</p>
     </div>
 
     <div id="bg-canvas"></div>
 
     <div id="ticker-wrap">
-        <div class="ticker-move">MASTER_V100.2.8.7 // REVENUE_PORTAL_UPGRADED // RSA_BOND_SYNC // ORIGIN_54_MERCH_ONLINE // DIRECTOR_MOG ONLINE...</div>
+        <div class="ticker-move">MASTER_V100.2.9 // PHASE_2: PREMIUM_UPLINK_READY // RSA_BOND_SYNC // NO_GHOST_ZONES // WITBANK_HQ ONLINE...</div>
     </div>
 
-    <nav id="side-drawer" class="fixed top-0 right-0 h-full w-80 bg-black/95 backdrop-filter blur-2xl z-[10000] border-l border-blue-500/30 translate-x-full transition-transform duration-500 shadow-[-20px_0_60px_rgba(0,0,0,0.9)]">
-        <div class="p-10 space-y-10">
-            <div class="flex justify-between items-center border-b border-white/5 pb-6">
-                <span class="text-gold font-black text-xs uppercase tracking-widest">M.O.G. Folders</span>
-                <button onclick="toggleDrawer()" class="text-white opacity-40 hover:opacity-100"><i class="fa-solid fa-xmark text-2xl"></i></button>
-            </div>
-            <ul class="space-y-4 mono text-[11px] text-gray-400">
-                <li class="hover:text-gold cursor-pointer p-4 border-b border-white/5 uppercase">Revenue Strategy</li>
-                <li class="hover:text-gold cursor-pointer p-4 border-b border-white/5 uppercase">RSA Bond Tracker</li>
-                <li class="hover:text-gold cursor-pointer p-4 border-b border-white/5 uppercase">App Store Protocol</li>
-            </ul>
-        </div>
-    </nav>
-
-    <div id="app-content" class="mt-20 p-8">
-        <header class="flex flex-col lg:flex-row justify-between items-center gap-10 mb-10 pl-12 lg:pl-0 relative z-50">
+    <div id="app-content" class="mt-20 p-6 lg:p-12">
+        <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-12 relative z-50">
             <div class="flex items-center gap-6">
-                <button onclick="toggleDrawer()" class="text-blue-400 text-3xl hover:rotate-90 transition-transform active:scale-90">
-                    <i class="fa-solid fa-bars-staggered"></i>
-                </button>
-                <div class="flex items-center gap-6">
-                    <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-20 w-20 rounded-full border-2 border-blue-500/30 shadow-2xl cursor-pointer">
-                    <div class="flex flex-col">
-                        <h1 id="main-title">Ministry of Groove</h1>
-                        <p class="text-[10px] text-blue-400 tracking-[.6em] mt-2 uppercase font-black">Decrypting the Culture. Synchronizing the Grid.</p>
+                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-20 w-20 rounded-full border-2 border-gold/40 shadow-2xl cursor-pointer">
+                <div>
+                    <h1 id="main-title">Ministry of Groove</h1>
+                    <div class="flex gap-6 mt-3">
+                        <span class="nav-link" onclick="scrollTo('radar')">Radar</span>
+                        <span class="nav-link" onclick="scrollTo('chat')">Frequency</span>
+                        <span class="nav-link" onclick="scrollTo('wealth')">Vault</span>
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col items-end text-right">
-                <div class="text-[12px] text-gold font-black border border-gold/50 px-8 py-3 bg-gold/5 tracking-[.6em] rounded-full">WEALTH INDEX: R73,827</div>
+            <div class="flex flex-col items-end">
+                <div class="text-[11px] text-gold font-black border border-gold/30 px-6 py-2 bg-gold/5 tracking-[0.4em] rounded-full shadow-lg">
+                    WEALTH INDEX: R73,827
+                </div>
             </div>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-50">
-            <div class="lg:col-span-4 space-y-10">
-                <section class="command-tile p-8">
-                    <div class="tile-header flex justify-between px-0 mb-4"><span class="tile-title">Sovereign Registry</span><i class="fa-solid fa-user-shield text-blue-400"></i></div>
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-50">
+            
+            <div class="lg:col-span-4 space-y-8">
+                <section class="command-tile p-6">
+                    <div class="tile-header flex justify-between px-0 mb-4 border-none bg-transparent">
+                        <span class="tile-title">Identity Gateway</span>
+                        <i class="fa-solid fa-key text-blue-400"></i>
+                    </div>
                     <div id="auth-ui" class="space-y-4">
-                        <input id="email-in" type="email" placeholder="ACCESS EMAIL" class="w-full bg-black/40 border border-blue-500/20 rounded-xl p-4 text-white text-[10px] outline-none">
-                        <button onclick="handleAuth()" class="master-btn !p-4 !text-xs">Authorize Link</button>
+                        <input id="email-in" type="email" placeholder="OPERATIVE EMAIL" class="w-full bg-black/40 border border-blue-500/20 rounded-xl p-4 text-white text-[10px] outline-none focus:border-blue-400">
+                        <button onclick="handleAuth()" class="premium-btn">Authorize Link</button>
                     </div>
                 </section>
 
-                <section class="command-tile h-80">
-                    <div class="tile-header flex justify-between"><span class="tile-title">National Territorial Radar</span><i class="fa-solid fa-satellite-dish"></i></div>
-                    <iframe class="w-full h-full grayscale invert opacity-30 scale-150" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d57544.755490076!2d29.2319985!3d-25.7876545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sza!4v1700000000000!5m2!1sen!2sza"></iframe>
-                </section>
-
-                <section class="command-tile p-8 space-y-6">
-                    <div class="tile-header flex justify-between px-0"><span class="tile-title text-gold">Wealth Grid & Monetization</span><i class="fa-solid fa-coins text-gold"></i></div>
-                    <div class="space-y-3">
-                        <button class="revenue-btn">M.O.G. Premium Subscription</button>
-                        <button class="revenue-btn" style="background: #111; color: var(--mog-gold); border: 1px solid var(--mog-gold);">Shop: ORIGIN 54 Collective</button>
-                    </div>
-                    <div class="pt-4 border-t border-white/10">
-                        <p class="text-[9px] text-zinc-400 uppercase font-black mb-2">RSA Retail Savings Bond Tracker</p>
-                        <div class="flex justify-between items-end"><span class="text-xs text-white font-bold">Projected Yield:</span><span class="text-lg text-gold font-black">R13,827.19</span></div>
-                        <div class="w-full bg-white/5 h-1.5 rounded-full mt-2"><div class="bg-gold h-full rounded-full" style="width: 45%"></div></div>
-                    </div>
+                <section id="radar" class="command-tile h-72">
+                    <div class="tile-header flex justify-between"><span class="tile-title">National Radar Grid</span><i class="fa-solid fa-satellite-dish"></i></div>
+                    <iframe class="w-full h-full grayscale invert opacity-20 contrast-125 scale-150" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114944.5671569766!2d29.15540346393529!3d-25.875323985799975!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ee266935835697d%3A0x9d11634579cc5f6d!2seMalahleni!5e0!3m2!1sen!2sza!4v1715421234567!5m2!1sen!2sza"></iframe>
                 </section>
             </div>
 
-            <div class="lg:col-span-8 space-y-10">
-                <section class="command-tile">
-                    <div class="tile-header flex justify-between"><span class="tile-title">Visual Intelligence Gallery</span><i class="fa-solid fa-layer-group"></i></div>
-                    <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 gap-3 p-4 max-h-96 scroller-v">
-                        <video muted loop autoplay class="w-full h-full object-cover opacity-50 rounded-xl">
-                            <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/1000211769.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </section>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <section class="command-tile h-[600px] flex flex-col">
-                        <div class="tile-header flex justify-between items-center"><span class="tile-title">Frequency Grid</span><i class="fa-brands fa-spotify text-2xl text-[#1DB954]"></i></div>
-                        <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX6ThpU68Anwa" width="100%" height="450" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen;"></iframe>
-                    </section>
-
-                    <section class="command-tile h-[600px] flex flex-col" style="background: var(--wa-bg);">
-                        <div class="tile-header bg-[#202c33] flex justify-between py-3 px-4"><span class="tile-title text-white">Frequency Chat</span><div class="flex gap-4 text-zinc-400"><i class="fa-solid fa-video"></i><i class="fa-solid fa-phone"></i></div></div>
-                        <div id="chat-stream" class="flex-grow p-4 scroller-v flex flex-col" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay;"></div>
+            <div class="lg:col-span-8 space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <section id="chat" class="command-tile h-[550px] flex flex-col" style="background: var(--wa-bg);">
+                        <div class="tile-header bg-[#202c33] flex justify-between py-3 px-4 border-none">
+                            <span class="tile-title text-white">Frequency Chat</span>
+                            <div class="flex gap-4 text-zinc-500"><i class="fa-solid fa-video"></i><i class="fa-solid fa-phone"></i></div>
+                        </div>
+                        <div id="chat-stream" class="flex-grow p-4 scroller-v flex flex-col overflow-y-auto" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay;"></div>
                         <div class="p-3 bg-[#202c33] flex items-center gap-3">
                             <input type="text" id="chat-msg-in" placeholder="Transmit packet..." class="flex-grow bg-[#2a3942] rounded-lg p-3 text-white text-sm outline-none border-none">
                             <button onclick="sendPacket()" class="bg-[#00a884] text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg"><i class="fa-solid fa-paper-plane"></i></button>
                         </div>
                     </section>
+
+                    <section id="wealth" class="command-tile p-8 flex flex-col justify-between">
+                        <div>
+                            <div class="tile-header flex justify-between px-0 mb-6 border-none bg-transparent"><span class="tile-title text-gold">Phase 2: Premium Gateway</span><i class="fa-solid fa-crown text-gold"></i></div>
+                            <p class="text-[10px] text-zinc-400 uppercase leading-relaxed mb-6">Access the full Ministry of Groove intelligence archive, master mixes, and priority grid alerts.</p>
+                            <button class="premium-btn mb-4">Unlock Premium Access</button>
+                        </div>
+                        <div class="pt-6 border-t border-white/10">
+                            <p class="text-[9px] text-zinc-500 uppercase font-black mb-3 tracking-widest text-center">RSA Bond Sync Tracking</p>
+                            <div class="flex justify-between items-end"><span class="text-xs text-white/60 font-bold uppercase">Yield:</span><span class="text-xl text-gold font-black">R13,827.19</span></div>
+                            <div class="w-full bg-white/5 h-1.5 rounded-full mt-3 overflow-hidden"><div class="bg-gold h-full rounded-full" style="width: 45%"></div></div>
+                        </div>
+                    </section>
                 </div>
 
                 <section class="command-tile p-4">
-                    <div class="tile-header flex justify-between px-0 mb-4"><span class="tile-title text-gold">Sovereign Archive (MP3)</span><i class="fa-solid fa-record-vinyl text-gold"></i></div>
+                    <div class="tile-header flex justify-between border-none bg-transparent mb-2"><span class="tile-title">Sovereign Mandate Archive</span><i class="fa-solid fa-compact-disc text-gold"></i></div>
                     <audio src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" controls class="w-full h-10"></audio>
                 </section>
             </div>
@@ -190,10 +171,14 @@
     </div>
     
     <section id="director-dashboard" class="hidden fixed inset-0 z-[11000] bg-black/98 p-10 overflow-y-auto backdrop-blur-3xl">
-        <div class="flex justify-between items-center mb-8 border-b border-gold/30 pb-4"><h2 class="text-3xl text-white font-black uppercase italic">Master Totality</h2><button onclick="toggleDirectorUI()" class="text-white text-2xl"><i class="fa-solid fa-xmark"></i></button></div>
-        <div class="bg-white/5 p-10 rounded-3xl border border-gold/20 text-center max-w-xl mx-auto">
-            <span class="text-xs text-gold uppercase tracking-[0.5em]">Total Liquidity</span>
-            <p class="text-5xl font-black mt-4">R73,827.00</p>
+        <div class="max-w-4xl mx-auto flex flex-col h-full">
+            <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-4"><h2 class="text-3xl text-white font-black uppercase italic">Master Totality</h2><button onclick="toggleDirectorUI()" class="text-white text-2xl">×</button></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white/5 p-10 rounded-3xl border border-gold/20 text-center">
+                    <span class="text-xs text-gold uppercase tracking-[0.5em]">Total Liquidity</span>
+                    <p class="text-5xl font-black mt-4">R73,827.00</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -211,12 +196,7 @@
             }, 2500);
         });
 
-        function toggleDrawer() {
-            const drawer = document.getElementById('side-drawer');
-            drawer.classList.toggle('translate-x-full');
-            drawer.classList.toggle('translate-x-0');
-        }
-
+        function scrollTo(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
         function toggleDirectorUI() { document.getElementById('director-dashboard').classList.toggle('hidden'); }
 
         function handleLogoSequence() {
@@ -240,8 +220,8 @@
 
         window.onload = () => {
             setInterval(() => { 
-                const lat = document.getElementById('lat-val');
-                if(lat) lat.innerText = `${Math.floor(Math.random()*10)+8}ms`; 
+                const lat = Math.floor(Math.random()*10)+8;
+                console.log(`Uplink: ${lat}ms`);
             }, 4000);
         };
     </script>
