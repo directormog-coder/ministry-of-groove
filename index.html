@@ -3,37 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
+    <title>M.O.G. | SOVEREIGN GRID</title>
     
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
 
-    <title>M.O.G. | MINISTRY OF GROOVE</title>
-    <meta name="description" content="Sovereign sound transmitted from the eMalahleni Sector. Join the Grid frequency.">
     <meta property="og:title" content="Ministry of Groove | Official Grid">
-    <meta property="og:description" content="Secure communication and sovereign sound transmission for the eMalahleni Sector.">
-    <meta property="og:image" content="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
-    <meta property="og:url" content="https://ministry-of-groove.vercel.app/">
+    <meta property="og:description" content="Sovereign sound transmission from eMalahleni.">
+    <meta property="og:image" content="logo.png">
+    <meta property="og:url" content="https://directormog-coder.github.io/Ministry-of-Groove/">
     <meta property="twitter:card" content="summary_large_image">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/easyqrcodejs@4.4.13/dist/easy.qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=JetBrains+Mono:wght@700&family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
 
     <style>
         :root { 
             --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; 
-            --mog-glass: rgba(5, 12, 20, 0.95); --mog-border: rgba(0, 212, 255, 0.2);
-            --mog-neon-blue: rgba(0, 212, 255, 0.6);
+            --mog-glass: rgba(5, 12, 20, 0.98); --mog-border: rgba(0, 212, 255, 0.2);
         }
 
-        html, body { min-height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: #fff; scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
-        * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-
+        html, body { min-height: 100vh; width: 100vw; background-color: var(--mog-black); color: #fff; scroll-behavior: smooth; font-family: 'Inter', sans-serif; }
+        
+        /* GPU ACCELERATION FOR PERFORMANCE */
         #bg-canvas { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 70%); transform: translateZ(0); }
 
-        /* GRID SYSTEM */
         .mainframe-wrapper { 
             display: grid; padding: 25px; gap: 25px; 
             grid-template-columns: 1.2fr 1.6fr 1fr; 
@@ -42,153 +39,130 @@
         }
         @media (max-width: 1200px) { .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "chart" "location" "vault" "history" "requests" "director"; padding: 15px; } }
 
-        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 40px; overflow: hidden; backdrop-filter: blur(40px); position: relative; }
-        .logo-wrapper { position: relative; padding: 6px; border-radius: 50%; background: conic-gradient(from 0deg, var(--mog-gold), var(--mog-blue), var(--mog-gold)); box-shadow: 0 0 25px var(--mog-neon-blue); animation: rotate-orbit 12s linear infinite; }
-        @keyframes rotate-orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 40px; backdrop-filter: blur(40px); position: relative; overflow: hidden; }
         
-        #countdown-hub { background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); padding: 5px 20px; border-radius: 50px; display: none; align-items: center; gap: 12px; }
-        #live-siren, #ascension-overlay, #share-overlay { position: fixed; inset: 0; z-index: 10001; background: rgba(0,0,0,0.98); display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(50px); }
-        
+        /* OVERLAYS */
+        #live-siren, #share-overlay, #ascension-overlay { position: fixed; inset: 0; z-index: 10001; background: rgba(0,0,0,0.96); display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(50px); }
+
+        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 15px; padding: 18px; width: 100%; text-transform: uppercase; cursor: pointer; font-size: 11px; border: none; }
+        .mog-input { background: rgba(255,255,255,0.03); border: none; border-bottom: 1px solid var(--mog-border); padding: 12px; color: #fff; width: 100%; text-align: center; font-family: 'JetBrains Mono'; font-size: 12px; }
+
+        #director-tile { grid-area: director; display: none; border: 1px solid #ef4444; margin-top: 20px; }
         .director-active #director-tile { display: block; }
-        #director-tile { grid-area: director; display: none; border: 2px solid #ef4444; background: rgba(239, 68, 68, 0.05); margin-top: 20px; }
 
-        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 18px; padding: 18px; width: 100%; text-transform: uppercase; cursor: pointer; letter-spacing: 1px; font-size: 11px; }
-        .mog-input { background: rgba(255,255,255,0.03); border: none; border-bottom: 1px solid var(--mog-border); padding: 12px 0; color: #fff; width: 100%; outline: none; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-        
-        .share-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 15px; width: 100%; }
-        .share-node { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 20px; text-align: center; cursor: pointer; }
-        .share-node:hover { background: var(--mog-gold); color: #000; transform: scale(1.05); }
-
-        .vault-item { background: #000; border: 1px solid var(--mog-border); border-radius: 25px; overflow: hidden; margin-bottom: 15px; }
-        .vlog-badge { border: 2px solid var(--mog-gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
+        .logo-glow { animation: pulse-glow 3s infinite; }
+        @keyframes pulse-glow { 0%, 100% { filter: drop-shadow(0 0 5px var(--mog-blue)); } 50% { filter: drop-shadow(0 0 15px var(--mog-gold)); } }
     </style>
 </head>
-<body class="pb-40">
+<body class="pb-32">
     <div id="bg-canvas"></div>
 
-    <div id="live-siren"><div class="text-center"><h1 class="text-blue-400 font-black italic text-5xl uppercase mb-8">Transmission Live</h1><button onclick="document.getElementById('live-siren').style.display='none'" class="master-btn px-20">Sync Grid</button></div></div>
-    <div id="ascension-overlay"><div class="text-center"><h1 class="text-gold font-black italic text-6xl uppercase mb-4 animate-bounce">Ascension</h1><p id="ascension-msg" class="text-white uppercase tracking-widest text-sm mb-12"></p><button onclick="document.getElementById('ascension-overlay').style.display='none'" class="master-btn px-20">Acknowledge</button></div></div>
-    <div id="share-overlay"><div class="command-tile p-12 text-center max-w-md w-full mx-6"><span class="text-gold font-black uppercase text-[10px] mb-8 block tracking-[0.4em]">Viral Matrix</span><div class="share-grid"><div onclick="viralTransmit('whatsapp')" class="share-node"><i class="fa-brands fa-whatsapp text-2xl"></i></div><div onclick="viralTransmit('twitter')" class="share-node"><i class="fa-brands fa-x-twitter text-2xl"></i></div><div onclick="viralTransmit('fb-msg')" class="share-node"><i class="fa-brands fa-facebook-messenger text-2xl"></i></div></div><button onclick="document.getElementById('share-overlay').style.display='none'" class="mt-8 text-[10px] font-black uppercase text-zinc-500 underline">Close Frequency</button></div></div>
-
-    <header class="px-6 md:px-12 py-8 bg-black/60 border-b border-white/10 backdrop-blur-2xl sticky top-0 z-[1000] flex justify-between items-center">
-        <div class="flex items-center gap-6">
-            <div class="logo-wrapper" onclick="handleDirectorSequence()"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-14 w-14 md:h-18 md:w-18 rounded-full cursor-pointer"></div>
-            <h1 class="text-3xl md:text-4xl font-black italic uppercase text-white tracking-tighter" style="font-family: 'Big Shoulders Display';">M.O.G.</h1>
+    <div id="live-siren"><div class="text-center"><h1 class="text-blue-400 font-black italic text-5xl mb-8 uppercase">Transmission Live</h1><button onclick="this.parentElement.parentElement.style.display='none'" class="master-btn max-w-xs">Sync Frequency</button></div></div>
+    
+    <div id="share-overlay">
+        <div class="command-tile p-12 text-center max-w-sm w-full mx-6">
+            <span class="text-gold font-black uppercase text-[10px] mb-8 block tracking-widest">Broadcast Matrix</span>
+            <div class="grid grid-cols-3 gap-4">
+                <button onclick="viralTransmit('whatsapp')" class="p-4 bg-white/5 rounded-2xl hover:bg-gold hover:text-black transition-all"><i class="fa-brands fa-whatsapp text-2xl"></i></button>
+                <button onclick="viralTransmit('twitter')" class="p-4 bg-white/5 rounded-2xl hover:bg-gold hover:text-black transition-all"><i class="fa-brands fa-x-twitter text-2xl"></i></button>
+                <button onclick="viralTransmit('fb-msg')" class="p-4 bg-white/5 rounded-2xl hover:bg-gold hover:text-black transition-all"><i class="fa-brands fa-facebook-messenger text-2xl"></i></button>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" class="mt-8 text-[10px] font-black uppercase text-zinc-500">Close</button>
         </div>
-        <div id="countdown-hub"><span id="timer-display" class="font-mono text-blue-400 text-sm font-bold tracking-widest">00:00:00:00</span></div>
-        <div class="flex items-center gap-4">
-            <button onclick="document.getElementById('share-overlay').style.display='flex'" class="bg-white/5 border border-white/10 w-10 h-10 md:w-12 md:h-12 rounded-full hover:bg-gold hover:text-black"><i class="fa-solid fa-share-nodes"></i></button>
-            <div class="status-badge bg-white/5 px-4 md:px-6 py-2 md:py-3 rounded-full border border-white/10 flex items-center gap-4">
-                <span id="op-counter" class="text-gold font-black text-xl md:text-2xl">0</span>
+    </div>
+
+    <header class="px-8 py-6 border-b border-white/5 flex justify-between items-center sticky top-0 bg-black/80 backdrop-blur-xl z-[1000]">
+        <div class="flex items-center gap-4" onclick="handleDirectorSequence()">
+            <img src="logo.png" class="h-12 w-12 rounded-full cursor-pointer logo-glow" onerror="this.src='https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png'">
+            <h1 class="text-2xl font-black italic uppercase" style="font-family: 'Big Shoulders Display';">M.O.G.</h1>
+        </div>
+        <div class="flex items-center gap-6">
+            <button onclick="document.getElementById('share-overlay').style.display='flex'" class="text-gold"><i class="fa-solid fa-share-nodes"></i></button>
+            <div class="bg-white/5 px-6 py-2 rounded-full border border-white/10 flex items-center gap-4">
+                <span id="op-counter" class="text-gold font-black text-2xl">0</span>
                 <button onclick="initiateLogout()" class="text-red-500"><i class="fa-solid fa-power-off"></i></button>
             </div>
         </div>
     </header>
-    
+
     <main class="mainframe-wrapper">
-        <section class="command-tile p-8 md:p-12 flex flex-col justify-center" style="grid-area: gateway;">
-            <div id="op-badge" class="text-center">
-                <div id="qrcode-container" class="bg-white p-4 rounded-3xl inline-block border-4"><div id="qrcode"></div></div>
-                <h2 id="op-display-id" class="text-xl md:text-2xl font-black italic uppercase text-white mt-6">OPERATIVE</h2>
-                <div id="tier-tag" class="text-[8px] font-black uppercase mt-2 py-1 px-4 rounded-full inline-block">Novice</div>
+        <section class="command-tile p-10 flex flex-col items-center justify-center" style="grid-area: gateway;">
+            <div id="qrcode" class="bg-white p-2 rounded-2xl"></div>
+            <h2 id="op-display-id" class="text-xl font-black italic mt-6 text-gold uppercase tracking-widest">AUTHENTICATING...</h2>
+        </section>
+
+        <section class="command-tile min-h-[600px] flex flex-col" style="grid-area: messenger;">
+            <div id="chat-stream" class="flex-grow p-8 overflow-y-auto space-y-4"></div>
+            <div class="p-4 flex gap-3 border-t border-white/5">
+                <input type="text" id="chat-input" class="flex-grow bg-white/5 rounded-full px-6 py-4 text-xs outline-none" placeholder="Transmit packet...">
+                <button onclick="sendPacket()" class="bg-blue-600 w-12 h-12 rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane text-xs"></i></button>
             </div>
         </section>
 
-        <section class="command-tile min-h-[500px] md:min-h-[700px] flex flex-col" style="grid-area: messenger;">
-            <div id="chat-stream" class="flex-grow p-6 md:p-10 overflow-y-auto space-y-4"></div>
-            <div class="p-4 md:p-8 bg-black/50 flex gap-4"><input type="text" id="chat-input" placeholder="Transmit packet..." class="flex-grow bg-white/5 border border-white/10 rounded-full px-6 py-4 outline-none text-sm"><button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-12 h-12 md:w-14 md:h-14 flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button></div>
-        </section>
+        <section class="command-tile p-8" style="grid-area: chart;"><span class="text-[10px] font-black text-gold uppercase underline">Top 10 Index</span><div id="chart-list" class="mt-4 space-y-3"></div></section>
+        <section class="command-tile p-8 h-48" style="grid-area: location;"><span class="text-[10px] font-black text-blue-400 uppercase underline">Sector Coords</span><div id="loc-node" class="mt-4"></div></section>
+        <section class="command-tile p-8 h-80 overflow-y-auto" style="grid-area: vault;"><span class="text-[10px] font-black text-blue-400 uppercase underline">Intel Vault</span><div id="vault-list" class="mt-4 space-y-3"></div></section>
+        <section class="command-tile p-8 h-80 overflow-y-auto" style="grid-area: history;"><span class="text-[10px] font-black text-gold uppercase underline">Set Archive</span><div id="set-list" class="mt-4 space-y-3"></div></section>
+        <section class="command-tile p-8" style="grid-area: requests;"><span class="text-[10px] font-black text-blue-400 uppercase underline">Booth Request</span><input id="req-in" class="mog-input mt-4" placeholder="Artist - Track"><button onclick="sendReq()" class="master-btn mt-4">Send</button></section>
 
-        <section class="command-tile p-10 overflow-y-auto" style="grid-area: chart;"><span class="text-[11px] font-black text-gold uppercase italic mb-6 block underline">Top 10 Index</span><div id="chart-index" class="space-y-4"></div></section>
-        <section class="command-tile p-10 h-64 overflow-y-auto" style="grid-area: location;"><span class="text-[11px] font-black text-blue-400 uppercase italic mb-6 block underline tracking-[0.3em]">Sector Coords</span><div id="location-node-container" class="space-y-4"></div></section>
-        <section class="command-tile p-10 overflow-y-auto h-96" style="grid-area: vault;"><span class="text-[11px] font-black text-blue-400 uppercase italic mb-6 block underline">Intel Vault</span><div id="vault-content" class="space-y-6"></div></section>
-        <section class="command-tile p-10 h-96 overflow-y-auto" style="grid-area: history;"><span class="text-[11px] font-black text-gold uppercase italic mb-6 block underline">Set Archive</span><div id="setlist-container" class="space-y-4"></div></section>
-        <section class="command-tile p-10" style="grid-area: requests;"><span class="text-[11px] font-black text-blue-400 uppercase italic mb-4 block underline">Booth Request</span><input id="track-request-input" class="mog-input mb-4" placeholder="Artist - Track"><button onclick="sendRequest()" class="master-btn py-4">Transmit</button></section>
-
-        <section id="director-tile" class="command-tile p-12 col-span-full border-red-500/40">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <div class="bg-black/40 p-8 rounded-3xl border border-red-500/20"><h2 class="text-red-500 font-black italic text-xl uppercase mb-6">Console</h2><button onclick="triggerLiveSiren()" class="bg-blue-600 text-white w-full py-4 rounded-xl font-black text-xs mb-4">Fire Siren</button><input id="target-datetime" type="datetime-local" class="mog-input mb-4"><button onclick="setTemporalTarget()" class="bg-gold text-black w-full py-4 rounded-xl font-black text-xs">Set Sync</button></div>
-                <div class="bg-black/40 p-8 rounded-3xl border border-gold/20"><h2 class="text-gold font-black italic text-xl uppercase mb-6">Deploy</h2><input id="vault-url" class="mog-input mb-4" placeholder="URL"><input id="vault-title-in" class="mog-input mb-4" placeholder="Title"><select id="vault-type" class="w-full bg-black/50 border border-white/10 p-2 text-white text-xs mb-6 rounded-lg"><option value="SESSION">SESSION</option><option value="VLOG">DIRECTOR VLOG</option></select><button onclick="deployVaultIntel()" class="bg-gold text-black w-full py-4 rounded-xl font-black text-xs text-center">Deploy Intel</button></div>
-                <div id="request-inbox" class="bg-black/40 p-8 rounded-3xl border border-white/10 overflow-y-auto h-64"><h2 class="text-white font-black italic text-xl uppercase mb-6 italic">Booth Feed</h2></div>
+        <section id="director-tile" class="command-tile p-10 col-span-full">
+            <h2 class="text-red-500 font-black italic text-xl uppercase mb-6">Directorate Oversight</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <button onclick="triggerSiren()" class="bg-blue-600 py-4 rounded-xl font-black text-xs uppercase">Fire Emergency Siren</button>
+                <button onclick="initiateLogout()" class="bg-zinc-800 py-4 rounded-xl font-black text-xs uppercase">Lock All Grid Access</button>
             </div>
         </section>
-    </main>
-
-    <footer class="fixed bottom-0 w-full bg-black/95 border-t border-gold/20 py-6 text-center z-[2000]"><p class="text-gold italic font-black text-[10px] uppercase tracking-widest">M.O.G. © 2026 // MPUMALANGA SECTOR HQ</p></footer>
+                                                                                                                                                                           </main>
+                                                                                                                                                                           
+    <footer class="text-center py-10 opacity-30 text-[9px] uppercase font-black tracking-widest">M.O.G. © 2026 // Sovereign Grid Frequency</footer>
 
     <script>
         const CFG = { U: "https://hzelmkthdqtbcxffsstl.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY" };
-        const db = window.supabase.createClient(CFG.U, CFG.K);
-        let timerInterval, logoClicks = 0;
+        let db, clicks = 0;
+
+        window.onload = async () => {
+            db = window.supabase.createClient(CFG.U, CFG.K);
+            const { data: { user } } = await db.auth.getUser();
+            if (user && sessionStorage.getItem('mog_handshake_verified') === 'true') {
+                document.getElementById('op-display-id').innerText = user.email.split('@')[0].toUpperCase();
+                if(user.email === 'director.mog@gmail.com') document.documentElement.classList.add('director-active');
+                new QRCode(document.getElementById("qrcode"), { text: user.id, width: 140, height: 140, colorDark: "#D4AF37" });
+                initGrid();
+            } else { location.reload(); }
+        };
+
+        async function initGrid() {
+            const { data } = await db.from('messages').select('*').order('created_at', { ascending: false }).limit(20);
+            if(data) data.reverse().forEach(appendMsg);
+            db.channel('public:messages').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, p => appendMsg(p.new)).subscribe();
+            db.channel('totality').on('broadcast', { event: 'live' }, () => document.getElementById('live-siren').style.display = 'flex').subscribe();
+        }
+
+        function appendMsg(m) {
+            const s = document.getElementById('chat-stream');
+            if(!s || m.alias.includes('VAULT') || m.alias.includes('REQ_')) return;
+            s.innerHTML += `<div class="bg-white/5 p-4 rounded-2xl border border-white/5 mb-2"><span class="text-blue-400 block font-black text-[8px] uppercase mb-1">${m.alias}</span>${m.content}</div>`;
+            s.scrollTop = s.scrollHeight;
+        }
+
+        async function sendPacket() {
+            const i = document.getElementById('chat-input');
+            const { data: { user } } = await db.auth.getUser();
+            if(i.value && user) await db.from('messages').insert([{ content: i.value, alias: user.email.split('@')[0] }]);
+            i.value = "";
+        }
 
         function viralTransmit(p) {
-            const url = encodeURIComponent(window.location.href);
-            const msg = encodeURIComponent("Ministry of Groove Sovereign Frequency.");
-            const h = { 'whatsapp': `https://api.whatsapp.com/send?text=${msg}%20${url}`, 'twitter': `https://twitter.com/intent/tweet?text=${msg}&url=${url}`, 'fb-msg': `fb-messenger://share?link=${url}` };
-            window.open(h[p] || url, '_blank');
+            const u = encodeURIComponent(window.location.href);
+            const m = encodeURIComponent("Ministry of Groove Sovereign Frequency.");
+            const h = { 'whatsapp': `https://api.whatsapp.com/send?text=${m}%20${u}`, 'twitter': `https://twitter.com/intent/tweet?text=${m}&url=${u}`, 'fb-msg': `fb-messenger://share?link=${u}` };
+            window.open(h[p] || u, '_blank');
         }
 
-        async function checkSecurity() {
-            const { data: { user } } = await db.auth.getUser();
-            if (user && sessionStorage.getItem('mog_handshake_verified') === 'true') { setupGrid(user); }
-            else { initiateLogout(); }
-        }
-
-        async function setupGrid(user) {
-            const alias = user.email.split('@')[0];
-            document.getElementById('op-display-id').innerText = alias;
-            if(user.email === 'director.mog@gmail.com') document.documentElement.classList.add('director-active');
-            const { count } = await db.from('messages').select('*', { count: 'exact', head: true }).eq('alias', alias);
-            processTier(count, user.email, user.id);
-            fetchComms(); fetchHistory(); fetchVault(); fetchChartIndex(); fetchCoordinates();
-            if(user.email === 'director.mog@gmail.com') fetchRequests();
-            db.channel('sovereign-totality').on('broadcast', { event: 'live-now' }, () => document.getElementById('live-siren').style.display = 'flex')
-                         .on('broadcast', { event: 'set-timer' }, p => startCountdown(p.payload.target)).subscribe();
-        }
-
-        function processTier(count, email, userId) {
-            let color = "#00d4ff", label = "Novice", tClass = "tier-novice";
-            if (email === 'director.mog@gmail.com' || count >= 50) { color = "#D4AF37"; label = "Elite"; tClass = "tier-elite"; }
-            else if (count >= 10) { color = "#C0C0C0"; label = "Sentinel"; tClass = "tier-sentinel"; }
-            const lastCount = parseInt(localStorage.getItem('mog_last_count') || 0);
-            if ((count >= 10 && lastCount < 10) || (count >= 50 && lastCount < 50)) {
-                document.getElementById('ascension-msg').innerText = `Role Status: ${label}`;
-                document.getElementById('ascension-overlay').style.display = 'flex';
-            }
-            localStorage.setItem('mog_last_count', count);
-            document.getElementById('qrcode-container').className = `bg-white p-4 rounded-3xl inline-block border-4 ${tClass}`;
-            document.getElementById('tier-tag').innerText = label + " Status";
-            document.getElementById('tier-tag').style.color = color;
-            new QRCode(document.getElementById("qrcode"), { text: "MOG-OP-" + userId, width: 200, height: 200, colorDark: color, colorLight: "#ffffff", logo: "https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png", logoWidth: 55, logoHeight: 55, quietZone: 12 });
-        }
-
-        function startCountdown(target) {
-            document.getElementById('countdown-hub').style.display = 'flex';
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                const dist = target - Date.now();
-                if (dist < 0) { clearInterval(timerInterval); document.getElementById('live-siren').style.display = 'flex'; return; }
-                const h = Math.floor(dist / 3600000), m = Math.floor((dist % 3600000) / 60000), s = Math.floor((dist % 60000) / 1000);
-                document.getElementById('timer-display').innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-            }, 1000);
-        }
-
-        function triggerLiveSiren() { db.channel('sovereign-totality').send({ type: 'broadcast', event: 'live-now' }); }
-        function setTemporalTarget() { const target = document.getElementById('target-datetime').value; if(target) db.channel('sovereign-totality').send({ type: 'broadcast', event: 'set-timer', payload: { target: new Date(target).getTime() } }); }
-        async function deployVaultIntel() { const u = document.getElementById('vault-url').value, t = document.getElementById('vault-type').value, l = document.getElementById('vault-title-in').value; if(u) await db.from('messages').insert([{ content: `${u}|${l}|${t}`, alias: 'VAULT_ITEM' }]); location.reload(); }
-        async function fetchVault() { const { data } = await db.from('messages').select('*').eq('alias', 'VAULT_ITEM').order('created_at', { ascending: false }); const v = document.getElementById('vault-content'); if(data) { v.innerHTML = ""; data.forEach(i => { const [url, title, type] = i.content.split('|'); const e = document.createElement('div'); e.className = `vault-item ${type === 'VLOG' ? 'vlog-badge' : ''}`; e.innerHTML = `<img src="${url}" class="w-full h-32 object-cover opacity-50"><p class="p-4 text-[9px] uppercase font-black">${title}</p>`; v.appendChild(e); }); } }
-        async function fetchChartIndex() { const { data } = await db.from('messages').select('*').eq('alias', 'YT_CHART').order('created_at', { ascending: false }).limit(10); const c = document.getElementById('chart-index'); if(data) { c.innerHTML = ""; data.forEach((i, x) => { const [n, v] = i.content.split('|'); const d = document.createElement('div'); d.className = "flex items-center gap-4 bg-white/5 p-4 rounded-xl cursor-pointer"; d.onclick = () => window.open(`https://www.youtube.com/watch?v=${v}`, '_blank'); d.innerHTML = `<span class="text-gold font-bold">#${x+1}</span><span class="text-[9px] uppercase">${n}</span>`; c.appendChild(d); }); } }
-        async function fetchCoordinates() { const { data } = await db.from('messages').select('*').eq('alias', 'SECTOR_LOC').limit(1); if(data && data[0]) { const [n, u] = data[0].content.split('|'); document.getElementById('location-node-container').innerHTML = `<div class="bg-blue-500/10 p-6 rounded-2xl border border-blue-500/20 cursor-pointer text-[9px] uppercase font-black" onclick="window.open('${u}','_blank')">${n}</div>`; } }
-        async function fetchSetArchive() { const { data } = await db.from('messages').select('*').eq('alias', 'SET_REFERENCE').order('created_at', { ascending: false }); const s = document.getElementById('setlist-container'); if(data) { s.innerHTML = ""; data.forEach(i => { const [t, l] = i.content.split('|'); const b = document.createElement('div'); b.className = "bg-white/5 p-4 rounded-2xl"; b.innerHTML = `<p class="text-white text-[10px] font-black underline mb-2">${t}</p><p class="text-zinc-500 text-[8px] uppercase truncate">${l}</p>`; s.appendChild(b); }); } }
-        async function sendPacket() { const i = document.getElementById('chat-input'); const { data: { user } } = await db.auth.getUser(); if (i.value && user) await db.from('messages').insert([{ content: i.value, alias: user.email.split('@')[0] }]); i.value = ""; }
-        function appendMessage(msg) { if(['REQ_','VAULT_ITEM','YT_CHART','SET_REFERENCE','SECTOR_LOC'].some(k => msg.alias.includes(k))) return; const s = document.getElementById('chat-stream'); const d = document.createElement('div'); d.className = "bg-white/5 p-4 rounded-2xl mb-4 border border-white/5 shadow-neon-blue"; d.innerHTML = `<span class="text-blue-400 font-black text-[9px] block mb-1 uppercase">${msg.alias}</span>${msg.content}`; s.appendChild(d); s.scrollTop = s.scrollHeight; }
-        async function fetchComms() { const { data } = await db.from('messages').select('*').order('created_at', { ascending: false }).limit(50); if (data) data.reverse().forEach(msg => appendMessage(msg)); }
-        db.channel('public:messages').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, p => appendMessage(p.new)).subscribe();
-        async function initiateLogout() { await db.auth.signOut(); sessionStorage.clear(); localStorage.clear(); location.reload(); }
-        async function sendRequest() { const t = document.getElementById('track-request-input').value, { data: { user } } = await db.auth.getUser(); if(t) await db.from('messages').insert([{ content: t, alias: `REQ_${user.email.split('@')[0]}` }]); document.getElementById('track-request-input').value = ""; alert("Frequency Sent."); }
-        async function fetchRequests() { const { data } = await db.from('messages').select('*').like('alias', 'REQ_%').limit(10); const b = document.getElementById('request-inbox'); if(data) data.forEach(r => { const e = document.createElement('div'); e.className = "text-[9px] text-zinc-400 mb-2 p-2 bg-white/5 rounded uppercase"; e.innerHTML = `<span class="text-white">${r.alias.replace('REQ_','')}</span>: ${r.content}`; b.appendChild(e); }); }
-        function handleDirectorSequence() { logoClicks++; if(logoClicks === 5) { document.documentElement.classList.add('director-active'); logoClicks = 0; } setTimeout(() => logoClicks = 0, 5000); }
-        window.onload = checkSecurity;
+        function handleDirectorSequence() { clicks++; if(clicks === 5) document.documentElement.classList.add('director-active'); }
+        async function initiateLogout() { await db.auth.signOut(); sessionStorage.clear(); location.reload(); }
+        async function triggerSiren() { db.channel('totality').send({ type: 'broadcast', event: 'live' }); }
+        async function sendReq() { const t = document.getElementById('req-in').value; const { data: { user } } = await db.auth.getUser(); if(t) await db.from('messages').insert([{ content: t, alias: `REQ_${user.email.split('@')[0]}` }]); document.getElementById('req-in').value = ""; alert("Frequency Transmitted."); }
     </script>
 </body>
-            </html>
+</html>
