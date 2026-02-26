@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.18</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.25</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -14,7 +14,7 @@
     <style>
         :root { 
             --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; 
-            --mog-glass: rgba(5, 12, 20, 0.9); --mog-border: rgba(0, 212, 255, 0.3);
+            --mog-glass: rgba(5, 12, 20, 0.95); --mog-border: rgba(0, 212, 255, 0.3);
         }
 
         html, body { min-height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: #fff; }
@@ -36,7 +36,7 @@
             filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
         }
 
-        /* Master Grid Areas */
+        /* Layout Architecture */
         .mainframe-wrapper {
             display: grid; padding: 30px; gap: 30px;
             grid-template-columns: 1.2fr 1.6fr 1fr;
@@ -46,30 +46,26 @@
 
         @media (max-width: 1200px) { .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "hitlist" "radar" "extra"; } }
 
-        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 45px; overflow: hidden; backdrop-filter: blur(30px); position: relative; }
+        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 45px; overflow: hidden; backdrop-filter: blur(40px); position: relative; }
         
-        /* Sidebar System */
-        #side-menu { position: fixed; top: 0; right: -400px; width: 400px; height: 100%; background: #050505; border-left: 2px solid var(--mog-border); z-index: 5000; padding: 50px; box-shadow: -20px 0 60px rgba(0,0,0,0.8); }
-        #side-menu.active { right: 0; }
-        .menu-link { display: block; font-size: 28px; font-weight: 900; text-transform: uppercase; font-style: italic; margin-bottom: 25px; color: white; letter-spacing: -1px; }
-        .menu-link:hover { color: var(--mog-gold); transform: translateX(10px); }
+        /* THE HARD-LOCK OTP GATE */
+        #security-gate { position: fixed; inset: 0; z-index: 9999; background: #000; display: none; flex-direction: column; align-items: center; justify-content: center; }
 
-        /* Directorate Veil */
+        .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 2px solid var(--mog-border); padding: 18px 0; color: #fff; width: 100%; outline: none; margin-bottom: 20px; font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; text-align: center; }
+        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 18px; padding: 22px; width: 100%; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; }
+
+        /* Sidebar */
+        #side-menu { position: fixed; top: 0; right: -400px; width: 400px; height: 100%; background: #050505; border-left: 2px solid var(--mog-border); z-index: 5000; padding: 50px; }
+        #side-menu.active { right: 0; }
+        .menu-link { display: block; font-size: 28px; font-weight: 900; text-transform: uppercase; font-style: italic; margin-bottom: 25px; color: white; }
+
         .director-only { display: none !important; }
         .director-active .director-only { display: flex !important; }
 
         .ticker-wrap { height: 40px; background: #000; border-bottom: 1px solid var(--mog-border); overflow: hidden; display: flex; align-items: center; }
-        .ticker-move { white-space: nowrap; animation: ticker 50s linear infinite; font-size: 11px; font-weight: 900; color: var(--mog-blue); letter-spacing: 3px; }
+        .ticker-move { white-space: nowrap; animation: ticker 50s linear infinite; font-size: 10px; font-weight: 900; color: var(--mog-blue); letter-spacing: 3px; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 2px solid var(--mog-border); padding: 18px 0; color: #fff; width: 100%; outline: none; margin-bottom: 20px; font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; }
-        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 18px; padding: 22px; width: 100%; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; }
-        
-        .status-dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; margin-right: 10px; }
-        .online { background-color: #10b981; box-shadow: 0 0 15px #10b981; }
-        .offline { background-color: #ef4444; box-shadow: 0 0 15px #ef4444; }
-
-        .mog-bubble { background: rgba(0, 212, 255, 0.08); border: 1px solid rgba(0, 212, 255, 0.15); border-radius: 20px; padding: 15px; font-size: 14px; color: #eee; }
         ::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -77,22 +73,30 @@
 
     <div id="bg-canvas"></div>
 
+    <div id="security-gate">
+        <div class="command-tile p-12 max-w-md w-full text-center border-gold">
+            <span class="text-[10px] font-black text-blue-400 uppercase tracking-widest block mb-4">Neural Handshake Protocol</span>
+            <h2 class="text-2xl font-black italic uppercase text-white mb-8">Enter 6-Digit Code</h2>
+            <input id="otp-code" type="text" maxlength="6" placeholder="000000" class="mog-input tracking-[0.5em]">
+            <button onclick="verifyOTP()" class="master-btn mt-4">Unlock Totality</button>
+            <p class="text-[9px] text-zinc-600 mt-8 uppercase tracking-[0.3em]">Code transmitted to your linked email.</p>
+        </div>
+    </div>
+
     <div class="ticker-wrap">
-        <div class="ticker-move">TOTALITY v100.2.18 // NEURAL SYNC ACTIVE // HUB: hzelmkthdqtbcxffsstl // CLEAN HANDSHAKE PROTOCOL ENABLED // RSA NATIONAL RADAR: ONLINE // AMAPIANO FREQUENCY: STABLE...</div>
+        <div class="ticker-move">TOTALITY v100.2.25 // FORCED OTP HANDSHAKE ENABLED // HUB: hzelmkthdqtbcxffsstl // MIDDELBURG HQ // SECTOR: MPUMALANGA...</div>
     </div>
 
     <div id="side-menu">
-        <button onclick="toggleMenu()" class="text-white text-4xl mb-16 hover:rotate-90"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="toggleMenu()" class="text-white text-4xl mb-16"><i class="fa-solid fa-xmark"></i></button>
         <nav>
             <a href="#" class="menu-link">Intel Archive</a>
             <a href="#" class="menu-link">Frequency Comms</a>
-            <a href="#" class="menu-link">National Hitlist</a>
             <div class="mt-24 pt-10 border-t border-white/10">
-                <p class="text-[10px] uppercase tracking-[0.4em] text-zinc-500 font-black">Sector Intelligence</p>
+                <p class="text-[10px] uppercase tracking-widest text-zinc-500 font-black">Sector Intelligence</p>
                 <p class="text-sm text-gold mt-3 font-bold">Middelburg, Mpumalanga // RSA</p>
-                
                 <div class="mt-8 p-4 bg-white/5 rounded-2xl border border-white/10">
-                    <span class="text-[9px] uppercase font-black text-blue-400 block mb-2 text-center">Mandate Mix v1.0</span>
+                    <span class="text-[9px] uppercase font-black text-blue-400 block mb-2 text-center">Mandate Mix</span>
                     <audio id="mandate-player" controls class="w-full h-8 opacity-40">
                         <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" type="audio/mpeg">
                     </audio>
@@ -103,55 +107,36 @@
 
     <header class="px-12 py-8 flex justify-between items-center bg-black/40 border-b border-white/5 backdrop-blur-xl sticky top-0 z-[1000]">
         <div class="flex items-center gap-8">
-            <button onclick="toggleMenu()" class="text-blue-400 text-3xl p-4 bg-white/5 rounded-2xl hover:bg-white/10"><i class="fa-solid fa-bars-staggered"></i></button>
-            <img id="main-logo" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-20 w-20 rounded-full border-2 border-blue-500/30 cursor-pointer shadow-2xl active:scale-90">
+            <button onclick="toggleMenu()" class="text-blue-400 text-3xl p-4 bg-white/5 rounded-2xl hover:bg-white/10 transition-all"><i class="fa-solid fa-bars-staggered"></i></button>
+            <img id="main-logo" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-20 w-20 rounded-full border-2 border-blue-500/30 cursor-pointer active:scale-95 shadow-2xl">
             <div class="flex flex-col">
                 <h1 id="main-title">Ministry of Groove</h1>
                 <p class="text-[11px] font-black uppercase tracking-[0.5em] text-white opacity-90">Sovereign Custodians of Sound</p>
             </div>
         </div>
-        <div class="flex items-center gap-6">
-            <button id="google-link-btn" onclick="loginWithGoogle()" class="text-[10px] bg-white text-black px-10 py-4 rounded-full font-black uppercase hover:bg-gold transition-all shadow-xl">Google Link</button>
-        </div>
+        <button id="google-link-btn" onclick="loginWithGoogle()" class="text-[10px] bg-white text-black px-10 py-4 rounded-full font-black uppercase hover:bg-gold shadow-xl">Google Link</button>
     </header>
 
-    <main class="mainframe-wrapper">
+    <main class="mainframe-wrapper" id="main-grid-ui">
         <section class="command-tile p-12 flex flex-col justify-center" style="grid-area: gateway;">
             <div id="signin-ui">
-                <span id="matrix-title" class="text-[11px] font-black text-blue-400 uppercase tracking-widest block mb-6">Neural Identity Matrix</span>
-                <input id="login-user" type="text" placeholder="OPERATIVE_ID" class="mog-input">
-                <input id="login-pass" type="password" placeholder="PASSCODE" class="mog-input">
-                <button id="auth-btn" onclick="loginOperative()" class="master-btn mt-6">Authorize</button>
-                <p class="text-[10px] text-zinc-500 mt-6 text-center">
-                    <button onclick="toggleAuthMode()" class="hover:text-gold uppercase tracking-widest font-black">Toggle Sign-Up / Login</button>
-                </p>
+                <span class="text-[11px] font-black text-blue-400 uppercase tracking-widest block mb-6">Neural Identity Matrix</span>
+                <input id="login-email" type="email" placeholder="OPERATIVE_EMAIL" class="mog-input">
+                <button onclick="requestManualOTP()" class="master-btn mt-6">Authorize</button>
             </div>
 
             <div id="active-op-badge" class="hidden text-center animate-fade-in">
-                <div id="qrcode" class="bg-white p-5 rounded-3xl inline-block mb-8 shadow-2xl border-8 border-black"></div>
-                <h2 id="display-op-id" class="text-4xl font-black italic uppercase text-gold tracking-tighter">OPERATIVE</h2>
+                <div id="qrcode" class="bg-white p-5 rounded-3xl inline-block mb-8 shadow-2xl"></div>
+                <h2 id="display-op-id" class="text-4xl font-black italic uppercase text-gold">OPERATIVE</h2>
             </div>
 
             <div class="director-only flex-col mt-8 space-y-5">
-                <div class="bg-black/60 rounded-3xl p-8 border border-white/5">
-                    <span class="text-[10px] font-black text-gold uppercase tracking-widest block mb-5 underline">System Diagnostics</span>
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between text-[11px] font-bold">
-                            <span class="text-zinc-400 uppercase">Supabase Uplink</span>
-                            <span id="health-db" class="flex items-center"><span class="status-dot offline"></span>SYNCING</span>
-                        </div>
-                        <div class="flex items-center justify-between text-[11px] font-bold">
-                            <span class="text-zinc-400 uppercase">Google Auth</span>
-                            <span id="health-auth" class="flex items-center"><span class="status-dot online"></span>ACTIVE</span>
-                        </div>
-                    </div>
+                <div class="bg-black/60 rounded-3xl p-8 border border-white/5 text-[11px] text-zinc-400">
+                    <span class="text-gold uppercase font-black underline mb-3 block">System Diagnostics</span>
+                    <div class="flex justify-between"><span>Hub:</span><span>hzelmkthdqtbcxffsstl</span></div>
+                    <div class="flex justify-between"><span>Handshake:</span><span class="text-green-500 font-bold">OTP_FORCED</span></div>
                 </div>
-                <button onclick="toggleMaintenance()" class="w-full py-4 rounded-2xl border border-blue-500/40 text-[10px] font-black uppercase hover:bg-blue-600">Toggle Maintenance</button>
-                <button onclick="purgeLogs()" class="w-full py-4 rounded-2xl border border-red-900 text-red-500 text-[10px] font-black uppercase hover:bg-red-600">Purge Totality Logs</button>
-                <a href="/origin54.html" class="flex items-center justify-between w-full p-5 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-white/10 hover:border-white/30 transition-all">
-                    <span class="text-[11px] font-black text-white uppercase italic">Origin 54 Archive</span>
-                    <i class="fa-solid fa-arrow-right-long text-gold"></i>
-                </a>
+                <a href="/origin54.html" class="master-btn text-center text-[10px] py-4 bg-zinc-900 border border-gold/40 text-white">Origin 54 Switcher</a>
             </div>
         </section>
 
@@ -160,28 +145,21 @@
                 <video muted loop autoplay class="w-full h-full object-cover opacity-60">
                     <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/1000211769.mp4" type="video/mp4">
                 </video>
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
             </div>
             <div id="chat-stream" class="flex-grow p-10 overflow-y-auto space-y-6"></div>
             <div class="p-8 bg-black/50 flex gap-5 border-t border-white/5">
-                <input type="text" id="chat-msg-in" placeholder="Transmit packet..." class="flex-grow bg-white/5 border border-white/10 rounded-full px-10 py-5 text-white text-base outline-none focus:border-blue-500">
-                <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-2xl active:scale-90"><i class="fa-solid fa-paper-plane text-xl"></i></button>
+                <input type="text" id="chat-msg-in" placeholder="Transmit thought..." class="flex-grow bg-white/5 border border-white/10 rounded-full px-10 py-5 text-white text-base outline-none">
+                <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-16 h-16 flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </section>
-        
+
         <section class="command-tile h-96" style="grid-area: radar;">
-            <div class="absolute top-6 left-6 z-10 bg-black/80 px-4 py-2 rounded-lg text-[9px] font-black text-blue-400 uppercase tracking-[0.3em] border border-blue-500/30">Mpumalanga Sector Radar</div>
-            <iframe class="w-full h-full grayscale invert opacity-20 scale-[2.5] pointer-events-none" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115160.03859664426!2d29.408713!3d-25.772592!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ebdf4f280e7c53d%3A0x676b7e53f93c8d3d!2sMiddelburg!5e0!3m2!1sen!2sza!4v17100000000001"></iframe>
+            <iframe class="w-full h-full grayscale invert opacity-20 scale-[2.5]" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d57544.755490076!2d29.2319985!3d-25.7876545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sza!4v1700000000000!5m2!1sen!2sza"></iframe>
         </section>
 
         <section class="command-tile p-10 h-96" style="grid-area: hitlist;">
-            <span class="text-[11px] font-black text-gold uppercase italic mb-6 block underline tracking-widest">National Hitlist</span>
-            <iframe class="rounded-3xl w-full h-full opacity-70 grayscale hover:grayscale-0 transition-all shadow-2xl" src="https://www.youtube.com/embed/videoseries?list=PL4fGSI1pDJn6jxsM-tS2j8nS_kK0qO7yG" frameborder="0"></iframe>
-        </section>
-
-        <section class="command-tile p-10 col-span-full mt-6" style="grid-area: extra;">
-             <span class="text-[11px] font-black text-blue-400 uppercase italic mb-8 block underline tracking-[0.4em]">Visual Intel Archive</span>
-             <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6"></div>
+            <iframe class="rounded-3xl w-full h-full opacity-70 grayscale hover:grayscale-0 transition-all" src="https://www.youtube.com/embed/videoseries?list=PL4fGSI1pDJn6jxsM-tS2j8nS_kK0qO7yG" frameborder="0"></iframe>
         </section>
     </main>
 
@@ -190,11 +168,7 @@
             <a href="https://instagram.com/ministryofgroove" target="_blank" class="hover:opacity-100 hover:text-gold transition-all"><i class="fa-brands fa-instagram"></i></a>
             <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="hover:opacity-100 hover:text-gold transition-all"><i class="fa-brands fa-tiktok"></i></a>
         </div>
-        <p class="text-gold italic font-black">M.O.G. © 2026 // TOTALITY v100.2.18</p>
-        <div class="flex gap-10">
-            <a href="/privacy.html" class="hover:text-gold transition-colors">Privacy</a>
-            <a href="/tos.html" class="hover:text-gold transition-colors">Terms</a>
-        </div>
+        <p class="text-gold italic font-black">M.O.G. © 2026 // MPUMALANGA HQ</p>
     </footer>
 
     <script>
@@ -203,47 +177,69 @@
             K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY" 
         };
         const db = window.supabase.createClient(CFG.U, CFG.K);
+        let currentEmail = "";
         let logoClicks = 0;
-        let isSignUp = false;
 
         function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
 
-        function toggleAuthMode() {
-            isSignUp = !isSignUp;
-            document.getElementById('matrix-title').innerText = isSignUp ? "Initialize Operative Identity" : "Neural Identity Matrix";
-            document.getElementById('auth-btn').innerText = isSignUp ? "Initialize" : "Authorize";
-            document.getElementById('auth-btn').setAttribute('onclick', isSignUp ? 'signUpOperative()' : 'loginOperative()');
-        }
-
-        async function signUpOperative() {
-            const u = document.getElementById('login-user').value;
-            const p = document.getElementById('login-pass').value;
-            const email = u.includes('@') ? u : `${u}@mog.internal`;
-            const { error } = await db.auth.signUp({ email, password: p });
-            if(error) alert(error.message); else alert("Identity Initialized. You may now Authorize.");
-        }
-
-        async function loginOperative() {
-            const u = document.getElementById('login-user').value;
-            const p = document.getElementById('login-pass').value;
-            const email = u.includes('@') ? u : `${u}@mog.internal`;
-            const { data, error } = await db.auth.signInWithPassword({ email, password: p });
-            if(!error) {
-                document.getElementById('signin-ui').classList.add('hidden');
-                document.getElementById('active-op-badge').classList.remove('hidden');
-                document.getElementById('display-op-id').innerText = u.split('@')[0];
-                new QRCode(document.getElementById("qrcode"), { text: "MOG-"+data.user.id, width: 180, height: 180 });
-            } else { alert("NEURAL MATCH FAILED."); }
-        }
-
+        // STAGE 1: Identity Handshake (Google)
         async function loginWithGoogle() {
-            const cleanRedirect = "https://ministry-of-groove.vercel.app".replace(/\.+$/, "").replace(/\/+$/, "");
-            try {
-                const { error } = await db.auth.signInWithOAuth({ 
-                    provider: 'google', options: { redirectTo: cleanRedirect, queryParams: { prompt: 'select_account' } } 
-                });
-                if (error) throw error;
-            } catch (err) { alert("Link Severed: Verify Redirect URIs."); }
+            const cleanRedirect = "https://ministry-of-groove.vercel.app";
+            await db.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: cleanRedirect } });
+        }
+
+        // STAGE 1b: Identity Handshake (Manual Email)
+        async function requestManualOTP() {
+            const email = document.getElementById('login-email').value;
+            if(!email) return alert("Enter Email.");
+            initiateOTP(email);
+        }
+
+        // STAGE 2: Forced OTP Challenge
+        async function initiateOTP(email) {
+            currentEmail = email;
+            sessionStorage.setItem('mog_temp_email', email);
+            const { error } = await db.auth.signInWithOtp({ email });
+            if (!error) {
+                document.getElementById('security-gate').style.display = 'flex';
+                alert("Security code transmitted to " + email);
+            } else {
+                alert("Neural Handshake Refused: " + error.message);
+            }
+        }
+
+        // STAGE 3: Final Verification
+        async function verifyOTP() {
+            const token = document.getElementById('otp-code').value;
+            const email = sessionStorage.getItem('mog_temp_email');
+            const { data, error } = await db.auth.verifyOtp({ email, token, type: 'magiclink' });
+
+            if (!error) {
+                sessionStorage.setItem('mog_grid_unlocked', 'true');
+                location.reload();
+            } else {
+                alert("NEURAL MISMATCH: Access Denied.");
+            }
+        }
+
+        async function checkSecurityStatus() {
+            const { data: { user } } = await db.auth.getUser();
+            if (user) {
+                if (sessionStorage.getItem('mog_grid_unlocked') !== 'true') {
+                    initiateOTP(user.email);
+                } else {
+                    showAuthorizedUI(user);
+                }
+            }
+        }
+
+        function showAuthorizedUI(user) {
+            document.getElementById('security-gate').style.display = 'none';
+            document.getElementById('signin-ui').classList.add('hidden');
+            document.getElementById('active-op-badge').classList.remove('hidden');
+            document.getElementById('display-op-id').innerText = user.email.split('@')[0];
+            new QRCode(document.getElementById("qrcode"), { text: "MOG-"+user.id, width: 180, height: 180 });
+            if (user.email === 'director.mog@gmail.com') document.documentElement.classList.add('director-active');
         }
 
         async function handleLogoSequence() {
@@ -251,32 +247,13 @@
             const { data: { user } } = await db.auth.getUser();
             if (logoClicks === 5 && user?.email === 'director.mog@gmail.com') {
                 document.documentElement.classList.add('director-active');
-                runDiagnostics();
-                alert("DIRECTORATE AUTHORIZED // SYSTEM UNLOCKED");
+                alert("DIRECTORATE AUTHORIZED // HUB UNLOCKED");
                 logoClicks = 0;
             }
             setTimeout(() => { logoClicks = 0; }, 5000);
         }
 
-        async function runDiagnostics() {
-            try {
-                const { error } = await db.from('system_config').select('id').limit(1);
-                document.getElementById('health-db').innerHTML = error ? '<span class="status-dot offline"></span>ERROR' : '<span class="status-dot online"></span>CONNECTED';
-            } catch { document.getElementById('health-db').innerHTML = '<span class="status-dot offline"></span>OFFLINE'; }
-        }
-
-        async function checkStatus() {
-            const { data: { user } } = await db.auth.getUser();
-            if (user) {
-                document.getElementById('google-link-btn').innerText = user.user_metadata.full_name || user.email;
-                if (user.email === 'director.mog@gmail.com') {
-                    document.documentElement.classList.add('director-active');
-                    runDiagnostics();
-                }
-            }
-        }
-
-        window.onload = checkStatus;
+        window.onload = checkSecurityStatus;
     </script>
 </body>
-</html>
+    </html>
