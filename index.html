@@ -4,119 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <title>M.O.G. | SOVEREIGN GRID</title>
-    
     <link rel="icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/easyqrcodejs@4.4.13/dist/easy.qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
-
     <style>
-        :root { 
-            --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; 
-            --mog-glass: rgba(5, 12, 20, 0.98); --mog-border: rgba(0, 212, 255, 0.2);
-        }
-        html, body { min-height: 100vh; width: 100vw; background-color: var(--mog-black); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        
-        #bg-canvas { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 70%); }
-
-        .mainframe-wrapper { 
-            display: grid; padding: 25px; gap: 25px; 
-            grid-template-columns: 1.2fr 1.6fr 1fr; 
-            grid-template-areas: "gateway messenger chart" "location messenger vault" "history messenger requests" "director director director"; 
-            max-width: 1900px; margin: 0 auto; 
-        }
-        @media (max-width: 1200px) { .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "chart" "location" "vault" "history" "requests" "director"; padding: 15px; } }
-
-        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 40px; backdrop-filter: blur(40px); position: relative; overflow: hidden; }
-        
-        #live-siren { position: fixed; inset: 0; z-index: 10005; background: rgba(0,0,0,0.98); display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(50px); }
-
-        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 15px; padding: 18px; width: 100%; text-transform: uppercase; cursor: pointer; font-size: 11px; border: none; }
-        .mog-input { background: rgba(255,255,255,0.03); border: none; border-bottom: 1px solid var(--mog-border); padding: 12px 0; color: #fff; width: 100%; text-align: center; font-family: 'JetBrains Mono'; font-size: 12px; }
-
-        #director-tile { grid-area: director; display: none; border: 1px solid #ef4444; margin-top: 20px; }
-        .director-active #director-tile { display: block; }
+        :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; }
+        body { background: var(--mog-black); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .command-tile { background: rgba(5, 12, 20, 0.98); border: 1px solid rgba(0, 212, 255, 0.1); border-radius: 35px; backdrop-filter: blur(20px); }
+        .mainframe-wrapper { display: grid; padding: 20px; gap: 20px; grid-template-columns: 1.2fr 1.6fr 1fr; grid-template-areas: "gateway messenger chart" "location messenger vault" "history messenger requests" "director director director"; }
+        @media (max-width: 1100px) { .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "chart" "location" "vault" "history" "requests" "director"; } }
+        #director-tile { grid-area: director; display: none; }
+        .director-active #director-tile { display: block; border: 1px solid #ef4444; }
     </style>
 </head>
 <body class="pb-32">
-    <div id="bg-canvas"></div>
-
-    <div id="live-siren"><div class="text-center"><h1 class="text-blue-400 font-black italic text-5xl uppercase mb-8">Transmission Live</h1><button onclick="this.parentElement.parentElement.style.display='none'" class="master-btn max-w-xs">Enter Grid</button></div></div>
-    
-    <header class="px-8 py-6 border-b border-white/5 flex justify-between items-center sticky top-0 bg-black/80 backdrop-blur-xl z-[1000]">
+    <header class="px-8 py-6 border-b border-white/5 flex justify-between items-center sticky top-0 bg-black/90 z-[1000]">
         <div class="flex items-center gap-4" onclick="handleDirectorSequence()">
-            <img src="logo.png" class="h-12 w-12 rounded-full cursor-pointer" onerror="this.src='https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png'">
-            <h1 class="text-2xl font-black italic uppercase" style="font-family: 'Big Shoulders Display';">M.O.G.</h1>
+            <img src="logo.png" class="h-10 w-10 rounded-full cursor-pointer" onerror="this.src='https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png'">
+            <h1 class="text-xl font-black italic uppercase" style="font-family: 'Big Shoulders Display';">M.O.G.</h1>
         </div>
         <div class="flex items-center gap-4">
-            <div class="bg-white/5 px-6 py-2 rounded-full border border-white/10 flex items-center gap-4">
-                <span id="op-counter" class="text-gold font-black text-xl">0</span>
-                <button onclick="initiateLogout()" class="text-red-500"><i class="fa-solid fa-power-off"></i></button>
-            </div>
+            <span id="op-counter" class="text-gold font-bold">0</span>
+            <button onclick="initiateLogout()" class="text-red-500"><i class="fa-solid fa-power-off"></i></button>
         </div>
     </header>
 
     <main class="mainframe-wrapper">
-        <section class="command-tile p-10 flex flex-col items-center" style="grid-area: gateway;">
-            <div id="qrcode" class="bg-white p-2 rounded-2xl"></div>
-            <h2 id="op-display-id" class="text-xl font-black italic mt-6 text-gold uppercase tracking-widest">OPERATIVE</h2>
+        <section class="command-tile p-8 flex flex-col items-center justify-center" style="grid-area: gateway;">
+            <div id="qrcode" class="bg-white p-2 rounded-xl"></div>
+            <h2 id="op-display-id" class="text-lg font-black italic mt-4 text-gold uppercase">OPERATIVE</h2>
         </section>
 
-        <section class="command-tile min-h-[600px] flex flex-col" style="grid-area: messenger;">
-            <div id="chat-stream" class="flex-grow p-8 overflow-y-auto space-y-4"></div>
-            <div class="p-4 bg-black/50 flex gap-3 border-t border-white/5">
-                <input type="text" id="chat-input" class="flex-grow bg-white/5 rounded-full px-6 py-4 outline-none text-xs" placeholder="Transmit packet...">
-                <button onclick="sendPacket()" class="bg-blue-600 w-12 h-12 rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-paper-plane text-xs"></i></button>
+        <section class="command-tile min-h-[550px] flex flex-col" style="grid-area: messenger;">
+            <div id="chat-stream" class="flex-grow p-6 overflow-y-auto space-y-4"></div>
+            <div class="p-4 flex gap-2 border-t border-white/5">
+                <input type="text" id="chat-input" class="flex-grow bg-white/5 rounded-full px-5 py-3 outline-none text-xs" placeholder="Packet...">
+                <button onclick="sendPacket()" class="bg-blue-600 w-12 h-12 rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane text-xs"></i></button>
             </div>
         </section>
 
-        <section class="command-tile p-8 overflow-y-auto" style="grid-area: chart;"><span class="text-[10px] font-black text-gold uppercase underline mb-4 block">Top 10 Index</span><div id="chart-list" class="space-y-3"></div></section>
-        <section class="command-tile p-8 h-48" style="grid-area: location;"><span class="text-[10px] font-black text-blue-400 uppercase underline mb-4 block">Sector Coords</span><div id="loc-node"></div></section>
-        <section class="command-tile p-8 h-80 overflow-y-auto" style="grid-area: vault;"><span class="text-[10px] font-black text-blue-400 uppercase underline mb-4 block">Intel Vault</span><div id="vault-list" class="space-y-4"></div></section>
-        <section class="command-tile p-8 h-80 overflow-y-auto" style="grid-area: history;"><span class="text-[10px] font-black text-gold uppercase underline mb-4 block">Set Archive</span><div id="set-list" class="space-y-3"></div></section>
-        <section class="command-tile p-8" style="grid-area: requests;"><span class="text-[10px] font-black text-blue-400 uppercase underline mb-4 block">Booth Request</span><input id="req-in" class="mog-input mb-4" placeholder="Artist - Track"><button onclick="sendReq()" class="master-btn">Send</button></section>
+        <section class="command-tile p-6" style="grid-area: chart;"><span class="text-[9px] font-black text-gold uppercase underline">Top 10 Index</span><div id="chart-list" class="mt-4 space-y-2"></div></section>
+        <section class="command-tile p-6 h-40" style="grid-area: location;"><span class="text-[9px] font-black text-blue-400 uppercase underline">Sector</span><div id="loc-node" class="mt-4"></div></section>
+        <section class="command-tile p-6 h-64 overflow-y-auto" style="grid-area: vault;"><span class="text-[9px] font-black text-blue-400 uppercase underline">Vault</span><div id="vault-list" class="mt-4 space-y-2"></div></section>
+        <section class="command-tile p-6 h-64 overflow-y-auto" style="grid-area: history;"><span class="text-[9px] font-black text-gold uppercase underline">Sets</span><div id="set-list" class="mt-4 space-y-2"></div></section>
+        <section class="command-tile p-6" style="grid-area: requests;"><span class="text-[9px] font-black text-blue-400 uppercase underline">Booth</span><input id="req-in" class="w-full bg-white/5 border-b border-white/10 p-2 text-[10px] mt-2 outline-none"><button onclick="sendReq()" class="w-full bg-gold text-black font-bold py-2 rounded mt-2 text-[10px]">Send</button></section>
 
         <section id="director-tile" class="command-tile p-10 col-span-full">
-            <h2 class="text-red-500 font-black italic text-xl uppercase mb-6">Director Console</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <button onclick="triggerSiren()" class="bg-blue-600 py-4 rounded-xl font-black text-xs uppercase">Fire Emergency Siren</button>
-                <button onclick="initiateLogout()" class="bg-zinc-800 py-4 rounded-xl font-black text-xs uppercase">Lock All Grids</button>
+            <h2 class="text-red-500 font-black mb-6 uppercase">Directorate Console</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="db.channel('totality').send({type:'broadcast',event:'live'});" class="bg-blue-600 py-3 rounded font-black text-[10px]">Fire Siren</button>
+                <button onclick="initiateLogout()" class="bg-zinc-800 py-3 rounded font-black text-[10px]">Lock All</button>
             </div>
         </section>
     </main>
 
-    <footer class="text-center py-10 opacity-30 text-[9px] uppercase font-black tracking-widest">M.O.G. V100.2.40 // eMalahleni Sector</footer>
-
     <script>
         const CFG = { U: "https://hzelmkthdqtbcxffsstl.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY" };
-        const db = window.supabase.createClient(CFG.U, CFG.K);
-        let clicks = 0;
+        let db, clicks = 0;
 
         window.onload = async () => {
+            db = window.supabase.createClient(CFG.U, CFG.K);
             const { data: { user } } = await db.auth.getUser();
             if (user && sessionStorage.getItem('mog_handshake_verified') === 'true') {
                 document.getElementById('op-display-id').innerText = user.email.split('@')[0].toUpperCase();
                 if(user.email === 'director.mog@gmail.com') document.documentElement.classList.add('director-active');
-                new QRCode(document.getElementById("qrcode"), { text: user.id, width: 140, height: 140, colorDark: "#D4AF37", quietZone: 10 });
-                initGrid();
+                new QRCode(document.getElementById("qrcode"), { text: user.id, width: 140, height: 140, colorDark: "#D4AF37" });
+                loadGrid();
             } else { location.reload(); }
         };
 
-        async function initGrid() {
-            const { data: m } = await db.from('messages').select('*').order('created_at', { ascending: false }).limit(30);
-            if(m) m.reverse().forEach(appendMsg);
-
-            db.channel('totality').on('broadcast', { event: 'live' }, () => document.getElementById('live-siren').style.display = 'flex').subscribe();
+        async function loadGrid() {
+            const { data } = await db.from('messages').select('*').order('created_at', { ascending: false }).limit(25);
+            if(data) data.reverse().forEach(appendMsg);
             db.channel('public:messages').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, p => appendMsg(p.new)).subscribe();
         }
 
         function appendMsg(m) {
-            if(['VAULT','YT','SET','SECTOR','REQ'].some(k => m.alias.includes(k))) return;
             const s = document.getElementById('chat-stream');
+            if(!s || ['VAULT','YT','SET','SECTOR','REQ'].some(k => m.alias.includes(k))) return;
             s.innerHTML += `<div class="bg-white/5 p-4 rounded-2xl border border-white/5 mb-2"><span class="text-blue-400 block font-black text-[8px] uppercase mb-1">${m.alias}</span>${m.content}</div>`;
             s.scrollTop = s.scrollHeight;
         }
@@ -124,14 +92,13 @@
         async function sendPacket() {
             const i = document.getElementById('chat-input');
             const { data: { user } } = await db.auth.getUser();
-            if(i.value && user) await db.from('messages').insert([{ content: i.value, alias: user.email.split('@')[0] }]);
+            if(i.value && user) await db.from('messages').insert([{ content: i.value, alias: user.email.split('@')[0], user_id: user.id }]);
             i.value = "";
         }
 
         function handleDirectorSequence() { clicks++; if(clicks === 5) document.documentElement.classList.add('director-active'); }
         async function initiateLogout() { await db.auth.signOut(); sessionStorage.clear(); location.reload(); }
-        async function triggerSiren() { db.channel('totality').send({ type: 'broadcast', event: 'live' }); }
-        async function sendReq() { const t = document.getElementById('req-in').value; const { data: { user } } = await db.auth.getUser(); if(t) await db.from('messages').insert([{ content: t, alias: `REQ_${user.email.split('@')[0]}` }]); document.getElementById('req-in').value = ""; alert("Frequency Sent."); }
+        async function sendReq() { const t = document.getElementById('req-in').value; const { data: { user } } = await db.auth.getUser(); if(t) await db.from('messages').insert([{ content: t, alias: `REQ_${user.email.split('@')[0]}`, user_id: user.id }]); document.getElementById('req-in').value = ""; alert("Sent."); }
     </script>
 </body>
 </html>
