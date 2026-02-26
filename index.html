@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.12</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.13</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -14,167 +14,184 @@
     <style>
         :root { 
             --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; 
-            --mog-glass: rgba(5, 12, 20, 0.85); --mog-border: rgba(0, 212, 255, 0.2);
+            --mog-glass: rgba(5, 12, 20, 0.9); --mog-border: rgba(0, 212, 255, 0.3);
         }
 
         html, body { min-height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: #fff; }
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Inter', sans-serif; }
 
-        /* CYBER-CIRCUITRY BACKGROUND (55% Visibility) */
+        /* CYBER-CIRCUITRY BACKGROUND */
         #bg-canvas {
             position: fixed; inset: 0; z-index: -1;
-            background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 70%),
+            background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.12) 0%, transparent 70%),
                 url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 L20 50 L30 40 L50 40' fill='none' stroke='rgba(0,212,255,0.15)' stroke-width='0.5'/%3E%3C/svg%3E");
             background-size: 400px 400px; opacity: 0.55;
         }
 
         #main-title {
             font-family: 'Big Shoulders Display', sans-serif !important;
-            font-size: clamp(2rem, 5vw, 4rem);
-            background: linear-gradient(to bottom, #fff 10%, var(--mog-gold) 100%);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            background: linear-gradient(to bottom, #fff 20%, var(--mog-gold) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
         }
 
+        /* Master Layout Grid */
         .mainframe-wrapper {
-            display: grid; padding: 25px; gap: 25px;
-            grid-template-columns: 1.2fr 1.5fr 1fr;
+            display: grid; padding: 30px; gap: 30px;
+            grid-template-columns: 1.2fr 1.6fr 1fr;
             grid-template-areas: "gateway messenger radar" "extra messenger hitlist";
-            max-width: 1800px; margin: 0 auto;
+            max-width: 1900px; margin: 0 auto;
         }
 
-        @media (max-width: 1200px) { .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "hitlist" "radar"; } }
+        @media (max-width: 1200px) { .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "hitlist" "radar" "extra"; } }
 
-        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 40px; overflow: hidden; backdrop-filter: blur(25px); position: relative; }
+        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 45px; overflow: hidden; backdrop-filter: blur(30px); position: relative; }
         
         /* Sidebar System */
-        #side-menu { position: fixed; top: 0; right: -350px; width: 350px; height: 100%; background: #080c10; border-left: 1px solid rgba(0, 212, 255, 0.2); z-index: 5000; padding: 40px; }
+        #side-menu { position: fixed; top: 0; right: -400px; width: 400px; height: 100%; background: #050505; border-left: 2px solid var(--mog-border); z-index: 5000; padding: 50px; box-shadow: -20px 0 60px rgba(0,0,0,0.8); }
         #side-menu.active { right: 0; }
-        .menu-link { display: block; font-size: 24px; font-weight: 900; text-transform: uppercase; font-style: italic; margin-bottom: 20px; color: white; }
+        .menu-link { display: block; font-size: 28px; font-weight: 900; text-transform: uppercase; font-style: italic; margin-bottom: 25px; color: white; letter-spacing: -1px; }
+        .menu-link:hover { color: var(--mog-gold); transform: translateX(10px); }
 
+        /* Director Visibility */
         .director-only { display: none !important; }
         .director-active .director-only { display: flex !important; }
 
-        .ticker-wrap { height: 35px; background: #000; border-bottom: 1px solid var(--mog-border); overflow: hidden; display: flex; align-items: center; }
-        .ticker-move { white-space: nowrap; animation: ticker 45s linear infinite; font-size: 10px; font-weight: 900; color: var(--mog-blue); letter-spacing: 2px; }
+        .ticker-wrap { height: 40px; background: #000; border-bottom: 1px solid var(--mog-border); overflow: hidden; display: flex; align-items: center; }
+        .ticker-move { white-space: nowrap; animation: ticker 50s linear infinite; font-size: 11px; font-weight: 900; color: var(--mog-blue); letter-spacing: 3px; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 2px solid var(--mog-border); padding: 15px 0; color: #fff; width: 100%; outline: none; margin-bottom: 15px; font-family: 'JetBrains Mono', monospace; }
-        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 15px; padding: 18px; width: 100%; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; }
+        .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 2px solid var(--mog-border); padding: 18px 0; color: #fff; width: 100%; outline: none; margin-bottom: 20px; font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; }
+        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 18px; padding: 22px; width: 100%; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; }
         
-        .status-dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; }
-        .online { background-color: #10b981; box-shadow: 0 0 10px #10b981; }
-        .offline { background-color: #ef4444; box-shadow: 0 0 10px #ef4444; }
+        .status-dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; margin-right: 10px; }
+        .online { background-color: #10b981; box-shadow: 0 0 15px #10b981; }
+        .offline { background-color: #ef4444; box-shadow: 0 0 15px #ef4444; }
 
-        .mog-bubble { background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.1); border-radius: 15px; padding: 12px; font-size: 13px; color: #eee; }
+        .mog-bubble { background: rgba(0, 212, 255, 0.08); border: 1px solid rgba(0, 212, 255, 0.15); border-radius: 20px; padding: 15px; font-size: 14px; color: #eee; }
         ::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="pb-32">
+<body class="pb-40">
 
     <div id="bg-canvas"></div>
 
     <div class="ticker-wrap">
-        <div class="ticker-move">TOTALITY v100.2.12 // CLEAN HANDSHAKE PROTOCOL ENABLED // DIAGNOSTICS ACTIVE // MIDDELBURG HQ SECTOR: MPUMALANGA...</div>
+        <div class="ticker-move">TOTALITY v100.2.13 // NEURAL SYNC ACTIVE // MIDDELBURG HQ // SECTOR: MPUMALANGA // RSA NATIONAL RADAR: ONLINE // ORIGIN 54 STATUS: CLASSIFIED // AMAPIANO FREQUENCY: STABLE...</div>
     </div>
 
     <div id="side-menu">
-        <button onclick="toggleMenu()" class="text-white text-3xl mb-12"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="toggleMenu()" class="text-white text-4xl mb-16 hover:rotate-90"><i class="fa-solid fa-xmark"></i></button>
         <nav>
             <a href="#" class="menu-link">Intel Archive</a>
             <a href="#" class="menu-link">Frequency Comms</a>
-            <div class="mt-20 pt-10 border-t border-white/10">
-                <p class="text-[10px] uppercase tracking-widest text-zinc-500">Sector Intelligence</p>
-                <p class="text-xs text-gold mt-2">Middelburg, Mpumalanga // RSA</p>
+            <a href="#" class="menu-link">National Hitlist</a>
+            <a href="#" class="menu-link">ID Matrix</a>
+            <div class="mt-24 pt-10 border-t border-white/10">
+                <p class="text-[10px] uppercase tracking-[0.4em] text-zinc-500 font-black">Sector Intelligence</p>
+                <p class="text-sm text-gold mt-3 font-bold">Middelburg, Mpumalanga // RSA</p>
+                <div class="mt-8 p-4 bg-white/5 rounded-2xl border border-white/10">
+                    <span class="text-[9px] uppercase font-black text-blue-400 block mb-2">Mandate Mix v1.0</span>
+                    <audio id="mandate-player" controls class="w-full h-8 opacity-40">
+                        <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/mandate_mix.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
             </div>
         </nav>
     </div>
 
-    <header class="px-10 py-6 flex justify-between items-center bg-black/40 border-b border-white/5 backdrop-blur-md sticky top-0 z-[1000]">
-        <div class="flex items-center gap-6">
-            <button onclick="toggleMenu()" class="text-blue-400 text-2xl p-3 bg-white/5 rounded-full"><i class="fa-solid fa-bars-staggered"></i></button>
-            <img id="main-logo" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-16 w-16 rounded-full border border-blue-500/30 cursor-pointer shadow-lg shadow-blue-500/20">
+    <header class="px-12 py-8 flex justify-between items-center bg-black/40 border-b border-white/5 backdrop-blur-xl sticky top-0 z-[1000]">
+        <div class="flex items-center gap-8">
+            <button onclick="toggleMenu()" class="text-blue-400 text-3xl p-4 bg-white/5 rounded-2xl hover:bg-white/10"><i class="fa-solid fa-bars-staggered"></i></button>
+            <img id="main-logo" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" onclick="handleLogoSequence()" class="h-20 w-20 rounded-full border-2 border-blue-500/30 cursor-pointer shadow-2xl active:scale-90">
             <div class="flex flex-col">
                 <h1 id="main-title">Ministry of Groove</h1>
-                <p class="text-[10px] font-black uppercase tracking-[0.4em] text-white opacity-80">eMalahleni Grid // Totality Build</p>
+                <p class="text-[11px] font-black uppercase tracking-[0.5em] text-white opacity-90">Sovereign Custodians of Sound</p>
             </div>
         </div>
-        <button id="google-link-btn" onclick="loginWithGoogle()" class="text-[10px] bg-white text-black px-8 py-3 rounded-full font-black uppercase hover:bg-gold transition-all">Google Link</button>
+        <button id="google-link-btn" onclick="loginWithGoogle()" class="text-[10px] bg-white text-black px-10 py-4 rounded-full font-black uppercase hover:bg-gold transition-all shadow-xl">Google Link</button>
     </header>
 
     <main class="mainframe-wrapper">
-        <section class="command-tile p-10 flex flex-col justify-center" style="grid-area: gateway;">
+        <section class="command-tile p-12 flex flex-col justify-center" style="grid-area: gateway;">
             <div id="signin-ui">
-                <span class="text-[10px] font-black text-blue-400 uppercase tracking-widest block mb-4">Neural Auth Matrix</span>
+                <span class="text-[11px] font-black text-blue-400 uppercase tracking-widest block mb-6">Neural Identity Matrix</span>
                 <input id="login-user" type="text" placeholder="OPERATIVE_ID" class="mog-input">
                 <input id="login-pass" type="password" placeholder="PASSCODE" class="mog-input">
-                <button onclick="loginOperative()" class="master-btn mt-4">Authorize</button>
+                <button onclick="loginOperative()" class="master-btn mt-6">Authorize</button>
             </div>
 
             <div id="active-op-badge" class="hidden text-center animate-fade-in">
-                <div id="qrcode" class="bg-white p-4 rounded-2xl inline-block mb-6 shadow-xl"></div>
-                <h2 id="display-op-id" class="text-3xl font-black italic uppercase text-gold">OPERATIVE</h2>
+                <div id="qrcode" class="bg-white p-5 rounded-3xl inline-block mb-8 shadow-2xl border-8 border-black"></div>
+                <h2 id="display-op-id" class="text-4xl font-black italic uppercase text-gold tracking-tighter">OPERATIVE</h2>
+                <p class="text-[10px] text-zinc-500 uppercase tracking-[0.4em] mt-3">Neural Verified Access</p>
             </div>
 
-            <div class="director-only flex-col mt-4 space-y-4">
-                <div class="bg-black/40 rounded-2xl p-6 border border-white/5">
-                    <span class="text-[9px] font-black text-gold uppercase tracking-widest block mb-4">System Health Report</span>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between text-[10px]">
-                            <span class="text-zinc-400">Supabase DB</span>
-                            <span id="health-db" class="flex items-center"><span class="status-dot offline"></span>SYNCING</span>
+            <div class="director-only flex-col mt-8 space-y-5">
+                <div class="bg-black/60 rounded-3xl p-8 border border-white/5">
+                    <span class="text-[10px] font-black text-gold uppercase tracking-widest block mb-5 underline">System Diagnostics</span>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-[11px] font-bold">
+                            <span class="text-zinc-400 uppercase">Supabase Connectivity</span>
+                            <span id="health-db" class="flex items-center"><span class="status-dot offline"></span>CHECKING</span>
                         </div>
-                        <div class="flex items-center justify-between text-[10px]">
-                            <span class="text-zinc-400">Google Auth</span>
+                        <div class="flex items-center justify-between text-[11px] font-bold">
+                            <span class="text-zinc-400 uppercase">Google Handshake</span>
                             <span id="health-auth" class="flex items-center"><span class="status-dot online"></span>ACTIVE</span>
                         </div>
                     </div>
                 </div>
-                <button onclick="toggleMaintenance()" class="w-full py-3 rounded-xl border border-blue-500/40 text-[9px] font-black uppercase">Toggle Maintenance</button>
-                <button onclick="purgeLogs()" class="w-full py-3 rounded-xl border border-red-800 text-red-500 text-[9px] font-black uppercase">Purge Entry Logs</button>
-                <a href="/origin54.html" class="flex items-center justify-between w-full p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
-                    <span class="text-[10px] font-black text-white uppercase italic">Origin 54 Switcher</span>
-                    <i class="fa-solid fa-arrow-right text-gold"></i>
+                <button onclick="toggleMaintenance()" class="w-full py-4 rounded-2xl border border-blue-500/40 text-[10px] font-black uppercase hover:bg-blue-600">Toggle Maintenance</button>
+                <button onclick="purgeLogs()" class="w-full py-4 rounded-2xl border border-red-900 text-red-500 text-[10px] font-black uppercase hover:bg-red-600">Purge Totality Logs</button>
+                <a href="/origin54.html" class="flex items-center justify-between w-full p-5 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-white/10 hover:border-white/30 transition-all">
+                    <span class="text-[11px] font-black text-white uppercase italic">Origin 54 Archive</span>
+                    <i class="fa-solid fa-arrow-right-long text-gold"></i>
                 </a>
             </div>
         </section>
 
-        <section class="command-tile min-h-[600px] flex flex-col" style="grid-area: messenger;">
-            <div class="relative h-48 w-full overflow-hidden">
+        <section class="command-tile min-h-[700px] flex flex-col" style="grid-area: messenger;">
+            <div class="relative h-64 w-full overflow-hidden">
                 <video muted loop autoplay class="w-full h-full object-cover opacity-60">
                     <source src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/1000211769.mp4" type="video/mp4">
                 </video>
-                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
             </div>
-            <div id="chat-stream" class="flex-grow p-8 overflow-y-auto space-y-4"></div>
-            <div class="p-6 bg-black/40 flex gap-4 border-t border-white/5">
-                <input type="text" id="chat-msg-in" placeholder="Transmit thought..." class="flex-grow bg-white/5 border border-white/10 rounded-full px-8 py-4 text-white text-sm outline-none focus:border-blue-500">
-                <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg shadow-blue-500/20"><i class="fa-solid fa-paper-plane"></i></button>
+            <div id="chat-stream" class="flex-grow p-10 overflow-y-auto space-y-6"></div>
+            <div class="p-8 bg-black/50 flex gap-5 border-t border-white/5">
+                <input type="text" id="chat-msg-in" placeholder="Transmit packet..." class="flex-grow bg-white/5 border border-white/10 rounded-full px-10 py-5 text-white text-base outline-none focus:border-blue-500">
+                <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-2xl active:scale-90"><i class="fa-solid fa-paper-plane text-xl"></i></button>
             </div>
         </section>
 
-        <section class="command-tile h-80" style="grid-area: radar;">
-            <iframe class="w-full h-full grayscale invert opacity-30 scale-150 pointer-events-none" src="http://googleusercontent.com/maps.google.com/4"></iframe>
+        <section class="command-tile h-96" style="grid-area: radar;">
+            <div class="absolute top-6 left-6 z-10 bg-black/80 px-4 py-2 rounded-lg text-[9px] font-black text-blue-400 uppercase tracking-[0.3em] border border-blue-500/30">Mpumalanga Sector Radar</div>
+            <iframe class="w-full h-full grayscale invert opacity-20 scale-[2.5] pointer-events-none" src="http://googleusercontent.com/maps.google.com/5"></iframe>
         </section>
 
-        <section class="command-tile p-8 h-80" style="grid-area: hitlist;">
-            <iframe class="rounded-2xl w-full h-full opacity-60 grayscale hover:grayscale-0 transition-all" src="https://www.youtube.com/embed/videoseries?list=PL4fGSI1pDJn6jxsM-tS2j8nS_kK0qO7yG" frameborder="0"></iframe>
+        <section class="command-tile p-10 h-96" style="grid-area: hitlist;">
+            <span class="text-[11px] font-black text-gold uppercase italic mb-6 block underline tracking-widest">Amapiano National Hitlist</span>
+            <iframe class="rounded-3xl w-full h-full opacity-70 grayscale hover:grayscale-0 transition-all shadow-2xl" src="https://www.youtube.com/embed/videoseries?list=PL4fGSI1pDJn6jxsM-tS2j8nS_kK0qO7yG" frameborder="0"></iframe>
         </section>
 
-        <section class="command-tile p-8 col-span-full mt-4" style="grid-area: extra;">
-             <span class="text-[10px] font-black text-gold uppercase italic mb-6 block underline tracking-[0.3em]">Live Intel Gallery</span>
-             <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <section class="command-tile p-10 col-span-full mt-6" style="grid-area: extra;">
+             <span class="text-[11px] font-black text-blue-400 uppercase italic mb-8 block underline tracking-[0.4em]">Visual Intel Archive</span>
+             <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
                  </div>
         </section>
     </main>
 
-    <footer class="fixed bottom-0 w-full bg-black/90 border-t border-gold/20 py-6 px-12 z-[2000] flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-zinc-500">
-        <div class="flex gap-10">
-            <a href="https://instagram.com/ministryofgroove" class="text-white text-2xl opacity-40 hover:opacity-100"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://tiktok.com/@ministryofgroove" class="text-white text-2xl opacity-40 hover:opacity-100"><i class="fa-brands fa-tiktok"></i></a>
+    <footer class="fixed bottom-0 w-full bg-black/95 border-t border-gold/20 py-8 px-16 z-[2000] flex justify-between items-center text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500">
+        <div class="flex gap-14">
+            <a href="https://instagram.com/ministryofgroove" target="_blank" class="text-white text-3xl opacity-40 hover:opacity-100 hover:text-gold transition-all"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="text-white text-3xl opacity-40 hover:opacity-100 hover:text-gold transition-all"><i class="fa-brands fa-tiktok"></i></a>
         </div>
-        <div>M.O.G. © 2026 // MPUMALANGA HQ</div>
-        <div class="flex gap-8">
+        <div class="text-center">
+            <p class="text-gold italic">M.O.G. © 2026 // TOTALITY v100.2.13</p>
+            <p class="text-[7px] mt-2 opacity-30">Custodians of the Digital Frequency</p>
+        </div>
+        <div class="flex gap-10">
             <a href="/privacy.html" class="hover:text-gold transition-colors">Privacy</a>
             <a href="/tos.html" class="hover:text-gold transition-colors">Terms</a>
         </div>
@@ -197,7 +214,19 @@
                     provider: 'google', options: { redirectTo: cleanRedirect, queryParams: { prompt: 'select_account' } } 
                 });
                 if (error) throw error;
-            } catch (err) { alert("Handshake Severed: Check Supabase Connectivity."); }
+            } catch (err) { alert("Neural Handshake Severed: Check Supabase Dashboard Connectivity."); }
+        }
+
+        async function loginOperative() {
+            const u = document.getElementById('login-user').value;
+            const p = document.getElementById('login-pass').value;
+            const { data, error } = await db.auth.signInWithPassword({ email: u.includes('@') ? u : `${u}@mog.internal`, password: p });
+            if(!error) {
+                document.getElementById('signin-ui').classList.add('hidden');
+                document.getElementById('active-op-badge').classList.remove('hidden');
+                document.getElementById('display-op-id').innerText = u.split('@')[0];
+                new QRCode(document.getElementById("qrcode"), { text: "MOG-"+data.user.id, width: 180, height: 180 });
+            } else { alert("NEURAL MATCH FAILED."); }
         }
 
         async function handleLogoSequence() {
@@ -206,6 +235,7 @@
             if (logoClicks === 5 && user?.email === 'director.mog@gmail.com') {
                 document.documentElement.classList.add('director-active');
                 runDiagnostics();
+                alert("DIRECTORATE AUTHORIZED // SYSTEM UNLOCKED");
                 logoClicks = 0;
             }
             setTimeout(() => { logoClicks = 0; }, 5000);
@@ -222,7 +252,10 @@
             const { data: { user } } = await db.auth.getUser();
             if (user) {
                 document.getElementById('google-link-btn').innerText = user.user_metadata.full_name;
-                if (user.email === 'director.mog@gmail.com') document.documentElement.classList.add('director-active');
+                if (user.email === 'director.mog@gmail.com') {
+                    document.documentElement.classList.add('director-active');
+                    runDiagnostics();
+                }
             }
         }
 
