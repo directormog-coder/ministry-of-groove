@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
-    
     <meta name="google-signin-client_id" content="210696195426-aleglo26fj6j5qusktr1eptme4m7j8s6.apps.googleusercontent.com">
-    
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.4.0</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.4.7</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -31,168 +28,100 @@
         html, body { min-height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: #fff; }
         * { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
 
-        /* CIRCULAR SPLASH SCREEN */
-        #splash-screen {
-            position: fixed; inset: 0; z-index: 99999; background: var(--mog-black);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .splash-logo-container {
-            width: 180px; height: 180px; clip-path: circle(50% at 50% 50%);
-            border: 2px solid var(--mog-gold); animation: pulse-glow 2s infinite alternate;
-        }
-        @keyframes pulse-glow {
-            from { transform: scale(0.95); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
-            to { transform: scale(1.05); box-shadow: 0 0 60px rgba(0, 212, 255, 0.4); }
-        }
-
-        /* CYBER-CIRCUITRY BACKGROUND (55% VISIBILITY) */
-        #bg-canvas {
-            position: fixed; inset: 0; z-index: -1; background-color: #050505;
-            background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.2) 0%, transparent 70%),
-                url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 L40 40 M80 0 L40 40 M0 80 L40 40 M80 80 L40 40' stroke='%2300d4ff' stroke-width='0.5' fill='none' opacity='0.15'/%3E%3C/svg%3E");
-            opacity: 0.55 !important;
-        }
-
-        #main-title {
-            font-family: 'Big Shoulders Display', sans-serif !important;
-            font-size: clamp(1.8rem, 4vw, 3.5rem); line-height: 1; white-space: nowrap; 
-            background: linear-gradient(to bottom, #fff 10%, var(--mog-gold) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 28px; overflow: hidden; backdrop-filter: blur(40px); box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8); }
-        .tile-header { border-bottom: 1px solid rgba(0, 212, 255, 0.1); padding: 18px 24px; background: linear-gradient(90deg, rgba(0, 212, 255, 0.05) 0%, transparent 100%); }
-        .tile-title { font-family: 'Clash Display', sans-serif; letter-spacing: 4px; text-transform: uppercase; font-size: 10px; color: var(--mog-blue); font-weight: 700; }
-
-        .premium-btn { 
-            background: linear-gradient(135deg, #D4AF37 0%, #8A6D3B 100%); 
-            color: #000; font-weight: 900; text-transform: uppercase; 
-            padding: 14px; border-radius: 12px; width: 100%; font-size: 11px;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); cursor: pointer;
-        }
-
-        #ticker-wrap { position: fixed; top: 0; width: 100%; background: #000; border-bottom: 1px solid var(--mog-gold); z-index: 1000; height: 35px; display: flex; align-items: center; overflow: hidden; }
-        .ticker-move { white-space: nowrap; animation: ticker 40s linear infinite; font-size: 9px; font-weight: 900; color: var(--mog-gold); letter-spacing: 2px; }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
-        .wa-bubble { max-width: 85%; padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; font-size: 13px; }
-        .wa-out { background: #005c4b; align-self: flex-end; color: white; }
-        .scroller-v { overflow-y: auto; scrollbar-width: none; }
-        .scroller-v::-webkit-scrollbar { display: none; }
-
-        .nav-link { font-size: 10px; font-weight: 900; letter-spacing: 2px; color: rgba(255,255,255,0.5); text-transform: uppercase; cursor: pointer; }
-        .nav-link:hover { color: var(--mog-blue); }
+        /* CIRCULAR SPLASH */
+        #splash-screen { position: fixed; inset: 0; z-index: 99999; background: var(--mog-black); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s; }
+        .splash-logo-container { width: 180px; height: 180px; clip-path: circle(50% at 50% 50%); border: 2px solid var(--mog-gold); animation: pulse-glow 2s infinite alternate; }
+        @keyframes pulse-glow { from { transform: scale(0.95); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); } to { transform: scale(1.05); box-shadow: 0 0 60px rgba(0, 212, 255, 0.4); } }
+        
+        /* BACKGROUND */
+        #bg-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.55; background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.2) 0%, transparent 70%), url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 L40 40 M80 0 L40 40 M0 80 L40 40 M80 80 L40 40' stroke='%2300d4ff' stroke-width='0.5' fill='none' opacity='0.15'/%3E%3C/svg%3E"); }
+        
+        /* UI COMPONENTS */
+        #main-title { font-family: 'Big Shoulders Display', sans-serif !important; font-size: clamp(1.8rem, 4vw, 3.5rem); background: linear-gradient(to bottom, #fff 10%, var(--mog-gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 28px; overflow: hidden; backdrop-filter: blur(40px); }
+        .tile-title { font-family: 'Clash Display', sans-serif; letter-spacing: 4px; text-transform: uppercase; font-size: 10px; color: var(--mog-blue); font-weight: 700; padding: 18px 24px; border-bottom: 1px solid rgba(0, 212, 255, 0.1); display: block; }
+        .premium-btn { background: linear-gradient(135deg, #D4AF37 0%, #8A6D3B 100%); color: #000; font-weight: 900; text-transform: uppercase; padding: 14px; border-radius: 12px; width: 100%; font-size: 11px; cursor: pointer; }
+        .wa-bubble { max-width: 85%; padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; font-size: 13px; background: #005c4b; align-self: flex-end; color: white; }
+        
+        /* QR CODE STYLING */
+        #qr-protocol { background: white; padding: 15px; border-radius: 15px; display: inline-block; }
     </style>
 </head>
 <body id="mog-totality">
 
-    <div id="splash-screen">
-        <div class="splash-logo-container">
-            <img src="logo.png" class="w-full h-full object-cover">
-        </div>
-        <p class="mt-8 mono text-[9px] text-gold tracking-[0.5em] uppercase animate-pulse">Ministry of Groove: Totality Engine</p>
-    </div>
-
+    <div id="splash-screen"><div class="splash-logo-container"><img src="logo.png" class="w-full h-full object-cover"></div></div>
     <div id="bg-canvas"></div>
 
-    <div id="ticker-wrap">
-        <div class="ticker-move">MASTER_V100.4.0 // PHASE_2: PREMIUM_READY // RSA_BOND_SYNC // WITBANK_HQ ONLINE // DECIPHER THE CULTURE...</div>
-    </div>
-
-    <div id="app-content" class="mt-20 p-6 lg:p-12">
-        
-        <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-12 relative z-50">
+    <div id="app-content" class="mt-12 p-6 lg:p-12">
+        <header class="flex justify-between items-center mb-12 relative z-50">
             <div class="flex items-center gap-6">
                 <img src="logo.png" onclick="handleLogoSequence()" class="h-20 w-20 rounded-full border-2 border-gold/40 shadow-2xl cursor-pointer">
                 <div>
                     <h1 id="main-title">Ministry of Groove</h1>
-                    <div class="flex gap-6 mt-3">
-                        <span class="nav-link" onclick="scrollTo('radar')">Radar</span>
-                        <span class="nav-link" onclick="scrollTo('chat')">Frequency</span>
-                        <span class="nav-link" onclick="scrollTo('vault')">Vault</span>
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col items-end">
-                <div class="text-[11px] text-gold font-black border border-gold/30 px-6 py-2 bg-gold/5 tracking-[0.4em] rounded-full shadow-lg">
-                    WEALTH INDEX: R73,827
+                    <p class="text-[10px] text-blue-400 tracking-[.5em] mt-2 uppercase font-black italic">Sound and Social Architecture</p>
                 </div>
             </div>
         </header>
 
         <main class="grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-50">
-            
             <div class="lg:col-span-4 space-y-10">
                 <section class="command-tile p-8">
-                    <div class="tile-header flex justify-between px-0 mb-4 border-none bg-transparent">
-                        <span class="tile-title">Identity Handshake</span>
-                        <i class="fa-solid fa-shield-halved text-blue-400"></i>
-                    </div>
+                    <span class="tile-title !p-0 !border-none mb-6">Identity Handshake</span>
                     <button onclick="loginWithGoogle()" class="premium-btn flex items-center justify-center gap-3">
                         <i class="fa-brands fa-google"></i> Authorize via Google
                     </button>
-                    <p class="text-[7px] text-zinc-500 uppercase mt-4 text-center tracking-widest">Protocol: Google OAuth 2.0</p>
                 </section>
-
-                <section id="radar" class="command-tile h-72">
-                    <div class="tile-header flex justify-between"><span class="tile-title">National Radar Grid</span><i class="fa-solid fa-satellite-dish"></i></div>
+                <section class="command-tile h-72">
+                    <span class="tile-title">National Radar Grid</span>
                     <iframe class="w-full h-full grayscale invert opacity-20 contrast-125 scale-150" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114944.5671569766!2d29.15540346393529!3d-25.875323985799975!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ee266935835697d%3A0x9d11634579cc5f6d!2seMalahleni!5e0!3m2!1sen!2sza!4v1715421234567!5m2!1sen!2sza"></iframe>
-                </section>
-
-                <section class="command-tile p-4">
-                    <div class="tile-header flex justify-between border-none bg-transparent mb-2"><span class="tile-title">Mandate Archive</span><i class="fa-solid fa-compact-disc text-gold"></i></div>
-                    <audio src="mandate_mix.mp3" controls class="w-full h-10"></audio>
                 </section>
             </div>
 
-            <div class="lg:col-span-8 space-y-10">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    
-                    <section id="chat" class="command-tile h-[600px] flex flex-col" style="background: var(--wa-bg);">
-                        <div class="tile-header bg-[#202c33] flex justify-between py-3 px-4 border-none">
-                            <span class="tile-title text-white font-black">Frequency Chat</span>
-                            <div class="flex gap-4 text-zinc-500"><i class="fa-solid fa-video"></i><i class="fa-solid fa-phone"></i></div>
-                        </div>
-                        <div id="chat-stream" class="flex-grow p-4 scroller-v flex flex-col overflow-y-auto" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay;"></div>
-                        <div class="p-3 bg-[#202c33] flex items-center gap-3">
-                            <input type="text" id="chat-msg-in" placeholder="Transmit packet..." class="flex-grow bg-[#2a3942] rounded-lg p-3 text-white text-sm outline-none border-none">
-                            <button onclick="sendPacket()" class="bg-[#00a884] text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg"><i class="fa-solid fa-paper-plane"></i></button>
-                        </div>
-                    </section>
-
-                    <section id="vault" class="command-tile p-8 flex flex-col justify-between">
-                        <div>
-                            <div class="tile-header flex justify-between px-0 mb-6 border-none bg-transparent"><span class="tile-title text-gold">Phase 2: Premium Gateway</span><i class="fa-solid fa-crown text-gold"></i></div>
-                            <div class="rounded-2xl overflow-hidden mb-6 border border-white/10 aspect-video bg-black shadow-inner">
-                                <video muted loop autoplay class="w-full h-full object-cover opacity-60">
-                                    <source src="1000211769.mp4" type="video/mp4">
-                                </video>
-                            </div>
-                            <p class="text-[10px] text-zinc-400 uppercase leading-relaxed mb-6">Access the full archive, master mixes, and priority grid alerts from the Witbank sector.</p>
-                            <button class="premium-btn">Unlock Premium Access</button>
-                        </div>
-                        <div class="pt-6 border-t border-white/10">
-                            <p class="text-[9px] text-zinc-500 uppercase font-black mb-3 tracking-widest text-center">RSA Retail Savings Bond Tracker</p>
-                            <div class="flex justify-between items-end"><span class="text-xs text-white/60 font-bold uppercase">Yield:</span><span class="text-xl text-gold font-black">R13,827.19</span></div>
-                            <div class="w-full bg-white/5 h-1.5 rounded-full mt-3 overflow-hidden"><div class="bg-gold h-full rounded-full" style="width: 45%"></div></div>
-                        </div>
-                    </section>
-                </div>
-
-                <section class="command-tile h-[400px]">
-                    <div class="tile-header flex justify-between items-center"><span class="tile-title">Spotify Frequency Sync</span><i class="fa-brands fa-spotify text-xl text-[#1DB954]"></i></div>
-                    <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX6ThpU68Anwa" width="100%" height="320" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen;"></iframe>
+            <div class="lg:col-span-8">
+                <section id="chat" class="command-tile h-[600px] flex flex-col" style="background: var(--wa-bg);">
+                    <span class="tile-title !bg-[#202c33] text-white">Frequency Chat</span>
+                    <div id="chat-stream" class="flex-grow p-4 overflow-y-auto flex flex-col" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay;"></div>
+                    <div class="p-3 bg-[#202c33] flex gap-3">
+                        <input type="text" id="chat-msg-in" placeholder="Transmit packet..." class="flex-grow bg-[#2a3942] rounded-lg p-3 text-white text-sm outline-none border-none">
+                        <button onclick="sendPacket()" class="bg-[#00a884] text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
                 </section>
             </div>
         </main>
     </div>
     
     <section id="director-dashboard" class="hidden fixed inset-0 z-[11000] bg-black/98 p-10 overflow-y-auto backdrop-blur-3xl">
-        <div class="max-w-4xl mx-auto flex flex-col h-full">
-            <div class="flex justify-between items-center mb-12 border-b border-gold/30 pb-4"><h2 class="text-3xl text-white font-black uppercase italic">Master Totality</h2><button onclick="toggleDirectorUI()" class="text-white text-2xl">×</button></div>
-            <div class="bg-white/5 p-10 rounded-3xl border border-gold/20 text-center max-w-xl mx-auto">
-                <span class="text-xs text-gold uppercase tracking-[0.5em]">Total Liquidity</span>
-                <p class="text-5xl font-black mt-4">R73,827.00</p>
+        <div class="max-w-4xl mx-auto space-y-12">
+            <div class="flex justify-between items-center border-b border-gold/30 pb-4">
+                <h2 class="text-3xl text-white font-black uppercase italic">Director Vault</h2>
+                <button onclick="toggleDirectorUI()" class="text-white text-2xl">×</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="command-tile p-10 text-center border-gold/40">
+                    <span class="text-xs text-gold uppercase tracking-[0.5em]">Wealth Index</span>
+                    <p id="main-wealth-display" class="text-5xl font-black mt-4 text-white">R0.00</p>
+                </div>
+                <div class="command-tile p-10 border-gold/40">
+                    <p class="text-[9px] text-zinc-500 uppercase font-black mb-3 text-center">RSA Bond Tracker</p>
+                    <div class="flex justify-between items-end"><span class="text-xs text-white/60">Yield:</span><span id="bond-yield-val" class="text-xl text-gold font-black">R0.00</span></div>
+                    <div class="w-full bg-white/5 h-1.5 rounded-full mt-3 overflow-hidden">
+                        <div id="bond-progress-bar" class="bg-gold h-full" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="command-tile p-8 border-blue-500/20">
+                    <span class="tile-title !p-0 !border-none mb-6">M.O.G. Collective: Inventory</span>
+                    <div id="merch-grid" class="grid grid-cols-1 gap-4 text-[10px] uppercase font-bold text-zinc-400">
+                        </div>
+                </div>
+                <div class="command-tile p-8 border-gold/20 text-center">
+                    <span class="tile-title !p-0 !border-none mb-6">Sovereign QR Protocol</span>
+                    <div id="qr-protocol" class="mb-4"></div>
+                    <p class="text-[8px] text-gold uppercase tracking-widest mt-2">Transmit Grid Access</p>
+                </div>
             </div>
         </div>
     </section>
@@ -206,43 +135,81 @@
         const db = window.supabase.createClient(CFG.U, CFG.K);
         let logoClicks = 0;
 
-        // IDENTITY HANDSHAKE
-        async function loginWithGoogle() {
-            const { data, error } = await db.auth.signInWithOAuth({
-                provider: 'google',
-                options: { redirectTo: CFG.REDIRECT }
-            });
-            if (error) console.error("Identity Breach:", error.message);
+        // PWA HANDSHAKE
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => { navigator.serviceWorker.register('service-worker.js'); });
         }
 
-        // SPLASH LOGIC
+        // LIVE WEALTH SYNC
+        async function syncWealth() {
+            const { data, error } = await db.from('wealth_stats').select('*').order('created_at', { ascending: false }).limit(1).single();
+            if (data) {
+                document.getElementById('bond-yield-val').innerText = `R${data.bond_yield.toLocaleString()}`;
+                document.getElementById('bond-progress-bar').style.width = `${data.bond_progress}%`;
+                document.getElementById('main-wealth-display').innerText = `R${data.total_wealth.toLocaleString()}`;
+            }
+        }
+
+        // LIVE MERCH SYNC
+        async function syncMerch() {
+            const { data } = await db.from('merch_inventory').select('item_name, status').order('item_name', { ascending: true });
+            if (data) {
+                document.getElementById('merch-grid').innerHTML = data.map(item => `
+                    <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                        ${item.item_name}: <span class="text-white">${item.status}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // QR PROTOCOL INITIALIZATION
+        function generateQR() {
+            const qrContainer = document.getElementById("qr-protocol");
+            qrContainer.innerHTML = "";
+            new QRCode(qrContainer, {
+                text: window.location.href,
+                width: 128,
+                height: 128,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        // INITIALIZATION SEQUENCE
         window.addEventListener('load', () => {
+            syncWealth();
+            syncMerch();
+            generateQR();
             setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                splash.style.opacity = '0';
-                setTimeout(() => { splash.style.visibility = 'hidden'; }, 1000);
+                const s = document.getElementById('splash-screen');
+                s.style.opacity = '0';
+                setTimeout(() => s.style.visibility = 'hidden', 1000);
             }, 2500);
         });
 
-        function scrollTo(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
         function toggleDirectorUI() { document.getElementById('director-dashboard').classList.toggle('hidden'); }
 
         function handleLogoSequence() {
             logoClicks++;
             if (logoClicks === 5) { 
                 const p = prompt("BYPASS_KEY:");
-                if(p === '7486' || p === '@MOGProtocol2026') { toggleDirectorUI(); }
+                if(p === '7486' || p === '@MOGProtocol2026') toggleDirectorUI();
             }
             setTimeout(() => { logoClicks = 0; }, 5000);
         }
 
+        async function loginWithGoogle() {
+            await db.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: CFG.REDIRECT } });
+        }
+
         function sendPacket() {
-            const mIn = document.getElementById('chat-msg-in');
-            const m = mIn.value.trim(); if(!m) return;
-            const s = document.getElementById('chat-stream');
-            const d = document.createElement('div'); 
-            d.className = "wa-bubble wa-out shadow-sm"; d.innerHTML = m;
-            s.appendChild(d); mIn.value = ""; s.scrollTop = s.scrollHeight;
+            const m = document.getElementById('chat-msg-in');
+            if(!m.value.trim()) return;
+            const d = document.createElement('div');
+            d.className = "wa-bubble shadow-sm"; d.innerHTML = m.value;
+            document.getElementById('chat-stream').appendChild(d);
+            m.value = "";
         }
     </script>
 </body>
