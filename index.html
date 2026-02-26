@@ -3,14 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <meta name="google-signin-client_id" content="210696195426-aleglo26fj6j5qusktr1eptme4m7j8s6.apps.googleusercontent.com">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.9.0</title>
+    <title>M.O.G. | SOVEREIGN TOTALITY v101.3.0</title>
     
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#050505">
-    <link rel="apple-touch-icon" href="logo.png">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -21,46 +15,30 @@
         
         :root { 
             --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-black: #050505; 
-            --mog-glass: rgba(5, 12, 20, 0.95); --mog-border: rgba(212, 175, 55, 0.3);
-            --wa-bg: #0b141a;
+            --mog-glass: rgba(5, 12, 20, 0.98); --mog-border: rgba(212, 175, 55, 0.3);
         }
 
         html, body { min-height: 100vh; width: 100vw; margin: 0; padding: 0; overflow-x: hidden; background-color: var(--mog-black); color: var(--mog-gold); }
         * { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif; box-sizing: border-box; }
-        h1, h2, .tile-title { font-family: 'Tenor Sans', sans-serif !important; letter-spacing: 3px; text-transform: uppercase; }
+        
+        #lightning-canvas { position: fixed; inset: 0; z-index: -2; opacity: 0.3; pointer-events: none; }
+        #bg-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.5; background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 80%), url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 L30 30 M60 0 L30 30 M0 60 L30 30 M60 60 L30 30' stroke='%2300d4ff' stroke-width='0.5' fill='none' opacity='0.1'/%3E%3C/svg%3E"); }
 
-        /* NEURAL LIGHTNING CANVAS */
-        #lightning-canvas { position: fixed; inset: 0; z-index: -2; opacity: 0.4; pointer-events: none; }
+        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 2px; backdrop-filter: blur(30px); }
+        .mog-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 14px 28px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; cursor: pointer; background: transparent; letter-spacing: 3px; }
+        .mog-btn:hover { background: var(--mog-gold); color: #000; box-shadow: 0 0 40px var(--mog-gold); }
 
-        /* CIRCULAR SPLASH */
-        #splash-screen { position: fixed; inset: 0; z-index: 99999; background: var(--mog-black); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s; }
+        /* OTP 8-DIGIT SEGMENTED INPUT */
+        .otp-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; margin: 30px 0; }
+        .otp-box { background: #000; border: 1px solid var(--mog-blue); color: #fff; text-align: center; height: 60px; font-family: 'JetBrains Mono'; font-weight: 800; font-size: 1.5rem; outline: none; }
+        .otp-box:focus { border-color: var(--mog-gold); box-shadow: 0 0 15px var(--mog-gold); }
+
+        #splash-screen { position: fixed; inset: 0; z-index: 99999; background: var(--mog-black); display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .splash-logo-container { width: 180px; height: 180px; clip-path: circle(50% at 50% 50%); border: 2px solid var(--mog-gold); animation: pulse-glow 2s infinite alternate; }
         @keyframes pulse-glow { from { transform: scale(0.95); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); } to { transform: scale(1.05); box-shadow: 0 0 60px rgba(0, 212, 255, 0.4); } }
-        
-        /* THE GRID BACKGROUND */
-        #bg-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.55; background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.2) 0%, transparent 70%), url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 L40 40 M80 0 L40 40 M0 80 L40 40 M80 80 L40 40' stroke='%2300d4ff' stroke-width='0.5' fill='none' opacity='0.15'/%3E%3C/svg%3E"); }
-        
-        /* UI THEME */
-        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 2px; overflow: hidden; backdrop-filter: blur(20px); box-shadow: 0 15px 50px rgba(0, 0, 0, 1); }
-        .tile-header { border-bottom: 1px solid rgba(212, 175, 55, 0.1); padding: 16px 20px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, transparent 100%); display: flex; justify-content: space-between; align-items: center; }
-        .tile-title { font-size: 0.75rem; color: var(--mog-gold); }
-
-        .mog-input { background: #000 !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; color: var(--mog-blue) !important; padding: 14px; width: 100%; outline: none; font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; }
-        .mog-btn { border: 1px solid var(--mog-gold); color: var(--mog-gold); padding: 12px 24px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; cursor: pointer; background: transparent; letter-spacing: 2px; }
-        .mog-btn:hover { background: var(--mog-gold); color: #000; box-shadow: 0 0 30px var(--mog-gold); }
-        
-        /* SCROLLBAR */
-        .scroller-v::-webkit-scrollbar { width: 4px; }
-        .scroller-v::-webkit-scrollbar-thumb { background: var(--mog-gold); }
-
-        /* TICKER */
-        #event-ticker { position: fixed; bottom: 0; left: 0; width: 100%; height: 40px; background: #000; border-top: 1px solid var(--mog-gold); z-index: 1000; display: flex; align-items: center; overflow: hidden; }
-        .ticker-label { background: var(--mog-gold); color: #000; padding: 0 25px; font-size: 11px; font-weight: 900; height: 100%; display: flex; align-items: center; }
-        #ticker-content { white-space: nowrap; animation: ticker-scroll 45s linear infinite; font-size: 11px; color: var(--mog-blue); font-weight: 600; padding-left: 20px; }
-        @keyframes ticker-scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
     </style>
 </head>
-<body id="mog-totality">
+<body>
 
     <canvas id="lightning-canvas"></canvas>
     <div id="splash-screen"><div class="splash-logo-container"><img src="logo.png" class="w-full h-full object-cover"></div></div>
@@ -70,181 +48,114 @@
         <div class="flex items-center gap-8">
             <img src="logo.png" onclick="handleLogoSequence()" class="h-20 w-20 border-2 border-gold rounded-full shadow-2xl cursor-pointer">
             <div>
-                <h1 class="text-3xl font-normal text-white italic tracking-[.25em]">MINISTRY OF GROOVE</h1>
-                <p class="text-[10px] text-blue-400 tracking-[.5em] mt-2 uppercase font-black">Sovereign Monolith v100.9.0</p>
+                <h1 class="text-3xl font-light text-white italic tracking-[.3em] font-serif uppercase">Ministry of Groove</h1>
+                <p class="text-[9px] text-blue-400 tracking-[.5em] mt-2 uppercase font-black">Email-Verified Command Grid</p>
             </div>
         </div>
-        <div id="auth-status" class="text-[10px] text-red-500 font-bold border border-red-900 px-6 py-2 bg-red-950/20 tracking-[.3em] uppercase">Satellite Link Offline</div>
+        <div id="auth-status" class="text-[10px] text-red-500 font-bold border border-red-900 px-6 py-2 bg-red-950/20 tracking-[.3em] uppercase italic">Handshake Pending</div>
     </header>
 
-    <main class="p-10 grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-50">
-        
-        <div class="lg:col-span-4 space-y-10">
-            <section class="command-tile">
-                <div class="tile-header"><span class="tile-title">Satellite Africa Prime</span> <i class="fa-solid fa-satellite animate-spin-slow"></i></div>
-                <div class="p-6">
-                    <div id="map-area" class="h-60 bg-[url('https://upload.wikimedia.org/wikipedia/commons/2/21/Continent_Models_Africa.svg')] bg-contain bg-no-repeat bg-center filter invert sepia saturate-200 hue-rotate-180 relative border border-blue-900/20">
-                        <div class="absolute w-full h-1 bg-blue-500 top-0 animate-[scan_4s_linear_infinite] shadow-[0_0_15px_#00d4ff]"></div>
-                    </div>
-                </div>
-            </section>
+    <main class="flex justify-center items-center min-h-[70vh] p-6 relative z-50">
+        <section id="gate-1" class="command-tile p-12 max-w-md w-full text-center">
+            <h2 class="text-xl mb-8 font-serif uppercase tracking-widest">Protocol 1: Identity</h2>
+            <button onclick="loginWithGoogle()" class="mog-btn w-full flex items-center justify-center gap-4">
+                <i class="fa-brands fa-google"></i> Identify Operative
+            </button>
+        </section>
 
-            <section class="command-tile p-8">
-                <div class="tile-header !p-0 !border-none mb-6">Identity Handshake</div>
-                <div id="auth-form">
-                    <input id="email-in" type="email" placeholder="OPERATIVE EMAIL" class="mog-input">
-                    <input id="password-in" type="password" placeholder="SECURITY CIPHER" class="mog-input">
-                    <button onclick="handleAuth('login')" class="mog-btn w-full mt-4">Identify</button>
-                    <button onclick="loginWithGoogle()" class="mog-btn w-full mt-2 !border-blue-500 !text-blue-400">Google Link</button>
-                </div>
-                <div id="op-profile" class="hidden text-center">
-                    <p id="active-alias" class="text-2xl font-black text-white uppercase mb-8 italic"></p>
-                    <div id="qrcode" class="bg-white p-3 inline-block rounded-sm"></div>
-                </div>
-            </section>
-        </div>
-
-        <div class="lg:col-span-8 space-y-10">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <section class="command-tile">
-                    <div class="tile-header">Global Frequency <i class="fa-solid fa-radio"></i></div>
-                    <div class="p-6">
-                        <div id="broadcast-frame" class="aspect-video bg-black border border-blue-900/20 flex items-center justify-center">
-                            <p class="text-[9px] animate-pulse">WAITING FOR DIRECTOR SIGNAL...</p>
-                        </div>
-                    </div>
-                </section>
-                <section class="command-tile">
-                    <div class="tile-header">Amapiano Poll <i class="fa-solid fa-square-poll-vertical"></i></div>
-                    <div id="poll-list" class="p-6 space-y-2 max-h-60 overflow-y-auto scroller-v">
-                        </div>
-                </section>
+        <section id="gate-2" class="command-tile p-12 max-w-2xl w-full text-center hidden">
+            <h2 class="text-xl mb-2 font-serif uppercase tracking-widest">Protocol 2: Cipher</h2>
+            <p id="target-email" class="text-[10px] text-zinc-500 mb-8 uppercase tracking-widest italic"></p>
+            
+            <p class="text-[9px] text-blue-400 mb-2 uppercase font-bold">Transmit 8-digit code from your email archive</p>
+            <div class="otp-grid">
+                <input type="text" maxlength="1" class="otp-box" onkeyup="tabFocus(this, 1)" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                <input type="text" maxlength="1" class="otp-box" onkeyup="tabFocus(this, 2)" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                <input type="text" maxlength="1" class="otp-box" onkeyup="tabFocus(this, 3)" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                <input type="text" maxlength="1" class="otp-box" onkeyup="tabFocus(this, 4)" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                <input type="text" maxlength="1" class="otp-box" onkeyup="tabFocus(this, 5)" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                <input type="text" maxlength="1" class="otp-box" onkeyup="tabFocus(this, 6)" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                <input type="text" maxlength="1" class="otp-box" onkeyup="tabFocus(this, 7)" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                <input type="text" maxlength="1" class="otp-box" onkeyup="tabFocus(this, 8)" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
             </div>
 
-            <section id="director-node" class="command-tile hidden !border-red-600">
-                <div class="tile-header !text-red-500"><span>Directorate Command</span> <i class="fa-solid fa-shield-halved"></i></div>
-                <div class="p-8 grid md:grid-cols-2 gap-8">
-                    <button onclick="toggleDirectorUI()" class="mog-btn !border-red-600 !text-red-500">Access Wealth Vault</button>
-                    <button onclick="document.getElementById('file-in').click()" class="mog-btn">Deploy Sonic Intel</button>
-                    <input type="file" id="file-in" class="hidden" multiple onchange="handleUpload(this.files)">
-                </div>
-            </section>
+            <button onclick="verifyCipher()" class="mog-btn w-full">Decrypt & Access</button>
+            <button onclick="resendCipher()" class="mt-8 text-[9px] text-zinc-600 hover:text-gold uppercase font-bold tracking-widest block mx-auto">Resend Signal</button>
+        </section>
 
-            <section class="command-tile h-64 flex flex-col">
-                <div class="tile-header">Frequency Comms <i class="fa-solid fa-message"></i></div>
-                <div id="chat-stream" class="flex-grow p-4 overflow-y-auto font-mono text-xs scroller-v" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay;"></div>
-                <div class="p-4 flex gap-4 border-t border-white/5">
-                    <input id="chat-msg-in" type="text" placeholder="TRANSMIT PACKET..." class="mog-input !mb-0">
-                    <button onclick="sendPacket()" class="mog-btn !w-32">Send</button>
-                </div>
-            </section>
+        <div id="mog-totality-grid" class="hidden w-full space-y-12">
+            <div class="text-center p-24 border border-gold/10 bg-black/50 backdrop-blur-xl">
+                <h2 class="text-5xl text-white font-serif italic mb-4">ACCESS GRANTED</h2>
+                <p class="text-gold tracking-[1.5em] uppercase font-bold">The Sovereignty is Active</p>
+            </div>
         </div>
     </main>
-
-    <section id="director-dashboard" class="hidden fixed inset-0 z-[11000] bg-black/98 p-10 backdrop-blur-3xl overflow-y-auto">
-        <div class="max-w-4xl mx-auto space-y-12">
-            <div class="flex justify-between items-center border-b border-gold/30 pb-4">
-                <h2 class="text-3xl text-white font-black italic">Directorate Vault</h2>
-                <button onclick="toggleDirectorUI()" class="text-white text-2xl">×</button>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div class="command-tile p-10 text-center">
-                    <span class="text-xs text-gold uppercase tracking-[0.5em]">Wealth Index</span>
-                    <p id="main-wealth-display" class="text-5xl font-black mt-4 text-white">R73,827.00</p>
-                </div>
-                <div class="command-tile p-10">
-                    <p class="text-[9px] text-zinc-500 uppercase font-black mb-3">RSA Bond Tracker</p>
-                    <div id="bond-yield-val" class="text-xl text-gold font-black">R13,827.19</div>
-                    <div class="w-full bg-white/5 h-1.5 rounded-full mt-3 overflow-hidden">
-                        <div id="bond-progress-bar" class="bg-gold h-full" style="width: 45%"></div>
-                    </div>
-                </div>
-            </div>
-            <div id="merch-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-        </div>
-    </section>
-
-    <div id="event-ticker">
-        <div class="ticker-label">MOG_LOG</div>
-        <div id="ticker-content">... SYSTEM V100.9.0 TOTALITY ONLINE ... WITBANK_HQ PRIME ... SECURE_HANDSHAKE_READY ... POLL_ENGINE_SYNCED ...</div>
-    </div>
 
     <script>
         const CFG = { 
             U: "https://hzelmkthdqtbcxffsstl.supabase.co", 
             K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY",
-            D: "director.mog@gmail.com",
-            REDIRECT: "https://hzelmkthdqtbcxffsstl.supabase.co/auth/v1/callback"
+            REDIRECT: window.location.origin 
         };
         const db = window.supabase.createClient(CFG.U, CFG.K);
-        let user = null; let logoClicks = 0;
 
-        // --- PWA & SPLASH ---
-        if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('service-worker.js')); }
+        // 1. HANDSHAKE & EMAIL CIPHER LOGIC
+        db.auth.onAuthStateChange(async (event, session) => {
+            if (session && event === 'SIGNED_IN') {
+                const userEmail = session.user.email;
+                document.getElementById('gate-1').classList.add('hidden');
+                document.getElementById('gate-2').classList.remove('hidden');
+                document.getElementById('target-email').innerText = `Cipher sent to: ${userEmail}`;
+                document.getElementById('auth-status').innerText = "Cipher Required";
+                document.getElementById('auth-status').className = "text-[10px] text-gold font-bold border border-gold/40 px-6 py-2 bg-gold/10 tracking-[.3em] uppercase italic";
+                
+                // Trigger the Supabase Email OTP
+                await db.auth.signInWithOtp({ email: userEmail });
+            }
+        });
+
+        async function loginWithGoogle() {
+            await db.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: CFG.REDIRECT } });
+        }
+
+        function tabFocus(el, index) {
+            if (el.value.length === 1 && index < 8) {
+                document.querySelectorAll('.otp-box')[index].focus();
+            }
+        }
         
-        window.addEventListener('DOMContentLoaded', () => {
+        async function verifyCipher() {
+            const token = Array.from(document.querySelectorAll('.otp-box')).map(i => i.value).join('');
+            const { data: { session }, error } = await db.auth.verifyOtp({
+                email: db.auth.session()?.user.email,
+                token: token,
+                type: 'signup' // or 'magiclink' depending on Supabase settings
+            });
+
+            if (!error) {
+                document.getElementById('gate-2').classList.add('hidden');
+                document.getElementById('mog-totality-grid').classList.remove('hidden');
+                document.getElementById('auth-status').innerText = "Sovereign Link Stable";
+                document.getElementById('auth-status').className = "text-[10px] text-blue-400 font-bold border border-blue-900 px-6 py-2 bg-blue-950/20 tracking-[.3em] uppercase";
+            } else {
+                alert("CIPHER REJECTED: Check signal and retry.");
+            }
+        }
+
+        async function resendCipher() {
+            const email = db.auth.session()?.user.email;
+            if (email) await db.auth.signInWithOtp({ email });
+        }
+
+        // VISUALS
+        window.onload = () => {
             initNeuralVisuals();
-            setTimeout(hideSplash, 2500); 
-            setTimeout(hideSplash, 5000); // Fail-safe
-        });
+            setTimeout(() => {
+                const s = document.getElementById('splash-screen');
+                if (s) { s.style.opacity = '0'; setTimeout(() => s.style.display = 'none', 1000); }
+            }, 2500);
+        };
 
-        function hideSplash() {
-            const s = document.getElementById('splash-screen');
-            if (s && s.style.visibility !== 'hidden') {
-                s.style.opacity = '0';
-                setTimeout(() => { s.style.visibility = 'hidden'; s.style.display = 'none'; }, 1000);
-            }
-        }
-
-        // --- AUTH & SYNC ---
-        db.auth.onAuthStateChange((event, session) => {
-            if (session) {
-                user = session.user;
-                document.getElementById('auth-form').classList.add('hidden');
-                document.getElementById('op-profile').classList.remove('hidden');
-                document.getElementById('active-alias').innerText = user.email.split('@')[0].toUpperCase();
-                document.getElementById('auth-status').innerText = "LINK ENCRYPTED";
-                document.getElementById('auth-status').className = "text-[10px] text-blue-400 font-bold border border-blue-900 px-6 py-2 bg-blue-950/20 tracking-[.3em]";
-                if (user.email === CFG.D) document.getElementById('director-node').classList.remove('hidden');
-                new QRCode(document.getElementById("qrcode"), { text: user.id, width: 100, height: 100 });
-                syncSystem();
-            }
-        });
-        
-        async function syncSystem() {
-            syncBroadcast();
-            syncPoll();
-            syncWealth();
-            syncMerch();
-            initSatellitePresence();
-        }
-
-        async function syncBroadcast() {
-            const { data } = await db.from('broadcast').select('*').single();
-            if (data && data.youtube_id) {
-                document.getElementById('broadcast-frame').innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${data.youtube_id}?autoplay=1&mute=1" frameborder="0"></iframe>`;
-            }
-        }
-
-        async function syncPoll() {
-            const { data } = await db.from('amapiano_poll').select('*');
-            if (data) {
-                document.getElementById('poll-list').innerHTML = data.map(p => `
-                    <div class="p-3 border border-white/5 flex justify-between items-center cursor-pointer hover:bg-gold hover:text-black font-bold text-[10px]" onclick="castVote('${p.id}')">
-                        <span>${p.track_name.toUpperCase()}</span>
-                        <span class="text-blue-400">${p.vote_count || 0} VOTES</span>
-                    </div>
-                `).join('');
-            }
-        }
-
-        async function castVote(id) {
-            const { error } = await db.from('votes').insert([{ poll_id: id, user_id: user.id }]);
-            if (error) alert("VOTE FAILED: Handshake limit reached (1 vote per operative)");
-            else syncPoll();
-        }
-
-        // --- VISUALS ---
         function initNeuralVisuals() {
             const canvas = document.getElementById('lightning-canvas');
             const ctx = canvas.getContext('2d');
@@ -260,31 +171,6 @@
                 requestAnimationFrame(animate);
             }
             animate();
-        }
-
-        // --- DIRECTOR COMMANDS ---
-        function toggleDirectorUI() { document.getElementById('director-dashboard').classList.toggle('hidden'); }
-        function handleLogoSequence() {
-            logoClicks++;
-            if (logoClicks === 5) { 
-                const p = prompt("BYPASS_KEY:");
-                if(p === '7486' || p === '@MOGProtocol2026') toggleDirectorUI();
-            }
-            setTimeout(() => logoClicks = 0, 5000);
-        }
-
-        async function handleUpload(files) {
-            for (const file of files) { await db.storage.from('intel-vault').upload(`${Date.now()}_${file.name}`, file); }
-            alert("SONIC INTEL DEPLOYED");
-        }
-
-        async function logout() { await db.auth.signOut(); location.reload(); }
-        async function handleAuth(mode) {
-            const e = document.getElementById('email-in').value, p = document.getElementById('password-in').value;
-            await db.auth.signInWithPassword({ email: e, password: p });
-        }
-        async function loginWithGoogle() {
-            await db.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: CFG.REDIRECT } });
         }
     </script>
 </body>
