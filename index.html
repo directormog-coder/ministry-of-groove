@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.3.0</title>
+    <meta name="description" content="Ministry of Groove: Decrypting the Culture. Synchronizing the Grid.">
+    
+    <meta name="google-signin-client_id" content="210696195426-aleglo26fj6j5qusktr1eptme4m7j8s6.apps.googleusercontent.com">
+    
+    <title>M.O.G. | SOVEREIGN TOTALITY v100.4.0</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -56,23 +60,25 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 24px; overflow: hidden; backdrop-filter: blur(40px); }
-        .tile-header { border-bottom: 1px solid rgba(0, 212, 255, 0.1); padding: 15px 20px; background: rgba(0, 212, 255, 0.05); }
-        .tile-title { font-family: 'Clash Display', sans-serif; letter-spacing: 3px; text-transform: uppercase; font-size: 9px; color: var(--mog-blue); font-weight: 700; }
+        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 28px; overflow: hidden; backdrop-filter: blur(40px); box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8); }
+        .tile-header { border-bottom: 1px solid rgba(0, 212, 255, 0.1); padding: 18px 24px; background: linear-gradient(90deg, rgba(0, 212, 255, 0.05) 0%, transparent 100%); }
+        .tile-title { font-family: 'Clash Display', sans-serif; letter-spacing: 4px; text-transform: uppercase; font-size: 10px; color: var(--mog-blue); font-weight: 700; }
+
+        .premium-btn { 
+            background: linear-gradient(135deg, #D4AF37 0%, #8A6D3B 100%); 
+            color: #000; font-weight: 900; text-transform: uppercase; 
+            padding: 14px; border-radius: 12px; width: 100%; font-size: 11px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); cursor: pointer;
+        }
 
         #ticker-wrap { position: fixed; top: 0; width: 100%; background: #000; border-bottom: 1px solid var(--mog-gold); z-index: 1000; height: 35px; display: flex; align-items: center; overflow: hidden; }
         .ticker-move { white-space: nowrap; animation: ticker 40s linear infinite; font-size: 9px; font-weight: 900; color: var(--mog-gold); letter-spacing: 2px; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        .premium-btn { 
-            background: linear-gradient(135deg, #D4AF37 0%, #8A6D3B 100%); 
-            color: #000; font-weight: 900; text-transform: uppercase; 
-            padding: 14px; border-radius: 12px; width: 100%; font-size: 10px;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-        }
-
         .wa-bubble { max-width: 85%; padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; font-size: 13px; }
         .wa-out { background: #005c4b; align-self: flex-end; color: white; }
+        .scroller-v { overflow-y: auto; scrollbar-width: none; }
+        .scroller-v::-webkit-scrollbar { display: none; }
 
         .nav-link { font-size: 10px; font-weight: 900; letter-spacing: 2px; color: rgba(255,255,255,0.5); text-transform: uppercase; cursor: pointer; }
         .nav-link:hover { color: var(--mog-blue); }
@@ -90,10 +96,11 @@
     <div id="bg-canvas"></div>
 
     <div id="ticker-wrap">
-        <div class="ticker-move">MASTER_V100.3.0 // PWA_STABILIZED // REVENUE_PORTAL_ACTIVE // RSA_BOND_SYNC // WITBANK_HQ ONLINE...</div>
+        <div class="ticker-move">MASTER_V100.4.0 // PHASE_2: PREMIUM_READY // RSA_BOND_SYNC // WITBANK_HQ ONLINE // DECIPHER THE CULTURE...</div>
     </div>
 
     <div id="app-content" class="mt-20 p-6 lg:p-12">
+        
         <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-12 relative z-50">
             <div class="flex items-center gap-6">
                 <img src="logo.png" onclick="handleLogoSequence()" class="h-20 w-20 rounded-full border-2 border-gold/40 shadow-2xl cursor-pointer">
@@ -113,32 +120,37 @@
             </div>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-50">
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-50">
             
-            <div class="lg:col-span-4 space-y-8">
-                <section class="command-tile p-6">
+            <div class="lg:col-span-4 space-y-10">
+                <section class="command-tile p-8">
                     <div class="tile-header flex justify-between px-0 mb-4 border-none bg-transparent">
-                        <span class="tile-title">Identity Gateway</span>
-                        <i class="fa-solid fa-key text-blue-400"></i>
+                        <span class="tile-title">Identity Handshake</span>
+                        <i class="fa-solid fa-shield-halved text-blue-400"></i>
                     </div>
-                    <div id="auth-ui" class="space-y-4">
-                        <input id="email-in" type="email" placeholder="OPERATIVE EMAIL" class="w-full bg-black/40 border border-blue-500/20 rounded-xl p-4 text-white text-[10px] outline-none focus:border-blue-400">
-                        <button onclick="handleAuth()" class="premium-btn">Authorize Link</button>
-                    </div>
+                    <button onclick="loginWithGoogle()" class="premium-btn flex items-center justify-center gap-3">
+                        <i class="fa-brands fa-google"></i> Authorize via Google
+                    </button>
+                    <p class="text-[7px] text-zinc-500 uppercase mt-4 text-center tracking-widest">Protocol: Google OAuth 2.0</p>
                 </section>
 
                 <section id="radar" class="command-tile h-72">
                     <div class="tile-header flex justify-between"><span class="tile-title">National Radar Grid</span><i class="fa-solid fa-satellite-dish"></i></div>
                     <iframe class="w-full h-full grayscale invert opacity-20 contrast-125 scale-150" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114944.5671569766!2d29.15540346393529!3d-25.875323985799975!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ee266935835697d%3A0x9d11634579cc5f6d!2seMalahleni!5e0!3m2!1sen!2sza!4v1715421234567!5m2!1sen!2sza"></iframe>
                 </section>
+
+                <section class="command-tile p-4">
+                    <div class="tile-header flex justify-between border-none bg-transparent mb-2"><span class="tile-title">Mandate Archive</span><i class="fa-solid fa-compact-disc text-gold"></i></div>
+                    <audio src="mandate_mix.mp3" controls class="w-full h-10"></audio>
+                </section>
             </div>
 
-            <div class="lg:col-span-8 space-y-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="lg:col-span-8 space-y-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                     
-                    <section id="chat" class="command-tile h-[550px] flex flex-col" style="background: var(--wa-bg);">
+                    <section id="chat" class="command-tile h-[600px] flex flex-col" style="background: var(--wa-bg);">
                         <div class="tile-header bg-[#202c33] flex justify-between py-3 px-4 border-none">
-                            <span class="tile-title text-white">Frequency Chat</span>
+                            <span class="tile-title text-white font-black">Frequency Chat</span>
                             <div class="flex gap-4 text-zinc-500"><i class="fa-solid fa-video"></i><i class="fa-solid fa-phone"></i></div>
                         </div>
                         <div id="chat-stream" class="flex-grow p-4 scroller-v flex flex-col overflow-y-auto" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay;"></div>
@@ -151,27 +163,25 @@
                     <section id="vault" class="command-tile p-8 flex flex-col justify-between">
                         <div>
                             <div class="tile-header flex justify-between px-0 mb-6 border-none bg-transparent"><span class="tile-title text-gold">Phase 2: Premium Gateway</span><i class="fa-solid fa-crown text-gold"></i></div>
-                            <p class="text-[10px] text-zinc-400 uppercase leading-relaxed mb-6">Access the full archive, master mixes, and priority grid alerts.</p>
-                            
-                            <div class="rounded-xl overflow-hidden mb-4 border border-white/10 aspect-video">
+                            <div class="rounded-2xl overflow-hidden mb-6 border border-white/10 aspect-video bg-black shadow-inner">
                                 <video muted loop autoplay class="w-full h-full object-cover opacity-60">
                                     <source src="1000211769.mp4" type="video/mp4">
                                 </video>
                             </div>
-                            
+                            <p class="text-[10px] text-zinc-400 uppercase leading-relaxed mb-6">Access the full archive, master mixes, and priority grid alerts from the Witbank sector.</p>
                             <button class="premium-btn">Unlock Premium Access</button>
                         </div>
                         <div class="pt-6 border-t border-white/10">
-                            <p class="text-[9px] text-zinc-500 uppercase font-black mb-3 tracking-widest text-center">RSA Bond Sync Tracking</p>
+                            <p class="text-[9px] text-zinc-500 uppercase font-black mb-3 tracking-widest text-center">RSA Retail Savings Bond Tracker</p>
                             <div class="flex justify-between items-end"><span class="text-xs text-white/60 font-bold uppercase">Yield:</span><span class="text-xl text-gold font-black">R13,827.19</span></div>
                             <div class="w-full bg-white/5 h-1.5 rounded-full mt-3 overflow-hidden"><div class="bg-gold h-full rounded-full" style="width: 45%"></div></div>
                         </div>
                     </section>
                 </div>
 
-                <section class="command-tile p-4">
-                    <div class="tile-header flex justify-between border-none bg-transparent mb-2"><span class="tile-title">Sovereign Mandate Archive</span><i class="fa-solid fa-compact-disc text-gold"></i></div>
-                    <audio src="mandate_mix.mp3" controls class="w-full h-10"></audio>
+                <section class="command-tile h-[400px]">
+                    <div class="tile-header flex justify-between items-center"><span class="tile-title">Spotify Frequency Sync</span><i class="fa-brands fa-spotify text-xl text-[#1DB954]"></i></div>
+                    <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX6ThpU68Anwa" width="100%" height="320" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen;"></iframe>
                 </section>
             </div>
         </main>
@@ -188,15 +198,21 @@
     </section>
 
     <script>
-        const CFG = { U: "https://vbkpatwvgvwarybbpiky.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8" };
+        const CFG = { 
+            U: "https://hzelmkthdqtbcxffsstl.supabase.co", 
+            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY",
+            REDIRECT: "https://hzelmkthdqtbcxffsstl.supabase.co/auth/v1/callback"
+        };
         const db = window.supabase.createClient(CFG.U, CFG.K);
         let logoClicks = 0;
 
-        // PWA SERVICE WORKER REGISTRATION
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js');
+        // IDENTITY HANDSHAKE
+        async function loginWithGoogle() {
+            const { data, error } = await db.auth.signInWithOAuth({
+                provider: 'google',
+                options: { redirectTo: CFG.REDIRECT }
             });
+            if (error) console.error("Identity Breach:", error.message);
         }
 
         // SPLASH LOGIC
@@ -225,8 +241,7 @@
             const m = mIn.value.trim(); if(!m) return;
             const s = document.getElementById('chat-stream');
             const d = document.createElement('div'); 
-            d.className = "wa-bubble wa-out shadow-sm";
-            d.innerHTML = m;
+            d.className = "wa-bubble wa-out shadow-sm"; d.innerHTML = m;
             s.appendChild(d); mIn.value = ""; s.scrollTop = s.scrollHeight;
         }
     </script>
