@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | SOVEREIGN TOTALITY v100.2.66</title>
     
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
+
+    <title>M.O.G. | MINISTRY OF GROOVE</title>
+    <meta name="description" content="Sovereign sound transmitted from the eMalahleni Sector. Join the Grid frequency.">
+    <meta property="og:title" content="Ministry of Groove | Official Grid">
+    <meta property="og:description" content="Secure communication and sovereign sound transmission for the eMalahleni Sector.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
+    <meta property="og:url" content="https://ministry-of-groove.vercel.app/">
+    <meta property="twitter:card" content="summary_large_image">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/easyqrcodejs@4.4.13/dist/easy.qrcode.min.js"></script>
@@ -23,116 +33,105 @@
 
         #bg-canvas { position: fixed; inset: 0; z-index: -1; background-image: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.12) 0%, transparent 70%), url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 L20 50 L30 40 L50 40' fill='none' stroke='rgba(0,212,255,0.15)' stroke-width='0.5'/%3E%3C/svg%3E"); background-size: 400px 400px; opacity: 0.55; }
 
+        /* GRID SYSTEM */
         .mainframe-wrapper { 
-            display: grid; padding: 30px; gap: 30px; 
+            display: grid; padding: 25px; gap: 25px; 
             grid-template-columns: 1.2fr 1.6fr 1fr; 
             grid-template-areas: "gateway messenger chart" "location messenger vault" "history messenger requests" "director director director"; 
             max-width: 1900px; margin: 0 auto; 
         }
-        @media (max-width: 1200px) { .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "chart" "location" "vault" "history" "requests" "director"; } }
+        @media (max-width: 1200px) { .mainframe-wrapper { grid-template-columns: 1fr; grid-template-areas: "gateway" "messenger" "chart" "location" "vault" "history" "requests" "director"; padding: 15px; } }
 
-        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 45px; overflow: hidden; backdrop-filter: blur(40px); position: relative; }
-        .logo-wrapper { position: relative; padding: 8px; border-radius: 50%; background: conic-gradient(from 0deg, var(--mog-gold), var(--mog-blue), var(--mog-gold)); box-shadow: 0 0 25px var(--mog-neon-blue); animation: rotate-orbit 10s linear infinite; }
+        .command-tile { background: var(--mog-glass); border: 1px solid var(--mog-border); border-radius: 40px; overflow: hidden; backdrop-filter: blur(40px); position: relative; }
+        .logo-wrapper { position: relative; padding: 6px; border-radius: 50%; background: conic-gradient(from 0deg, var(--mog-gold), var(--mog-blue), var(--mog-gold)); box-shadow: 0 0 25px var(--mog-neon-blue); animation: rotate-orbit 12s linear infinite; }
         @keyframes rotate-orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         
         #countdown-hub { background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); padding: 5px 20px; border-radius: 50px; display: none; align-items: center; gap: 12px; }
-        #live-siren, #ascension-overlay, #broadcast-overlay { position: fixed; inset: 0; z-index: 10001; background: rgba(0,0,0,0.96); display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(80px); }
+        #live-siren, #ascension-overlay, #share-overlay { position: fixed; inset: 0; z-index: 10001; background: rgba(0,0,0,0.96); display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(80px); }
         
         .director-active #director-tile { display: block; }
         #director-tile { grid-area: director; display: none; border: 2px solid #ef4444; background: rgba(239, 68, 68, 0.05); margin-top: 20px; }
 
-        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 18px; padding: 20px; width: 100%; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; font-size: 11px; }
-        .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 1px solid var(--mog-border); padding: 15px 0; color: #fff; width: 100%; outline: none; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+        .master-btn { background: var(--mog-gold); color: #000; font-weight: 900; border-radius: 18px; padding: 18px; width: 100%; text-transform: uppercase; cursor: pointer; letter-spacing: 1px; font-size: 11px; }
+        .mog-input { background: rgba(0,212,255,0.05); border: none; border-bottom: 1px solid var(--mog-border); padding: 12px 0; color: #fff; width: 100%; outline: none; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
         
-        .vault-item { background: #000; border: 1px solid var(--mog-border); border-radius: 20px; overflow: hidden; margin-bottom: 15px; }
-        .vlog-badge { border: 2px solid var(--mog-gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
-        .social-link { font-size: 1.2rem; color: rgba(255,255,255,0.4); transition: 0.4s; }
-        .social-link:hover { color: var(--mog-gold); transform: translateY(-5px); }
+        /* VIRAL SHARING GRID */
+        .share-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 15px; width: 100%; }
+        .share-node { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 20px; text-align: center; cursor: pointer; }
+        .share-node:hover { background: var(--mog-gold); color: #000; transform: scale(1.05); }
+
+        .vault-item { background: #000; border: 1px solid var(--mog-border); border-radius: 25px; overflow: hidden; margin-bottom: 15px; }
+        .vlog-badge { border: 2px solid var(--mog-gold); }
     </style>
 </head>
 <body class="pb-40">
     <div id="bg-canvas"></div>
 
-    <div id="live-siren"><div class="relative text-center z-10"><h1 class="text-blue-400 font-black italic text-5xl uppercase mb-4">Transmission Live</h1><button onclick="document.getElementById('live-siren').style.display='none'" class="master-btn px-20">Enter Frequency</button></div></div>
-    <div id="ascension-overlay"><div class="text-center"><h1 class="text-gold font-black italic text-6xl uppercase mb-4 animate-bounce">Ascension</h1><p id="ascension-msg" class="text-white uppercase tracking-widest text-sm mb-12">Tier Status Upgraded</p><button onclick="document.getElementById('ascension-overlay').style.display='none'" class="master-btn px-20">Acknowledge</button></div></div>
-    <div id="broadcast-overlay"><div class="command-tile p-16 max-w-2xl w-full text-center border-gold"><span class="text-gold font-black uppercase text-xs mb-6 block tracking-[0.5em]">Director Signal</span><h2 id="broadcast-msg-display" class="text-3xl font-black italic text-white mb-12 uppercase"></h2><button onclick="document.getElementById('broadcast-overlay').style.display='none'" class="master-btn w-full">Close Feed</button></div></div>
+    <div id="live-siren"><div class="text-center"><h1 class="text-blue-400 font-black italic text-5xl uppercase mb-8">Transmission Live</h1><button onclick="document.getElementById('live-siren').style.display='none'" class="master-btn px-20">Sync Frequency</button></div></div>
+    <div id="ascension-overlay"><div class="text-center"><h1 class="text-gold font-black italic text-6xl uppercase mb-4 animate-bounce">Ascension</h1><p id="ascension-msg" class="text-white uppercase tracking-widest text-sm mb-12"></p><button onclick="document.getElementById('ascension-overlay').style.display='none'" class="master-btn px-20">Acknowledge</button></div></div>
+    <div id="share-overlay"><div class="command-tile p-12 text-center max-w-md w-full mx-6"><span class="text-gold font-black uppercase text-[10px] mb-8 block tracking-[0.4em]">Viral Matrix</span><div class="share-grid"><div onclick="viralTransmit('whatsapp')" class="share-node"><i class="fa-brands fa-whatsapp text-2xl"></i></div><div onclick="viralTransmit('twitter')" class="share-node"><i class="fa-brands fa-x-twitter text-2xl"></i></div><div onclick="viralTransmit('fb-msg')" class="share-node"><i class="fa-brands fa-facebook-messenger text-2xl"></i></div></div><button onclick="document.getElementById('share-overlay').style.display='none'" class="mt-8 text-[10px] font-black uppercase text-zinc-500 underline">Close Frequency</button></div></div>
 
-    <header class="px-12 py-8 bg-black/60 border-b border-white/10 backdrop-blur-2xl sticky top-0 z-[1000]">
+    <header class="px-6 md:px-12 py-8 bg-black/60 border-b border-white/10 backdrop-blur-2xl sticky top-0 z-[1000]">
         <div class="flex flex-wrap items-center justify-between gap-6">
             <div class="flex items-center gap-6">
-                <div class="logo-wrapper" onclick="handleDirectorSequence()"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 md:h-20 md:w-20 rounded-full cursor-pointer"></div>
-                <h1 class="text-4xl font-black italic uppercase text-white tracking-tighter" style="font-family: 'Big Shoulders Display';">M.O.G.</h1>
+                <div class="logo-wrapper" onclick="handleDirectorSequence()"><img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-14 w-14 md:h-18 md:w-18 rounded-full cursor-pointer"></div>
+                <h1 class="text-3xl md:text-4xl font-black italic uppercase text-white tracking-tighter" style="font-family: 'Big Shoulders Display';">M.O.G.</h1>
             </div>
-            <div id="countdown-hub"><span id="timer-display" class="font-mono text-blue-400 text-sm font-bold">00:00:00:00</span></div>
-            <div class="status-badge flex items-center gap-6 bg-white/5 px-6 py-4 rounded-full border border-white/10">
-                <span id="op-counter" class="text-gold font-black text-2xl">0</span>
-                <button onclick="initiateLogout()" class="text-red-500 hover:scale-125 transition-all"><i class="fa-solid fa-power-off"></i></button>
+            <div id="countdown-hub"><span id="timer-display" class="font-mono text-blue-400 text-sm font-bold tracking-widest">00:00:00:00</span></div>
+            <div class="flex items-center gap-4">
+                <button onclick="document.getElementById('share-overlay').style.display='flex'" class="bg-white/5 border border-white/10 w-10 h-10 md:w-12 md:h-12 rounded-full hover:bg-gold hover:text-black"><i class="fa-solid fa-share-nodes"></i></button>
+                <div class="status-badge bg-white/5 px-4 md:px-6 py-2 md:py-3 rounded-full border border-white/10 flex items-center gap-4">
+                    <span id="op-counter" class="text-gold font-black text-xl md:text-2xl">0</span>
+                    <button onclick="initiateLogout()" class="text-red-500"><i class="fa-solid fa-power-off"></i></button>
+                </div>
             </div>
         </div>
     </header>
-
+    
     <main class="mainframe-wrapper">
-        <section class="command-tile p-12 flex flex-col justify-center" style="grid-area: gateway;">
+        <section class="command-tile p-8 md:p-12 flex flex-col justify-center" style="grid-area: gateway;">
             <div id="op-badge" class="text-center">
-                <div id="qrcode-container" class="bg-white p-4 rounded-3xl inline-block border-4 transition-all duration-1000"><div id="qrcode"></div></div>
-                <h2 id="op-display-id" class="text-2xl font-black italic uppercase text-white mt-6">OPERATIVE</h2>
-                <div id="tier-tag" class="text-[8px] font-black uppercase mt-2 py-1 px-4 rounded-full inline-block">Novice Status</div>
+                <div id="qrcode-container" class="bg-white p-4 rounded-3xl inline-block border-4"><div id="qrcode"></div></div>
+                <h2 id="op-display-id" class="text-xl md:text-2xl font-black italic uppercase text-white mt-6">OPERATIVE</h2>
+                <div id="tier-tag" class="text-[8px] font-black uppercase mt-2 py-1 px-4 rounded-full inline-block">Novice</div>
             </div>
         </section>
 
-        <section class="command-tile min-h-[700px] flex flex-col" style="grid-area: messenger;">
-            <div id="chat-stream" class="flex-grow p-10 overflow-y-auto"></div>
-            <div class="p-8 bg-black/50 flex gap-4 border-t border-white/5">
-                <input type="text" id="chat-input" placeholder="Transmit thought..." class="flex-grow bg-white/5 border border-white/10 rounded-full px-8 py-4 outline-none">
-                <button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-xl"><i class="fa-solid fa-paper-plane"></i></button>
-            </div>
+        <section class="command-tile min-h-[500px] md:min-h-[700px] flex flex-col" style="grid-area: messenger;">
+            <div id="chat-stream" class="flex-grow p-6 md:p-10 overflow-y-auto"></div>
+            <div class="p-4 md:p-8 bg-black/50 flex gap-4"><input type="text" id="chat-input" placeholder="Transmit thought..." class="flex-grow bg-white/5 border border-white/10 rounded-full px-6 py-4 outline-none text-sm"><button onclick="sendPacket()" class="bg-blue-600 text-white rounded-full w-12 h-12 md:w-14 md:h-14 flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button></div>
         </section>
 
-        <section class="command-tile p-10 overflow-y-auto" style="grid-area: chart;"><span class="text-[11px] font-black text-gold uppercase italic mb-6 block underline tracking-[0.4em]">Sovereign Chart Index</span><div id="chart-index" class="space-y-4"></div></section>
-
-        <section class="command-tile p-10 h-64 overflow-y-auto" style="grid-area: location;"><span class="text-[11px] font-black text-blue-400 uppercase italic mb-6 block underline">Sector Coordinates</span><div id="location-node-container" class="space-y-4"></div></section>
-
-        <section class="command-tile p-10 overflow-y-auto h-96" style="grid-area: vault;"><span class="text-[11px] font-black text-blue-400 uppercase italic mb-6 block underline">Visual Intel Vault</span><div id="vault-content" class="space-y-6"></div></section>
-
-        <section class="command-tile p-10 h-96 overflow-y-auto" style="grid-area: history;"><span class="text-[11px] font-black text-gold uppercase italic mb-6 block underline">Private Set Archive</span><div id="setlist-container" class="space-y-4"></div></section>
-
-        <section class="command-tile p-10" style="grid-area: requests;"><span class="text-[11px] font-black text-blue-400 uppercase italic mb-4 block underline">Booth Request Line</span><input id="track-request-input" class="mog-input mb-4" placeholder="Artist - Track Name"><button onclick="sendRequest()" class="master-btn py-4">Send Request</button></section>
+        <section class="command-tile p-10 overflow-y-auto" style="grid-area: chart;"><span class="text-[11px] font-black text-gold uppercase italic mb-6 block underline">Top 10 Index</span><div id="chart-index" class="space-y-4"></div></section>
+        <section class="command-tile p-10 h-64 overflow-y-auto" style="grid-area: location;"><span class="text-[11px] font-black text-blue-400 uppercase italic mb-6 block underline tracking-[0.3em]">Sector Coords</span><div id="location-node-container" class="space-y-4"></div></section>
+        <section class="command-tile p-10 overflow-y-auto h-96" style="grid-area: vault;"><span class="text-[11px] font-black text-blue-400 uppercase italic mb-6 block underline">Intel Vault</span><div id="vault-content" class="space-y-6"></div></section>
+        <section class="command-tile p-10 h-96 overflow-y-auto" style="grid-area: history;"><span class="text-[11px] font-black text-gold uppercase italic mb-6 block underline">Set Archive</span><div id="setlist-container" class="space-y-4"></div></section>
+        <section class="command-tile p-10" style="grid-area: requests;"><span class="text-[11px] font-black text-blue-400 uppercase italic mb-4 block underline">Booth Request</span><input id="track-request-input" class="mog-input mb-4" placeholder="Artist - Track"><button onclick="sendRequest()" class="master-btn py-4">Transmit</button></section>
 
         <section id="director-tile" class="command-tile p-12 col-span-full border-red-500/40">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                <div class="bg-black/40 p-8 rounded-3xl border border-red-500/20">
-                    <h2 class="text-red-500 font-black italic text-xl uppercase mb-6">Master Console</h2>
-                    <button onclick="triggerLiveSiren()" class="bg-blue-600 text-white w-full py-4 rounded-xl font-black text-xs mb-4">Siren Trigger</button>
-                    <input id="target-datetime" type="datetime-local" class="mog-input mb-4">
-                    <button onclick="setTemporalTarget()" class="bg-gold text-black w-full py-4 rounded-xl font-black text-xs">Set Sync Timer</button>
-                    <button onclick="broadcastSignal()" class="mt-4 text-[9px] text-zinc-500 font-black uppercase w-full">Transmit Signal</button>
-                </div>
-                <div class="bg-black/40 p-8 rounded-3xl border border-gold/20">
-                    <h2 class="text-gold font-black italic text-xl uppercase mb-6">Intel Deployment</h2>
-                    <input id="vault-url" class="mog-input mb-4" placeholder="URL"><input id="vault-title-in" class="mog-input mb-4" placeholder="Title">
-                    <select id="vault-type" class="w-full bg-black/50 border border-white/10 p-2 text-white text-[10px] mb-6 rounded-lg"><option value="SESSION">SESSION</option><option value="VLOG">DIRECTOR VLOG</option></select>
-                    <button onclick="deployVaultIntel()" class="bg-gold text-black w-full py-4 rounded-xl font-black text-xs">Deploy Intel</button>
-                </div>
-                <div id="request-inbox" class="bg-black/40 p-8 rounded-3xl border border-white/10 overflow-y-auto h-64"><h2 class="text-white font-black italic text-xl uppercase mb-6">Booth Requests</h2></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="bg-black/40 p-8 rounded-3xl border border-red-500/20"><h2 class="text-red-500 font-black italic text-xl uppercase mb-6">Console</h2><button onclick="triggerLiveSiren()" class="bg-blue-600 text-white w-full py-4 rounded-xl font-black text-xs mb-4">Fire Siren</button><input id="target-datetime" type="datetime-local" class="mog-input mb-4"><button onclick="setTemporalTarget()" class="bg-gold text-black w-full py-4 rounded-xl font-black text-xs">Set Sync</button></div>
+                <div class="bg-black/40 p-8 rounded-3xl border border-gold/20"><h2 class="text-gold font-black italic text-xl uppercase mb-6">Deploy</h2><input id="vault-url" class="mog-input mb-4" placeholder="URL"><input id="vault-title-in" class="mog-input mb-4" placeholder="Title"><select id="vault-type" class="w-full bg-black/50 border border-white/10 p-2 text-white text-xs mb-6 rounded-lg"><option value="SESSION">SESSION</option><option value="VLOG">DIRECTOR VLOG</option></select><button onclick="deployVaultIntel()" class="bg-gold text-black w-full py-4 rounded-xl font-black text-xs">Deploy Intel</button></div>
+                <div id="request-inbox" class="bg-black/40 p-8 rounded-3xl border border-white/10 overflow-y-auto h-64"><h2 class="text-white font-black text-xl uppercase mb-6 italic">Booth Feed</h2></div>
             </div>
-            <div id="live-op-feed" class="mt-8 space-y-2"></div>
         </section>
     </main>
 
-    <footer class="fixed bottom-0 w-full bg-black/95 border-t border-gold/20 py-8 px-16 z-[2000] flex justify-between items-center text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500">
-        <div class="flex gap-10">
-            <a href="https://instagram.com/ministryofgroove" target="_blank" class="social-link"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://tiktok.com/@ministryofgroove" target="_blank" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="https://facebook.com/ministryofgroove" target="_blank" class="social-link"><i class="fa-brands fa-facebook"></i></a>
-            <a href="mailto:director.mog@gmail.com" class="social-link"><i class="fa-solid fa-envelope"></i></a>
-        </div>
-        <p class="text-gold italic font-black">M.O.G. © 2026 // MPUMALANGA HQ</p>
-    </footer>
+    <footer class="fixed bottom-0 w-full bg-black/95 border-t border-gold/20 py-6 text-center z-[2000]"><p class="text-gold italic font-black text-[10px] uppercase tracking-widest">M.O.G. © 2026 // MPUMALANGA SECTOR HQ</p></footer>
 
     <script>
+        // CORE GRID CONFIGURATION
         const CFG = { U: "https://hzelmkthdqtbcxffsstl.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY" };
         const db = window.supabase.createClient(CFG.U, CFG.K);
         let timerInterval, logoClicks = 0;
+
+        // VIRAL TRANSMISSION
+        function viralTransmit(p) {
+            const url = encodeURIComponent(window.location.href);
+            const msg = encodeURIComponent("Ministry of Groove Sovereign Frequency.");
+            const h = { 'whatsapp': `https://api.whatsapp.com/send?text=${msg}%20${url}`, 'twitter': `https://twitter.com/intent/tweet?text=${msg}&url=${url}`, 'fb-msg': `fb-messenger://share?link=${url}` };
+            window.open(h[p] || url, '_blank');
+        }
 
         async function checkSecurity() {
             const { data: { user } } = await db.auth.getUser();
@@ -144,26 +143,26 @@
             const alias = user.email.split('@')[0];
             document.getElementById('op-display-id').innerText = alias;
             if(user.email === 'director.mog@gmail.com') document.documentElement.classList.add('director-active');
-            
             const { count } = await db.from('messages').select('*', { count: 'exact', head: true }).eq('alias', alias);
             processTier(count, user.email, user.id);
             fetchComms(); fetchHistory(); fetchVault(); fetchChartIndex(); fetchCoordinates();
             if(user.email === 'director.mog@gmail.com') fetchRequests();
-    
+            
+            // LOW LATENCY BROADCAST
             db.channel('sovereign-totality').on('broadcast', { event: 'live-now' }, () => document.getElementById('live-siren').style.display = 'flex')
-                         .on('broadcast', { event: 'set-timer' }, p => startCountdown(p.payload.target))
-                         .on('broadcast', { event: 'alert' }, p => {
-                            if(Date.now() - p.payload.timestamp < 86400000) {
-                                document.getElementById('broadcast-msg-display').innerText = p.payload.msg;
-                                document.getElementById('broadcast-overlay').style.display = 'flex';
-                            }
-                         }).subscribe();
+                         .on('broadcast', { event: 'set-timer' }, p => startCountdown(p.payload.target)).subscribe();
         }
 
         function processTier(count, email, userId) {
             let color = "#00d4ff", label = "Novice", tClass = "tier-novice";
             if (email === 'director.mog@gmail.com' || count >= 50) { color = "#D4AF37"; label = "Elite"; tClass = "tier-elite"; }
             else if (count >= 10) { color = "#C0C0C0"; label = "Sentinel"; tClass = "tier-sentinel"; }
+            const last = parseInt(localStorage.getItem('mog_last_count') || 0);
+            if ((count >= 10 && last < 10) || (count >= 50 && last < 50)) {
+                document.getElementById('ascension-msg').innerText = `Role Status: ${label}`;
+                document.getElementById('ascension-overlay').style.display = 'flex';
+            }
+            localStorage.setItem('mog_last_count', count);
             document.getElementById('qrcode-container').className = `bg-white p-4 rounded-3xl inline-block border-4 ${tClass}`;
             document.getElementById('tier-tag').innerText = label + " Status";
             document.getElementById('tier-tag').style.color = color;
@@ -181,19 +180,18 @@
             }, 1000);
         }
 
-        // DIRECTOR COMMANDS
         function triggerLiveSiren() { db.channel('sovereign-totality').send({ type: 'broadcast', event: 'live-now' }); }
         function setTemporalTarget() { const target = document.getElementById('target-datetime').value; if(target) db.channel('sovereign-totality').send({ type: 'broadcast', event: 'set-timer', payload: { target: new Date(target).getTime() } }); }
         async function deployVaultIntel() { const u = document.getElementById('vault-url').value, t = document.getElementById('vault-type').value, l = document.getElementById('vault-title-in').value; if(u) await db.from('messages').insert([{ content: `${u}|${l}|${t}`, alias: 'VAULT_ITEM' }]); location.reload(); }
 
-        // FETCHERS
+        // FETCHING SYSTEMS
         async function fetchVault() { const { data } = await db.from('messages').select('*').eq('alias', 'VAULT_ITEM').order('created_at', { ascending: false }); const v = document.getElementById('vault-content'); if(data) { v.innerHTML = ""; data.forEach(i => { const [url, title, type] = i.content.split('|'); const e = document.createElement('div'); e.className = `vault-item ${type === 'VLOG' ? 'vlog-badge' : ''}`; e.innerHTML = `<img src="${url}" class="w-full h-32 object-cover opacity-50"><p class="p-4 text-[9px] uppercase font-black">${title}</p>`; v.appendChild(e); }); } }
         async function fetchChartIndex() { const { data } = await db.from('messages').select('*').eq('alias', 'YT_CHART').order('created_at', { ascending: false }).limit(10); const c = document.getElementById('chart-index'); if(data) { c.innerHTML = ""; data.forEach((i, x) => { const [n, v] = i.content.split('|'); const d = document.createElement('div'); d.className = "flex items-center gap-4 bg-white/5 p-4 rounded-xl cursor-pointer"; d.onclick = () => window.open(`https://www.youtube.com/watch?v=${v}`, '_blank'); d.innerHTML = `<span class="text-gold font-bold">#${x+1}</span><span class="text-[9px] uppercase">${n}</span>`; c.appendChild(d); }); } }
         async function fetchCoordinates() { const { data } = await db.from('messages').select('*').eq('alias', 'SECTOR_LOC').limit(1); if(data && data[0]) { const [n, u] = data[0].content.split('|'); document.getElementById('location-node-container').innerHTML = `<div class="bg-blue-500/10 p-6 rounded-2xl border border-blue-500/20 cursor-pointer" onclick="window.open('${u}','_blank')"><p class="text-white font-black text-xs">${n}</p></div>`; } }
         async function fetchSetArchive() { const { data } = await db.from('messages').select('*').eq('alias', 'SET_REFERENCE').order('created_at', { ascending: false }); const s = document.getElementById('setlist-container'); if(data) { s.innerHTML = ""; data.forEach(i => { const [t, l] = i.content.split('|'); const b = document.createElement('div'); b.className = "bg-white/5 p-4 rounded-2xl"; b.innerHTML = `<p class="text-white text-[10px] font-black underline mb-2">${t}</p><p class="text-zinc-500 text-[8px] uppercase">${l}</p>`; s.appendChild(b); }); } }
         
         async function sendPacket() { const i = document.getElementById('chat-input'); const { data: { user } } = await db.auth.getUser(); if (i.value && user) await db.from('messages').insert([{ content: i.value, alias: user.email.split('@')[0] }]); i.value = ""; }
-        function appendMessage(msg) { if(['REQ_','VAULT_ITEM','YT_CHART','SET_REFERENCE','SECTOR_LOC'].some(k => msg.alias.includes(k))) return; const s = document.getElementById('chat-stream'); const d = document.createElement('div'); d.className = "bg-white/5 p-4 rounded-2xl mb-4 border border-white/5"; d.innerHTML = `<span class="text-blue-400 font-black text-[9px] block mb-1">${msg.alias}</span>${msg.content}`; s.appendChild(d); s.scrollTop = s.scrollHeight; }
+        function appendMessage(msg) { if(['REQ_','VAULT_ITEM','YT_CHART','SET_REFERENCE','SECTOR_LOC'].some(k => msg.alias.includes(k))) return; const s = document.getElementById('chat-stream'); const d = document.createElement('div'); d.className = "bg-white/5 p-4 rounded-2xl mb-4 border border-white/5 shadow-neon-blue"; d.innerHTML = `<span class="text-blue-400 font-black text-[9px] block mb-1">${msg.alias}</span>${msg.content}`; s.appendChild(d); s.scrollTop = s.scrollHeight; }
         async function fetchComms() { const { data } = await db.from('messages').select('*').order('created_at', { ascending: true }); if (data) data.forEach(msg => appendMessage(msg)); }
         db.channel('public:messages').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, p => appendMessage(p.new)).subscribe();
 
