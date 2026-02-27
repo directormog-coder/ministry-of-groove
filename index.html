@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID MASTER V180.22</title>
+    <title>M.O.G. | NATIONAL GRID MASTER V190.50</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
@@ -41,6 +44,12 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
         }
 
+        /* UPGRADED: Premium Dark Map */
+        #operative-map { height: 350px; width: 100%; border-radius: 25px; border: 2px solid rgba(212, 175, 55, 0.1); }
+        .leaflet-tile-pane { filter: brightness(0.6) invert(100%) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7); }
+        .leaflet-container { background: #060a0f !important; }
+        .leaflet-control-layers { background: #0b141a !important; color: #fff !important; border: none !important; border-radius: 15px !important; font-size: 10px !important; text-transform: uppercase; font-weight: 900; }
+
         #mog-toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
             background: var(--mog-blue); color: #000; padding: 12px 24px;
@@ -61,9 +70,6 @@
 
         input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 16px; border-radius: 20px; outline: none; width: 100%; }
         
-        .loading-pulse { animation: pulse 1.5s infinite; pointer-events: none; opacity: 0.6; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
         .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 40s linear infinite; }
         @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
     </style>
@@ -75,27 +81,24 @@
     <div id="director-console" class="modal-overlay">
         <div class="command-tile p-8 max-w-lg w-full border-gold/30">
             <h2 class="text-2xl text-white font-black uppercase italic mb-6">Director Hub</h2>
-            
-            <div class="mb-8">
+            <div class="mb-6">
                 <p class="text-[10px] text-blue-400 font-black mb-2 uppercase">Signal Sync</p>
                 <input type="text" id="dir-yt-id" placeholder="YouTube Video ID" class="mb-2">
                 <button onclick="updateBroadcast()" class="w-full bg-blue-500 text-black font-black py-3 rounded-xl uppercase text-[10px]">Update Broadcast</button>
             </div>
-
             <div class="mb-4">
                 <p class="text-[10px] text-blue-400 font-black mb-2 uppercase">Add to Hitlist</p>
                 <input type="text" id="dir-track-name" placeholder="Track Name" class="mb-2">
                 <input type="text" id="dir-track-artist" placeholder="Artist" class="mb-2">
-                <button onclick="addTrack()" class="w-full bg-white text-black font-black py-3 rounded-xl uppercase text-[10px]">Add New Track</button>
+                <button onclick="addTrack()" class="w-full bg-white text-black font-black py-3 rounded-xl uppercase text-[10px]">Add Track</button>
             </div>
-
             <button onclick="toggleUI('director-console')" class="w-full mt-6 text-zinc-500 font-black text-[10px]">EXIT CONSOLE</button>
         </div>
     </div>
 
     <div class="fixed top-0 w-full bg-black z-[9000] h-[45px] border-b border-blue-400/20 flex items-center overflow-hidden">
         <div class="ticker-move text-[10px] font-black uppercase text-blue-400">
-            M.O.G. V180.22 // DECRYPTING THE CULTURE // SYNCHRONIZING THE GRID // GOOGLE_OAUTH_ACTIVE // DIRECT_FREQ_ENABLED...
+            M.O.G. V190.50 // DECRYPTING THE CULTURE // SYNCHRONIZING THE GRID // MAP UPGRADED // REAL-TIME COMMS ACTIVE...
         </div>
     </div>
 
@@ -103,27 +106,31 @@
         <header class="flex flex-col items-center justify-center text-center p-6 mb-8">
             <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-logo-trigger" class="h-24 w-24 mb-4 cursor-pointer">
             <h1 class="text-4xl lg:text-6xl text-gold font-black uppercase italic tracking-tighter">Ministry of Groove</h1>
-            <p class="text-[10px] text-blue-400 font-black uppercase tracking-[0.4em]">Decrypting the Culture. Synchronizing the Grid</p>
         </header>
 
         <div class="mainframe-grid">
             <section class="command-tile p-8">
-                <div id="auth-container">
+                <div id="auth-container" class="mb-6">
                     <button id="google-auth-btn" onclick="loginWithGoogle()" class="w-full bg-white text-black font-black py-4 rounded-full uppercase text-xs flex items-center justify-center gap-3">
                         <i class="fa-brands fa-google"></i> <span id="auth-text">Authorize DNA</span>
                     </button>
                 </div>
-                <div id="active-op-badge" class="hidden flex flex-col items-center justify-center text-center">
-                    <img id="display-avatar" src="" class="w-24 h-24 rounded-3xl border-2 border-gold object-cover mb-4">
-                    <h2 id="display-op-id" class="text-2xl text-white font-black uppercase italic">OPERATIVE</h2>
+                <div id="active-op-badge" class="hidden flex items-center gap-4 mb-6 bg-white/5 p-4 rounded-3xl">
+                    <img id="display-avatar" src="" class="w-12 h-12 rounded-xl border border-gold object-cover">
+                    <h2 id="display-op-id" class="text-sm text-white font-black uppercase italic">OPERATIVE</h2>
                 </div>
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-blue-400 font-black uppercase text-[9px]">Operative Grid Map</h3>
+                    <span id="map-status" class="text-[8px] text-green-500 font-black">● LIVE</span>
+                </div>
+                <div id="operative-map"></div>
             </section>
 
             <section class="command-tile p-1 lg:col-span-2">
                 <div class="messenger-view">
                     <div id="chat-stream" class="msg-stream"></div>
                     <div class="p-4 bg-[#202c33] flex gap-3">
-                        <input id="chat-msg" type="text" class="flex-grow bg-[#2a3942] border-0 rounded-full px-6 text-white" placeholder="Transmit Packet...">
+                        <input id="chat-msg" type="text" class="flex-grow bg-[#2a3942] border-0 rounded-full px-6 text-white" placeholder="Transmit packet...">
                         <button onclick="sendMessage()" class="w-14 h-14 bg-blue-500 text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
                     </div>
                 </div>
@@ -138,15 +145,15 @@
                 <div id="yt-broadcast" class="w-full h-full bg-black rounded-[30px] overflow-hidden"></div>
             </section>
         </div>
-    </div>
-    
-    <script>
+                    </div>
+
+        <script>
         const MOG_CFG = {
             U: "https://hzelmkthdqtbxcffsstl.supabase.co",
             K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY"
         };
         const db = window.supabase.createClient(MOG_CFG.U, MOG_CFG.K);
-        let currentOp = null, logoClicks = 0;
+        let currentOp = null, logoClicks = 0, map, markers = {}, operativeLayer, gridLayer;
 
         function showToast(msg) {
             const t = document.getElementById('mog-toast');
@@ -154,14 +161,57 @@
             setTimeout(() => t.classList.remove('toast-active'), 3000);
         }
 
-        /* --- REALTIME ENGINE --- */
-        db.channel('mog-master-sync')
+        /* --- UPGRADED MAP ENGINE --- */
+        function initMap() {
+            // High-precision center near Witbank
+            map = L.map('operative-map', { zoomControl: false, scrollWheelZoom: false }).setView([-25.87, 29.23], 6);
+            
+            const baseTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
+            baseTiles.addTo(map);
+
+            operativeLayer = L.layerGroup().addTo(map);
+            gridLayer = L.layerGroup();
+
+            const overlays = { "Operative Signal": operativeLayer, "Grid Density": gridLayer };
+            L.control.layers(null, overlays, { collapsed: false }).addTo(map);
+        }
+
+        async function syncPresence(user) {
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const loc = await res.json();
+                const channel = db.channel('grid-presence', { config: { presence: { key: user.id } } });
+                
+                channel.on('presence', { event: 'sync' }, () => {
+                    const state = channel.presenceState();
+                    operativeLayer.clearLayers();
+                    
+                    for (const id in state) {
+                        const p = state[id][0];
+                        if (p.lat && p.lng) {
+                            // Pulsing signal effect using custom Leaflet CircleMarker
+                            L.circleMarker([p.lat, p.lng], {
+                                color: '#D4AF37', weight: 1, fillColor: '#00d4ff', fillOpacity: 0.8, radius: 6
+                            }).addTo(operativeLayer).bindPopup(`<div style="color:#000; font-weight:900; font-size:10px;">${p.name.toUpperCase()}<br>SECTOR: ${p.city.toUpperCase()}</div>`);
+                        }
+                    }
+                }).subscribe(async (status) => {
+                    if (status === 'SUBSCRIBED') await channel.track({
+                        name: user.user_metadata.full_name,
+                        city: loc.city || 'Unknown',
+                        lat: loc.latitude, lng: loc.longitude
+                    });
+                });
+            } catch(e) { console.error("Grid Sync Failure", e); }
+        }
+
+        /* --- DATA BROADCAST --- */
+        db.channel('master-hub')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => refreshChat())
             .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'broadcast' }, () => syncGrid())
             .on('postgres_changes', { event: '*', schema: 'public', table: 'tracks' }, () => loadHitlist())
             .subscribe();
 
-        /* --- BROADCAST & TRACK LOGIC --- */
         async function syncGrid() {
             const { data } = await db.from('broadcast').select('*').eq('id', 1).single();
             if (data) document.getElementById('yt-broadcast').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${data.youtube_id}?autoplay=1&mute=1" frameborder="0" allowfullscreen></iframe>`;
@@ -170,14 +220,14 @@
         async function updateBroadcast() {
             const vidId = document.getElementById('dir-yt-id').value.trim();
             const { error } = await db.from('broadcast').update({ youtube_id: vidId }).eq('id', 1);
-            if(error) showToast("ACCESS DENIED: DIRECTOR ONLY"); else showToast("SIGNAL UPDATED");
+            if(error) showToast("ACCESS DENIED"); else showToast("SIGNAL UPDATED");
         }
 
         async function addTrack() {
             const name = document.getElementById('dir-track-name').value;
             const artist = document.getElementById('dir-track-artist').value;
             const { error } = await db.from('tracks').insert([{ name, artist, votes: 0 }]);
-            if(error) showToast("ACCESS DENIED: DIRECTOR ONLY"); else { showToast("TRACK ADDED"); toggleUI('director-console'); }
+            if(error) showToast("ACCESS DENIED"); else { showToast("TRACK ADDED"); toggleUI('director-console'); }
         }
 
         async function loadHitlist() {
@@ -194,12 +244,10 @@
         }
 
         async function voteTrack(id, currentVotes) {
-            if(!currentOp) return showToast("AUTHORIZE DNA TO VOTE");
-            const { error } = await db.from('tracks').update({ votes: currentVotes + 1 }).eq('id', id);
-            if(!error) showToast("VOTE RECORDED");
+            if(!currentOp) return showToast("AUTHORIZE DNA");
+            await db.from('tracks').update({ votes: currentVotes + 1 }).eq('id', id);
         }
 
-        /* --- CHAT ENGINE --- */
         async function refreshChat() {
             const { data } = await db.from('messages').select('*').order('created_at', { ascending: true }).limit(50);
             const s = document.getElementById('chat-stream'); 
@@ -209,22 +257,16 @@
 
         async function sendMessage() {
             const input = document.getElementById('chat-msg');
-            if(!input.value || !currentOp) return showToast("AUTHORIZE DNA TO TRANSMIT");
+            if(!input.value || !currentOp) return showToast("AUTHORIZE DNA");
             await db.from('messages').insert([{ content: input.value, user_id: currentOp.id, alias: currentOp.user_metadata.full_name }]);
             input.value = '';
         }
 
-        /* --- AUTH ENGINE --- */
+        /* --- AUTH SYSTEM --- */
         async function loginWithGoogle() { 
             const btn = document.getElementById('google-auth-btn');
-            const txt = document.getElementById('auth-text');
             btn.classList.add('loading-pulse');
-            txt.innerText = "SYNCHRONIZING...";
-            
-            await db.auth.signInWithOAuth({ 
-                provider: 'google', 
-                options: { redirectTo: 'https://ministry-of-groove.vercel.app', skipBrowserRedirect: false } 
-            }); 
+            await db.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://ministry-of-groove.vercel.app' } }); 
         }
 
         db.auth.onAuthStateChange((event, session) => {
@@ -234,8 +276,7 @@
                 document.getElementById('active-op-badge').classList.remove('hidden');
                 document.getElementById('display-avatar').src = session.user.user_metadata.avatar_url;
                 document.getElementById('display-op-id').innerText = session.user.user_metadata.full_name;
-                refreshChat();
-                showToast("DNA RECOGNIZED");
+                refreshChat(); syncPresence(session.user); showToast("DNA RECOGNIZED");
             }
         });
 
@@ -246,7 +287,7 @@
         });
 
         function toggleUI(id) { document.getElementById(id).classList.toggle('active-modal'); }
-        window.onload = () => { syncGrid(); loadHitlist(); };
+        window.onload = () => { initMap(); syncGrid(); loadHitlist(); };
     </script>
 </body>
 </html>
