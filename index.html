@@ -61,6 +61,9 @@
 
         input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 16px; border-radius: 20px; outline: none; width: 100%; }
         
+        .loading-pulse { animation: pulse 1.5s infinite; pointer-events: none; opacity: 0.6; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
         .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 40s linear infinite; }
         @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
     </style>
@@ -78,7 +81,7 @@
                 <input type="text" id="dir-yt-id" placeholder="YouTube Video ID" class="mb-2">
                 <button onclick="updateBroadcast()" class="w-full bg-blue-500 text-black font-black py-3 rounded-xl uppercase text-[10px]">Update Broadcast</button>
             </div>
-            
+
             <div class="mb-4">
                 <p class="text-[10px] text-blue-400 font-black mb-2 uppercase">Add to Hitlist</p>
                 <input type="text" id="dir-track-name" placeholder="Track Name" class="mb-2">
@@ -100,6 +103,7 @@
         <header class="flex flex-col items-center justify-center text-center p-6 mb-8">
             <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-logo-trigger" class="h-24 w-24 mb-4 cursor-pointer">
             <h1 class="text-4xl lg:text-6xl text-gold font-black uppercase italic tracking-tighter">Ministry of Groove</h1>
+            <p class="text-[10px] text-blue-400 font-black uppercase tracking-[0.4em]">Decrypting the Culture. Synchronizing the Grid</p>
         </header>
 
         <div class="mainframe-grid">
@@ -135,7 +139,7 @@
             </section>
         </div>
     </div>
-
+    
     <script>
         const MOG_CFG = {
             U: "https://hzelmkthdqtbxcffsstl.supabase.co",
@@ -150,7 +154,7 @@
             setTimeout(() => t.classList.remove('toast-active'), 3000);
         }
 
-        /* --- REALTIME HUB --- */
+        /* --- REALTIME ENGINE --- */
         db.channel('mog-master-sync')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => refreshChat())
             .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'broadcast' }, () => syncGrid())
@@ -191,10 +195,11 @@
 
         async function voteTrack(id, currentVotes) {
             if(!currentOp) return showToast("AUTHORIZE DNA TO VOTE");
-            await db.from('tracks').update({ votes: currentVotes + 1 }).eq('id', id);
+            const { error } = await db.from('tracks').update({ votes: currentVotes + 1 }).eq('id', id);
+            if(!error) showToast("VOTE RECORDED");
         }
 
-        /* --- CHAT --- */
+        /* --- CHAT ENGINE --- */
         async function refreshChat() {
             const { data } = await db.from('messages').select('*').order('created_at', { ascending: true }).limit(50);
             const s = document.getElementById('chat-stream'); 
@@ -209,9 +214,17 @@
             input.value = '';
         }
 
-        /* --- AUTH --- */
+        /* --- AUTH ENGINE --- */
         async function loginWithGoogle() { 
-            await db.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://ministry-of-groove.vercel.app' } }); 
+            const btn = document.getElementById('google-auth-btn');
+            const txt = document.getElementById('auth-text');
+            btn.classList.add('loading-pulse');
+            txt.innerText = "SYNCHRONIZING...";
+            
+            await db.auth.signInWithOAuth({ 
+                provider: 'google', 
+                options: { redirectTo: 'https://ministry-of-groove.vercel.app', skipBrowserRedirect: false } 
+            }); 
         }
 
         db.auth.onAuthStateChange((event, session) => {
@@ -222,11 +235,14 @@
                 document.getElementById('display-avatar').src = session.user.user_metadata.avatar_url;
                 document.getElementById('display-op-id').innerText = session.user.user_metadata.full_name;
                 refreshChat();
+                showToast("DNA RECOGNIZED");
             }
         });
 
+        /* --- UI HELPERS --- */
         document.getElementById('mog-logo-trigger').addEventListener('click', () => {
             if(++logoClicks === 5) { toggleUI('director-console'); logoClicks = 0; }
+            setTimeout(() => logoClicks = 0, 5000);
         });
 
         function toggleUI(id) { document.getElementById(id).classList.toggle('active-modal'); }
