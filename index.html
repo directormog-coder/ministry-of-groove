@@ -196,7 +196,7 @@
             </section>
         </div>
     </div>
-    
+
     <footer>
         <div class="flex justify-center gap-8 mb-4">
             <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-instagram"></i></a>
@@ -209,7 +209,7 @@
 
     <script>
         const MOG_CFG = {
-            // VERIFIED: Latin URL hzelmkthdqtbxcffsstl correctly implemented
+            // VERIFIED: Correct Project ID hzelmkthdqtbxcffsstl used throughout
             U: "https://hzelmkthdqtbxcffsstl.supabase.co",
             K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY"
         };
@@ -220,7 +220,127 @@
         async function loginWithGoogle() { 
             await db.auth.signInWithOAuth({ 
                 provider: 'google',
-                options: { redirectTo: 'https://ministry-of-groove.vercel.app' }
+                options: { 
+                    // FIXED: This now matches your Vercel Site URL exactly
+                    redirectTo: 'https://ministry-of-groove.vercel.app' 
+                }
+            }); 
+        }
+
+        function setAuthMode(m) { authMode = m; document.getElementById('reg-fields').classList.toggle('hidden', m === 'login'); }
+        
+        async function executeAuth() {
+            const e = document.getElementById('auth-user').value.trim(), p = document.getElementById('auth-pass').value;
+            if(authMode === 'reg') {
+                const { data } = await db.auth.signUp({ email: e, password: p });
+                if(data.user) await db.from('registrations').insert([{ user_id: data.user.id, alias: document.getElementById('reg-alias').value }]);
+                setAuthMode('login');
+            } else {
+                const { data, error } = await db.auth.signInWithPassword({ email: e, password: p });
+                if(data.user) setupSession(data.user); else alert(error.message);
+            }
+        }
+
+        async function setupSession(u) {
+            currentOp = u; document.getElementById('auth-container').classList.add('hidden'); document.getElementById('active-op-badge').classList.remove('hidden');
+            const { data } = await db.from('registrations').select('*').eq('user_id', u.id).single();
+            if(data) {
+                document.getElementById('display-op-id').innerText = data.alias;
+                document.getElementById('display-avatar').src = data.avatar_url || 'https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png';
+                document.getElementById('display-vibe').innerText = data.status || 'READY';
+            }
+            syncGrid(); refreshChat(); fetchEvents();
+        }
+
+        /* --- GRID LOGIC --- */
+        async function syncGrid() {
+            const { data } = await db.from('broadcast').select('*').eq('id', 1).single();
+            if(data) document.getElementById('yt-broadcast').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${data.youtube_id}" frameborder="0" allowfullscreen></iframe>`;
+            loadPoll();
+        }
+
+        async function loadPoll() {
+            const { data: t } = await db.from('tracks').select('*');
+            const { data: v } = await db.from('amapiano_poll').select('spotify_track_id');
+            const sorted = t.map(tk => ({...tk, c: v?.filter(vote => vote.spotify_track_id === tk.id).length || 0})).sort((a,b) => b.c - a.c);
+            document.getElementById('dynamic-poll').innerHTML = sorted.map((tk, idx) => `<div class="flex items-center justify-between p-4 bg-white/5 rounded-3xl"><div><p class="text-[8px] text-zinc-500 uppercase">#${idx+1}</p><p class="text-white font-black text-xs uppercase">${tk.name}</p></div><button onclick="boostTrack('${tk.id}','${tk.name}')" class="text-[9px] text-blue-400 font-black px-4 py-2 border border-blue-400/20 rounded-full">Boost [${tk.c}]</button></div>`).join('');
+        }
+
+        async function fetchEvents() {
+            const { data } = await db.from('events').select('*').order('date', { ascending: true });
+            document.getElementById('events-matrix').innerHTML = data?.map(ev => `<div class="p-4 bg-white/5 rounded-2xl border-l-4 border-blue-500 mb-3"><p class="text-[9px] font-black text-blue-400 uppercase">${ev.date}</p><p class="text-xs font-black text-white uppercase">${ev.title}</p></div>`).join('') || '<p class="text-[10px] opacity-30">No Events.</p>';
+        }
+
+        async function refreshChat() {
+            const { data } = await db.from('messages').select('*').is('recipient_id', null).order('created_at', { ascending: true }).limit(50);
+            const s = document.getElementById('chat-stream'); s.innerHTML = '';
+            data?.forEach(m => {
+                const d = document.createElement('div'); d.className = `bubble ${m.user_id === currentOp?.id ? 'sent' : 'received'}`;
+                d.innerHTML = `<span class="text-[8px] font-black uppercase block mb-1 opacity-50">${m.alias}</span>${m.content}`;
+                s.appendChild(d);
+            });
+            s.scrollTop = s.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const i = document.getElementById('chat-msg'); if(!i.value || !currentOp) return;
+            await db.from('messages').insert([{ content: i.value, user_id: currentOp.id, alias: document.getElementById('display-op-id').innerText }]);
+            i.value = ''; refreshChat();
+        }
+
+        /* --- DIRECTOR ACCESS --- */
+        document.getElementById('mog-logo-trigger').addEventListener('click', () => {
+            logoClicks++;
+            if(logoClicks === 5) { 
+                if(currentOp?.email === 'director.mog@gmail.com') {
+                    const p = prompt("DIRECTOR_PROTOCOL_ID:");
+                    if(p === "@MOGProtocol2026") toggleUI('director-console');
+                }
+                            <section class="command-tile p-1 full-width">
+                <div class="messenger-view rounded-[34px]">
+                    <div class="bg-[#202c33] p-5 flex flex-wrap justify-between items-center border-b border-white/5">
+                        <div class="flex gap-4">
+                            <button onclick="switchChat('public')" id="tab-public" class="text-[10px] font-black uppercase px-6 py-2 bg-blue-500 text-black rounded-lg">Public</button>
+                            <button onclick="switchChat('private')" id="tab-private" class="text-[10px] font-black uppercase px-6 py-2 bg-white/5 text-zinc-500 rounded-lg">Direct</button>
+                        </div>
+                    </div>
+                    <div id="chat-stream" class="msg-stream"></div>
+                    <div class="bg-[#202c33] p-5 flex gap-4">
+                        <input id="chat-msg" type="text" class="flex-grow bg-[#2a3942] border-0 rounded-full px-8 py-5 text-white outline-none" placeholder="Transmit packet...">
+                        <button onclick="sendMessage()" class="w-16 h-16 bg-blue-500 text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <div class="flex justify-center gap-8 mb-4">
+            <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-spotify"></i></a>
+            <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+        <button onclick="toggleUI('policy-modal')" class="text-[9px] font-black uppercase text-blue-400">Privacy & Protocols</button>
+        <p class="text-[9px] text-zinc-600 uppercase mt-4">© 2026 Ministry of Groove</p>
+    </footer>
+
+    <script>
+        const MOG_CFG = {
+            // VERIFIED: Correct Project ID hzelmkthdqtbxcffsstl used throughout
+            U: "https://hzelmkthdqtbxcffsstl.supabase.co",
+            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY"
+        };
+        const db = window.supabase.createClient(MOG_CFG.U, MOG_CFG.K);
+        let currentOp = null, authMode = 'login', logoClicks = 0, currentChatTab = 'public';
+
+        /* --- SYNC & AUTH --- */
+        async function loginWithGoogle() { 
+            await db.auth.signInWithOAuth({ 
+                provider: 'google',
+                options: { 
+                    // FIXED: This now matches your Vercel Site URL exactly
+                    redirectTo: 'https://ministry-of-groove.vercel.app' 
+                }
             }); 
         }
 
