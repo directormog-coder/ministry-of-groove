@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID MASTER V200.50</title>
+    <title>M.O.G. | NATIONAL GRID MASTER V200.95</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -45,19 +45,20 @@
         }
 
         .full-width { grid-column: 1 / -1; }
-
-        /* Map Radar Styling */
         #operative-map { height: 250px; width: 100%; border-radius: 20px; }
         .leaflet-tile-pane { filter: brightness(0.6) invert(100%) contrast(3) hue-rotate(200deg); }
 
-        /* Messenger Styling */
+        /* Messenger Full Restoration */
         .messenger-view { height: 550px; display: flex; flex-direction: column; background: #0b141a; }
         .msg-stream { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
         .bubble { max-width: 80%; padding: 14px 18px; border-radius: 22px; font-size: 14px; position: relative; cursor: pointer; }
         .sent { align-self: flex-end; background: var(--chat-sent); color: #fff; border-bottom-right-radius: 4px; }
         .received { align-self: flex-start; background: var(--chat-received); color: #e9edef; border-bottom-left-radius: 4px; }
 
-        /* Toast & Modals */
+        /* Hitlist Scroller */
+        .scroller-x { display: flex; overflow-x: auto; gap: 15px; padding: 10px; scroll-snap-type: x mandatory; }
+        .hit-item { min-width: 280px; border-radius: 25px; overflow: hidden; scroll-snap-align: start; flex-shrink: 0; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
+
         #mog-toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
             background: var(--mog-blue); color: #000; padding: 12px 24px;
@@ -80,7 +81,7 @@
 </head>
 <body id="mog-mainframe">
 
-    <div id="mog-toast">DNA SYNCHRONIZED</div>
+    <div id="mog-toast">GRID RESTORED</div>
     <audio id="log-drum" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logdrum.mp3" preload="auto"></audio>
 
     <div id="director-console" class="modal-overlay">
@@ -91,21 +92,15 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="space-y-6">
-                    <p class="text-[10px] text-blue-400 font-black uppercase">Signal Center</p>
-                    <input type="text" id="dir-yt-id" placeholder="YouTube Video ID">
+                    <p class="text-[10px] text-blue-400 font-black uppercase">Main Signal</p>
+                    <input type="text" id="dir-yt-id" placeholder="Broadcast YT ID">
                     <button onclick="updateBroadcast()" class="w-full bg-blue-500 text-black font-black py-4 rounded-xl text-xs uppercase italic">Sync Grid</button>
                 </div>
                 <div class="space-y-6">
-                    <p class="text-[10px] text-blue-400 font-black uppercase">Track Manager</p>
-                    <input type="text" id="dir-track-name" placeholder="Track Name">
-                    <input type="text" id="dir-track-artist" placeholder="Artist">
-                    <button onclick="addTrack()" class="w-full bg-white text-black font-black py-4 rounded-xl text-xs uppercase">Post Track</button>
-                </div>
-                <div class="space-y-6">
-                    <p class="text-[10px] text-blue-400 font-black uppercase">Grid Status</p>
-                    <div class="p-4 bg-white/5 rounded-xl border border-blue-400/20 text-[10px] text-white">
-                        V200.50 OMNI-RESTORATION ACTIVE<br>ENCRYPTION: AES-256<br>SECTORS: MONITORED
-                    </div>
+                    <p class="text-[10px] text-blue-400 font-black uppercase">Hitlist Addition</p>
+                    <input type="text" id="dir-track-name" placeholder="Song Name">
+                    <input type="text" id="dir-track-yt" placeholder="YouTube Video ID">
+                    <button onclick="addTrack()" class="w-full bg-white text-black font-black py-4 rounded-xl text-xs uppercase">Post to Top 10</button>
                 </div>
             </div>
         </div>
@@ -113,7 +108,7 @@
 
     <div class="fixed top-0 w-full bg-black z-[9000] h-[45px] border-b border-blue-400/20 flex items-center overflow-hidden">
         <div class="ticker-move text-[10px] font-black uppercase text-blue-400">
-            M.O.G. V200.50 // RESTORED V180.21 TILES // OMNI-BUILD // GRID FULLY OPERATIONAL // DIRECT MESSAGING ENABLED // LOG DRUM ARMED...
+            M.O.G. V200.95 // CHAT TILE RESTORED // OMNI-BUILD // GRID OPERATIONAL // SECTOR RADAR LIVE // LOG DRUM ARMED...
         </div>
     </div>
 
@@ -128,9 +123,17 @@
             <section class="command-tile p-8">
                 <h3 class="text-white font-black uppercase text-[11px] mb-6 italic tracking-widest border-b border-white/5 pb-4">DNA Matrix</h3>
                 <div id="auth-container">
-                    <button id="google-auth-btn" onclick="loginWithGoogle()" class="w-full bg-white text-black font-black py-4 rounded-full uppercase text-xs flex items-center justify-center gap-3 mb-6">
-                        <i class="fa-brands fa-google"></i> <span id="auth-text">Authorize DNA</span>
+                    <button onclick="loginWithGoogle()" class="w-full bg-white text-black font-black py-4 rounded-full uppercase text-xs flex items-center justify-center gap-3 mb-6">
+                        <i class="fa-brands fa-google"></i> Google Authorization
                     </button>
+                    <div id="reg-fields" class="hidden mb-4"><input id="reg-alias" type="text" placeholder="ALIAS"></div>
+                    <input id="auth-user" type="text" class="mb-3" placeholder="EMAIL">
+                    <input id="auth-pass" type="password" class="mb-6" placeholder="PASSCODE">
+                    <div class="flex gap-4">
+                        <button onclick="setAuthMode('login')" class="text-[10px] font-black text-blue-400 uppercase">Login</button>
+                        <button onclick="executeAuth()" id="auth-btn" class="flex-grow bg-blue-500 text-black font-black py-4 rounded-xl uppercase text-xs">Authorize</button>
+                        <button onclick="setAuthMode('reg')" class="text-[10px] font-black text-zinc-500 uppercase">Join</button>
+                    </div>
                 </div>
                 <div id="active-op-badge" class="hidden flex flex-col items-center justify-center text-center">
                     <img id="display-avatar" src="" class="w-24 h-24 rounded-3xl border-2 border-gold mb-4 object-cover">
@@ -139,9 +142,9 @@
                 </div>
             </section>
 
-            <section class="command-tile p-8">
-                <h3 class="text-white font-black uppercase text-[11px] mb-6 italic tracking-widest border-b border-white/5 pb-4">Top 10 Hitlist</h3>
-                <div id="hitlist-container" class="space-y-4 overflow-y-auto max-h-[300px]"></div>
+            <section class="command-tile p-8 lg:col-span-2">
+                <h3 class="text-white font-black uppercase text-[11px] mb-6 italic tracking-widest border-b border-white/5 pb-4">Amapiano Top 10 Hitlist</h3>
+                <div id="hitlist-container" class="scroller-x pb-4"></div>
             </section>
 
             <section class="command-tile p-2 aspect-video lg:col-span-2">
@@ -158,7 +161,7 @@
                     <div class="p-4 bg-[#202c33] flex justify-between items-center border-b border-white/10">
                         <div class="flex gap-4">
                             <button onclick="setChatTarget(null)" id="btn-public" class="px-6 py-2 bg-blue-500 text-black text-[10px] font-black uppercase rounded-lg">Public Grid</button>
-                            <button id="btn-dm" class="hidden px-6 py-2 bg-white/5 text-zinc-500 text-[10px] font-black uppercase rounded-lg">Direct Frequency</button>
+                            <button id="btn-dm" class="hidden px-6 py-2 bg-white/5 text-zinc-500 text-[10px] font-black uppercase rounded-lg">Frequency</button>
                         </div>
                     </div>
                     <div id="chat-stream" class="msg-stream"></div>
@@ -174,55 +177,67 @@
     <footer>
         <div class="flex justify-center gap-8 mb-4">
             <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-spotify"></i></a>
             <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-tiktok"></i></a>
         </div>
         <button onclick="showToast('Privacy protocols active.')" class="text-[9px] font-black uppercase text-blue-400">Privacy & Protocols</button>
         <p class="text-[9px] text-zinc-600 uppercase mt-4">© 2026 Ministry of Groove</p>
     </footer>
-        <script>
+    
+    <script>
         const MOG_CFG = {
             U: "https://hzelmkthdqtbxcffsstl.supabase.co",
             K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY"
         };
         const db = window.supabase.createClient(MOG_CFG.U, MOG_CFG.K);
-        let currentOp = null, logoClicks = 0, map, markers = {}, chatTarget = null;
+        let currentOp = null, authMode = 'login', chatTarget = null, logoClicks = 0, map, markers = {};
 
         function showToast(msg) {
             const t = document.getElementById('mog-toast');
             t.innerText = msg; t.classList.add('toast-active');
             setTimeout(() => t.classList.remove('toast-active'), 3000);
-            const drum = document.getElementById('log-drum');
-            drum.currentTime = 0; drum.play();
+            document.getElementById('log-drum').currentTime = 0; document.getElementById('log-drum').play();
         }
 
-        /* --- MAP SYSTEM --- */
-        function initMap() {
-            map = L.map('operative-map', { zoomControl: false }).setView([-25.87, 29.23], 6);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        /* --- AUTH --- */
+        function setAuthMode(m) { authMode = m; document.getElementById('reg-fields').classList.toggle('hidden', m === 'login'); }
+        async function executeAuth() {
+            const e = document.getElementById('auth-user').value.trim(), p = document.getElementById('auth-pass').value;
+            if(authMode === 'reg') {
+                const { data, error } = await db.auth.signUp({ email: e, password: p });
+                if(data.user) showToast("DNA REGISTERED."); else showToast(error.message);
+                setAuthMode('login');
+            } else {
+                const { data, error } = await db.auth.signInWithPassword({ email: e, password: p });
+                if(data.user) setupSession(data.user); else showToast(error.message);
+            }
         }
-
-        async function syncPresence(user) {
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                const loc = await res.json();
-                const channel = db.channel('grid-presence', { config: { presence: { key: user.id } } });
-                channel.on('presence', { event: 'sync' }, () => {
-                    const state = channel.presenceState();
-                    Object.keys(markers).forEach(k => { map.removeLayer(markers[k]); delete markers[k]; });
-                    for (const id in state) {
-                        const p = state[id][0];
-                        if (p.lat && p.lng) {
-                            markers[id] = L.circleMarker([p.lat, p.lng], { color: '#00d4ff', radius: 8 }).addTo(map).bindPopup(p.name);
-                        }
-                    }
-                }).subscribe(async (s) => {
-                    if (s === 'SUBSCRIBED') await channel.track({ name: user.user_metadata.full_name, city: loc.city, lat: loc.latitude, lng: loc.longitude });
-                });
-            } catch(e) {}
+        async function loginWithGoogle() { await db.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://ministry-of-groove.vercel.app' } }); }
+        async function setupSession(u) {
+            currentOp = u; document.getElementById('auth-container').classList.add('hidden'); document.getElementById('active-op-badge').classList.remove('hidden');
+            document.getElementById('display-avatar').src = u.user_metadata.avatar_url || 'https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png';
+            document.getElementById('display-op-id').innerText = u.user_metadata.full_name || 'OPERATIVE';
+            refreshChat(); syncGrid(); initMap(); syncPresence(u);
         }
+        db.auth.onAuthStateChange((event, session) => { if (session?.user) setupSession(session.user); });
 
-        /* --- REALTIME ENGINE --- */
+        /* --- HITLIST ENGINE --- */
+        async function loadHitlist() {
+            const { data } = await db.from('tracks').select('*').order('votes', { ascending: false }).limit(10);
+            document.getElementById('hitlist-container').innerHTML = data?.map((tk, idx) => `
+                <div class="hit-item">
+                    <div class="aspect-video w-full bg-black"><iframe width="100%" height="100%" src="https://www.youtube.com/embed/${tk.youtube_id}" frameborder="0"></iframe></div>
+                    <div class="p-4 flex justify-between items-center">
+                        <div><p class="text-[8px] text-blue-400 font-black uppercase">SIGNAL #${idx+1}</p><p class="text-[10px] text-white font-black uppercase truncate w-32">${tk.name}</p></div>
+                        <button onclick="voteTrack('${tk.id}', ${tk.votes})" class="text-[10px] text-gold font-bold border border-gold/20 px-4 py-2 rounded-full italic">BOOST [${tk.votes}]</button>
+                    </div>
+                </div>
+            `).join('') || '';
+        }
+        async function voteTrack(id, votes) { if(!currentOp) return showToast("AUTHORIZE DNA"); await db.from('tracks').update({ votes: votes + 1 }).eq('id', id); }
+
+        /* --- REALTIME --- */
         db.channel('master-hub')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => refreshChat())
             .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'broadcast' }, () => syncGrid())
@@ -234,106 +249,45 @@
             if (data) document.getElementById('yt-broadcast').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${data.youtube_id}?autoplay=1&mute=1" frameborder="0" allowfullscreen></iframe>`;
         }
 
-        async function loadHitlist() {
-            const { data } = await db.from('tracks').select('*').order('votes', { ascending: false }).limit(10);
-            document.getElementById('hitlist-container').innerHTML = data?.map(tk => `
-                <div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl">
-                    <p class="text-white text-xs font-black uppercase">${tk.name}</p>
-                    <button onclick="voteTrack('${tk.id}', ${tk.votes})" class="text-[10px] text-blue-400 font-bold border border-blue-400/20 px-3 py-1 rounded-full">BOOST [${tk.votes}]</button>
-                </div>
-            `).join('') || '';
-        }
-
-        async function voteTrack(id, votes) {
-            if(!currentOp) return showToast("AUTHORIZE DNA FIRST");
-            await db.from('tracks').update({ votes: votes + 1 }).eq('id', id);
-        }
-
-        /* --- CHAT & DM SYSTEM --- */
-        function setChatTarget(user) {
-            chatTarget = user;
-            const btn = document.getElementById('btn-dm');
-            if(user) {
-                btn.classList.remove('hidden');
-                btn.innerText = `FREQ: ${user.alias}`;
-                btn.classList.add('bg-blue-500', 'text-black');
-                document.getElementById('btn-public').classList.replace('bg-blue-500', 'bg-white/5');
-            } else {
-                btn.classList.add('hidden');
-                document.getElementById('btn-public').classList.replace('bg-white/5', 'bg-blue-500');
-            }
-            refreshChat();
-        }
-
+        function setChatTarget(user) { chatTarget = user; document.getElementById('btn-dm').classList.toggle('hidden', !user); if(user) document.getElementById('btn-dm').innerText = `FREQ: ${user.alias}`; refreshChat(); }
         async function refreshChat() {
-            let query = db.from('messages').select('*').order('created_at', { ascending: true });
-            if(chatTarget) {
-                query = query.or(`and(user_id.eq.${currentOp.id},recipient_id.eq.${chatTarget.id}),and(user_id.eq.${chatTarget.id},recipient_id.eq.${currentOp.id})`);
-            } else {
-                query = query.is('recipient_id', null);
-            }
-            const { data } = await query.limit(50);
+            let q = db.from('messages').select('*').order('created_at', { ascending: true });
+            if(chatTarget) q = q.or(`and(user_id.eq.${currentOp.id},recipient_id.eq.${chatTarget.id}),and(user_id.eq.${chatTarget.id},recipient_id.eq.${currentOp.id})`);
+            else q = q.is('recipient_id', null);
+            const { data } = await q.limit(50);
             const s = document.getElementById('chat-stream'); 
-            s.innerHTML = data?.map(m => `
-                <div class="bubble ${m.user_id === currentOp?.id ? 'sent' : 'received'}" 
-                     onclick="if('${m.user_id}' !== '${currentOp.id}') setChatTarget({id: '${m.user_id}', alias: '${m.alias}'})">
-                    <span class="text-[9px] font-black uppercase block mb-1 opacity-50">${m.alias}</span>
-                    ${m.content}
-                </div>
-            `).join('') || '';
+            s.innerHTML = data?.map(m => `<div class="bubble ${m.user_id === currentOp?.id ? 'sent' : 'received'}" onclick="if('${m.user_id}' !== '${currentOp.id}') setChatTarget({id: '${m.user_id}', alias: '${m.alias}'})"><span class="text-[9px] font-black uppercase block mb-1 opacity-50">${m.alias}</span>${m.content}</div>`).join('');
             s.scrollTop = s.scrollHeight;
         }
 
         async function sendMessage() {
-            const i = document.getElementById('chat-msg');
-            if(!i.value || !currentOp) return;
-            await db.from('messages').insert([{ 
-                content: i.value, user_id: currentOp.id, alias: currentOp.user_metadata.full_name,
-                recipient_id: chatTarget ? chatTarget.id : null
-            }]);
+            const i = document.getElementById('chat-msg'); if(!i.value || !currentOp) return;
+            await db.from('messages').insert([{ content: i.value, user_id: currentOp.id, alias: currentOp.user_metadata.full_name, recipient_id: chatTarget?.id }]);
             i.value = '';
         }
 
-        /* --- AUTH --- */
-        async function loginWithGoogle() { 
-            const btn = document.getElementById('google-auth-btn');
-            const txt = document.getElementById('auth-text');
-            btn.classList.add('loading-pulse');
-            txt.innerText = "SYNCHRONIZING...";
-            await db.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://ministry-of-groove.vercel.app' } }); 
+        function initMap() { map = L.map('operative-map', { zoomControl: false }).setView([-25.87, 29.23], 6); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map); }
+        async function syncPresence(u) {
+            try {
+                const res = await fetch('https://ipapi.co/json/'); const loc = await res.json();
+                const chan = db.channel('grid-presence', { config: { presence: { key: u.id } } });
+                chan.on('presence', { event: 'sync' }, () => {
+                    const st = chan.presenceState(); Object.keys(markers).forEach(k => { map.removeLayer(markers[k]); delete markers[k]; });
+                    for(const id in st) { const p = st[id][0]; markers[id] = L.circleMarker([p.lat, p.lng], { color: '#00d4ff', radius: 8 }).addTo(map); }
+                }).subscribe(async (s) => { if(s==='SUBSCRIBED') await chan.track({ name: u.user_metadata.full_name, lat: loc.latitude, lng: loc.longitude }); });
+            } catch(e) {}
         }
 
-        db.auth.onAuthStateChange((event, session) => {
-            if (session?.user) {
-                currentOp = session.user;
-                document.getElementById('auth-container').classList.add('hidden');
-                document.getElementById('active-op-badge').classList.remove('hidden');
-                document.getElementById('display-avatar').src = session.user.user_metadata.avatar_url;
-                document.getElementById('display-op-id').innerText = session.user.user_metadata.full_name;
-                refreshChat(); syncPresence(session.user); showToast("DNA SYNCHRONIZED");
-            }
-        });
-
-        /* --- DIRECTOR ACCESS --- */
-        document.getElementById('mog-logo-trigger').addEventListener('click', () => {
-            if(++logoClicks === 5) { toggleUI('director-console'); logoClicks = 0; }
-        });
-
-        async function updateBroadcast() {
-            const vidId = document.getElementById('dir-yt-id').value.trim();
-            const { error } = await db.from('broadcast').update({ youtube_id: vidId }).eq('id', 1);
-            if(error) showToast("ACCESS DENIED"); else showToast("SIGNAL UPDATED");
+        document.getElementById('mog-logo-trigger').addEventListener('click', () => { if(++logoClicks === 5) { toggleUI('director-console'); logoClicks = 0; } });
+        async function updateBroadcast() { const vid = document.getElementById('dir-yt-id').value; await db.from('broadcast').update({ youtube_id: vid }).eq('id', 1); }
+        async function addTrack() { 
+            const n = document.getElementById('dir-track-name').value;
+            const y = document.getElementById('dir-track-yt').value;
+            await db.from('tracks').insert([{ name: n, youtube_id: y, votes: 0 }]); 
+            toggleUI('director-console');
         }
-
-        async function addTrack() {
-            const name = document.getElementById('dir-track-name').value;
-            const artist = document.getElementById('dir-track-artist').value;
-            const { error } = await db.from('tracks').insert([{ name, artist, votes: 0 }]);
-            if(error) showToast("ACCESS DENIED"); else { showToast("TRACK ADDED"); toggleUI('director-console'); }
-        }
-
         function toggleUI(id) { document.getElementById(id).classList.toggle('active-modal'); }
-        window.onload = () => { initMap(); syncGrid(); loadHitlist(); };
+        window.onload = () => { syncGrid(); loadHitlist(); };
     </script>
 </body>
 </html>
