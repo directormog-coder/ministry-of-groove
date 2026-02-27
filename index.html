@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID MASTER V200.95</title>
+    <title>M.O.G. | NATIONAL GRID MASTER V200.99</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -77,11 +77,13 @@
         @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
         
         footer { background: rgba(0,0,0,0.5); border-top: 1px solid rgba(212,175,55,0.1); padding: 2rem; margin-top: 4rem; text-align: center; }
+        .social-link { color: var(--mog-gold); opacity: 0.5; transition: opacity 0.3s, transform 0.3s; font-size: 1.5rem; }
+        .social-link:hover { opacity: 1; transform: scale(1.2); }
     </style>
 </head>
 <body id="mog-mainframe">
 
-    <div id="mog-toast">GRID RESTORED</div>
+    <div id="mog-toast">GRID FULLY REMASTERED</div>
     <audio id="log-drum" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logdrum.mp3" preload="auto"></audio>
 
     <div id="director-console" class="modal-overlay">
@@ -108,7 +110,7 @@
 
     <div class="fixed top-0 w-full bg-black z-[9000] h-[45px] border-b border-blue-400/20 flex items-center overflow-hidden">
         <div class="ticker-move text-[10px] font-black uppercase text-blue-400">
-            M.O.G. V200.95 // CHAT TILE RESTORED // OMNI-BUILD // GRID OPERATIONAL // SECTOR RADAR LIVE // LOG DRUM ARMED...
+            M.O.G. V200.99 // REMASTERED BUILD // SOCIAL GRID COMPLETE // INITIAL LOGIN TILES RESTORED // OMNI-BUILD // SECTOR RADAR LIVE...
         </div>
     </div>
 
@@ -175,16 +177,18 @@
     </div>
 
     <footer>
-        <div class="flex justify-center gap-8 mb-4">
-            <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-tiktok"></i></a>
+        <div class="flex justify-center flex-wrap gap-6 md:gap-10 mb-6">
+            <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="#" class="social-link"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fa-brands fa-threads"></i></a>
         </div>
-        <button onclick="showToast('Privacy protocols active.')" class="text-[9px] font-black uppercase text-blue-400">Privacy & Protocols</button>
-        <p class="text-[9px] text-zinc-600 uppercase mt-4">© 2026 Ministry of Groove</p>
-    </footer>
-    
+        <button onclick="showToast('Privacy protocols active.')" class="text-[9px] font-black uppercase text-blue-400 hover:text-white">Privacy & Protocols</button>
+        <p class="text-[9px] text-zinc-600 uppercase mt-4 italic">© 2026 Ministry of Groove // Remastered Series</p>
+                    </footer>
+                    
     <script>
         const MOG_CFG = {
             U: "https://hzelmkthdqtbxcffsstl.supabase.co",
@@ -197,10 +201,11 @@
             const t = document.getElementById('mog-toast');
             t.innerText = msg; t.classList.add('toast-active');
             setTimeout(() => t.classList.remove('toast-active'), 3000);
-            document.getElementById('log-drum').currentTime = 0; document.getElementById('log-drum').play();
+            const drum = document.getElementById('log-drum');
+            drum.currentTime = 0; drum.play();
         }
 
-        /* --- AUTH --- */
+        /* --- AUTH RESTORATION --- */
         function setAuthMode(m) { authMode = m; document.getElementById('reg-fields').classList.toggle('hidden', m === 'login'); }
         async function executeAuth() {
             const e = document.getElementById('auth-user').value.trim(), p = document.getElementById('auth-pass').value;
@@ -237,7 +242,7 @@
         }
         async function voteTrack(id, votes) { if(!currentOp) return showToast("AUTHORIZE DNA"); await db.from('tracks').update({ votes: votes + 1 }).eq('id', id); }
 
-        /* --- REALTIME --- */
+        /* --- DATA REALTIME --- */
         db.channel('master-hub')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => refreshChat())
             .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'broadcast' }, () => syncGrid())
