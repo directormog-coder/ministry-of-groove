@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID MASTER V210.60</title>
+    <title>M.O.G. | NATIONAL GRID MASTER V211.00</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -16,163 +16,172 @@
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
         
         :root { 
-            --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; 
-            --mog-panel: rgba(10, 20, 30, 0.95); --chat-sent: #005c4b; --chat-received: #202c33; 
+            --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #030508; 
+            --mog-panel: rgba(13, 20, 28, 0.8); --chat-sent: #005c4b; --chat-received: #202c33; 
         }
 
-        * { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--mog-blue); border-radius: 10px; }
+        * { transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; outline: none; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(var(--mog-blue), var(--mog-gold)); border-radius: 10px; }
 
         body { 
             background-color: var(--mog-bg);
-            background-image: radial-gradient(circle at 2px 2px, rgba(0, 212, 255, 0.05) 1px, transparent 0);
-            background-size: 30px 30px;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.02) 1px, transparent 0);
+            background-size: 100% 100%, 40px 40px;
             color: var(--mog-gold); min-height: 100vh; margin: 0; padding-bottom: 2rem; overflow-x: hidden;
         }
 
         .mainframe-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
-            gap: 1.5rem; width: 100%; padding: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 450px), 1fr));
+            gap: 2rem; width: 100%; padding: 2rem;
         }
 
+        /* Glassmorphism 2.0 Upgraded Tiles */
         .command-tile { 
-            background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.1); 
-            backdrop-filter: blur(50px); border-radius: 35px; overflow: hidden; 
+            background: var(--mog-panel); border: 1px solid rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(25px); border-radius: 40px; overflow: hidden; 
             display: flex; flex-direction: column; height: 100%; 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
+            position: relative;
         }
+        .command-tile:hover { border-color: rgba(0, 212, 255, 0.3); transform: translateY(-5px); }
 
         .full-width { grid-column: 1 / -1; }
 
-        /* Operative Map Styling */
-        #operative-map { height: 280px; width: 100%; border-radius: 25px; border: 1px solid rgba(0, 212, 255, 0.2); }
-        .leaflet-tile-pane { filter: brightness(0.6) invert(100%) contrast(3) hue-rotate(200deg) saturate(0.3); }
+        /* Google-Grade Radar Telemetry */
+        #operative-map { height: 320px; width: 100%; border-radius: 30px; filter: grayscale(1) invert(0.9) contrast(1.2); }
+        .leaflet-container { background: transparent !important; }
 
-        /* Messenger Full Restoration */
-        .messenger-view { height: 550px; display: flex; flex-direction: column; background: #0b141a; }
-        .msg-stream { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-        .bubble { max-width: 80%; padding: 14px 18px; border-radius: 22px; font-size: 14px; position: relative; cursor: pointer; }
-        .sent { align-self: flex-end; background: var(--chat-sent); color: #fff; border-bottom-right-radius: 4px; }
-        .received { align-self: flex-start; background: var(--chat-received); color: #e9edef; border-bottom-left-radius: 4px; }
+        /* WhatsApp-Inspired Messenger */
+        .messenger-view { height: 600px; display: flex; flex-direction: column; background: #0b1014; }
+        .msg-stream { flex-grow: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay; background-opacity: 0.05; }
+        .bubble { max-width: 75%; padding: 12px 16px; border-radius: 15px; font-size: 14px; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .sent { align-self: flex-end; background: var(--chat-sent); color: #e9edef; border-top-right-radius: 0; }
+        .received { align-self: flex-start; background: var(--chat-received); color: #e9edef; border-top-left-radius: 0; }
+        
+        /* Modern Input Tech */
+        .grid-input { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 18px 24px; border-radius: 20px; width: 100%; transition: all 0.3s; }
+        .grid-input:focus { background: rgba(255, 255, 255, 0.07); border-color: var(--mog-blue); box-shadow: 0 0 20px rgba(0, 212, 255, 0.1); }
 
-        /* YouTube Hitlist Scroller */
-        .scroller-x { display: flex; overflow-x: auto; gap: 15px; padding: 10px; scroll-snap-type: x mandatory; }
-        .hit-item { min-width: 300px; border-radius: 25px; overflow: hidden; scroll-snap-align: start; flex-shrink: 0; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
-
-        /* UI Components */
         #mog-toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
-            background: var(--mog-blue); color: #000; padding: 12px 24px;
-            border-radius: 20px; font-weight: 900; font-size: 12px; text-transform: uppercase;
-            z-index: 10001; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+            background: linear-gradient(45deg, var(--mog-blue), #0088ff); color: #000; padding: 14px 28px;
+            border-radius: 50px; font-weight: 900; font-size: 11px; text-transform: uppercase;
+            z-index: 10001; box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
         }
         .toast-active { bottom: 40px !important; }
-        .modal-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.98); backdrop-filter: blur(30px); display: none; align-items: center; justify-content: center; padding: 1rem; }
-        .active-modal { display: flex !important; }
-
-        input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 16px; border-radius: 20px; outline: none; width: 100%; }
-        .vibe-tag { font-size: 10px; background: rgba(0, 212, 255, 0.15); color: var(--mog-blue); padding: 4px 10px; border-radius: 10px; font-weight: 900; }
         
-        .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 40s linear infinite; }
+        .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 45s linear infinite; }
         @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
         
-        footer { background: rgba(0,0,0,0.5); border-top: 1px solid rgba(212,175,55,0.1); padding: 2rem; margin-top: 4rem; text-align: center; }
-        .social-link { color: var(--mog-gold); opacity: 0.5; transition: 0.3s; font-size: 1.5rem; }
-        .social-link:hover { opacity: 1; transform: translateY(-3px); }
+        footer { background: rgba(0,0,0,0.8); border-top: 1px solid rgba(255,255,255,0.05); padding: 3rem; margin-top: 5rem; text-align: center; }
+        .social-grid a { font-size: 1.8rem; color: var(--mog-gold); opacity: 0.4; transition: 0.4s; }
+        .social-grid a:hover { opacity: 1; transform: scale(1.3) rotate(5deg); color: var(--mog-blue); }
     </style>
 </head>
 <body id="mog-mainframe">
 
-    <div id="mog-toast">OMNI-GRID SYNCHRONIZED</div>
+    <div id="mog-toast">DNA FREQUENCY SECURED</div>
     <audio id="log-drum" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logdrum.mp3" preload="auto"></audio>
 
-    <div id="director-console" class="modal-overlay">
-        <div class="command-tile p-8 max-w-6xl w-full max-h-[85vh] overflow-y-auto border-gold/30">
-            <div class="flex justify-between items-center mb-10 border-b border-white/10 pb-4">
-                <h2 class="text-3xl text-white font-black uppercase italic">Director Hub v21</h2>
-                <button onclick="toggleUI('director-console')" class="text-zinc-500 font-black">CLOSE</button>
+    <div id="director-console" class="modal-overlay fixed inset-0 z-[10000] bg-black/95 backdrop-blur-xl hidden items-center justify-center p-6">
+        <div class="command-tile p-10 max-w-5xl w-full border-gold/20">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-4xl text-white font-black italic uppercase tracking-tighter">Director Hub <span class="text-blue-500">v22</span></h2>
+                <button onclick="toggleUI('director-console')" class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center hover:bg-red-500/20"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="space-y-6">
-                    <p class="text-[10px] text-blue-400 font-black uppercase">Signal Center</p>
-                    <input type="text" id="dir-yt-id" placeholder="Broadcast YT ID">
-                    <button onclick="updateBroadcast()" class="w-full bg-blue-500 text-black font-black py-4 rounded-xl text-xs uppercase italic">Sync Grid</button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="p-6 bg-white/5 rounded-3xl">
+                    <p class="text-[10px] text-blue-400 font-black mb-4 uppercase tracking-widest">Grid Signal Control</p>
+                    <input type="text" id="dir-yt-id" placeholder="YouTube Video ID" class="grid-input mb-4">
+                    <button onclick="updateBroadcast()" class="w-full bg-blue-500 text-black font-black py-5 rounded-2xl uppercase text-xs hover:shadow-[0_0_30px_rgba(0,212,255,0.5)]">Authorize Signal</button>
                 </div>
-                <div class="space-y-6">
-                    <p class="text-[10px] text-blue-400 font-black uppercase">Hitlist Manager</p>
-                    <input type="text" id="dir-track-name" placeholder="Song Name">
-                    <input type="text" id="dir-track-yt" placeholder="YouTube Video ID">
-                    <button onclick="addTrack()" class="w-full bg-white text-black font-black py-4 rounded-xl text-xs uppercase">Post to Hitlist</button>
+                <div class="p-6 bg-white/5 rounded-3xl">
+                    <p class="text-[10px] text-blue-400 font-black mb-4 uppercase tracking-widest">Hitlist Telemetry</p>
+                    <input type="text" id="dir-track-name" placeholder="Track Name" class="grid-input mb-2">
+                    <input type="text" id="dir-track-yt" placeholder="YouTube Video ID" class="grid-input mb-4">
+                    <button onclick="addTrack()" class="w-full bg-white text-black font-black py-5 rounded-2xl uppercase text-xs">Inject Track</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="fixed top-0 w-full bg-black z-[9000] h-[45px] border-b border-blue-400/20 flex items-center overflow-hidden">
-        <div class="ticker-move text-[10px] font-black uppercase text-blue-400">
-            M.O.G. V210.60 // OMNI-REMASTERED // CHAT & DMs LIVE // SECTOR RADAR ACTIVE // AMAPIANO TOP 10 RESTORED // LOG DRUM ARMED...
+    <div class="fixed top-0 w-full bg-black/80 backdrop-blur-md z-[9000] h-[50px] border-b border-blue-500/10 flex items-center overflow-hidden">
+        <div class="ticker-move text-[11px] font-black uppercase text-blue-400/80">
+            M.O.G. V211.00 // ELITE ENGINE ACTIVE // QUANTUM ENCRYPTION // SECTOR RADAR ENHANCED // WHATSAPP MESSENGER PROTOCOL // AMAPIANO TOP 10...
         </div>
     </div>
 
-    <div class="max-w-[1600px] mx-auto mt-20 px-4">
-        <header class="flex flex-col items-center justify-center text-center p-6 mb-12">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-logo-trigger" class="h-28 w-28 md:h-36 md:w-36 cursor-pointer mb-4">
-            <h1 class="text-4xl lg:text-7xl text-gold font-black uppercase italic tracking-tighter leading-none mb-1">Ministry of Groove</h1>
-            <p class="text-[10px] md:text-[12px] text-blue-400 font-black uppercase tracking-[0.4em]">Decrypting the Culture. Synchronizing the Grid</p>
+    <div class="max-w-[1700px] mx-auto mt-24 px-6">
+        <header class="flex flex-col items-center justify-center text-center mb-16">
+            <div class="relative group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-blue-500 to-gold rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-logo-trigger" class="relative h-32 md:h-44 cursor-pointer">
+            </div>
+            <h1 class="text-5xl lg:text-8xl text-gold font-black uppercase italic tracking-tighter leading-none mt-8 drop-shadow-2xl">Ministry of Groove</h1>
+            <p class="text-xs md:text-sm text-blue-400 font-black uppercase tracking-[0.5em] mt-4 opacity-70">Synchronizing the National Grid</p>
         </header>
 
         <div class="mainframe-grid">
-            <section class="command-tile p-8">
-                <h3 class="text-white font-black uppercase text-[11px] mb-6 italic tracking-widest border-b border-white/5 pb-4">DNA Matrix</h3>
+            <section class="command-tile p-10">
+                <h3 class="text-white font-black uppercase text-xs mb-8 italic tracking-widest border-l-4 border-gold pl-4">DNA Matrix</h3>
                 <div id="auth-container">
-                    <button onclick="loginWithGoogle()" class="w-full bg-white text-black font-black py-4 rounded-full uppercase text-xs flex items-center justify-center gap-3 mb-6">
-                        <i class="fa-brands fa-google"></i> Google Authorization
+                    <button onclick="loginWithGoogle()" class="w-full bg-white text-black font-black py-5 rounded-2xl uppercase text-xs flex items-center justify-center gap-4 hover:shadow-2xl mb-8">
+                        <i class="fa-brands fa-google text-lg"></i> Google DNA Auth
                     </button>
-                    <div id="reg-fields" class="hidden mb-4"><input id="reg-alias" type="text" placeholder="ALIAS"></div>
-                    <input id="auth-user" type="text" class="mb-3" placeholder="EMAIL">
-                    <input id="auth-pass" type="password" class="mb-6" placeholder="PASSCODE">
-                    <div class="flex gap-4">
-                        <button onclick="setAuthMode('login')" class="text-[10px] font-black text-blue-400 uppercase">Login</button>
-                        <button onclick="executeAuth()" id="auth-btn" class="flex-grow bg-blue-500 text-black font-black py-4 rounded-xl uppercase text-xs">Authorize</button>
-                        <button onclick="setAuthMode('reg')" class="text-[10px] font-black text-zinc-500 uppercase">Join</button>
+                    <div id="reg-fields" class="hidden space-y-2 mb-4"><input id="reg-alias" type="text" placeholder="OPERATIVE ALIAS" class="grid-input"></div>
+                    <input id="auth-user" type="text" class="grid-input mb-3" placeholder="GRID EMAIL">
+                    <input id="auth-pass" type="password" class="grid-input mb-8" placeholder="DNA PASSCODE">
+                    <div class="flex items-center gap-6">
+                        <button onclick="setAuthMode('login')" class="text-[10px] font-black text-blue-400 uppercase tracking-widest hover:text-white">Login</button>
+                        <button onclick="executeAuth()" id="auth-btn" class="flex-grow bg-gradient-to-r from-blue-600 to-blue-400 text-black font-black py-5 rounded-2xl uppercase text-xs shadow-lg">Authorize</button>
+                        <button onclick="setAuthMode('reg')" class="text-[10px] font-black text-zinc-500 uppercase tracking-widest hover:text-white">Join</button>
                     </div>
                 </div>
-                <div id="active-op-badge" class="hidden flex flex-col items-center justify-center text-center">
-                    <img id="display-avatar" src="" class="w-24 h-24 rounded-3xl border-2 border-gold mb-4 object-cover">
-                    <h2 id="display-op-id" class="text-2xl text-white font-black uppercase italic mb-2">OPERATIVE</h2>
-                    <span class="vibe-tag">ENCRYPTED</span>
+                <div id="active-op-badge" class="hidden flex flex-col items-center justify-center">
+                    <div class="relative mb-6">
+                        <div class="absolute -inset-2 bg-blue-500 rounded-full blur-xl opacity-20 animate-pulse"></div>
+                        <img id="display-avatar" src="" class="relative w-32 h-32 rounded-[2rem] border-2 border-gold/30 object-cover">
+                    </div>
+                    <h2 id="display-op-id" class="text-3xl text-white font-black uppercase italic mb-2 tracking-tighter">OPERATIVE</h2>
+                    <span class="vibe-tag text-blue-400">ENCRYPTION ACTIVE</span>
                 </div>
             </section>
 
-            <section class="command-tile p-8 lg:col-span-2">
-                <h3 class="text-white font-black uppercase text-[11px] mb-6 italic tracking-widest border-b border-white/5 pb-4">Amapiano Top 10 Hitlist</h3>
-                <div id="hitlist-container" class="scroller-x pb-4"></div>
+            <section class="command-tile p-10 lg:col-span-2">
+                <h3 class="text-white font-black uppercase text-xs mb-8 italic tracking-widest border-l-4 border-blue-500 pl-4">Top 10 Amapiano Grid</h3>
+                <div id="hitlist-container" class="scroller-x gap-6"></div>
             </section>
 
-            <section class="command-tile p-2 aspect-video lg:col-span-2">
-                <div id="yt-broadcast" class="w-full h-full bg-black rounded-[30px] overflow-hidden"></div>
+            <section class="command-tile p-3 aspect-video lg:col-span-2 group">
+                <div id="yt-broadcast" class="w-full h-full bg-black rounded-[35px] overflow-hidden shadow-inner"></div>
             </section>
 
-            <section class="command-tile p-6">
-                <h3 class="text-white font-black uppercase text-[11px] mb-4 italic tracking-widest">Sector Radar</h3>
+            <section class="command-tile p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-white font-black uppercase text-xs italic tracking-widest">Sector Radar</h3>
+                    <div class="flex items-center gap-2"><span class="w-2 h-2 bg-blue-500 rounded-full animate-ping"></span> <span class="text-[9px] font-black text-blue-500">LIVE</span></div>
+                </div>
                 <div id="operative-map"></div>
             </section>
 
             <section class="command-tile p-1 full-width">
-                <div class="messenger-view rounded-[34px]">
-                    <div class="p-4 bg-[#202c33] flex justify-between items-center border-b border-white/10">
+                <div class="messenger-view rounded-[39px]">
+                    <div class="p-6 bg-[#202c33] flex justify-between items-center border-b border-white/5">
                         <div class="flex gap-4">
-                            <button onclick="setChatTarget(null)" id="btn-public" class="px-6 py-2 bg-blue-500 text-black text-[10px] font-black uppercase rounded-lg">Public Grid</button>
-                            <button id="btn-dm" class="hidden px-6 py-2 bg-white/5 text-zinc-500 text-[10px] font-black uppercase rounded-lg">Frequency</button>
+                            <button onclick="setChatTarget(null)" id="btn-public" class="px-8 py-3 bg-blue-500 text-black text-[11px] font-black uppercase rounded-xl shadow-lg">Public Frequency</button>
+                            <button id="btn-dm" class="hidden px-8 py-3 bg-white/5 text-zinc-500 text-[11px] font-black uppercase rounded-xl">Private Frequency</button>
                         </div>
+                        <div class="text-blue-400/30 text-xs"><i class="fa-solid fa-shield-halved"></i> E2E Encrypted</div>
                     </div>
                     <div id="chat-stream" class="msg-stream"></div>
-                    <div class="bg-[#202c33] p-5 flex gap-4">
-                        <input id="chat-msg" type="text" class="flex-grow bg-[#2a3942] border-0 rounded-full px-8 py-5 text-white outline-none" placeholder="Transmit packet...">
-                        <button onclick="sendMessage()" class="w-16 h-16 bg-blue-500 text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
+                    <div class="bg-[#202c33] p-6 flex gap-4 items-center">
+                        <button class="text-zinc-500 text-xl px-2"><i class="fa-solid fa-plus"></i></button>
+                        <input id="chat-msg" type="text" class="flex-grow bg-[#2a3942] border-0 rounded-2xl px-8 py-5 text-white placeholder-zinc-500 shadow-inner" placeholder="Message National Grid...">
+                        <button onclick="sendMessage()" class="w-16 h-16 bg-blue-600 hover:bg-blue-400 text-black rounded-full shadow-2xl flex items-center justify-center transform hover:scale-110"><i class="fa-solid fa-paper-plane text-xl"></i></button>
                     </div>
                 </div>
             </section>
@@ -180,16 +189,18 @@
     </div>
 
     <footer>
-        <div class="flex justify-center flex-wrap gap-8 mb-6">
-            <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" class="social-link"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="#" class="social-link"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="#" class="social-link"><i class="fa-brands fa-threads"></i></a>
+        <div class="social-grid flex justify-center flex-wrap gap-12 mb-10">
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-threads"></i></a>
         </div>
-        <button onclick="showToast('Privacy protocols active.')" class="text-[9px] font-black uppercase text-blue-400">Privacy & Protocols</button>
-        <p class="text-[9px] text-zinc-600 uppercase mt-4 italic">© 2026 Ministry of Groove // Omni-Series</p>
+        <div class="space-y-4">
+            <button onclick="showToast('Security protocols fully engaged.')" class="text-[10px] font-black uppercase text-blue-400 hover:text-white border-b border-blue-400/20 pb-1">Privacy & Grid Protocols</button>
+            <p class="text-[10px] text-zinc-700 uppercase tracking-widest mt-8">Remastered Series // Build 211.00 // © 2026 M.O.G. HQ</p>
+        </div>
     </footer>
     
     <script>
@@ -203,33 +214,38 @@
         function showToast(msg) {
             const t = document.getElementById('mog-toast');
             t.innerText = msg; t.classList.add('toast-active');
-            setTimeout(() => t.classList.remove('toast-active'), 3000);
+            setTimeout(() => t.classList.remove('toast-active'), 4000);
             const drum = document.getElementById('log-drum'); drum.currentTime = 0; drum.play();
         }
 
-        /* --- AUTH ENGINE --- */
+        /* --- MODERN AUTH --- */
         function setAuthMode(m) { authMode = m; document.getElementById('reg-fields').classList.toggle('hidden', m === 'login'); }
         async function executeAuth() {
             const e = document.getElementById('auth-user').value.trim(), p = document.getElementById('auth-pass').value;
             if(authMode === 'reg') {
                 const { data, error } = await db.auth.signUp({ email: e, password: p });
-                if(data.user) showToast("DNA REGISTERED. LOGIN."); else showToast(error.message);
+                if(data.user) showToast("DNA RECORDED. PLEASE LOG IN."); else showToast(error.message);
                 setAuthMode('login');
             } else {
                 const { data, error } = await db.auth.signInWithPassword({ email: e, password: p });
                 if(data.user) setupSession(data.user); else showToast(error.message);
             }
         }
-        async function loginWithGoogle() { 
-            await db.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://ministry-of-groove.vercel.app' } }); 
+        async function loginWithGoogle() { await db.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://ministry-of-groove.vercel.app' } }); }
+        
+        async function setupSession(u) {
+            currentOp = u; document.getElementById('auth-container').classList.add('hidden'); document.getElementById('active-op-badge').classList.remove('hidden');
+            document.getElementById('display-avatar').src = u.user_metadata.avatar_url || 'https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png';
+            document.getElementById('display-op-id').innerText = u.user_metadata.full_name || 'OPERATIVE';
+            refreshChat(); syncGrid(); initMap(); syncPresence(u);
         }
+        db.auth.onAuthStateChange((event, session) => { if (session?.user) setupSession(session.user); });
 
-        /* --- RADAR MAP --- */
+        /* --- RADAR TELEMETRY --- */
         function initMap() {
-            map = L.map('operative-map', { zoomControl: false }).setView([-25.87, 29.23], 6); // Witbank/eMalahleni Anchor
+            map = L.map('operative-map', { zoomControl: false, scrollWheelZoom: false }).setView([-25.87, 29.23], 6);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         }
-
         async function syncPresence(u) {
             try {
                 const res = await fetch('https://ipapi.co/json/'); const loc = await res.json();
@@ -238,36 +254,41 @@
                     const st = chan.presenceState(); Object.keys(markers).forEach(k => { map.removeLayer(markers[k]); delete markers[k]; });
                     for(const id in st) { 
                         const p = st[id][0]; 
-                        markers[id] = L.circleMarker([p.lat, p.lng], { color: '#00d4ff', radius: 8, fillOpacity: 0.8 }).addTo(map).bindPopup(p.name); 
+                        markers[id] = L.circleMarker([p.lat, p.lng], { color: '#00d4ff', radius: 8, fillOpacity: 0.9, weight: 2 }).addTo(map).bindPopup(`<b class="text-black uppercase text-[10px]">${p.name}</b>`); 
                     }
-                }).subscribe(async (s) => { 
-                    if(s==='SUBSCRIBED') await chan.track({ name: u.user_metadata.full_name || 'OPERATIVE', lat: loc.latitude, lng: loc.longitude }); 
-                });
+                }).subscribe(async (s) => { if(s==='SUBSCRIBED') await chan.track({ name: u.user_metadata.full_name, lat: loc.latitude, lng: loc.longitude }); });
             } catch(e) {}
         }
 
-        /* --- BROADCAST & HITLIST --- */
+        /* --- DATA BROADCAST --- */
+        db.channel('master-hub')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => refreshChat())
+            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'broadcast' }, () => syncGrid())
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'tracks' }, () => loadHitlist())
+            .subscribe();
+
         async function syncGrid() {
             const { data } = await db.from('broadcast').select('*').eq('id', 1).single();
-            if (data) document.getElementById('yt-broadcast').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${data.youtube_id}?autoplay=1&mute=1" frameborder="0" allowfullscreen></iframe>`;
+            if (data) document.getElementById('yt-broadcast').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${data.youtube_id}?autoplay=1&mute=1&rel=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>`;
         }
 
         async function loadHitlist() {
             const { data } = await db.from('tracks').select('*').order('votes', { ascending: false }).limit(10);
             document.getElementById('hitlist-container').innerHTML = data?.map((tk, idx) => `
-                <div class="hit-item">
-                    <div class="aspect-video w-full bg-black"><iframe width="100%" height="100%" src="https://www.youtube.com/embed/${tk.youtube_id}" frameborder="0"></iframe></div>
-                    <div class="p-4 flex justify-between items-center">
-                        <div><p class="text-[8px] text-blue-400 font-black uppercase">SIGNAL #${idx+1}</p><p class="text-[10px] text-white font-black uppercase truncate w-32">${tk.name}</p></div>
-                        <button onclick="voteTrack('${tk.id}', ${tk.votes})" class="text-[10px] text-gold font-bold border border-gold/20 px-4 py-2 rounded-full italic">BOOST [${tk.votes}]</button>
+                <div class="hit-item group">
+                    <div class="aspect-video w-full bg-black relative">
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/${tk.youtube_id}" frameborder="0"></iframe>
+                    </div>
+                    <div class="p-6 flex justify-between items-center bg-[#0b141a]">
+                        <div><p class="text-[9px] text-blue-400 font-black uppercase mb-1">Grid #0${idx+1}</p><p class="text-xs text-white font-black uppercase truncate w-36">${tk.name}</p></div>
+                        <button onclick="voteTrack('${tk.id}', ${tk.votes})" class="h-10 w-10 flex items-center justify-center rounded-full bg-gold/10 text-gold border border-gold/20 hover:bg-gold hover:text-black transform transition active:scale-90"><i class="fa-solid fa-fire-flame-curved"></i></button>
                     </div>
                 </div>
             `).join('') || '';
         }
+        async function voteTrack(id, votes) { if(!currentOp) return showToast("AUTHORIZE DNA TO BOOST SIGNAL"); await db.from('tracks').update({ votes: votes + 1 }).eq('id', id); showToast("SIGNAL BOOSTED"); }
 
-        async function voteTrack(id, votes) { if(!currentOp) return showToast("AUTHORIZE DNA"); await db.from('tracks').update({ votes: votes + 1 }).eq('id', id); }
-
-        /* --- MESSENGER --- */
+        /* --- MESSENGER ENGINE --- */
         function setChatTarget(user) { chatTarget = user; document.getElementById('btn-dm').classList.toggle('hidden', !user); if(user) document.getElementById('btn-dm').innerText = `FREQ: ${user.alias}`; refreshChat(); }
         async function refreshChat() {
             let q = db.from('messages').select('*').order('created_at', { ascending: true });
@@ -275,36 +296,28 @@
             else q = q.is('recipient_id', null);
             const { data } = await q.limit(50);
             const s = document.getElementById('chat-stream'); 
-            s.innerHTML = data?.map(m => `<div class="bubble ${m.user_id === currentOp?.id ? 'sent' : 'received'}" onclick="if('${m.user_id}' !== '${currentOp.id}') setChatTarget({id: '${m.user_id}', alias: '${m.alias}'})"><span class="text-[9px] font-black uppercase block mb-1 opacity-50">${m.alias}</span>${m.content}</div>`).join('');
+            s.innerHTML = data?.map(m => `
+                <div class="bubble ${m.user_id === currentOp?.id ? 'sent' : 'received'}" onclick="if('${m.user_id}' !== '${currentOp.id}') setChatTarget({id: '${m.user_id}', alias: '${m.alias}'})">
+                    <span class="text-[8px] font-black uppercase block mb-1 ${m.user_id === currentOp?.id ? 'text-blue-300' : 'text-gold'}">${m.alias}</span>
+                    ${m.content}
+                    <div class="text-[8px] mt-1 text-right opacity-40">${new Date(m.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ${m.user_id === currentOp?.id ? '✓✓' : ''}</div>
+                </div>
+            `).join('');
             s.scrollTop = s.scrollHeight;
         }
 
         async function sendMessage() {
             const i = document.getElementById('chat-msg'); if(!i.value || !currentOp) return;
-            await db.from('messages').insert([{ content: i.value, user_id: currentOp.id, alias: currentOp.user_metadata.full_name || 'OPERATIVE', recipient_id: chatTarget?.id }]);
+            await db.from('messages').insert([{ content: i.value, user_id: currentOp.id, alias: currentOp.user_metadata.full_name, recipient_id: chatTarget?.id }]);
             i.value = '';
         }
 
-        /* --- CORE RUNTIME --- */
-        async function setupSession(u) {
-            currentOp = u; document.getElementById('auth-container').classList.add('hidden'); document.getElementById('active-op-badge').classList.remove('hidden');
-            document.getElementById('display-avatar').src = u.user_metadata.avatar_url || 'https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png';
-            document.getElementById('display-op-id').innerText = u.user_metadata.full_name || 'OPERATIVE';
-            refreshChat(); syncGrid(); initMap(); syncPresence(u);
-        }
-
-        db.auth.onAuthStateChange((event, session) => { if (session?.user) setupSession(session.user); });
-
-        db.channel('master-hub')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => refreshChat())
-            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'broadcast' }, () => syncGrid())
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'tracks' }, () => loadHitlist())
-            .subscribe();
-
-        document.getElementById('mog-logo-trigger').addEventListener('click', () => { if(++logoClicks === 5) { toggleUI('director-console'); logoClicks = 0; } });
-        async function updateBroadcast() { const vid = document.getElementById('dir-yt-id').value; await db.from('broadcast').update({ youtube_id: vid }).eq('id', 1); }
-        async function addTrack() { const n = document.getElementById('dir-track-name').value; const y = document.getElementById('dir-track-yt').value; await db.from('tracks').insert([{ name: n, youtube_id: y, votes: 0 }]); toggleUI('director-console'); }
-        function toggleUI(id) { document.getElementById(id).classList.toggle('active-modal'); }
+        /* --- DIRECTOR GATE --- */
+        document.getElementById('mog-logo-trigger').addEventListener('click', () => { if(++logoClicks === 5) { toggleUI('director-console'); logoClicks = 0; } setTimeout(() => logoClicks = 0, 5000); });
+        function toggleUI(id) { document.getElementById(id).classList.toggle('hidden'); document.getElementById(id).classList.toggle('flex'); }
+        async function updateBroadcast() { const vid = document.getElementById('dir-yt-id').value; await db.from('broadcast').update({ youtube_id: vid }).eq('id', 1); showToast("GLOBAL SIGNAL UPDATED"); toggleUI('director-console'); }
+        async function addTrack() { const n = document.getElementById('dir-track-name').value; const y = document.getElementById('dir-track-yt').value; await db.from('tracks').insert([{ name: n, youtube_id: y, votes: 0 }]); showToast("HITLIST TELEMETRY ADDED"); toggleUI('director-console'); }
+        
         window.onload = () => { syncGrid(); loadHitlist(); };
     </script>
 </body>
