@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID MASTER V180.17</title>
+    <title>M.O.G. | NATIONAL GRID MASTER V180.19</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -43,9 +43,10 @@
 
         .full-width { grid-column: 1 / -1; }
 
-        /* GALLERY & MERCH CAROUSELS */
+        /* SCROLLERS & EVENTS */
         .scroller-x { display: flex; overflow-x: auto; gap: 15px; padding: 10px; scroll-snap-type: x mandatory; }
-        .scroll-item { min-width: 280px; border-radius: 25px; overflow: hidden; scroll-snap-align: start; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.05); }
+        .scroll-item { min-width: 280px; border-radius: 25px; overflow: hidden; scroll-snap-align: start; flex-shrink: 0; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
+        .event-card { background: rgba(0, 212, 255, 0.05); border-left: 4px solid var(--mog-blue); padding: 15px; border-radius: 15px; }
 
         .messenger-view { height: 550px; display: flex; flex-direction: column; background: #0b141a; }
         .msg-stream { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
@@ -59,65 +60,55 @@
         .modal-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.98); backdrop-filter: blur(30px); display: none; align-items: center; justify-content: center; padding: 1rem; }
         .active-modal { display: flex !important; }
 
-        input, select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 16px; border-radius: 20px; outline: none; }
+        input, select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 16px; border-radius: 20px; outline: none; width: 100%; }
         .vibe-tag { font-size: 10px; background: rgba(0, 212, 255, 0.15); color: var(--mog-blue); padding: 4px 10px; border-radius: 10px; font-weight: 900; }
     </style>
 </head>
-<body>
+<body id="mog-mainframe">
 
     <audio id="log-drum" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logdrum.mp3" preload="auto"></audio>
 
-    <div id="announcement-bar" onclick="this.classList.remove('announcement-active')">
-        <i class="fa-solid fa-tower-broadcast mr-3 animate-pulse"></i> <span id="announcement-text">Signal Incoming...</span>
+    <div id="announcement-bar">
+        <i class="fa-solid fa-tower-broadcast mr-3 animate-pulse"></i> <span id="announcement-text">Broadcasting...</span>
     </div>
 
     <div id="director-console" class="modal-overlay">
         <div class="command-tile p-8 max-w-6xl w-full max-h-[85vh] overflow-y-auto border-gold/30">
             <div class="flex justify-between items-center mb-10">
-                <h2 class="text-3xl text-white font-black uppercase italic">Director Oversight v17</h2>
+                <h2 class="text-3xl text-white font-black uppercase italic">Director Oversight v19</h2>
                 <button onclick="toggleUI('director-console')" class="bg-white/10 p-3 rounded-full text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="space-y-6">
-                    <p class="text-[10px] text-blue-400 font-black uppercase tracking-widest">Master Signals</p>
-                    <input type="text" id="dir-announce" placeholder="Announcement" class="w-full">
-                    <button onclick="pushAnnouncement()" class="w-full bg-[#ff0050] text-white font-black py-4 rounded-xl uppercase text-xs mb-4">Push Broadcast</button>
-                    <input type="text" id="dir-yt-id" placeholder="YouTube ID" class="w-full mb-2">
-                    <input type="text" id="dir-sp-id" placeholder="Spotify ID" class="w-full">
-                    <button onclick="updateBroadcast()" class="w-full bg-blue-500 text-black font-black py-4 rounded-xl uppercase text-xs">Sync Signal</button>
+                    <p class="text-[10px] text-blue-400 font-black uppercase">Signal Center</p>
+                    <input type="text" id="dir-announce" placeholder="Global Message">
+                    <button onclick="pushAnnouncement()" class="w-full bg-[#ff0050] text-white font-black py-4 rounded-xl text-xs uppercase">Broadcast</button>
+                    <input type="text" id="dir-yt-id" placeholder="YouTube ID" class="mt-4">
+                    <button onclick="updateBroadcast()" class="w-full bg-blue-500 text-black font-black py-4 rounded-xl text-xs uppercase">Sync Signal</button>
                 </div>
                 <div class="space-y-6">
-                    <p class="text-[10px] text-blue-400 font-black uppercase tracking-widest">Signal Requests</p>
-                    <div id="director-request-list" class="space-y-3 max-h-80 overflow-y-auto text-[10px] uppercase font-bold text-white"></div>
+                    <p class="text-[10px] text-blue-400 font-black uppercase">Event Manager</p>
+                    <input type="text" id="dir-event-title" placeholder="Event Name">
+                    <input type="date" id="dir-event-date">
+                    <button onclick="addGridEvent()" class="w-full bg-white text-black font-black py-4 rounded-xl text-xs uppercase">Post Event</button>
+                    <div id="director-event-list" class="space-y-2 max-h-40 overflow-y-auto mt-4"></div>
                 </div>
                 <div class="space-y-6">
-                    <p class="text-[10px] text-blue-400 font-black uppercase tracking-widest">Grid Matrix</p>
-                    <input type="text" id="dir-img-url" placeholder="Asset URL" class="w-full">
-                    <button onclick="addGalleryImage()" class="w-full bg-white text-black font-black py-4 rounded-xl uppercase text-xs">Push Asset</button>
-                    <div id="director-gallery-list" class="space-y-2 max-h-40 overflow-y-auto"></div>
+                    <p class="text-[10px] text-blue-400 font-black uppercase">Grid Requests</p>
+                    <div id="director-request-list" class="space-y-3 max-h-80 overflow-y-auto text-[10px] font-black uppercase text-white"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="profile-modal" class="modal-overlay">
-        <div class="command-tile p-10 max-w-lg w-full">
-            <h2 class="text-2xl text-white font-black uppercase italic mb-8">DNA Configuration</h2>
-            <input type="text" id="edit-alias" class="w-full mb-4" placeholder="Alias">
-            <input type="text" id="edit-avatar" class="w-full mb-4" placeholder="Avatar URL">
-            <input type="text" id="edit-vibe" class="w-full mb-8" placeholder="Current Vibe">
-            <button onclick="saveProfile()" class="w-full bg-blue-500 text-black py-4 rounded-full uppercase text-xs font-black">Update Identity</button>
-        </div>
-    </div>
-
     <div class="fixed top-0 w-full bg-black z-[9000] h-[45px] border-b border-blue-400/20 flex items-center overflow-hidden">
-        <div id="master-ticker" class="ticker-move text-[10px] font-black uppercase text-blue-400">
-            M.O.G. V17 // DIRECTOR_PASSCODE_ENFORCED // GALLERY_MATRIX_SYNCED // SIGNAL_REQUEST_LIVE // SECURE_GRID...
+        <div class="ticker-move text-[10px] font-black uppercase text-blue-400">
+            M.O.G. V19 // GOOGLE_OAUTH_INTEGRATED // EVENTS_MATRIX_LIVE // LEADERBOARD_SYNCED // SECURE_S01_TUNNEL...
         </div>
     </div>
 
-    <div class="max-w-[1600px] mx-auto mt-20">
-        <header class="flex items-center justify-between p-6">
+    <div class="max-w-[1600px] mx-auto mt-20 px-4">
+        <header class="flex items-center justify-between p-6 mb-8">
             <div class="flex items-center gap-6">
                 <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-logo-trigger" class="h-20 w-20 cursor-pointer">
                 <h1 class="text-4xl lg:text-7xl text-gold font-black uppercase italic tracking-tighter">Ministry of Groove</h1>
@@ -127,36 +118,32 @@
         <div class="mainframe-grid">
             
             <section class="command-tile p-8">
-                <div id="auth-container" class="w-full">
-                    <div class="flex gap-6 mb-6">
-                        <button onclick="setAuthMode('login')" id="btn-login" class="text-xs font-black uppercase text-blue-400 border-b-2 border-blue-400">Login</button>
-                        <button onclick="setAuthMode('reg')" id="btn-reg" class="text-xs font-black uppercase text-zinc-500">Register</button>
+                <div id="auth-container">
+                    <h3 class="text-white font-black uppercase text-[11px] mb-6 italic tracking-widest border-b border-white/5 pb-4">Grid Authorization</h3>
+                    <button onclick="loginWithGoogle()" class="w-full bg-white text-black font-black py-4 rounded-full uppercase text-xs flex items-center justify-center gap-3 mb-6">
+                        <i class="fa-brands fa-google"></i> Sign in with Google
+                    </button>
+                    <div class="flex items-center gap-4 mb-6 opacity-30"><hr class="flex-grow border-white/20"> <span class="text-[10px] font-black uppercase">OR</span> <hr class="flex-grow border-white/20"></div>
+                    <div id="reg-fields" class="hidden mb-4"><input id="reg-alias" type="text" placeholder="CHOOSE ALIAS"></div>
+                    <input id="auth-user" type="text" class="mb-3" placeholder="GMAIL / EMAIL">
+                    <input id="auth-pass" type="password" class="mb-6" placeholder="PASSCODE">
+                    <div class="flex gap-4">
+                        <button onclick="setAuthMode('login')" id="btn-login" class="flex-1 text-[10px] font-black text-blue-400 uppercase">Login</button>
+                        <button onclick="executeAuth()" id="auth-btn" class="flex-grow bg-blue-500 text-black font-black py-4 rounded-xl uppercase text-xs">Authorize</button>
+                        <button onclick="setAuthMode('reg')" id="btn-reg" class="flex-1 text-[10px] font-black text-zinc-500 uppercase text-right">Join</button>
                     </div>
-                    <div id="reg-fields" class="hidden mb-4"><input id="reg-alias" type="text" class="w-full" placeholder="ALIAS"></div>
-                    <input id="auth-user" type="text" class="w-full mb-3" placeholder="EMAIL">
-                    <input id="auth-pass" type="password" class="w-full mb-6" placeholder="PASSCODE">
-                    <button onclick="executeAuth()" id="auth-btn" class="w-full bg-white text-black font-black py-4 rounded-full uppercase text-xs">Authorize</button>
                 </div>
                 <div id="active-op-badge" class="hidden flex flex-col items-center justify-center text-center">
                     <img id="display-avatar" src="" class="w-24 h-24 rounded-3xl border-2 border-gold cursor-pointer object-cover mb-4" onclick="toggleUI('profile-modal')">
                     <h2 id="display-op-id" class="text-2xl text-white font-black uppercase italic mb-2">OPERATIVE</h2>
-                    <span class="vibe-tag" id="display-vibe">SYNCING...</span>
+                    <span class="vibe-tag" id="display-vibe">VIBE_SYNCING...</span>
                 </div>
             </section>
 
             <section class="command-tile p-8">
-                <h3 class="text-white font-black uppercase text-[11px] mb-6 italic tracking-widest">Signal Request</h3>
-                <select id="req-type" class="w-full mb-3 text-xs">
-                    <option value="youtube">YouTube Video</option>
-                    <option value="spotify">Spotify Track</option>
-                </select>
-                <input type="text" id="req-link-id" class="w-full mb-4" placeholder="Enter ID / Link">
-                <button onclick="submitRequest()" class="w-full bg-blue-500 text-black font-black py-4 rounded-xl uppercase text-xs">Transmit Request</button>
-            </section>
-
-            <section class="command-tile p-6 lg:col-span-2">
-                <h3 class="text-white font-black uppercase text-[11px] mb-4 italic tracking-widest">Gallery Matrix</h3>
-                <div id="grid-gallery" class="scroller-x scrollbar-hide h-[400px]"></div>
+                <h3 class="text-white font-black uppercase text-[11px] mb-6 italic tracking-widest">Grid Events</h3>
+                <div id="events-matrix" class="space-y-4 overflow-y-auto max-h-[300px] pr-2">
+                    </div>
             </section>
 
             <section class="command-tile p-2 aspect-video lg:col-span-2">
@@ -164,12 +151,13 @@
             </section>
 
             <section class="command-tile p-8">
-                <h3 class="text-white font-black uppercase text-[11px] mb-8 italic border-b border-white/5 pb-4">Hitlist Leaderboard</h3>
-                <div id="dynamic-poll" class="space-y-4 overflow-y-auto max-h-[350px]"></div>
+                <h3 class="text-white font-black uppercase text-[11px] mb-8 italic border-b border-white/5 pb-4">Top 10 Hitlist</h3>
+                <div id="dynamic-poll" class="space-y-4 overflow-y-auto max-h-[400px]"></div>
             </section>
 
-            <section class="command-tile p-2 lg:col-span-3">
-                 <div id="spotify-broadcast" class="h-[120px] w-full bg-black rounded-[30px] overflow-hidden"></div>
+            <section class="command-tile p-6">
+                <h3 class="text-white font-black uppercase text-[11px] mb-4 italic tracking-widest">Sector Radar</h3>
+                <iframe src="http://googleusercontent.com/maps.google.com/9" width="100%" height="100%" class="min-h-[250px]" loading="lazy"></iframe>
             </section>
 
             <section class="command-tile p-1 full-width">
@@ -179,14 +167,12 @@
                             <button onclick="switchChat('public')" id="tab-public" class="text-[10px] font-black uppercase px-6 py-2 bg-blue-500 text-black rounded-lg">Public</button>
                             <button onclick="switchChat('private')" id="tab-private" class="text-[10px] font-black uppercase px-6 py-2 bg-white/5 text-zinc-500 rounded-lg">Direct</button>
                         </div>
-                    </div>
-                    <div id="private-selector" class="hidden bg-black/40 p-4 border-b border-white/5">
-                        <select id="recipient-list" class="w-full bg-black text-xs p-3"></select>
+                        <input type="text" id="chat-search" class="hidden bg-black/40 text-xs py-2 px-4 rounded-xl border-blue-400/20" placeholder="Filter..." onkeyup="filterMessages()">
                     </div>
                     <div id="chat-stream" class="msg-stream"></div>
                     <div class="bg-[#202c33] p-5 flex gap-4">
-                        <input id="chat-msg" type="text" class="flex-grow bg-[#2a3942] border-0 rounded-full px-8 py-5 text-white outline-none text-sm" placeholder="Transmit Packet...">
-                        <button onclick="sendMessage()" class="w-16 h-16 bg-blue-500 text-black rounded-full flex items-center justify-center shadow-lg shadow-blue-500/20"><i class="fa-solid fa-paper-plane"></i></button>
+                        <input id="chat-msg" type="text" class="flex-grow bg-[#2a3942] border-0 rounded-full px-8 py-5 text-white outline-none" placeholder="Transmit packet...">
+                        <button onclick="sendMessage()" class="w-16 h-16 bg-blue-500 text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
                     </div>
                 </div>
             </section>
@@ -196,24 +182,25 @@
     <script>
         const MOG_CFG = {
             U: "https://hzelmkthdqtbсxffsstl.supabase.co",
-            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8"
+            K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY"
         };
         const db = window.supabase.createClient(MOG_CFG.U, MOG_CFG.K);
-        let currentOp = null, authMode = 'login', logoClicks = 0, onlineUsers = new Set(), currentChatTab = 'public';
+        let currentOp = null, authMode = 'login', logoClicks = 0, currentChatTab = 'public';
 
         /* --- SYNC ENGINE --- */
-        const channel = db.channel('mog-v17');
-        channel.on('presence', { event: 'sync' }, () => {
-            const state = channel.presenceState(); onlineUsers = new Set();
-            Object.values(state).forEach(pArr => pArr.forEach(p => onlineUsers.add(p.user_id)));
-            updateRecipientList();
-        })
-        .on('broadcast', { event: 'announcement' }, p => triggerAnnouncement(p.payload.msg))
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => refreshChat())
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'gallery' }, () => fetchGallery())
-        .subscribe(async (s) => { if (s === 'SUBSCRIBED' && currentOp) await channel.track({ user_id: currentOp.id }); });
+        const channel = db.channel('mog-v19');
+        channel.on('broadcast', { event: 'announcement' }, p => triggerAnnouncement(p.payload.msg))
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => refreshChat())
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'events' }, () => fetchEvents())
+            .subscribe(async (s) => { if (s === 'SUBSCRIBED' && currentOp) await channel.track({ user_id: currentOp.id }); });
 
-        /* --- AUTH & DIRECTOR --- */
+        /* --- GOOGLE LOGIN --- */
+        async function loginWithGoogle() {
+            const { error } = await db.auth.signInWithOAuth({ provider: 'google' });
+            if(error) alert(error.message);
+        }
+
+        /* --- AUTH & DNA --- */
         function setAuthMode(m) { authMode = m; document.getElementById('reg-fields').classList.toggle('hidden', m === 'login'); }
         async function executeAuth() {
             const e = document.getElementById('auth-user').value.trim();
@@ -223,8 +210,8 @@
                 if(data.user) await db.from('registrations').insert([{ user_id: data.user.id, alias: document.getElementById('reg-alias').value.trim() }]);
                 setAuthMode('login');
             } else {
-                const { data } = await db.auth.signInWithPassword({ email: e, password: p });
-                if(data.user) setupSession(data.user);
+                const { data, error } = await db.auth.signInWithPassword({ email: e, password: p });
+                if(data.user) setupSession(data.user); else alert(error.message);
             }
         }
 
@@ -235,118 +222,66 @@
                 document.getElementById('display-op-id').innerText = data.alias;
                 document.getElementById('display-avatar').src = data.avatar_url || 'https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png';
                 document.getElementById('display-vibe').innerText = data.status || 'READY';
-                document.getElementById('edit-alias').value = data.alias; document.getElementById('edit-avatar').value = data.avatar_url || '';
             }
-            await channel.track({ user_id: u.id }); syncGrid(); refreshChat(); fetchGallery();
-            if(u.email === 'director.mog@gmail.com') fetchDirectorRequests();
+            syncGrid(); fetchEvents(); refreshChat();
         }
 
-        /* --- GALLERY & REQUESTS --- */
-        async function fetchGallery() {
-            const { data } = await db.from('gallery').select('*').order('created_at', { ascending: false });
-            const cont = document.getElementById('grid-gallery');
-            const dCont = document.getElementById('director-gallery-list');
-            if(cont) cont.innerHTML = data?.map(img => `<div class="scroll-item h-full"><img src="${img.url}" class="w-full h-full object-cover"></div>`).join('') || '<p class="text-xs opacity-30 uppercase">Gallery Empty</p>';
-            if(dCont) dCont.innerHTML = data?.map(img => `<div class="flex justify-between text-[8px] bg-white/5 p-2 rounded"><span>${img.url.substring(0,30)}...</span><button onclick="deleteGalleryItem('${img.id}')" class="text-red-500">X</button></div>`).join('');
+        /* --- EVENTS MATRIX --- */
+        async function fetchEvents() {
+            const { data } = await db.from('events').select('*').order('date', { ascending: true });
+            document.getElementById('events-matrix').innerHTML = data?.map(ev => `
+                <div class="event-card">
+                    <p class="text-[8px] font-black text-blue-400 uppercase">${new Date(ev.date).toDateString()}</p>
+                    <p class="text-xs font-black uppercase text-white">${ev.title}</p>
+                </div>`).join('') || '<p class="text-[10px] opacity-30">No upcoming events.</p>';
+            
+            document.getElementById('director-event-list').innerHTML = data?.map(ev => `
+                <div class="flex justify-between text-[10px] bg-white/5 p-2 rounded">
+                    <span>${ev.title}</span> <button onclick="deleteEvent('${ev.id}')" class="text-red-500">X</button>
+                </div>`).join('');
         }
 
-        async function addGalleryImage() {
-            const url = document.getElementById('dir-img-url').value.trim();
-            if(!url) return;
-            await db.from('gallery').insert([{ url }]); document.getElementById('dir-img-url').value = ''; fetchGallery();
+        async function addGridEvent() {
+            const title = document.getElementById('dir-event-title').value;
+            const date = document.getElementById('dir-event-date').value;
+            await db.from('events').insert([{ title, date }]); fetchEvents();
         }
 
-        async function deleteGalleryItem(id) { await db.from('gallery').delete().eq('id', id); fetchGallery(); }
+        async function deleteEvent(id) { await db.from('events').delete().eq('id', id); fetchEvents(); }
 
-        async function submitRequest() {
-            if(!currentOp) return alert("AUTH REQUIRED");
-            const type = document.getElementById('req-type').value;
-            const link = document.getElementById('req-link-id').value.trim();
-            if(!link) return;
-            await db.from('media_requests').insert([{ user_id: currentOp.id, alias: document.getElementById('display-op-id').innerText, type, content_id: link }]);
-            alert("REQUEST SENT"); document.getElementById('req-link-id').value = '';
+        /* --- UTILS & BROADCAST --- */
+        async function syncGrid() {
+            const { data } = await db.from('broadcast').select('*').eq('id', 1).single();
+            if(data) document.getElementById('yt-broadcast').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${data.youtube_id}" frameborder="0" allowfullscreen></iframe>`;
         }
 
-        async function fetchDirectorRequests() {
-            const { data } = await db.from('media_requests').select('*').order('created_at', { ascending: false });
-            const list = document.getElementById('director-request-list');
-            list.innerHTML = data?.map(r => `<div class="bg-white/5 p-3 rounded-xl mb-2"><p class="text-blue-400">${r.alias} : ${r.type}</p><p class="text-white mb-2 truncate">${r.content_id}</p><button onclick="approveRequest('${r.type}', '${r.content_id}', '${r.id}')" class="bg-blue-500 text-black px-2 py-1 rounded">Approve</button></div>`).join('') || 'None.';
+        async function pushAnnouncement() {
+            const msg = document.getElementById('dir-announce').value;
+            await channel.send({ type: 'broadcast', event: 'announcement', payload: { msg } });
+            document.getElementById('dir-announce').value = '';
         }
 
-        async function approveRequest(type, cid, rid) {
-            const update = type === 'youtube' ? { youtube_id: cid } : { spotify_id: cid };
-            await db.from('broadcast').update(update).eq('id', 1);
-            await db.from('media_requests').delete().eq('id', rid);
-            syncGrid(); fetchDirectorRequests();
+        function triggerAnnouncement(msg) {
+            const bar = document.getElementById('announcement-bar');
+            document.getElementById('announcement-text').innerText = msg;
+            bar.classList.add('announcement-active'); document.getElementById('log-drum').play().catch(()=>{});
+            setTimeout(() => bar.classList.remove('announcement-active'), 8000);
         }
 
-        /* --- LOGO TRIGGER & PASSCODE --- */
+        /* --- LOGO TRIGGER --- */
         document.getElementById('mog-logo-trigger').addEventListener('click', () => {
             logoClicks++;
             if(logoClicks === 5) { 
                 if(currentOp?.email === 'director.mog@gmail.com') {
-                    const pass = prompt("DIRECTOR_ACCESS_CODE:");
+                    const pass = prompt("DIRECTOR_PROTOCOL_ID:");
                     if(pass === "@MOGProtocol2026") toggleUI('director-console');
-                    else alert("ACCESS_DENIED: INCORRECT PROTOCOL");
-                } else {
-                    alert("DIRECTOR CLEARANCE REQUIRED");
                 }
                 logoClicks = 0; 
             }
             setTimeout(() => logoClicks = 0, 5000);
         });
 
-        /* --- CORE HELPERS --- */
-        async function syncGrid() {
-            const { data } = await db.from('broadcast').select('*').eq('id', 1).single();
-            if(data) {
-                document.getElementById('yt-broadcast').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${data.youtube_id}" frameborder="0" allowfullscreen></iframe>`;
-                document.getElementById('spotify-broadcast').innerHTML = `<iframe src="http://googleusercontent.com/spotify.com/5{data.spotify_id}" width="100%" height="100%" frameBorder="0"></iframe>`;
-            }
-            loadPoll();
-        }
-
-        async function loadPoll() {
-            const { data: t } = await db.from('tracks').select('*');
-            const { data: v } = await db.from('amapiano_poll').select('spotify_track_id');
-            const sorted = t.map(tk => ({...tk, c: v?.filter(vote => vote.spotify_track_id === tk.id).length || 0})).sort((a,b) => b.c - a.c);
-            document.getElementById('dynamic-poll').innerHTML = sorted.map((tk, idx) => `<div class="flex items-center justify-between p-4 bg-white/5 rounded-3xl border border-white/5"><div><p class="text-[8px] text-zinc-500 uppercase">#${idx+1}</p><p class="text-white font-black text-xs uppercase">${tk.name}</p></div><button onclick="boostTrack('${tk.id}','${tk.name}')" class="text-[9px] text-blue-400 font-black border border-blue-400/20 px-4 py-2 rounded-full uppercase">Boost [${tk.c}]</button></div>`).join('');
-        }
-
-        async function saveProfile() {
-            await db.from('registrations').upsert({ user_id: currentOp.id, alias: document.getElementById('edit-alias').value, avatar_url: document.getElementById('edit-avatar').value, status: document.getElementById('edit-vibe').value });
-            setupSession(currentOp); toggleUI('profile-modal');
-        }
-
-        async function refreshChat() {
-            let q = db.from('messages').select('*').order('created_at', { ascending: true });
-            if(currentChatTab === 'public') q = q.is('recipient_id', null);
-            else q = q.or(`recipient_id.eq.${currentOp.id},user_id.eq.${currentOp.id}`).not('recipient_id', 'is', null);
-            const { data } = await q.limit(50);
-            const s = document.getElementById('chat-stream'); s.innerHTML = '';
-            data?.forEach(m => {
-                const d = document.createElement('div'); d.className = `bubble ${m.user_id === currentOp?.id ? 'sent' : 'received'}`;
-                d.innerHTML = `<span class="text-[8px] font-black uppercase block mb-1 opacity-50">${m.alias}</span>${m.content}`;
-                s.appendChild(d);
-            });
-            s.scrollTop = s.scrollHeight;
-        }
-
-        async function sendMessage() {
-            const i = document.getElementById('chat-msg'); const r = document.getElementById('recipient-list').value; if(!i.value) return;
-            const p = { content: i.value, user_id: currentOp.id, alias: document.getElementById('display-op-id').innerText };
-            if(currentChatTab === 'private' && r) p.recipient_id = r;
-            await db.from('messages').insert([p]); i.value = '';
-        }
-
-        async function pushAnnouncement() { await channel.send({ type: 'broadcast', event: 'announcement', payload: { msg: document.getElementById('dir-announce').value } }); document.getElementById('dir-announce').value = ''; }
-        function triggerAnnouncement(msg) { const bar = document.getElementById('announcement-bar'); document.getElementById('announcement-text').innerText = msg; bar.classList.add('announcement-active'); document.getElementById('log-drum').play().catch(()=>{}); setTimeout(() => bar.classList.remove('announcement-active'), 8000); }
-        async function updateBroadcast() { await db.from('broadcast').upsert({ id: 1, youtube_id: document.getElementById('dir-yt-id').value, spotify_id: document.getElementById('dir-sp-id').value }); syncGrid(); }
         function toggleUI(id) { document.getElementById(id).classList.toggle('active-modal'); }
-        function switchChat(t) { currentChatTab = t; document.getElementById('tab-public').className = t==='public'?'bg-blue-500 text-black':'bg-white/5 text-zinc-500'; document.getElementById('tab-private').className = t==='private'?'bg-blue-500 text-black':'bg-white/5 text-zinc-500'; document.getElementById('private-selector').classList.toggle('hidden', t==='public'); refreshChat(); }
-        async function updateRecipientList() { const { data } = await db.from('registrations').select('user_id, alias'); const l = document.getElementById('recipient-list'); l.innerHTML = '<option value="">Select Recipient...</option>'; data?.filter(r => r.user_id !== currentOp?.id).forEach(r => l.innerHTML += `<option value="${r.user_id}">${onlineUsers.has(r.user_id)?'● ':''}${r.alias}</option>`); }
-        async function boostTrack(id, name) { await db.from('amapiano_poll').insert([{ spotify_track_id: id, track_name: name, user_id: currentOp.id }]); }
-
         window.onload = () => { if(currentOp) syncGrid(); };
     </script>
 </body>
