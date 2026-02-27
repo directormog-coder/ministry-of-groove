@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID MASTER V200.00</title>
+    <title>M.O.G. | NATIONAL GRID MASTER V200.50</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -46,11 +46,11 @@
 
         .full-width { grid-column: 1 / -1; }
 
-        /* Map Styling (v190.50 Custom Dark) */
-        #operative-map { height: 250px; width: 100%; border-radius: 20px; border: 1px solid rgba(0, 212, 255, 0.2); }
-        .leaflet-tile-pane { filter: brightness(0.6) invert(100%) contrast(3) hue-rotate(200deg) saturate(0.3); }
+        /* Map Radar Styling */
+        #operative-map { height: 250px; width: 100%; border-radius: 20px; }
+        .leaflet-tile-pane { filter: brightness(0.6) invert(100%) contrast(3) hue-rotate(200deg); }
 
-        /* Messenger View */
+        /* Messenger Styling */
         .messenger-view { height: 550px; display: flex; flex-direction: column; background: #0b141a; }
         .msg-stream { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
         .bubble { max-width: 80%; padding: 14px 18px; border-radius: 22px; font-size: 14px; position: relative; cursor: pointer; }
@@ -80,7 +80,7 @@
 </head>
 <body id="mog-mainframe">
 
-    <div id="mog-toast">GRID RESTORED</div>
+    <div id="mog-toast">DNA SYNCHRONIZED</div>
     <audio id="log-drum" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logdrum.mp3" preload="auto"></audio>
 
     <div id="director-console" class="modal-overlay">
@@ -104,7 +104,7 @@
                 <div class="space-y-6">
                     <p class="text-[10px] text-blue-400 font-black uppercase">Grid Status</p>
                     <div class="p-4 bg-white/5 rounded-xl border border-blue-400/20 text-[10px] text-white">
-                        PROTOCOLS: ACTIVE<br>ENCRYPTION: AES-256<br>SECTORS: MONITORED
+                        V200.50 OMNI-RESTORATION ACTIVE<br>ENCRYPTION: AES-256<br>SECTORS: MONITORED
                     </div>
                 </div>
             </div>
@@ -113,7 +113,7 @@
 
     <div class="fixed top-0 w-full bg-black z-[9000] h-[45px] border-b border-blue-400/20 flex items-center overflow-hidden">
         <div class="ticker-move text-[10px] font-black uppercase text-blue-400">
-            M.O.G. V200.00 // OMNI-BUILD // GRID FULLY OPERATIONAL // DIRECT MESSAGING ENABLED // SECTOR RADAR LIVE // LOG DRUM ARMED...
+            M.O.G. V200.50 // RESTORED V180.21 TILES // OMNI-BUILD // GRID FULLY OPERATIONAL // DIRECT MESSAGING ENABLED // LOG DRUM ARMED...
         </div>
     </div>
 
@@ -126,9 +126,10 @@
 
         <div class="mainframe-grid">
             <section class="command-tile p-8">
+                <h3 class="text-white font-black uppercase text-[11px] mb-6 italic tracking-widest border-b border-white/5 pb-4">DNA Matrix</h3>
                 <div id="auth-container">
-                    <button onclick="loginWithGoogle()" class="w-full bg-white text-black font-black py-4 rounded-full uppercase text-xs flex items-center justify-center gap-3 mb-6">
-                        <i class="fa-brands fa-google"></i> Google Authorization
+                    <button id="google-auth-btn" onclick="loginWithGoogle()" class="w-full bg-white text-black font-black py-4 rounded-full uppercase text-xs flex items-center justify-center gap-3 mb-6">
+                        <i class="fa-brands fa-google"></i> <span id="auth-text">Authorize DNA</span>
                     </button>
                 </div>
                 <div id="active-op-badge" class="hidden flex flex-col items-center justify-center text-center">
@@ -156,7 +157,7 @@
                 <div class="messenger-view rounded-[34px]">
                     <div class="p-4 bg-[#202c33] flex justify-between items-center border-b border-white/10">
                         <div class="flex gap-4">
-                            <button onclick="setChatTarget(null)" id="btn-public" class="px-6 py-2 bg-blue-500 text-black text-[10px] font-black uppercase rounded-lg">Public</button>
+                            <button onclick="setChatTarget(null)" id="btn-public" class="px-6 py-2 bg-blue-500 text-black text-[10px] font-black uppercase rounded-lg">Public Grid</button>
                             <button id="btn-dm" class="hidden px-6 py-2 bg-white/5 text-zinc-500 text-[10px] font-black uppercase rounded-lg">Direct Frequency</button>
                         </div>
                     </div>
@@ -179,8 +180,7 @@
         <button onclick="showToast('Privacy protocols active.')" class="text-[9px] font-black uppercase text-blue-400">Privacy & Protocols</button>
         <p class="text-[9px] text-zinc-600 uppercase mt-4">© 2026 Ministry of Groove</p>
     </footer>
-    
-    <script>
+        <script>
         const MOG_CFG = {
             U: "https://hzelmkthdqtbxcffsstl.supabase.co",
             K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY"
@@ -192,11 +192,11 @@
             const t = document.getElementById('mog-toast');
             t.innerText = msg; t.classList.add('toast-active');
             setTimeout(() => t.classList.remove('toast-active'), 3000);
-            document.getElementById('log-drum').currentTime = 0;
-            document.getElementById('log-drum').play();
+            const drum = document.getElementById('log-drum');
+            drum.currentTime = 0; drum.play();
         }
 
-        /* --- MAP ENGINE --- */
+        /* --- MAP SYSTEM --- */
         function initMap() {
             map = L.map('operative-map', { zoomControl: false }).setView([-25.87, 29.23], 6);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -222,7 +222,7 @@
             } catch(e) {}
         }
 
-        /* --- DATA BROADCAST --- */
+        /* --- REALTIME ENGINE --- */
         db.channel('master-hub')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => refreshChat())
             .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'broadcast' }, () => syncGrid())
@@ -267,13 +267,11 @@
 
         async function refreshChat() {
             let query = db.from('messages').select('*').order('created_at', { ascending: true });
-            
             if(chatTarget) {
                 query = query.or(`and(user_id.eq.${currentOp.id},recipient_id.eq.${chatTarget.id}),and(user_id.eq.${chatTarget.id},recipient_id.eq.${currentOp.id})`);
             } else {
                 query = query.is('recipient_id', null);
             }
-
             const { data } = await query.limit(50);
             const s = document.getElementById('chat-stream'); 
             s.innerHTML = data?.map(m => `
@@ -290,9 +288,7 @@
             const i = document.getElementById('chat-msg');
             if(!i.value || !currentOp) return;
             await db.from('messages').insert([{ 
-                content: i.value, 
-                user_id: currentOp.id, 
-                alias: currentOp.user_metadata.full_name,
+                content: i.value, user_id: currentOp.id, alias: currentOp.user_metadata.full_name,
                 recipient_id: chatTarget ? chatTarget.id : null
             }]);
             i.value = '';
@@ -300,6 +296,10 @@
 
         /* --- AUTH --- */
         async function loginWithGoogle() { 
+            const btn = document.getElementById('google-auth-btn');
+            const txt = document.getElementById('auth-text');
+            btn.classList.add('loading-pulse');
+            txt.innerText = "SYNCHRONIZING...";
             await db.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://ministry-of-groove.vercel.app' } }); 
         }
 
