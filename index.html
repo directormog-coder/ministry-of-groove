@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID MASTER V180.2</title>
+    <title>M.O.G. | NATIONAL GRID MASTER V180.6</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -14,8 +14,8 @@
         
         :root { 
             --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #060a0f; 
-            --mog-panel: rgba(10, 20, 30, 0.98); --mog-cyan: #00f2ea; --mog-magenta: #ff0050;
-            --chat-sent: #005c4b; --chat-received: #202c33; --id-gradient: linear-gradient(135deg, #0f172a 0%, #060a0f 100%);
+            --mog-panel: rgba(10, 20, 30, 0.98); --chat-sent: #005c4b; --chat-received: #202c33; 
+            --id-gradient: linear-gradient(135deg, #0f172a 0%, #060a0f 100%);
         }
 
         * { transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); font-family: 'Satoshi', sans-serif; box-sizing: border-box; }
@@ -24,17 +24,10 @@
 
         body { 
             background-color: var(--mog-bg);
-            background-image: 
-                linear-gradient(130deg, transparent 40%, rgba(0, 212, 255, 0.12) 45%, rgba(0, 212, 255, 0.2) 50%, rgba(0, 212, 255, 0.12) 55%, transparent 60%),
-                radial-gradient(circle at 2px 2px, rgba(0, 212, 255, 0.15) 1px, transparent 0),
-                linear-gradient(rgba(0, 212, 255, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 212, 255, 0.04) 1px, transparent 1px);
-            background-size: 200% 200%, 40px 40px, 20px 20px, 20px 20px;
-            animation: lightning-drift 20s linear infinite;
-            color: var(--mog-gold); min-height: 100vh; margin: 0; overflow-x: hidden; display: flex; flex-direction: column;
+            background-image: radial-gradient(circle at 2px 2px, rgba(0, 212, 255, 0.1) 1px, transparent 0);
+            background-size: 40px 40px;
+            color: var(--mog-gold); min-height: 100vh; margin: 0; display: flex; flex-direction: column; overflow-x: hidden;
         }
-
-        @keyframes lightning-drift { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
 
         .command-tile { 
             background: var(--mog-panel); border: 1px solid rgba(0, 212, 255, 0.2); 
@@ -42,61 +35,66 @@
             overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 50px 100px rgba(0,0,0,0.9); 
         }
 
-        .command-tile:hover { border-color: var(--mog-blue); box-shadow: 0 0 30px rgba(0, 212, 255, 0.2); }
-
         .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 40s linear infinite; }
         @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
         .messenger-view { height: 600px; display: flex; flex-direction: column; background: #0b141a; border-radius: 35px; overflow: hidden; }
         .msg-stream { flex-grow: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay; background-color: #0b141a; }
-        .bubble { max-width: 80%; padding: 14px 18px; border-radius: 22px; font-size: 14px; position: relative; }
+        .bubble { max-width: 80%; padding: 14px 18px; border-radius: 22px; font-size: 14px; }
         .sent { align-self: flex-end; background: var(--chat-sent); color: #fff; border-top-right-radius: 4px; }
         .received { align-self: flex-start; background: var(--chat-received); color: #e9edef; border-top-left-radius: 4px; }
 
-        .id-card { background: var(--id-gradient); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 24px; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
-
-        .vault-item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 22px; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .vault-locked { filter: blur(12px); pointer-events: none; }
-
-        #side-drawer { position: fixed; top: 0; left: -100%; width: 320px; height: 100%; background: #0a0e14; z-index: 9000; transition: 0.5s; border-right: 1px solid rgba(0,212,255,0.2); }
-        #side-drawer.drawer-active { left: 0; }
-        .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 8500; display: none; backdrop-filter: blur(8px); }
-        .drawer-overlay.active { display: block; }
-        
-        .modal-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.98); backdrop-filter: blur(40px); display: none; align-items: center; justify-content: center; padding: 25px; }
+        .modal-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.96); backdrop-filter: blur(30px); display: none; align-items: center; justify-content: center; padding: 20px; }
         .active-modal { display: flex !important; }
 
-        .social-link { height: 50px; width: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); font-size: 1.4rem; transition: 0.3s; }
-        .fa-tiktok { color: #fff; text-shadow: 2px 0 var(--mog-magenta), -2px 0 var(--mog-cyan); }
+        input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 16px; border-radius: 18px; width: 100%; outline: none; margin-bottom: 12px; }
+        .animate-spin-slow { animation: spin 8s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
 <body id="mog-mainframe">
 
-    <div id="drawer-bg" class="drawer-overlay" onclick="toggleDrawer()"></div>
-    <nav id="side-drawer">
-        <div class="p-10 border-b border-white/5">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-16 w-16 mb-4">
-            <p class="text-[10px] text-blue-400 font-black uppercase tracking-[0.3em]">Grid Navigation</p>
-        </div>
-        <div class="flex flex-col p-6 space-y-4">
-            <div class="flex items-center gap-4 text-white font-black uppercase text-xs p-4 bg-white/5 rounded-2xl"><i class="fa-solid fa-house-signal text-blue-400"></i> National Grid</div>
-            <div onclick="toggleUI('privacy-modal')" class="flex items-center gap-4 text-zinc-500 font-black uppercase text-xs p-4 hover:text-white cursor-pointer"><i class="fa-solid fa-shield-halved"></i> Privacy Protocol</div>
-        </div>
-    </nav>
+    <audio id="log-drum" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logdrum.mp3" preload="auto"></audio>
 
-    <div id="director-console" class="modal-overlay" onclick="if(event.target == this) toggleUI('director-console')">
-        <div class="command-tile p-12 max-w-5xl w-full border-gold/40">
-            <h2 class="text-3xl text-white font-black uppercase italic mb-8 border-b border-white/5 pb-6">Director Hub</h2>
-            <div class="bg-white/5 p-6 rounded-[35px] border border-white/10 text-center mb-10">
-                <span class="text-[10px] text-blue-400 font-black uppercase block mb-3">System Persistence</span>
-                <p class="text-xs text-zinc-400">Broadcast ID and Tracks sync via SQL Constraints.</p>
+    <div id="director-console" class="modal-overlay">
+        <div class="command-tile p-10 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+                <h2 class="text-2xl text-white font-black uppercase italic">Director Oversight</h2>
+                <button onclick="toggleUI('director-console')" class="text-zinc-500 hover:text-white">CLOSE</button>
             </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <h3 class="text-blue-400 text-[10px] font-black uppercase">Broadcast Control</h3>
+                    <input type="text" id="dir-yt-id" placeholder="YouTube Live ID">
+                    <input type="text" id="dir-sp-id" placeholder="Spotify ID">
+                    <button onclick="updateBroadcast()" class="w-full bg-blue-500 text-black font-black py-4 rounded-xl uppercase text-xs">Push & Pulse Grid</button>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="text-blue-400 text-[10px] font-black uppercase">Hitlist Management</h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="new-track-name" placeholder="Track Name" class="mb-0">
+                        <button onclick="addTrack()" class="bg-white text-black px-4 rounded-xl"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <div id="director-track-list" class="space-y-2 max-h-48 overflow-y-auto"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="profile-modal" class="modal-overlay">
+        <div class="command-tile p-10 max-w-lg w-full">
+            <h2 class="text-2xl text-white font-black uppercase italic mb-6 border-b border-white/5 pb-4">Profile Matrix</h2>
+            <input type="text" id="edit-alias" placeholder="Update Alias">
+            <input type="text" id="edit-avatar" placeholder="Avatar URL">
+            <button onclick="saveProfile()" class="w-full bg-blue-500 text-black py-4 rounded-full uppercase text-xs font-black">Update DNA</button>
+            <button onclick="toggleUI('profile-modal')" class="w-full mt-4 text-zinc-500 text-[10px] uppercase font-black">Cancel</button>
         </div>
     </div>
 
     <div class="fixed top-0 w-full bg-black z-[1000] h-[50px] border-b border-blue-400/20 flex items-center overflow-hidden">
         <div id="master-ticker" class="ticker-move text-[10px] font-black uppercase text-blue-400 px-8">
-            MASTER_SINGULARITY_V180.2 // PERSISTENCE_ACTIVE // RLS_ENFORCED // DIRECTOR_OVERSIGHT_LIVE // SYNCING_GRID_RECORDS...
+            MASTER_SINGULARITY_V180.6 // DIRECTOR_OVERSIGHT_LIVE // REALTIME_VOTING_SYNC // RLS_ENFORCED // BROADCAST_STABLE...
         </div>
     </div>
 
@@ -109,157 +107,196 @@
                     <p class="text-[12px] text-blue-400 font-black uppercase mt-3 tracking-[0.7em]">S-01 National Mainframe</p>
                 </div>
             </div>
-            <button onclick="toggleDrawer()" class="text-blue-400 text-4xl p-6 bg-white/5 rounded-full border border-white/5"><i class="fa-solid fa-bars-staggered"></i></button>
         </header>
 
         <main class="grid grid-cols-1 lg:grid-cols-3 gap-16">
-            
             <section class="command-tile lg:col-span-2 p-1">
                 <div class="messenger-view">
-                    <div class="bg-[#202c33] p-5 flex justify-between items-center">
+                    <div class="bg-[#202c33] p-5 border-b border-white/5 flex justify-between">
                         <p class="text-white font-black uppercase text-xs">National Frequency</p>
                     </div>
-                    <div id="chat-stream" class="msg-stream scrollbar-hide"></div>
+                    <div id="chat-stream" class="msg-stream"></div>
                     <div class="bg-[#202c33] p-5 flex gap-4">
-                        <input type="text" id="chat-msg" placeholder="Message..." class="flex-grow bg-[#2a3942] border-0 rounded-full px-8 py-5 text-sm text-white outline-none">
+                        <input type="text" id="chat-msg" placeholder="Transmit..." class="flex-grow bg-[#2a3942] border-0 rounded-full px-8 py-5 text-white outline-none mb-0">
                         <button onclick="sendMessage()" class="w-16 h-16 bg-blue-500 text-black rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
                     </div>
                 </div>
             </section>
-            
+
             <section class="command-tile p-12 h-fit">
-                <div id="auth-fields">
-                    <h3 class="text-xl text-white font-black uppercase italic mb-8 border-b border-white/5 pb-4">Authorization</h3>
-                    <input id="login-user" type="text" placeholder="GMAIL / ALIAS" class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white mb-4 outline-none">
-                    <input id="login-pass" type="password" placeholder="PASSCODE" class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white mb-6 outline-none">
-                    <button onclick="handleMainAuth()" class="w-full bg-white text-black font-black py-5 rounded-full uppercase text-xs">Authorize Entry</button>
+                <div id="auth-container">
+                    <div class="flex gap-4 mb-8">
+                        <button onclick="setAuthMode('login')" id="btn-login" class="text-[10px] font-black uppercase border-b-2 border-blue-400 text-blue-400">Login</button>
+                        <button onclick="setAuthMode('reg')" id="btn-reg" class="text-[10px] font-black uppercase text-zinc-500">Register</button>
+                    </div>
+                    <div id="reg-fields" class="hidden"><input id="reg-alias" type="text" placeholder="CHOOSE ALIAS"></div>
+                    <input id="auth-user" type="text" placeholder="EMAIL">
+                    <input id="auth-pass" type="password" placeholder="PASSCODE">
+                    <button onclick="executeAuth()" id="auth-btn" class="w-full bg-white text-black font-black py-5 rounded-full uppercase text-xs">Authorize Entry</button>
                 </div>
                 <div id="active-op-badge" class="hidden">
-                    <div class="id-card">
-                        <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="w-32 h-32 rounded-2xl border-2 border-gold mb-6">
-                        <h2 id="display-op-id" class="text-3xl text-white font-black uppercase italic">OPERATIVE</h2>
-                        <p id="op-role" class="text-[10px] text-gold font-black uppercase mt-2">S-01 OPERATIVE</p>
+                    <div class="id-card cursor-pointer" onclick="toggleUI('profile-modal')">
+                        <img id="display-avatar" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="w-32 h-32 mx-auto rounded-3xl border-2 border-gold mb-6 object-cover">
+                        <h2 id="display-op-id" class="text-2xl text-white font-black uppercase italic">OPERATIVE</h2>
+                        <p id="op-status" class="text-[10px] text-gold font-black uppercase mt-2">ACTIVE S-01</p>
                     </div>
                 </div>
             </section>
 
             <section class="command-tile lg:col-span-3 p-12">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div>
-                        <span class="text-white font-black uppercase text-xs mb-4 block">YouTube Live Stream</span>
-                        <div id="yt-container" class="aspect-video bg-black rounded-3xl overflow-hidden border border-white/5">
-                             <p class="text-zinc-600 text-xs p-10">Syncing Master Broadcast...</p>
-                        </div>
-                    </div>
-                    <div>
-                        <span class="text-white font-black uppercase text-xs mb-4 block">Spotify Frequency</span>
-                        <div id="spotify-container">
-                             <p class="text-zinc-600 text-xs p-10">Awaiting Signal...</p>
-                        </div>
-                    </div>
+                    <div id="yt-broadcast" class="aspect-video bg-black rounded-3xl overflow-hidden border border-white/5 flex items-center justify-center"></div>
+                    <div id="spotify-broadcast" class="h-[380px] bg-black rounded-3xl overflow-hidden border border-white/5 flex items-center justify-center"></div>
                 </div>
             </section>
 
+            <section class="command-tile lg:col-span-3 p-12">
+                <span class="text-white font-black uppercase text-sm mb-12 block italic"><i class="fa-brands fa-spotify mr-4 text-[#1DB954]"></i> Top 10 Hitlist Booster</span>
+                <div id="dynamic-poll" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            </section>
         </main>
     </div>
-
+    
     <script>
         const MOG_CFG = {
             U: "https://vbkpatwvgvwarybbpiky.supabase.co",
             K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia3BhdHd2Z3Z3YXJpYmJwaWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjc0MTksImV4cCI6MjA4NjcwMzQxOX0.v3iWw2z9vL-X6pGjY0W_S5m1z0S8uI1L8yN7fL0M_Y8"
         };
         const db = window.supabase.createClient(MOG_CFG.U, MOG_CFG.K);
-        let currentOp = null, logoClicks = 0;
+        let currentOp = null, authMode = 'login', logoClicks = 0;
 
-        // 1. SYNC MASTER BROADCAST (Based on SQL Tables)
-        async function syncMasterBroadcast() {
-            const { data, error } = await db.from('broadcast').select('*').eq('id', 1).single();
-            if (data) {
-                if (data.youtube_id) {
-                    document.getElementById('yt-container').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${data.youtube_id}" frameborder="0" allowfullscreen></iframe>`;
-                }
-                if (data.spotify_id) {
-                    document.getElementById('spotify-container').innerHTML = `<iframe src="https://open.spotify.com/embed/playlist/${data.spotify_id}" width="100%" height="380" frameBorder="0" allow="autoplay; encrypted-media" class="rounded-3xl"></iframe>`;
-                }
+        /* AUTH & REGISTRY */
+        function setAuthMode(mode) {
+            authMode = mode;
+            document.getElementById('reg-fields').classList.toggle('hidden', mode === 'login');
+            document.getElementById('auth-btn').innerText = mode === 'login' ? 'Authorize Entry' : 'Register DNA';
+        }
+
+        async function executeAuth() {
+            const email = document.getElementById('auth-user').value.trim();
+            const pass = document.getElementById('auth-pass').value;
+            const alias = document.getElementById('reg-alias').value.trim();
+
+            if (authMode === 'reg') {
+                const { data, error } = await db.auth.signUp({ email, password: pass });
+                if (data.user) await db.from('registrations').insert([{ user_id: data.user.id, alias: alias }]);
+                alert("REGISTRATION COMPLETE. LOG IN.");
+                setAuthMode('login');
+            } else {
+                const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+                if (data.user) setupSession(data.user);
             }
         }
 
-        // 2. REALTIME MESSENGER (Updated with user_id persistence)
-        const channel = db.channel('public:messages')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
-                appendMsg(payload.new); 
-            }).subscribe();
-
-        function appendMsg(m) {
-            const stream = document.getElementById('chat-stream');
-            const div = document.createElement('div');
-            div.className = `bubble ${m.user_id === currentOp?.id ? 'sent' : 'received'}`;
-            div.innerHTML = `<span class="text-[9px] font-black uppercase block mb-1 ${m.user_id === currentOp?.id ? 'text-gold' : 'text-blue-400'}">${m.alias || 'Unknown'}</span>${m.content}`;
-            stream.appendChild(div);
-            stream.scrollTop = stream.scrollHeight;
+        async function setupSession(user) {
+            currentOp = user;
+            document.getElementById('auth-container').classList.add('hidden');
+            document.getElementById('active-op-badge').classList.remove('hidden');
+            const { data } = await db.from('registrations').select('*').eq('user_id', user.id).single();
+            if(data) {
+                document.getElementById('display-op-id').innerText = data.alias;
+                if(data.avatar_url) document.getElementById('display-avatar').src = data.avatar_url;
+            }
+            if(user.email === 'director.mog@gmail.com') document.getElementById('op-status').innerText = "DIRECTORATE";
         }
 
-        async function fetchHistory() {
-            const { data } = await db.from('messages').select('*').order('created_at', { ascending: true }).limit(50);
-            if (data) data.forEach(m => appendMsg(m));
+        /* BROADCAST & TRACKS */
+        async function syncGrid() {
+            const { data: b } = await db.from('broadcast').select('*').eq('id', 1).single();
+            if(b) {
+                document.getElementById('yt-broadcast').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${b.youtube_id}" frameborder="0" allowfullscreen></iframe>`;
+                document.getElementById('spotify-broadcast').innerHTML = `<iframe src="http://googleusercontent.com/spotify.com/6{b.spotify_id}" width="100%" height="380" frameBorder="0"></iframe>`;
+            }
+            loadPoll();
         }
 
-        async function sendMessage() {
-            if (!currentOp) return alert("AUTHORIZE IDENTITY FIRST");
-            const input = document.getElementById('chat-msg');
-            const content = input.value.trim();
-            if (!content) return;
+        async function loadPoll() {
+            const { data: tracks } = await db.from('tracks').select('*').order('created_at', { ascending: false });
+            const { data: votes } = await db.from('amapiano_poll').select('spotify_track_id');
             
-            // Integrated user_id logic from SQL migrations
-            const { error } = await db.from('messages').insert([{ 
-                content, 
-                user_id: currentOp.id, 
-                alias: document.getElementById('display-op-id').innerText 
-            }]);
-            if (!error) input.value = '';
+            document.getElementById('dynamic-poll').innerHTML = tracks.map(t => {
+                const count = votes.filter(v => v.spotify_track_id === t.id).length;
+                return `
+                <div class="flex items-center justify-between p-6 bg-white/5 border border-white/5 rounded-3xl">
+                    <div><p class="text-white font-black text-[11px] uppercase">${t.name}</p>
+                    <span class="text-[9px] text-blue-400 font-black">${count} BOOSTS</span></div>
+                    <button onclick="boostTrack('${t.id}', '${t.name}')" class="text-[9px] text-blue-400 font-black border border-blue-400/20 px-4 py-1 rounded-full uppercase">Boost</button>
+                </div>`;
+            }).join('');
+            
+            // Sync Director View
+            document.getElementById('director-track-list').innerHTML = tracks.map(t => {
+                const count = votes.filter(v => v.spotify_track_id === t.id).length;
+                return `<div class="flex justify-between p-2 bg-white/5 rounded-lg text-[10px] uppercase font-bold">
+                    <span>${t.name} (${count})</span>
+                    <button onclick="deleteTrack('${t.id}')" class="text-red-500">X</button>
+                </div>`;
+            }).join('');
         }
 
-        // 3. AUTH & REGISTRY SYNC
-        async function handleMainAuth() {
-            const email = document.getElementById('login-user').value.trim();
-            const pass = document.getElementById('login-pass').value;
-            
-            const finalEmail = email.includes('@') ? email : `${email}@user.mog.internal`;
-            const { data, error } = await db.auth.signInWithPassword({ email: finalEmail, password: pass });
-            
-            if(!error) { 
-                currentOp = data.user; 
-                document.getElementById('auth-fields').classList.add('hidden');
-                document.getElementById('active-op-badge').classList.remove('hidden');
-                
-                // Fetch Alias from Registrations Table (Operatives Registry SQL)
-                const { data: reg } = await db.from('registrations').select('alias').eq('user_id', currentOp.id).single();
-                if(reg) document.getElementById('display-op-id').innerText = reg.alias;
-                
-                if(currentOp.email === 'director.mog@gmail.com') {
-                    document.getElementById('op-role').innerText = "DIRECTOR OVERSIGHT";
-                    document.getElementById('op-role').classList.add('text-blue-400');
-                }
-            } else { alert(error.message); }
+        /* DIRECTOR ACTIONS */
+        async function updateBroadcast() {
+            const yt = document.getElementById('dir-yt-id').value;
+            const sp = document.getElementById('dir-sp-id').value;
+            await db.from('broadcast').upsert({ id: 1, youtube_id: yt, spotify_id: sp });
+            await db.from('messages').insert([{ content: "⚠️ GRID UPDATE: Broadcast frequency shifted.", alias: "SYSTEM", user_id: currentOp.id }]);
+            syncGrid();
         }
 
-        // UI HELPERS
-        function toggleDrawer() { document.getElementById('side-drawer').classList.toggle('drawer-active'); document.getElementById('drawer-bg').classList.toggle('active'); }
-        function toggleUI(id) { document.getElementById(id).classList.toggle('active-modal'); }
+        async function addTrack() {
+            const name = document.getElementById('new-track-name').value;
+            await db.from('tracks').insert([{ name }]);
+            loadPoll();
+        }
 
+        async function deleteTrack(id) {
+            await db.from('tracks').delete().eq('id', id);
+            loadPoll();
+        }
+
+        /* LOGO TRIGGER */
         document.getElementById('mog-logo-trigger').addEventListener('click', () => {
             logoClicks++;
             if (logoClicks === 5) {
-                const key = prompt("DIRECTOR_ACCESS:");
-                if(key === "@MOGProtocol2026") toggleUI('director-console');
+                if(currentOp?.email === 'director.mog@gmail.com') toggleUI('director-console');
+                else alert("DIRECTOR CLEARANCE REQUIRED");
                 logoClicks = 0;
             }
             setTimeout(() => logoClicks = 0, 5000);
         });
 
+        /* MESSENGER */
+        const chan = db.channel('msg').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, p => appendMsg(p.new)).subscribe();
+        function appendMsg(m) {
+            const s = document.getElementById('chat-stream');
+            const d = document.createElement('div');
+            d.className = `bubble ${m.user_id === currentOp?.id ? 'sent' : 'received'}`;
+            d.innerHTML = `<span class="text-[9px] font-black uppercase block mb-1">${m.alias}</span>${m.content}`;
+            s.appendChild(d); s.scrollTop = s.scrollHeight;
+            if(m.user_id !== currentOp?.id) { 
+                const drum = document.getElementById('log-drum'); 
+                drum.currentTime = 0; drum.play().catch(()=>{}); 
+            }
+        }
+        async function sendMessage() {
+            const i = document.getElementById('chat-msg');
+            if(!currentOp || !i.value) return;
+            await db.from('messages').insert([{ content: i.value, user_id: currentOp.id, alias: document.getElementById('display-op-id').innerText }]);
+            i.value = '';
+        }
+
+        async function boostTrack(tid, name) {
+            if(!currentOp) return alert("AUTH REQUIRED");
+            const { error } = await db.from('amapiano_poll').insert([{ spotify_track_id: tid, track_name: name, user_id: currentOp.id }]);
+            if(error) alert("ALREADY BOOSTED");
+            loadPoll();
+        }
+
+        function toggleUI(id) { document.getElementById(id).classList.toggle('active-modal'); }
+
         window.onload = () => { 
-            fetchHistory(); 
-            syncMasterBroadcast();
+            syncGrid();
+            db.from('messages').select('*').order('created_at', { ascending: true }).limit(50).then(({data}) => data?.forEach(m => appendMsg(m)));
         };
     </script>
 </body>
