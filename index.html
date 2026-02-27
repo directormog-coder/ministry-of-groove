@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID MASTER V210.00</title>
+    <title>M.O.G. | NATIONAL GRID MASTER V210.60</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -46,7 +46,7 @@
 
         .full-width { grid-column: 1 / -1; }
 
-        /* UPGRADED Radar Map (v180.21 x v190.50 Hybrid) */
+        /* Operative Map Styling */
         #operative-map { height: 280px; width: 100%; border-radius: 25px; border: 1px solid rgba(0, 212, 255, 0.2); }
         .leaflet-tile-pane { filter: brightness(0.6) invert(100%) contrast(3) hue-rotate(200deg) saturate(0.3); }
 
@@ -57,10 +57,11 @@
         .sent { align-self: flex-end; background: var(--chat-sent); color: #fff; border-bottom-right-radius: 4px; }
         .received { align-self: flex-start; background: var(--chat-received); color: #e9edef; border-bottom-left-radius: 4px; }
 
-        /* Amapiano YouTube Hitlist Scroller */
+        /* YouTube Hitlist Scroller */
         .scroller-x { display: flex; overflow-x: auto; gap: 15px; padding: 10px; scroll-snap-type: x mandatory; }
         .hit-item { min-width: 300px; border-radius: 25px; overflow: hidden; scroll-snap-align: start; flex-shrink: 0; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
 
+        /* UI Components */
         #mog-toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
             background: var(--mog-blue); color: #000; padding: 12px 24px;
@@ -85,7 +86,7 @@
 </head>
 <body id="mog-mainframe">
 
-    <div id="mog-toast">DNA SYNCHRONIZED</div>
+    <div id="mog-toast">OMNI-GRID SYNCHRONIZED</div>
     <audio id="log-drum" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logdrum.mp3" preload="auto"></audio>
 
     <div id="director-console" class="modal-overlay">
@@ -94,17 +95,17 @@
                 <h2 class="text-3xl text-white font-black uppercase italic">Director Hub v21</h2>
                 <button onclick="toggleUI('director-console')" class="text-zinc-500 font-black">CLOSE</button>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="space-y-6">
-                    <p class="text-[10px] text-blue-400 font-black uppercase">Main Broadcast</p>
+                    <p class="text-[10px] text-blue-400 font-black uppercase">Signal Center</p>
                     <input type="text" id="dir-yt-id" placeholder="Broadcast YT ID">
                     <button onclick="updateBroadcast()" class="w-full bg-blue-500 text-black font-black py-4 rounded-xl text-xs uppercase italic">Sync Grid</button>
                 </div>
                 <div class="space-y-6">
-                    <p class="text-[10px] text-blue-400 font-black uppercase">Amapiano Hitlist</p>
+                    <p class="text-[10px] text-blue-400 font-black uppercase">Hitlist Manager</p>
                     <input type="text" id="dir-track-name" placeholder="Song Name">
                     <input type="text" id="dir-track-yt" placeholder="YouTube Video ID">
-                    <button onclick="addTrack()" class="w-full bg-white text-black font-black py-4 rounded-xl text-xs uppercase">Post to Grid</button>
+                    <button onclick="addTrack()" class="w-full bg-white text-black font-black py-4 rounded-xl text-xs uppercase">Post to Hitlist</button>
                 </div>
             </div>
         </div>
@@ -112,7 +113,7 @@
 
     <div class="fixed top-0 w-full bg-black z-[9000] h-[45px] border-b border-blue-400/20 flex items-center overflow-hidden">
         <div class="ticker-move text-[10px] font-black uppercase text-blue-400">
-            M.O.G. V210.00 // OMNI-REMASTERED // SECTOR RADAR LIVE // AMAPIANO TOP 10 RESTORED // LOG DRUM ARMED...
+            M.O.G. V210.60 // OMNI-REMASTERED // CHAT & DMs LIVE // SECTOR RADAR ACTIVE // AMAPIANO TOP 10 RESTORED // LOG DRUM ARMED...
         </div>
     </div>
 
@@ -188,7 +189,7 @@
             <a href="#" class="social-link"><i class="fa-brands fa-threads"></i></a>
         </div>
         <button onclick="showToast('Privacy protocols active.')" class="text-[9px] font-black uppercase text-blue-400">Privacy & Protocols</button>
-        <p class="text-[9px] text-zinc-600 uppercase mt-4 italic">© 2026 Ministry of Groove // Master Series</p>
+        <p class="text-[9px] text-zinc-600 uppercase mt-4 italic">© 2026 Ministry of Groove // Omni-Series</p>
     </footer>
     
     <script>
@@ -203,17 +204,16 @@
             const t = document.getElementById('mog-toast');
             t.innerText = msg; t.classList.add('toast-active');
             setTimeout(() => t.classList.remove('toast-active'), 3000);
-            const drum = document.getElementById('log-drum');
-            drum.currentTime = 0; drum.play();
+            const drum = document.getElementById('log-drum'); drum.currentTime = 0; drum.play();
         }
 
-        /* --- AUTH SYSTEM RESTORATION --- */
+        /* --- AUTH ENGINE --- */
         function setAuthMode(m) { authMode = m; document.getElementById('reg-fields').classList.toggle('hidden', m === 'login'); }
         async function executeAuth() {
             const e = document.getElementById('auth-user').value.trim(), p = document.getElementById('auth-pass').value;
             if(authMode === 'reg') {
                 const { data, error } = await db.auth.signUp({ email: e, password: p });
-                if(data.user) showToast("DNA REGISTERED. LOG IN."); else showToast(error.message);
+                if(data.user) showToast("DNA REGISTERED. LOGIN."); else showToast(error.message);
                 setAuthMode('login');
             } else {
                 const { data, error } = await db.auth.signInWithPassword({ email: e, password: p });
@@ -224,7 +224,7 @@
             await db.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://ministry-of-groove.vercel.app' } }); 
         }
 
-        /* --- RADAR MAP SYSTEM --- */
+        /* --- RADAR MAP --- */
         function initMap() {
             map = L.map('operative-map', { zoomControl: false }).setView([-25.87, 29.23], 6); // Witbank/eMalahleni Anchor
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -241,12 +241,17 @@
                         markers[id] = L.circleMarker([p.lat, p.lng], { color: '#00d4ff', radius: 8, fillOpacity: 0.8 }).addTo(map).bindPopup(p.name); 
                     }
                 }).subscribe(async (s) => { 
-                    if(s==='SUBSCRIBED') await chan.track({ name: u.user_metadata.full_name, lat: loc.latitude, lng: loc.longitude }); 
+                    if(s==='SUBSCRIBED') await chan.track({ name: u.user_metadata.full_name || 'OPERATIVE', lat: loc.latitude, lng: loc.longitude }); 
                 });
             } catch(e) {}
         }
 
-        /* --- HITLIST & BROADCAST --- */
+        /* --- BROADCAST & HITLIST --- */
+        async function syncGrid() {
+            const { data } = await db.from('broadcast').select('*').eq('id', 1).single();
+            if (data) document.getElementById('yt-broadcast').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${data.youtube_id}?autoplay=1&mute=1" frameborder="0" allowfullscreen></iframe>`;
+        }
+
         async function loadHitlist() {
             const { data } = await db.from('tracks').select('*').order('votes', { ascending: false }).limit(10);
             document.getElementById('hitlist-container').innerHTML = data?.map((tk, idx) => `
@@ -259,14 +264,10 @@
                 </div>
             `).join('') || '';
         }
+
         async function voteTrack(id, votes) { if(!currentOp) return showToast("AUTHORIZE DNA"); await db.from('tracks').update({ votes: votes + 1 }).eq('id', id); }
 
-        async function syncGrid() {
-            const { data } = await db.from('broadcast').select('*').eq('id', 1).single();
-            if (data) document.getElementById('yt-broadcast').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${data.youtube_id}?autoplay=1&mute=1" frameborder="0" allowfullscreen></iframe>`;
-        }
-
-        /* --- MESSENGER ENGINE --- */
+        /* --- MESSENGER --- */
         function setChatTarget(user) { chatTarget = user; document.getElementById('btn-dm').classList.toggle('hidden', !user); if(user) document.getElementById('btn-dm').innerText = `FREQ: ${user.alias}`; refreshChat(); }
         async function refreshChat() {
             let q = db.from('messages').select('*').order('created_at', { ascending: true });
@@ -280,7 +281,7 @@
 
         async function sendMessage() {
             const i = document.getElementById('chat-msg'); if(!i.value || !currentOp) return;
-            await db.from('messages').insert([{ content: i.value, user_id: currentOp.id, alias: currentOp.user_metadata.full_name, recipient_id: chatTarget?.id }]);
+            await db.from('messages').insert([{ content: i.value, user_id: currentOp.id, alias: currentOp.user_metadata.full_name || 'OPERATIVE', recipient_id: chatTarget?.id }]);
             i.value = '';
         }
 
