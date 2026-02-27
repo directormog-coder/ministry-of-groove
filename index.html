@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>M.O.G. | NATIONAL GRID MASTER V180.20</title>
+    <title>M.O.G. | NATIONAL GRID MASTER V180.21</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -25,14 +25,13 @@
             background-color: var(--mog-bg);
             background-image: radial-gradient(circle at 2px 2px, rgba(0, 212, 255, 0.05) 1px, transparent 0);
             background-size: 30px 30px;
-            color: var(--mog-gold); min-height: 100vh; margin: 0; overflow-x: hidden;
-            display: flex; flex-direction: column;
+            color: var(--mog-gold); min-height: 100vh; margin: 0; padding-bottom: 2rem; overflow-x: hidden;
         }
 
         .mainframe-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
-            gap: 1.5rem; width: 100%; padding: 1.5rem; flex-grow: 1;
+            gap: 1.5rem; width: 100%; padding: 1.5rem;
         }
 
         .command-tile { 
@@ -44,31 +43,25 @@
 
         .full-width { grid-column: 1 / -1; }
 
-        /* SCROLLERS */
         .scroller-x { display: flex; overflow-x: auto; gap: 15px; padding: 10px; scroll-snap-type: x mandatory; }
         .scroll-item { min-width: 280px; border-radius: 25px; overflow: hidden; scroll-snap-align: start; flex-shrink: 0; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
 
-        /* MESSENGER */
         .messenger-view { height: 550px; display: flex; flex-direction: column; background: #0b141a; }
         .msg-stream { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
         .bubble { max-width: 80%; padding: 14px 18px; border-radius: 22px; font-size: 14px; position: relative; }
         .sent { align-self: flex-end; background: var(--chat-sent); color: #fff; border-bottom-right-radius: 4px; }
         .received { align-self: flex-start; background: var(--chat-received); color: #e9edef; border-bottom-left-radius: 4px; }
 
-        /* MODALS */
-        .modal-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.98); backdrop-filter: blur(30px); display: none; align-items: center; justify-content: center; padding: 1.5rem; }
-        .active-modal { display: flex !important; }
-
-        input, select, textarea { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 16px; border-radius: 20px; outline: none; width: 100%; }
-        
-        /* FOOTER */
-        footer { background: rgba(0,0,0,0.8); border-top: 1px solid rgba(212,175,55,0.2); padding: 3rem 1.5rem; text-align: center; }
-        .social-link { font-size: 1.5rem; color: var(--mog-gold); transition: 0.3s; opacity: 0.6; }
-        .social-link:hover { opacity: 1; color: var(--mog-blue); transform: translateY(-3px); }
-
         #announcement-bar { position: fixed; top: -100px; left: 0; width: 100%; padding: 18px; background: #ff0050; color: white; z-index: 10000; display: flex; align-items: center; justify-content: center; font-weight: 900; text-transform: uppercase; }
         .announcement-active { top: 0 !important; }
+
+        .modal-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.98); backdrop-filter: blur(30px); display: none; align-items: center; justify-content: center; padding: 1rem; }
+        .active-modal { display: flex !important; }
+
+        input, select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 16px; border-radius: 20px; outline: none; width: 100%; }
+        .vibe-tag { font-size: 10px; background: rgba(0, 212, 255, 0.15); color: var(--mog-blue); padding: 4px 10px; border-radius: 10px; font-weight: 900; }
         
+        footer { background: rgba(0,0,0,0.5); border-top: 1px solid rgba(212,175,55,0.1); padding: 2rem; margin-top: 4rem; text-align: center; }
         .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 40s linear infinite; }
         @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
     </style>
@@ -78,63 +71,69 @@
     <audio id="log-drum" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logdrum.mp3" preload="auto"></audio>
 
     <div id="announcement-bar">
-        <i class="fa-solid fa-satellite-dish mr-3 animate-pulse"></i> <span id="announcement-text">Broadcasting...</span>
+        <i class="fa-solid fa-tower-broadcast mr-3 animate-pulse"></i> <span id="announcement-text">Broadcasting...</span>
     </div>
 
     <div id="director-console" class="modal-overlay">
         <div class="command-tile p-8 max-w-6xl w-full max-h-[85vh] overflow-y-auto border-gold/30">
             <div class="flex justify-between items-center mb-10 border-b border-white/10 pb-4">
-                <h2 class="text-3xl text-white font-black uppercase italic">Director Oversight v20</h2>
-                <button onclick="toggleUI('director-console')" class="text-zinc-500 font-black hover:text-white">CLOSE</button>
+                <h2 class="text-3xl text-white font-black uppercase italic">Director Hub v21</h2>
+                <button onclick="toggleUI('director-console')" class="text-zinc-500 font-black">CLOSE</button>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="space-y-6">
-                    <p class="text-[10px] text-blue-400 font-black uppercase">Push Control</p>
-                    <input type="text" id="dir-announce" placeholder="Global Message">
+                    <p class="text-[10px] text-blue-400 font-black uppercase">Signal Center</p>
+                    <input type="text" id="dir-announce" placeholder="Announcement">
                     <button onclick="pushAnnouncement()" class="w-full bg-[#ff0050] text-white font-black py-4 rounded-xl text-xs uppercase">Broadcast</button>
                     <input type="text" id="dir-yt-id" placeholder="YouTube ID" class="mt-4">
-                    <button onclick="updateBroadcast()" class="w-full bg-blue-500 text-black font-black py-4 rounded-xl text-xs uppercase">Sync Signal</button>
+                    <button onclick="updateBroadcast()" class="w-full bg-blue-500 text-black font-black py-4 rounded-xl text-xs uppercase">Sync Grid</button>
                 </div>
                 <div class="space-y-6">
-                    <p class="text-[10px] text-blue-400 font-black uppercase">Grid Events</p>
+                    <p class="text-[10px] text-blue-400 font-black uppercase">Event Manager</p>
                     <input type="text" id="dir-event-title" placeholder="Event Name">
                     <input type="date" id="dir-event-date">
-                    <button onclick="addGridEvent()" class="w-full bg-white text-black font-black py-4 rounded-xl text-xs uppercase">Add Event</button>
-                    <div id="director-event-list" class="space-y-2 mt-4"></div>
+                    <button onclick="addGridEvent()" class="w-full bg-white text-black font-black py-4 rounded-xl text-xs uppercase">Post Event</button>
+                    <div id="director-event-list" class="space-y-2 max-h-40 overflow-y-auto mt-4"></div>
                 </div>
                 <div class="space-y-6">
-                    <p class="text-[10px] text-blue-400 font-black uppercase">Registry Info</p>
-                    <div id="director-request-list" class="space-y-2 max-h-60 overflow-y-auto text-[10px] text-white"></div>
+                    <p class="text-[10px] text-blue-400 font-black uppercase">Grid Requests</p>
+                    <div id="director-request-list" class="space-y-3 max-h-80 overflow-y-auto text-[10px] font-black uppercase text-white"></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="profile-modal" class="modal-overlay">
+        <div class="command-tile p-10 max-w-lg w-full">
+            <h2 class="text-2xl text-white font-black uppercase italic mb-8">DNA Matrix</h2>
+            <input type="text" id="edit-alias" class="mb-4" placeholder="Alias">
+            <input type="text" id="edit-avatar" class="mb-4" placeholder="Avatar URL">
+            <input type="text" id="edit-vibe" class="mb-8" placeholder="Vibe Status">
+            <button onclick="saveProfile()" class="w-full bg-blue-500 text-black py-4 rounded-full uppercase text-xs font-black">Re-Code DNA</button>
         </div>
     </div>
 
     <div id="policy-modal" class="modal-overlay">
         <div class="command-tile p-10 max-w-3xl w-full max-h-[80vh] overflow-y-auto">
-            <h2 class="text-2xl text-white font-black uppercase italic mb-6">Grid Governance & Privacy</h2>
-            <div class="text-zinc-400 text-sm space-y-4 leading-relaxed">
-                <p class="text-gold font-bold">1. Data Encryption</p>
-                <p>The Ministry of Groove uses end-to-end grid synchronization. Operative DNA (alias, email, and vibe) is stored securely via Supabase. We do not sell operative data to external grids.</p>
-                <p class="text-gold font-bold">2. Digital DNA Tracking</p>
-                <p>Real-time presence and message logs are maintained for grid stability. Direct frequency messages are accessible only by the sender and recipient.</p>
-                <p class="text-gold font-bold">3. Terms of Synchronization</p>
-                <p>By entering the mainframe, you agree to decrypt the culture responsibly. Hostile transmissions or unauthorized attempts to access the Director Hub result in immediate DNA purging.</p>
+            <h2 class="text-2xl text-white font-black uppercase italic mb-6">Grid Governance</h2>
+            <div class="text-zinc-400 text-sm space-y-4">
+                <p><span class="text-gold font-bold">Privacy:</span> Your DNA is encrypted on the Supabase National Grid.</p>
+                <p><span class="text-gold font-bold">Conduct:</span> Synchronize culture. Hostile frequencies are purged.</p>
             </div>
-            <button onclick="toggleUI('policy-modal')" class="w-full bg-blue-500 text-black font-black py-4 rounded-full uppercase text-xs mt-8">Understood</button>
+            <button onclick="toggleUI('policy-modal')" class="w-full bg-white text-black font-black py-4 rounded-full uppercase text-xs mt-8">Accept Protocol</button>
         </div>
     </div>
 
     <div class="fixed top-0 w-full bg-black z-[9000] h-[45px] border-b border-blue-400/20 flex items-center overflow-hidden">
         <div class="ticker-move text-[10px] font-black uppercase text-blue-400">
-            M.O.G. V20 // DECRYPTING THE CULTURE // SYNCHRONIZING THE GRID // LEGAL_PROTOCOLS_ACTIVE // SOCIAL_GRID_SYNCED...
+            M.O.G. V180.21 // DECRYPTING THE CULTURE // SYNCHRONIZING THE GRID // GOOGLE_OAUTH_ACTIVE // DIRECT_FREQ_ENABLED...
         </div>
     </div>
 
-    <div class="max-w-[1600px] mx-auto mt-20 px-4 flex-grow">
+    <div class="max-w-[1600px] mx-auto mt-20 px-4">
         <header class="flex flex-col items-center justify-center text-center p-6 mb-12">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-logo-trigger" class="h-32 w-32 cursor-pointer mb-6 hover:scale-105 transition-transform">
-            <h1 class="text-4xl lg:text-7xl text-gold font-black uppercase italic tracking-tighter leading-none mb-2">Ministry of Groove</h1>
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-logo-trigger" class="h-28 w-28 md:h-36 md:w-36 cursor-pointer mb-4">
+            <h1 class="text-4xl lg:text-7xl text-gold font-black uppercase italic tracking-tighter leading-none mb-1">Ministry of Groove</h1>
             <p class="text-[10px] md:text-[12px] text-blue-400 font-black uppercase tracking-[0.4em]">Decrypting the Culture. Synchronizing the Grid</p>
         </header>
 
@@ -145,8 +144,8 @@
                     <button onclick="loginWithGoogle()" class="w-full bg-white text-black font-black py-4 rounded-full uppercase text-xs flex items-center justify-center gap-3 mb-6">
                         <i class="fa-brands fa-google"></i> Google Authorization
                     </button>
-                    <div id="reg-fields" class="hidden mb-4"><input id="reg-alias" type="text" placeholder="CHOOSE ALIAS"></div>
-                    <input id="auth-user" type="text" class="mb-3" placeholder="EMAIL ADDRESS">
+                    <div id="reg-fields" class="hidden mb-4"><input id="reg-alias" type="text" placeholder="ALIAS"></div>
+                    <input id="auth-user" type="text" class="mb-3" placeholder="EMAIL">
                     <input id="auth-pass" type="password" class="mb-6" placeholder="PASSCODE">
                     <div class="flex gap-4">
                         <button onclick="setAuthMode('login')" class="text-[10px] font-black text-blue-400 uppercase">Login</button>
@@ -157,8 +156,13 @@
                 <div id="active-op-badge" class="hidden flex flex-col items-center justify-center text-center">
                     <img id="display-avatar" src="" class="w-24 h-24 rounded-3xl border-2 border-gold cursor-pointer object-cover mb-4" onclick="toggleUI('profile-modal')">
                     <h2 id="display-op-id" class="text-2xl text-white font-black uppercase italic mb-2">OPERATIVE</h2>
-                    <span class="vibe-tag" id="display-vibe">SYNCING...</span>
+                    <span class="vibe-tag" id="display-vibe">READY</span>
                 </div>
+            </section>
+
+            <section class="command-tile p-8">
+                <h3 class="text-white font-black uppercase text-[11px] mb-6 italic tracking-widest border-b border-white/5 pb-4">Grid Events</h3>
+                <div id="events-matrix" class="space-y-4 overflow-y-auto max-h-[300px] pr-2"></div>
             </section>
 
             <section class="command-tile p-2 aspect-video lg:col-span-2">
@@ -166,13 +170,18 @@
             </section>
 
             <section class="command-tile p-8">
-                <h3 class="text-white font-black uppercase text-[11px] mb-6 italic tracking-widest border-b border-white/5 pb-4">Grid Events</h3>
-                <div id="events-matrix" class="space-y-4 overflow-y-auto max-h-[300px]"></div>
+                <h3 class="text-white font-black uppercase text-[11px] mb-8 italic border-b border-white/5 pb-4">Top 10 Hitlist</h3>
+                <div id="dynamic-poll" class="space-y-4 overflow-y-auto max-h-[400px]"></div>
             </section>
 
-            <section class="command-tile p-1 lg:col-span-2">
+            <section class="command-tile p-6">
+                <h3 class="text-white font-black uppercase text-[11px] mb-4 italic tracking-widest">Sector Radar</h3>
+                <iframe src="http://googleusercontent.com/maps.google.com/1" width="100%" height="250" loading="lazy"></iframe>
+            </section>
+
+            <section class="command-tile p-1 full-width">
                 <div class="messenger-view rounded-[34px]">
-                    <div class="bg-[#202c33] p-5 flex justify-between items-center border-b border-white/5">
+                    <div class="bg-[#202c33] p-5 flex flex-wrap justify-between items-center border-b border-white/5">
                         <div class="flex gap-4">
                             <button onclick="switchChat('public')" id="tab-public" class="text-[10px] font-black uppercase px-6 py-2 bg-blue-500 text-black rounded-lg">Public</button>
                             <button onclick="switchChat('private')" id="tab-private" class="text-[10px] font-black uppercase px-6 py-2 bg-white/5 text-zinc-500 rounded-lg">Direct</button>
@@ -185,29 +194,17 @@
                     </div>
                 </div>
             </section>
-
         </div>
     </div>
-    
-    <footer>
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
-            <div class="text-left">
-                <p class="text-xs font-black uppercase text-white mb-2 italic">Ministry of Groove</p>
-                <p class="text-[10px] text-zinc-500 uppercase leading-relaxed">© 2026 National Grid Master.<br>All DNA Reserved.</p>
-            </div>
-            
-            <div class="flex justify-center gap-8">
-                <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
-                <a href="#" class="social-link"><i class="fa-brands fa-spotify"></i></a>
-                <a href="#" class="social-link"><i class="fa-brands fa-youtube"></i></a>
-                <a href="#" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
-            </div>
 
-            <div class="text-right">
-                <button onclick="toggleUI('policy-modal')" class="text-[10px] font-black uppercase text-blue-400 hover:text-white">Privacy & Governance</button>
-            </div>
+    <footer>
+        <div class="flex justify-center gap-8 mb-4">
+            <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-spotify"></i></a>
+            <a href="#" class="text-gold opacity-50 hover:opacity-100 text-xl"><i class="fa-brands fa-youtube"></i></a>
         </div>
+        <button onclick="toggleUI('policy-modal')" class="text-[9px] font-black uppercase text-blue-400">Privacy & Protocols</button>
+        <p class="text-[9px] text-zinc-600 uppercase mt-4">© 2026 Ministry of Groove</p>
     </footer>
 
     <script>
@@ -216,20 +213,19 @@
             K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY"
         };
         const db = window.supabase.createClient(MOG_CFG.U, MOG_CFG.K);
-        let currentOp = null, authMode = 'login', logoClicks = 0;
+        let currentOp = null, authMode = 'login', logoClicks = 0, currentChatTab = 'public';
 
-        /* --- AUTH ENGINE --- */
+        /* --- SYNC & AUTH --- */
         async function loginWithGoogle() { await db.auth.signInWithOAuth({ provider: 'google' }); }
         function setAuthMode(m) { authMode = m; document.getElementById('reg-fields').classList.toggle('hidden', m === 'login'); }
         async function executeAuth() {
-            const email = document.getElementById('auth-user').value.trim();
-            const pass = document.getElementById('auth-pass').value;
+            const e = document.getElementById('auth-user').value.trim(), p = document.getElementById('auth-pass').value;
             if(authMode === 'reg') {
-                const { data } = await db.auth.signUp({ email, password: pass });
+                const { data } = await db.auth.signUp({ email: e, password: p });
                 if(data.user) await db.from('registrations').insert([{ user_id: data.user.id, alias: document.getElementById('reg-alias').value }]);
                 setAuthMode('login');
             } else {
-                const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+                const { data, error } = await db.auth.signInWithPassword({ email: e, password: p });
                 if(data.user) setupSession(data.user); else alert(error.message);
             }
         }
@@ -242,18 +238,26 @@
                 document.getElementById('display-avatar').src = data.avatar_url || 'https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png';
                 document.getElementById('display-vibe').innerText = data.status || 'READY';
             }
-            syncGrid(); fetchEvents(); refreshChat();
+            syncGrid(); refreshChat(); fetchEvents();
         }
 
         /* --- GRID LOGIC --- */
         async function syncGrid() {
             const { data } = await db.from('broadcast').select('*').eq('id', 1).single();
-            if(data) document.getElementById('yt-broadcast').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${data.youtube_id}?autoplay=1&mute=0" frameborder="0" allowfullscreen></iframe>`;
+            if(data) document.getElementById('yt-broadcast').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${data.youtube_id}" frameborder="0" allowfullscreen></iframe>`;
+            loadPoll();
+        }
+
+        async function loadPoll() {
+            const { data: t } = await db.from('tracks').select('*');
+            const { data: v } = await db.from('amapiano_poll').select('spotify_track_id');
+            const sorted = t.map(tk => ({...tk, c: v?.filter(vote => vote.spotify_track_id === tk.id).length || 0})).sort((a,b) => b.c - a.c);
+            document.getElementById('dynamic-poll').innerHTML = sorted.map((tk, idx) => `<div class="flex items-center justify-between p-4 bg-white/5 rounded-3xl"><div><p class="text-[8px] text-zinc-500 uppercase">#${idx+1}</p><p class="text-white font-black text-xs uppercase">${tk.name}</p></div><button onclick="boostTrack('${tk.id}','${tk.name}')" class="text-[9px] text-blue-400 font-black px-4 py-2 border border-blue-400/20 rounded-full">Boost [${tk.c}]</button></div>`).join('');
         }
 
         async function fetchEvents() {
             const { data } = await db.from('events').select('*').order('date', { ascending: true });
-            document.getElementById('events-matrix').innerHTML = data?.map(ev => `<div class="p-4 bg-white/5 rounded-2xl border-l-4 border-blue-500 mb-3"><p class="text-[9px] font-black text-blue-400 uppercase">${new Date(ev.date).toDateString()}</p><p class="text-xs font-black text-white uppercase">${ev.title}</p></div>`).join('') || '<p class="text-xs opacity-30">No upcoming drops.</p>';
+            document.getElementById('events-matrix').innerHTML = data?.map(ev => `<div class="p-4 bg-white/5 rounded-2xl border-l-4 border-blue-500 mb-3"><p class="text-[9px] font-black text-blue-400 uppercase">${ev.date}</p><p class="text-xs font-black text-white uppercase">${ev.title}</p></div>`).join('') || '<p class="text-[10px] opacity-30">No Events.</p>';
         }
 
         async function refreshChat() {
@@ -278,7 +282,7 @@
             logoClicks++;
             if(logoClicks === 5) { 
                 if(currentOp?.email === 'director.mog@gmail.com') {
-                    const p = prompt("DIRECTOR_PROTOCOL_ACCESS:");
+                    const p = prompt("DIRECTOR_PROTOCOL_ID:");
                     if(p === "@MOGProtocol2026") toggleUI('director-console');
                 }
                 logoClicks = 0; 
