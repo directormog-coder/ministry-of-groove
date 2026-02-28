@@ -4,127 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <title>MINISTRY OF GROOVE | OMEGA SINGULARITY</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
     <style>
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
-        :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #030508; --mog-panel: rgba(13, 20, 28, 0.98); --wa-bg: #0b141a; --wa-sent: #005c4b; --wa-received: #202c33; }
-        
-        * { transition: all 0.3s ease; font-family: Satoshi, sans-serif; box-sizing: border-box; outline: none; }
-        body { background-color: var(--mog-bg); color: var(--mog-gold); min-height: 100vh; overflow-x: hidden; margin: 0; padding-bottom: 4rem; }
-        
-        /* Flex-Responsive Grid */
-        .mainframe-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr)); 
-            gap: 1.5rem; 
-            padding: 1rem; 
-            max-width: 1800px; 
-            margin: 0 auto; 
-        }
-
-        /* Large Screen Overrides */
-        @media (min-width: 1024px) {
-            .span-2 { grid-column: span 2; }
-            .span-3 { grid-column: span 3; }
-        }
-
-        .command-tile { 
-            background: var(--mog-panel); 
-            border: 1px solid rgba(212, 175, 55, 0.1); 
-            backdrop-filter: blur(40px); 
-            border-radius: 30px; 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column; 
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-        }
-
-        .hero-track { display: flex; overflow-x: auto; gap: 1.5rem; padding: 1rem; scrollbar-width: none; -ms-overflow-style: none; }
-        .hero-track::-webkit-scrollbar { display: none; }
-
-        /* Social Icon Hover Effects */
-        .social-link { font-size: 1.5rem; color: rgba(255,255,255,0.4); }
-        .social-link:hover { color: var(--mog-gold); transform: translateY(-5px); text-shadow: 0 0 15px var(--mog-gold); }
-
-        #visualizer { position: fixed; inset: 0; pointer-events: none; opacity: 0.15; z-index: 1; }
-        #mog-toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: var(--mog-blue); color: #000; padding: 12px 24px; border-radius: 50px; font-weight: 900; z-index: 10001; font-size: 0.8rem; }
-        .toast-active { bottom: 2rem !important; }
+        :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #030508; --mog-panel: rgba(13, 20, 28, 0.98); }
+        * { transition: all 0.3s ease; font-family: Satoshi, sans-serif; box-sizing: border-box; }
+        body { background: var(--mog-bg); color: var(--mog-gold); overflow-x: hidden; margin: 0; }
+        .mainframe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr)); gap: 1.5rem; padding: 1rem; max-width: 1800px; margin: 0 auto; }
+        .command-tile { background: var(--mog-panel); border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 30px; overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); }
+        .msg-stream { height: 400px; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 10px; }
+        .bubble { max-width: 80%; padding: 12px; border-radius: 15px; cursor: pointer; color: #fff; }
+        .sent { align-self: flex-end; background: #005c4b; }
+        .received { align-self: flex-start; background: #202c33; }
+        #visualizer { position: fixed; inset: 0; opacity: 0.15; pointer-events: none; z-index: 1; }
+        footer a:hover { color: var(--mog-gold); transform: translateY(-3px); }
     </style>
 </head>
 <body>
-
     <canvas id="visualizer"></canvas>
-    <div id="mog-toast">GRID UNIVERSALLY SYNCED</div>
-
-    <div class="w-full mt-10 px-4 relative z-10">
+    <div class="mt-10 px-4 relative z-10">
         <header class="text-center mb-10">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-24 md:h-32 mx-auto mb-4 hover:scale-110 cursor-pointer">
-            <h1 class="text-3xl md:text-6xl font-black uppercase italic tracking-tighter" style="color: var(--mog-gold)">Ministry of Groove</h1>
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-24 mx-auto mb-4">
+            <h1 class="text-3xl md:text-6xl font-black uppercase italic tracking-tighter">Ministry of Groove</h1>
         </header>
 
         <div class="mainframe-grid">
-            <section class="command-tile p-6 span-3">
-                <h3 class="text-white font-black uppercase text-[10px] mb-4 italic border-l-4 border-gold pl-4">Legacy Visualizer</h3>
-                <div id="hero-carousel" class="hero-track">
-                    <p class="text-zinc-600 text-[10px] uppercase font-bold">Awaiting Bounty Signal...</p>
-                </div>
-            </section>
-
             <section class="command-tile p-8">
                 <div id="auth-container" class="space-y-4">
-                    <h3 class="text-white font-black uppercase text-[10px] italic border-l-4 border-gold pl-4">DNA Matrix</h3>
-                    <input id="auth-user" type="text" placeholder="GRID EMAIL" class="text-sm">
-                    <input id="auth-pass" type="password" placeholder="PASSCODE" class="text-sm">
-                    <button onclick="executeAuth()" class="w-full bg-blue-500 text-black font-black py-3 rounded-xl uppercase text-[10px] tracking-widest hover:bg-white">Authorize</button>
+                    <h3 class="text-white font-black uppercase text-[10px] border-l-4 border-gold pl-4">DNA Matrix</h3>
+                    <input id="auth-user" type="text" placeholder="GRID EMAIL" class="w-full p-4 bg-white/5 rounded-xl text-white">
+                    <input id="auth-pass" type="password" placeholder="PASSCODE" class="w-full p-4 bg-white/5 rounded-xl text-white">
+                    <button onclick="executeAuth()" class="w-full bg-blue-500 text-black font-black py-4 rounded-xl uppercase text-xs">Authorize</button>
                 </div>
-                <div id="active-op-badge" class="hidden text-center py-4">
+                <div id="active-op-badge" class="hidden text-center">
                     <h2 id="display-op-id" class="text-xl text-white font-black uppercase italic">OPERATIVE</h2>
-                    <div class="text-[10px] text-blue-400 font-black mt-2">PKTS: <span id="display-packets" class="text-white text-lg">0</span></div>
+                    <div class="text-[10px] text-blue-400 font-black mt-2">DNA PKTS: <span id="display-packets" class="text-white text-lg">0</span></div>
                 </div>
             </section>
 
-            <section class="command-tile span-2">
-                <div id="operative-radar" style="height: 200px; width: 100%;"></div>
-                <div id="chat-stream" class="flex-grow overflow-y-auto p-6 flex flex-col gap-3 h-[400px]"></div>
+            <section class="command-tile md:col-span-2">
+                <div id="chat-stream" class="msg-stream"></div>
                 <div class="p-4 bg-white/5 flex gap-2">
-                    <input id="chat-msg" type="text" placeholder="Transmit packet..." class="flex-1 bg-white/5 border-none text-sm">
-                    <button onclick="sendMessage()" class="bg-blue-600 w-12 h-12 rounded-full text-black flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
+                    <input id="chat-msg" type="text" placeholder="Transmit packet..." class="flex-1 bg-transparent text-white border-none">
+                    <button onclick="sendMessage()" class="bg-blue-600 w-12 h-12 rounded-full text-black"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
-            </section>
-
-            <section class="command-tile p-8">
-                <h3 class="text-white font-black uppercase text-[10px] italic border-l-4 border-blue-400 pl-4 mb-6">Leaderboard</h3>
-                <div id="leaderboard-list" class="space-y-3"></div>
             </section>
         </div>
     </div>
-    
-    <footer class="mt-20 border-t border-white/5 py-12 px-6 text-center relative z-10 bg-black/50 backdrop-blur-md">
-        <div class="max-w-4xl mx-auto">
-            <h4 class="text-[10px] font-black uppercase tracking-[0.5em] text-zinc-500 mb-8">Connect with the Singularity</h4>
-            <div class="flex justify-center gap-8 mb-10">
-                <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
-                <a href="#" class="social-link"><i class="fa-brands fa-youtube"></i></a>
-                <a href="#" class="social-link"><i class="fa-brands fa-discord"></i></a>
-                <a href="#" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
-            </div>
-            <p class="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">
-                &copy; 2026 MINISTRY OF GROOVE | ALL RIGHTS RESERVED | VERSION 3.0 OMEGA
-            </p>
+
+    <footer class="mt-20 py-10 text-center border-t border-white/5">
+        <div class="flex justify-center gap-6 mb-6">
+            <a href="#" class="text-2xl transition"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="text-2xl transition"><i class="fa-brands fa-discord"></i></a>
+            <a href="#" class="text-2xl transition"><i class="fa-brands fa-youtube"></i></a>
         </div>
+        <p class="text-[9px] uppercase tracking-widest opacity-40">© 2026 Ministry of Groove | Omega Singularity</p>
     </footer>
 
     <script>
-        // Use the same MOG_CFG and JavaScript logic from our previous master version
-        // ... [Insert JS from previous response here] ...
+        const MOG_CFG = { U: "https://hzelmkthdqtbxcffsstl.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY" };
+        const db = window.supabase.createClient(MOG_CFG.U, MOG_CFG.K);
+        let currentOp = null;
+
+        async function executeAuth() {
+            const e = document.getElementById('auth-user').value, p = document.getElementById('auth-pass').value;
+            const { data, error } = await db.auth.signInWithPassword({ email: e, password: p });
+            if (!error) {
+                currentOp = data.user;
+                document.getElementById('auth-container').classList.add('hidden');
+                document.getElementById('active-op-badge').classList.remove('hidden');
+                document.getElementById('display-op-id').innerText = currentOp.user_metadata.full_name;
+                syncRealtime();
+            }
+        }
+
+        async function yogaPacket(receiver) {
+            if(currentOp.user_metadata.full_name === receiver) return;
+            const { error } = await db.rpc('transfer_packets', { receiver_alias: receiver, amount: 5 });
+            if(!error) { 
+                confetti({ particleCount: 150, colors: ['#D4AF37', '#00d4ff'] });
+                await db.from('messages').insert([{ content: `⚡ Yoga Gift sent to ${receiver}!`, user_id: currentOp.id, alias: currentOp.user_metadata.full_name }]);
+            }
+        }
+
+        async function syncRealtime() {
+            db.channel('room1').on('postgres_changes', { event: '*', schema: 'public' }, () => {
+                updateUI();
+            }).subscribe();
+            updateUI();
+        }
+
+        async function updateUI() {
+            const { data: stats } = await db.from('operative_stats').select('balance').eq('alias', currentOp.user_metadata.full_name).single();
+            if(stats) document.getElementById('display-packets').innerText = stats.balance;
+            const { data: msgs } = await db.from('messages').select('*').order('created_at', { ascending: true });
+            if(msgs) {
+                document.getElementById('chat-stream').innerHTML = msgs.map(m => `
+                    <div class="bubble ${m.user_id === currentOp.id ? 'sent' : 'received'}" onclick="yogaPacket('${m.alias}')">
+                        <span class="text-[9px] font-black text-blue-400 block">${m.alias}</span>
+                        ${m.content}
+                    </div>`).join('');
+                const s = document.getElementById('chat-stream'); s.scrollTop = s.scrollHeight;
+            }
+        }
+
+        async function sendMessage() {
+            const i = document.getElementById('chat-msg'); if(!i.value) return;
+            await db.from('messages').insert([{ content: i.value, user_id: currentOp.id, alias: currentOp.user_metadata.full_name }]);
+            i.value = '';
+        }
     </script>
 </body>
 </html>
