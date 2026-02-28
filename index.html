@@ -6,160 +6,149 @@
     <title>MINISTRY OF GROOVE | OMEGA SINGULARITY</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <style>
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #030508; --mog-panel: rgba(13, 20, 28, 0.98); --wa-bg: #0b141a; --wa-sent: #005c4b; --wa-received: #202c33; }
-        * { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); font-family: Satoshi, sans-serif; box-sizing: border-box; outline: none; }
-        body { background-color: var(--mog-bg); color: var(--mog-gold); min-height: 100vh; overflow-x: hidden; margin: 0; background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.02) 1px, transparent 0); background-size: 40px 40px; }
-        
-        .mainframe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 450px), 1fr)); gap: 1.5rem; padding: 1.5rem; max-width: 1800px; margin: 0 auto; }
-        .command-tile { background: var(--mog-panel); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(40px); border-radius: 40px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 1); height: 100%; }
-        .full-width { grid-column: 1 / -1; }
-        
-        /* Legacy Visualizer */
+        * { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); font-family: Satoshi, sans-serif; box-sizing: border-box; }
+        body { background: var(--mog-bg); color: var(--mog-gold); min-height: 100vh; overflow-x: hidden; margin: 0; }
+        .mainframe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 1.5rem; padding: 1.5rem; max-width: 1800px; margin: 0 auto; position: relative; z-index: 10; }
+        .command-tile { background: var(--mog-panel); border: 1px solid rgba(212,175,55,0.1); backdrop-filter: blur(40px); border-radius: 40px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 1); }
         .hero-track { display: flex; overflow-x: auto; gap: 2rem; padding: 1rem; scrollbar-width: none; }
-        .hero-card { min-width: 320px; aspect-video: 16/9; background: #000; border-radius: 25px; overflow: hidden; position: relative; border: 1px solid rgba(255, 255, 255, 0.1); }
-        .hero-tag { position: absolute; top: 10px; left: 10px; background: var(--mog-gold); color: #000; padding: 4px 10px; border-radius: 50px; font-size: 8px; font-weight: 900; z-index: 10; text-transform: uppercase; }
-
-        /* Sonic Messenger */
-        .messenger-view { height: clamp(600px, 90vh, 1200px); display: flex; flex-direction: column; background: var(--wa-bg); border-radius: 40px; overflow: hidden; }
-        .msg-stream { flex-grow: 1; padding: 2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay; }
-        .bubble { max-width: 75%; padding: 12px 16px; border-radius: 15px; font-size: 0.92rem; color: #e9edef; position: relative; cursor: pointer; }
+        .hero-card { min-width: 320px; aspect-video: 16/9; background: #000; border-radius: 25px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); }
+        .msg-stream { height: 500px; overflow-y: auto; padding: 2rem; display: flex; flex-direction: column; gap: 12px; }
+        .bubble { max-width: 80%; padding: 14px; border-radius: 20px; color: #e9edef; cursor: pointer; }
         .sent { align-self: flex-end; background: var(--wa-sent); border-top-right-radius: 0; }
         .received { align-self: flex-start; background: var(--wa-received); border-top-left-radius: 0; }
-
-        input { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); color: white; padding: 1.2rem; border-radius: 20px; width: 100%; }
-        .modal-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.95); backdrop-filter: blur(30px); display: none; align-items: center; justify-content: center; padding: 2rem; }
-        .active-modal { display: flex !important; }
-        #mog-toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: var(--mog-blue); color: #000; padding: 16px 32px; border-radius: 60px; font-weight: 900; z-index: 10001; text-transform: uppercase; }
+        #visualizer { position: fixed; inset: 0; opacity: 0.15; pointer-events: none; z-index: 1; }
+        #mog-toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: var(--mog-blue); color: #000; padding: 16px 32px; border-radius: 60px; font-weight: 900; z-index: 10001; text-transform: uppercase; transition: 0.5s; }
         .toast-active { bottom: 3rem !important; }
     </style>
 </head>
-<body id="mog-mainframe">
+<body>
 
-    <div id="mog-toast">GRID UNIVERSALLY SYNCED</div>
-    <audio id="log-drum-victory" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logdrum.mp3"></audio>
+<canvas id="visualizer"></canvas>
+<div id="mog-toast">GRID UNIVERSALLY SYNCED</div>
 
-    <div class="max-w-[1700px] mx-auto mt-24 px-6">
-        <header class="text-center mb-16">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-logo-trigger" class="h-32 md:h-48 mx-auto mb-6 cursor-pointer">
-            <h1 class="text-4xl md:text-8xl text-gold font-black uppercase italic tracking-tighter leading-none">Ministry of Groove</h1>
-        </header>
+<div class="max-w-[1700px] mx-auto mt-20 px-6 relative z-10">
+    <header class="text-center mb-16">
+        <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" id="mog-logo-trigger" class="h-32 mx-auto mb-6">
+        <h1 class="text-4xl md:text-8xl font-black uppercase italic tracking-tighter leading-none" style="color: var(--mog-gold)">Ministry of Groove</h1>
+    </header>
 
-        <div class="mainframe-grid">
-            <section class="command-tile p-10 full-width mb-8">
-                <h3 class="text-white font-black uppercase text-[10px] mb-6 italic border-l-4 border-gold pl-5">Legacy Visualizer</h3>
-                <div id="hero-carousel" class="hero-track"><p class="text-zinc-600 uppercase text-[10px] font-black">Syncing Hero signals...</p></div>
-            </section>
+    <div class="mainframe-grid">
+        <section class="command-tile p-10 lg:col-span-3">
+            <h3 class="text-white font-black uppercase text-[10px] mb-6 italic border-l-4 border-gold pl-5">Legacy Visualizer</h3>
+            <div id="hero-carousel" class="hero-track"></div>
+        </section>
 
-            <section class="command-tile p-10">
-                <div id="auth-container" class="space-y-6">
-                    <h3 class="text-white font-black uppercase text-[10px] italic border-l-4 border-gold pl-5">DNA Matrix</h3>
-                    <input id="auth-user" type="text" placeholder="GRID EMAIL"><input id="auth-pass" type="password" placeholder="PASSCODE">
-                    <button onclick="executeAuth()" class="w-full bg-blue-500 text-black font-black py-4 rounded-2xl uppercase text-xs">Authorize</button>
-                </div>
-                <div id="active-op-badge" class="hidden text-center py-6">
-                    <img class="w-36 h-36 rounded-[3rem] mx-auto mb-6 border-2 border-gold object-cover shadow-2xl" src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png">
-                    <h2 id="display-op-id" class="text-2xl text-white font-black uppercase italic mb-1">OPERATIVE</h2>
-                    <div class="text-[10px] text-blue-400 uppercase font-black tracking-widest">PKTS: <span id="display-packets" class="text-white">0</span></div>
-                </div>
-            </section>
+        <section class="command-tile p-10">
+            <div id="auth-container" class="space-y-6">
+                <input id="auth-user" type="text" placeholder="GRID EMAIL" class="w-full p-4 bg-white/5 rounded-xl text-white">
+                <input id="auth-pass" type="password" placeholder="PASSCODE" class="w-full p-4 bg-white/5 rounded-xl text-white">
+                <button onclick="executeAuth()" class="w-full bg-blue-500 text-black font-black py-4 rounded-xl uppercase text-xs">Authorize</button>
+            </div>
+            <div id="active-op-badge" class="hidden text-center">
+                <h2 id="display-op-id" class="text-2xl text-white font-black uppercase italic">OPERATIVE</h2>
+                <div class="text-[10px] text-blue-400 font-black tracking-widest mt-2">PKTS: <span id="display-packets" class="text-white">0</span></div>
+            </div>
+        </section>
 
-            <section class="command-tile full-width">
-                <div class="messenger-view">
-                    <div id="operative-radar" style="height: 350px; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.1);"></div>
-                    <div id="chat-stream" class="msg-stream"></div>
-                    <div class="p-6 bg-[#202c33] flex gap-4">
-                        <button onclick="sendVoice()" class="text-zinc-400"><i class="fa-solid fa-microphone text-xl"></i></button>
-                        <input id="chat-msg" type="text" placeholder="Transmit packet to collective...">
-                        <button onclick="sendMessage()" class="w-14 h-14 bg-blue-600 text-black rounded-full flex items-center justify-center active:scale-90 shadow-xl"><i class="fa-solid fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </section>
-        </div>
+        <section class="command-tile lg:col-span-2">
+            <div id="operative-radar" style="height: 200px; width: 100%;"></div>
+            <div id="chat-stream" class="msg-stream"></div>
+            <div class="p-6 bg-white/5 flex gap-4">
+                <input id="chat-msg" type="text" placeholder="Transmit packet..." class="flex-1 bg-white/5 p-4 rounded-xl text-white">
+                <button onclick="sendMessage()" class="bg-blue-600 w-14 h-14 rounded-full flex items-center justify-center text-black"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </section>
+
+        <section class="command-tile p-10">
+            <h3 class="text-white font-black uppercase text-[10px] italic border-l-4 border-blue-400 pl-5 mb-6">Elite Operatives</h3>
+            <div id="leaderboard-list" class="space-y-4"></div>
+        </section>
     </div>
-    
-    <script>
-        const MOG_CFG = { U: "https://hzelmkthdqtbxcffsstl.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY" };
-        const db = window.supabase.createClient(MOG_CFG.U, MOG_CFG.K);
-        let currentOp = null, map, markers = {}, logoClicks = 0;
+</div>
 
-        function showToast(msg) { const t = document.getElementById('mog-toast'); t.innerText = msg; t.classList.add('toast-active'); setTimeout(() => t.classList.remove('toast-active'), 4000); document.getElementById('log-drum-victory').play(); }
+<script>
+    const MOG_CFG = { U: "https://hzelmkthdqtbxcffsstl.supabase.co", K: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6ZWxta3RoZHF0YmN4ZmZzc3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDExOTksImV4cCI6MjA4NzM3NzE5OX0.Hx-dlAnPYqn-1GAmkS0ZNJIuvhutYdJ2_fLxAn3MTfY" };
+    const db = window.supabase.createClient(MOG_CFG.U, MOG_CFG.K);
+    let currentOp = null, audioCtx, analyser;
 
-        async function executeAuth() {
-            const e = document.getElementById('auth-user').value.trim(), p = document.getElementById('auth-pass').value;
-            const { data, error } = await db.auth.signInWithPassword({ email: e, password: p });
-            if (!error) setupSession(data.user); else showToast("DNA REJECTED");
-        }
+    function showToast(m) { const t = document.getElementById('mog-toast'); t.innerText = m; t.classList.add('toast-active'); setTimeout(() => t.classList.remove('toast-active'), 4000); }
 
-        async function setupSession(u) {
-            currentOp = u; document.getElementById('auth-container').classList.add('hidden'); document.getElementById('active-op-badge').classList.remove('hidden');
-            document.getElementById('display-op-id').innerText = u.user_metadata.full_name;
-            initRadar(); refreshChat(); syncLegacy();
-        }
+    async function executeAuth() {
+        const e = document.getElementById('auth-user').value, p = document.getElementById('auth-pass').value;
+        const { data, error } = await db.auth.signInWithPassword({ email: e, password: p });
+        if (!error) {
+            currentOp = data.user;
+            document.getElementById('auth-container').classList.add('hidden');
+            document.getElementById('active-op-badge').classList.remove('hidden');
+            document.getElementById('display-op-id').innerText = currentOp.user_metadata.full_name;
+            initVisualizer(); initRadar(); syncRealtime(); syncBounties();
+        } else showToast("DNA REJECTED");
+    }
 
-        async function initRadar() {
-            map = L.map('operative-radar', { zoomControl: false }).setView([-25.87, 29.23], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            const res = await fetch('https://ipapi.co/json/'); const loc = await res.json();
-            const chan = db.channel('radar').on('presence', { event: 'sync' }, () => {
-                const st = chan.presenceState(); Object.values(markers).forEach(m => map.removeLayer(m));
-                for(const id in st) markers[id] = L.circleMarker([st[id][0].lat, st[id][0].lng], { color: '#00d4ff', radius: 10 }).addTo(map);
-            }).subscribe(async (s) => { if (s === 'SUBSCRIBED') await chan.track({ alias: currentOp.user_metadata.full_name, lat: loc.latitude, lng: loc.longitude }); });
-        }
+    function initVisualizer() {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioCtx.createAnalyser();
+        const canvas = document.getElementById('visualizer'), ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        function render() {
+            requestAnimationFrame(render);
+            const data = new Uint8Array(analyser.frequencyBinCount);
+            analyser.getByteFrequencyData(data);
+            ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle = '#D4AF37';
+            for(let i=0; i<data.length; i++) { ctx.fillRect(i*10, canvas.height-(data[i]*2), 8, data[i]*2); }
+        } render();
+    }
 
-        async function syncLegacy() {
-            const { data } = await db.from('bounty_archives').select('*');
-            if (data?.length) {
-                document.getElementById('hero-carousel').innerHTML = data.map(a => `
-                    <div class="hero-card">
-                        <div class="hero-tag">MVP: ${a.mvp_alias || 'Elite'}</div>
-                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/${a.reward_url}" frameborder="0"></iframe>
-                        <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black to-transparent">
-                            <p class="text-[8px] text-blue-400 font-black uppercase">${a.mvp_score} CONTRIBUTED</p>
-                            <h4 class="text-white font-black text-xs uppercase">${a.title}</h4>
-                        </div>
-                    </div>`).join('');
-            }
-        }
+    async function syncRealtime() {
+        db.channel('any').on('postgres_changes', {event:'*', schema:'public'}, () => { updateStats(); updateLeaderboard(); refreshChat(); }).subscribe();
+        updateStats(); updateLeaderboard(); refreshChat();
+    }
 
-        async function sendMessage() {
-            const i = document.getElementById('chat-msg'); if(!i.value || !currentOp) return;
-            await db.from('messages').insert([{ content: i.value, user_id: currentOp.id, alias: currentOp.user_metadata.full_name }]);
-            i.value = '';
-        }
+    async function updateStats() {
+        const { data } = await db.from('operative_stats').select('balance').eq('alias', currentOp.user_metadata.full_name).single();
+        if(data) document.getElementById('display-packets').innerText = data.balance;
+    }
 
-        async function sendVoice() {
-            const url = prompt("Enter Audio URL (DropBox/G-Drive):");
-            if(url) await db.from('messages').insert([{ content: 'Sonic Signal Transmitted', user_id: currentOp.id, alias: currentOp.user_metadata.full_name, is_audio: true, audio_url: url }]);
-        }
+    async function updateLeaderboard() {
+        const { data } = await db.from('leaderboard').select('*');
+        if(data) document.getElementById('leaderboard-list').innerHTML = data.map((o,i) => `<div class='flex justify-between bg-white/5 p-3 rounded-lg'><span class='text-xs font-black'>${i+1}. ${o.alias}</span><span class='text-blue-400'>${o.balance} PKTS</span></div>`).join('');
+    }
 
-        async function refreshChat() {
-            const { data } = await db.from('messages').select('*').order('created_at', { ascending: true }).limit(60);
-            document.getElementById('chat-stream').innerHTML = data?.map(m => `
-                <div class="bubble ${m.user_id === currentOp?.id ? 'sent' : 'received'}" onclick="yogaPacket('${m.alias}')">
-                    <span class="text-[9px] font-black uppercase text-blue-400 block mb-1">${m.alias}</span>
-                    ${m.is_audio ? `<button onclick="new Audio('${m.audio_url}').play()" class="bg-white/5 p-3 rounded-xl text-blue-400 font-black"><i class="fa-solid fa-play"></i> Play Sonic</button>` : `<p>${m.content}</p>`}
-                </div>`).join('');
-            document.getElementById('chat-stream').scrollTop = document.getElementById('chat-stream').scrollHeight;
-            if(currentOp) {
-                const { data: stats } = await db.from('operative_stats').select('balance').eq('alias', currentOp.user_metadata.full_name).single();
-                document.getElementById('display-packets').innerText = stats?.balance || 0;
-            }
-        }
+    async function yogaPacket(receiver) {
+        if(currentOp.user_metadata.full_name === receiver) return;
+        const { error } = await db.rpc('transfer_packets', { receiver_alias: receiver, amount: 5 });
+        if(!error) { confetti({ particleCount: 150 }); showToast("YOGA GIFT SENT"); }
+    }
 
-        async function yogaPacket(receiver) {
-            if(currentOp.user_metadata.full_name === receiver) return;
-            await db.from('transfers').insert([{ sender_alias: currentOp.user_metadata.full_name, receiver_alias: receiver, amount: 5 }]);
-            await db.from('messages').insert([{ content: `⚡ Yoga: Gifted 5 Pkts to ${receiver}!`, user_id: currentOp.id, alias: currentOp.user_metadata.full_name }]);
-            showToast("YOGA GIFT SENT");
-        }
+    async function sendMessage() {
+        const i = document.getElementById('chat-msg'); if(!i.value) return;
+        await db.from('messages').insert([{ content: i.value, user_id: currentOp.id, alias: currentOp.user_metadata.full_name }]);
+        i.value = '';
+    }
 
-        db.channel('master').on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => refreshChat())
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'bounties' }, () => syncLegacy()).subscribe();
-    </script>
+    async function refreshChat() {
+        const { data } = await db.from('messages').select('*').order('created_at', { ascending: true });
+        if(data) document.getElementById('chat-stream').innerHTML = data.map(m => `<div class="bubble ${m.user_id === currentOp.id ? 'sent' : 'received'}" onclick="yogaPacket('${m.alias}')"><span class='text-[9px] block text-blue-400 font-black'>${m.alias}</span>${m.content}</div>`).join('');
+        document.getElementById('chat-stream').scrollTop = document.getElementById('chat-stream').scrollHeight;
+    }
+
+    async function syncBounties() {
+        const { data } = await db.from('bounty_archives').select('*');
+        if(data) document.getElementById('hero-carousel').innerHTML = data.map(a => `<div class="hero-card"><iframe width="100%" height="100%" src="https://www.youtube.com/embed/${a.reward_url}" frameborder="0"></iframe></div>`).join('');
+    }
+
+    function initRadar() {
+        const map = L.map('operative-radar', { zoomControl: false, attributionControl: false }).setView([-25.87, 29.23], 13);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+    }
+</script>
 </body>
 </html>
