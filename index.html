@@ -12,42 +12,51 @@
         @import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,900&display=swap');
         :root { --mog-gold: #D4AF37; --mog-blue: #00d4ff; --mog-bg: #030508; --mog-panel: rgba(13, 20, 28, 0.98); }
         * { transition: all 0.3s ease; font-family: Satoshi, sans-serif; box-sizing: border-box; }
-        body { background: var(--mog-bg); color: var(--mog-gold); overflow-x: hidden; margin: 0; padding-bottom: 5rem; }
+        body { background: var(--mog-bg); color: var(--mog-gold); overflow-x: hidden; margin: 0; padding-bottom: 4rem; }
+        
         .mainframe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr)); gap: 1.5rem; padding: 1rem; max-width: 1800px; margin: 0 auto; }
-        .command-tile { background: var(--mog-panel); border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 30px; overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); }
-        .msg-stream { height: 450px; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 12px; }
-        .bubble { max-width: 85%; padding: 14px; border-radius: 20px; color: #fff; cursor: pointer; position: relative; }
-        .sent { align-self: flex-end; background: #005c4b; border-bottom-right-radius: 4px; }
-        .received { align-self: flex-start; background: #202c33; border-bottom-left-radius: 4px; }
+        .command-tile { background: var(--mog-panel); border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 30px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8); position: relative; }
+        .hero-track { display: flex; overflow-x: auto; gap: 1.5rem; padding: 1rem; scrollbar-width: none; }
+        .hero-card { min-width: 300px; aspect-video: 16/9; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .msg-stream { height: 400px; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 12px; }
+        .bubble { max-width: 85%; padding: 14px; border-radius: 20px; color: #fff; cursor: pointer; }
+        .sent { align-self: flex-end; background: #005c4b; }
+        .received { align-self: flex-start; background: #202c33; }
         #visualizer { position: fixed; inset: 0; opacity: 0.15; pointer-events: none; z-index: 1; }
-        footer a:hover { color: var(--mog-gold); transform: translateY(-3px); text-shadow: 0 0 10px var(--mog-gold); }
+        footer a:hover { color: var(--mog-gold); transform: translateY(-5px); text-shadow: 0 0 15px var(--mog-gold); }
     </style>
 </head>
 <body>
     <canvas id="visualizer"></canvas>
+
     <div class="mt-10 px-4 relative z-10">
         <header class="text-center mb-10">
-            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-24 mx-auto mb-4 hover:scale-110">
-            <h1 class="text-3xl md:text-6xl font-black uppercase italic tracking-tighter" style="color: var(--mog-gold)">Ministry of Groove</h1>
+            <img src="https://raw.githubusercontent.com/directormog-coder/Ministry-of-Groove/main/logo.png" class="h-24 mx-auto mb-4 hover:scale-110 cursor-pointer">
+            <h1 class="text-3xl md:text-6xl font-black uppercase italic tracking-tighter">Ministry of Groove</h1>
         </header>
 
         <div class="mainframe-grid">
+            <section class="command-tile p-6 md:col-span-2 lg:col-span-3">
+                <h3 class="text-white font-black uppercase text-[10px] mb-4 border-l-4 border-gold pl-4">Legacy Visualizer</h3>
+                <div id="hero-carousel" class="hero-track"></div>
+            </section>
+
             <section class="command-tile p-8">
-                <div id="auth-container" class="space-y-4">
-                    <h3 class="text-white font-black uppercase text-[10px] border-l-4 border-gold pl-4 italic">DNA Matrix</h3>
-                    <input id="auth-user" type="text" placeholder="GRID EMAIL" class="w-full p-4 bg-white/5 rounded-xl text-white border-none outline-none">
-                    <input id="auth-pass" type="password" placeholder="PASSCODE" class="w-full p-4 bg-white/5 rounded-xl text-white border-none outline-none">
-                    <button onclick="executeAuth()" class="w-full bg-blue-500 text-black font-black py-4 rounded-xl uppercase text-xs tracking-widest hover:bg-white">Authorize</button>
+                <div id="auth-container" class="space-y-4 text-center">
+                    <h3 class="text-white font-black text-[10px] border-l-4 border-gold pl-4 text-left uppercase">DNA Matrix</h3>
+                    <input id="auth-user" type="text" placeholder="GRID EMAIL" class="w-full p-4 bg-white/5 rounded-xl text-white outline-none border-none">
+                    <input id="auth-pass" type="password" placeholder="PASSCODE" class="w-full p-4 bg-white/5 rounded-xl text-white outline-none border-none">
+                    <button onclick="executeAuth()" class="w-full bg-blue-500 text-black font-black py-4 rounded-xl uppercase text-xs hover:bg-white tracking-widest">Authorize Access</button>
                 </div>
                 <div id="active-op-badge" class="hidden text-center py-4">
                     <h2 id="display-op-id" class="text-xl text-white font-black uppercase italic">OPERATIVE</h2>
-                    <div class="text-[10px] text-blue-400 font-black mt-2 tracking-widest uppercase">DNA PKTS: <span id="display-packets" class="text-white text-lg">0</span></div>
+                    <div class="text-[10px] text-blue-400 font-black mt-2 uppercase tracking-widest">DNA PKTS: <span id="display-packets" class="text-white text-lg">0</span></div>
                 </div>
             </section>
 
             <section class="command-tile md:col-span-2">
                 <div id="chat-stream" class="msg-stream"></div>
-                <div class="p-4 bg-white/5 flex gap-2 border-t border-white/5">
+                <div class="p-4 bg-white/5 flex gap-2 border-t border-white/10">
                     <input id="chat-msg" type="text" placeholder="Transmit packet..." class="flex-1 bg-transparent text-white border-none focus:ring-0">
                     <button onclick="sendMessage()" class="bg-blue-600 w-12 h-12 rounded-full text-black flex items-center justify-center hover:scale-110 active:scale-95"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
@@ -60,13 +69,14 @@
         </div>
     </div>
 
-    <footer class="mt-20 py-12 text-center border-t border-white/5 bg-black/40 backdrop-blur-md">
+    <footer class="mt-20 py-12 text-center border-t border-white/5 bg-black/50 backdrop-blur-md">
         <div class="flex justify-center gap-8 mb-8">
-            <a href="#" class="text-2xl transition-all opacity-50 hover:opacity-100"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" class="text-2xl transition-all opacity-50 hover:opacity-100"><i class="fa-brands fa-discord"></i></a>
-            <a href="#" class="text-2xl transition-all opacity-50 hover:opacity-100"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" class="text-2xl opacity-40 hover:opacity-100 transition"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="text-2xl opacity-40 hover:opacity-100 transition"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="text-2xl opacity-40 hover:opacity-100 transition"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" class="text-2xl opacity-40 hover:opacity-100 transition"><i class="fa-brands fa-discord"></i></a>
         </div>
-        <p class="text-[9px] uppercase tracking-[0.3em] opacity-30 font-bold italic">© 2026 Ministry of Groove | Omega Singularity v3.0</p>
+        <p class="text-[9px] uppercase tracking-[0.4em] opacity-30 font-bold italic">© 2026 Ministry of Groove | Omega Singularity Restoration</p>
     </footer>
 
     <script>
@@ -83,15 +93,6 @@
                 document.getElementById('active-op-badge').classList.remove('hidden');
                 document.getElementById('display-op-id').innerText = currentOp.user_metadata.full_name;
                 initVisualizer(); syncRealtime();
-            }
-        }
-
-        async function yogaPacket(receiver) {
-            if(currentOp.user_metadata.full_name === receiver) return;
-            const { error } = await db.rpc('transfer_packets', { receiver_alias: receiver, amount: 5 });
-            if(!error) { 
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 }, colors: ['#D4AF37', '#00d4ff'] });
-                await db.from('messages').insert([{ content: `⚡ Yoga Gift sent to ${receiver}!`, user_id: currentOp.id, alias: currentOp.user_metadata.full_name }]);
             }
         }
 
@@ -117,19 +118,21 @@
         async function updateUI() {
             const { data: stats } = await db.from('operative_stats').select('balance').eq('alias', currentOp.user_metadata.full_name).single();
             if(stats) document.getElementById('display-packets').innerText = stats.balance;
-            
             const { data: lead } = await db.from('leaderboard').select('*');
-            if(lead) document.getElementById('leaderboard-list').innerHTML = lead.map((o,i) => `<div class='flex justify-between bg-white/5 p-3 rounded-lg border border-white/5'><span class='text-xs font-bold'>${i+1}. ${o.alias}</span><span class='text-blue-400 font-black'>${o.balance} PKTS</span></div>`).join('');
-
+            if(lead) document.getElementById('leaderboard-list').innerHTML = lead.map((o,i) => `<div class='flex justify-between bg-white/5 p-3 rounded-xl border border-white/5'><span class='text-xs font-bold'>${i+1}. ${o.alias}</span><span class='text-blue-400 font-black'>${o.balance} PKTS</span></div>`).join('');
             const { data: msgs } = await db.from('messages').select('*').order('created_at', { ascending: true });
             if(msgs) {
-                document.getElementById('chat-stream').innerHTML = msgs.map(m => `
-                    <div class="bubble ${m.user_id === currentOp.id ? 'sent' : 'received'}" onclick="yogaPacket('${m.alias}')">
-                        <span class="text-[9px] font-black text-blue-400 block opacity-70">${m.alias}</span>
-                        ${m.content}
-                    </div>`).join('');
+                document.getElementById('chat-stream').innerHTML = msgs.map(m => `<div class="bubble ${m.user_id === currentOp.id ? 'sent' : 'received'}" onclick="yogaPacket('${m.alias}')"><span class="text-[9px] font-black text-blue-400 block">${m.alias}</span>${m.content}</div>`).join('');
                 const s = document.getElementById('chat-stream'); s.scrollTop = s.scrollHeight;
             }
+            const { data: bounties } = await db.from('bounty_archives').select('*');
+            if(bounties) document.getElementById('hero-carousel').innerHTML = bounties.map(b => `<div class="hero-card"><iframe width="100%" height="100%" src="https://www.youtube.com/embed/${b.reward_url}" frameborder="0"></iframe></div>`).join('');
+        }
+
+        async function yogaPacket(receiver) {
+            if(currentOp.user_metadata.full_name === receiver) return;
+            const { error } = await db.rpc('transfer_packets', { receiver_alias: receiver, amount: 5 });
+            if(!error) { confetti({ particleCount: 150, colors: ['#D4AF37', '#00d4ff'] }); }
         }
 
         async function sendMessage() {
